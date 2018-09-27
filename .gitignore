@@ -1,0 +1,13 @@
+*.aux
+*.bak
+*.bbl
+*.blg
+*.log
+*.lof
+*.lot
+*.out
+*.pyc
+*.swp
+*.toc
+*.~lock*
+__pycache__

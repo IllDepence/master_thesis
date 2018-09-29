@@ -34,38 +34,64 @@
   title     = {The Quest to Automate Fact-Checking},
   year      = {2015},
   month     = {10},
+  note      = {r},
   booktitle = {Proceedings of the 2015 Computation + Journalism Symposium},
+  review    = {- argue for pursuing the goal of fully automated fact checking
+- uses political discourse as goto example (politicians making claims, voters juding claims for their truth)
+- developed own tool ClaimBuster
+- supervised ML using SVM (also tested other methods, SVM performed best)
+- manually created features
+- used AlchemyAPI for sentiment analysis
+- no stemming or stop word removal
+- POS tags
+- used random forest classifier},
 }
 
 @Article{BuckinghamShum2000,
-  author        = {Buckingham Shum, Simon and Motta, Enrico and Domingue, John},
-  title         = {ScholOnto: an ontology-based digital library server for research documents and discourse},
-  journal       = {International Journal on Digital Libraries},
-  year          = {2000},
-  volume        = {3},
-  number        = {3},
-  pages         = {237--248},
-  month         = {Oct},
-  issn          = {1432-5012},
-  __markedentry = {[tarek:]},
-  abstract      = {The internet is rapidly becoming the first place for researchers to publish documents, but at present they receive little support in searching, tracking, analysing or debating concepts in a literature from scholarly perspectives. This paper describes the design rationale and implementation of ScholOnto, an ontology-based digital library server to support scholarly interpretation and discourse. It enables researchers to describe and debate via a semantic network the contributions a document makes, and its relationship to the literature. The paper discusses the computational services that an ontology-based server supports, alternative user interfaces to support interaction with a large semantic network, usability issues associated with knowledge formalisation, new work practices that could emerge, and related work.},
-  day           = {01},
-  doi           = {10.1007/s007990000034},
-  url           = {https://doi.org/10.1007/s007990000034},
+  author   = {Buckingham Shum, Simon and Motta, Enrico and Domingue, John},
+  title    = {ScholOnto: an ontology-based digital library server for research documents and discourse},
+  journal  = {International Journal on Digital Libraries},
+  year     = {2000},
+  volume   = {3},
+  number   = {3},
+  pages    = {237--248},
+  month    = {Oct},
+  issn     = {1432-5012},
+  abstract = {The internet is rapidly becoming the first place for researchers to publish documents, but at present they receive little support in searching, tracking, analysing or debating concepts in a literature from scholarly perspectives. This paper describes the design rationale and implementation of ScholOnto, an ontology-based digital library server to support scholarly interpretation and discourse. It enables researchers to describe and debate via a semantic network the contributions a document makes, and its relationship to the literature. The paper discusses the computational services that an ontology-based server supports, alternative user interfaces to support interaction with a large semantic network, usability issues associated with knowledge formalisation, new work practices that could emerge, and related work.},
+  day      = {01},
+  doi      = {10.1007/s007990000034},
+  url      = {https://doi.org/10.1007/s007990000034},
 }
 
 @InProceedings{Goudas2014,
-  author        = {Goudas, Theodosis and Louizos, Christos and Petasis, Georgios and Karkaletsis, Vangelis},
-  title         = {Argument Extraction from News, Blogs, and Social Media},
-  booktitle     = {Artificial Intelligence: Methods and Applications},
-  year          = {2014},
-  editor        = {Likas, Aristidis and Blekas, Konstantinos and Kalles, Dimitris},
-  pages         = {287--299},
+  author    = {Goudas, Theodosis and Louizos, Christos and Petasis, Georgios and Karkaletsis, Vangelis},
+  title     = {Argument Extraction from News, Blogs, and Social Media},
+  booktitle = {Artificial Intelligence: Methods and Applications},
+  year      = {2014},
+  editor    = {Likas, Aristidis and Blekas, Konstantinos and Kalles, Dimitris},
+  pages     = {287--299},
+  address   = {Cham},
+  publisher = {Springer International Publishing},
+  abstract  = {Argument extraction is the task of identifying arguments, along with their components in text. Arguments can be usually decomposed into a claim and one or more premises justifying it. Among the novel aspects of this work is the thematic domain itself which relates to Social Media, in contrast to traditional research in the area, which concentrates mainly on law documents and scientific publications. The huge increase of social media communities, along with their user tendency to debate, makes the identification of arguments in these texts a necessity. Argument extraction from Social Media is more challenging because texts may not always contain arguments, as is the case of legal documents or scientific publications usually studied. In addition, being less formal in nature, texts in Social Media may not even have proper syntax or spelling. This paper presents a two-step approach for argument extraction from social media texts. During the first step, the proposed approach tries to classify the sentences into ``sentences that contain arguments'' and ``sentences that don't contain arguments''. In the second step, it tries to identify the exact fragments that contain the premises from the sentences that contain arguments, by utilizing conditional random fields. The results exceed significantly the base line approach, and according to literature, are quite promising.},
+  isbn      = {978-3-319-07064-3},
+}
+
+@InProceedings{Mishra2016,
+  author        = {Mishra, Arunav and Berberich, Klaus},
+  title         = {Leveraging Semantic Annotations to Link Wikipedia and News Archives},
+  booktitle     = {Advances in Information Retrieval},
+  year          = {2016},
+  editor        = {Ferro, Nicola and Crestani, Fabio and Moens, Marie-Francine and Mothe, Josiane and Silvestri, Fabrizio and Di Nunzio, Giorgio Maria and Hauff, Claudia and Silvello, Gianmaria},
+  pages         = {30--42},
   address       = {Cham},
   publisher     = {Springer International Publishing},
+  note          = {r (ch 1-3)},
   __markedentry = {[tarek:]},
-  abstract      = {Argument extraction is the task of identifying arguments, along with their components in text. Arguments can be usually decomposed into a claim and one or more premises justifying it. Among the novel aspects of this work is the thematic domain itself which relates to Social Media, in contrast to traditional research in the area, which concentrates mainly on law documents and scientific publications. The huge increase of social media communities, along with their user tendency to debate, makes the identification of arguments in these texts a necessity. Argument extraction from Social Media is more challenging because texts may not always contain arguments, as is the case of legal documents or scientific publications usually studied. In addition, being less formal in nature, texts in Social Media may not even have proper syntax or spelling. This paper presents a two-step approach for argument extraction from social media texts. During the first step, the proposed approach tries to classify the sentences into ``sentences that contain arguments'' and ``sentences that don't contain arguments''. In the second step, it tries to identify the exact fragments that contain the premises from the sentences that contain arguments, by utilizing conditional random fields. The results exceed significantly the base line approach, and according to literature, are quite promising.},
-  isbn          = {978-3-319-07064-3},
+  abstract      = {The incomprehensible amount of information available online has made it difficult to retrospect on past events. We propose a novel linking problem to connect excerpts from Wikipedia summarizing events to online news articles elaborating on them. To address this linking problem, we cast it into an information retrieval task by treating a given excerpt as a user query with the goal to retrieve a ranked list of relevant news articles. We find that Wikipedia excerpts often come with additional semantics, in their textual descriptions, representing the time, geolocations, and named entities involved in the event. Our retrieval model leverages text and semantic annotations as different dimensions of an event by estimating independent query models to rank documents. In our experiments on two datasets, we compare methods that consider different combinations of dimensions and find that the approach that leverages all dimensions suits our problem best.},
+  isbn          = {978-3-319-30671-1},
+  review        = {- for a small part of a wikipedia entry describing a historical event, find news articles (ranked list) describing the event in detail
+- useses text, time, geolocations, names entities
+- linking method unclear},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

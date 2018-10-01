@@ -1,3 +1,10 @@
+# questions
+
+* goto example/paper for entity based citerec?
+* classical ML, therefore feature engineering?
+* other approaches often are a large ensemble of techniques/features/prior work reused — should I rather build from scratch or try to recreate/assemble existing things? in both cases: is trying for improvement just enough or do choices need to be justified further?
+* ^ pick/engineer vs "brute force"
+
 # structured notes
 
 ## citation recommendation based on entities
@@ -15,3 +22,6 @@ asd
 # misc notes
 
 * [Daniel Hershcovich](http://www.cs.huji.ac.il/~danielh/)
+* python
+    * [scikit-learn](http://scikit-learn.org/)
+    * [pandas](https://pandas.pydata.org/)

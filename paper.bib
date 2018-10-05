@@ -63,9 +63,14 @@
   pages    = {237--248},
   month    = {Oct},
   issn     = {1432-5012},
+  note     = {r (ch 1-3)},
   abstract = {The internet is rapidly becoming the first place for researchers to publish documents, but at present they receive little support in searching, tracking, analysing or debating concepts in a literature from scholarly perspectives. This paper describes the design rationale and implementation of ScholOnto, an ontology-based digital library server to support scholarly interpretation and discourse. It enables researchers to describe and debate via a semantic network the contributions a document makes, and its relationship to the literature. The paper discusses the computational services that an ontology-based server supports, alternative user interfaces to support interaction with a large semantic network, usability issues associated with knowledge formalisation, new work practices that could emerge, and related work.},
   day      = {01},
   doi      = {10.1007/s007990000034},
+  review   = {- poposal to (manually) add semantic annotation to scientific texts (to enable network of contestable claims)
+- introduce annotation scheme for above
+- "discourse-oriented ontology"
+- 90s style interface implementation},
   url      = {https://doi.org/10.1007/s007990000034},
 }
 
@@ -95,21 +100,83 @@
 }
 
 @InProceedings{Mishra2016,
-  author        = {Mishra, Arunav and Berberich, Klaus},
-  title         = {Leveraging Semantic Annotations to Link Wikipedia and News Archives},
-  booktitle     = {Advances in Information Retrieval},
-  year          = {2016},
-  editor        = {Ferro, Nicola and Crestani, Fabio and Moens, Marie-Francine and Mothe, Josiane and Silvestri, Fabrizio and Di Nunzio, Giorgio Maria and Hauff, Claudia and Silvello, Gianmaria},
-  pages         = {30--42},
-  address       = {Cham},
-  publisher     = {Springer International Publishing},
-  note          = {r (ch 1-3)},
-  __markedentry = {[tarek:]},
-  abstract      = {The incomprehensible amount of information available online has made it difficult to retrospect on past events. We propose a novel linking problem to connect excerpts from Wikipedia summarizing events to online news articles elaborating on them. To address this linking problem, we cast it into an information retrieval task by treating a given excerpt as a user query with the goal to retrieve a ranked list of relevant news articles. We find that Wikipedia excerpts often come with additional semantics, in their textual descriptions, representing the time, geolocations, and named entities involved in the event. Our retrieval model leverages text and semantic annotations as different dimensions of an event by estimating independent query models to rank documents. In our experiments on two datasets, we compare methods that consider different combinations of dimensions and find that the approach that leverages all dimensions suits our problem best.},
-  isbn          = {978-3-319-30671-1},
-  review        = {- for a small part of a wikipedia entry describing a historical event, find news articles (ranked list) describing the event in detail
+  author    = {Mishra, Arunav and Berberich, Klaus},
+  title     = {Leveraging Semantic Annotations to Link Wikipedia and News Archives},
+  booktitle = {Advances in Information Retrieval},
+  year      = {2016},
+  editor    = {Ferro, Nicola and Crestani, Fabio and Moens, Marie-Francine and Mothe, Josiane and Silvestri, Fabrizio and Di Nunzio, Giorgio Maria and Hauff, Claudia and Silvello, Gianmaria},
+  pages     = {30--42},
+  address   = {Cham},
+  publisher = {Springer International Publishing},
+  note      = {r (ch 1-3)},
+  abstract  = {The incomprehensible amount of information available online has made it difficult to retrospect on past events. We propose a novel linking problem to connect excerpts from Wikipedia summarizing events to online news articles elaborating on them. To address this linking problem, we cast it into an information retrieval task by treating a given excerpt as a user query with the goal to retrieve a ranked list of relevant news articles. We find that Wikipedia excerpts often come with additional semantics, in their textual descriptions, representing the time, geolocations, and named entities involved in the event. Our retrieval model leverages text and semantic annotations as different dimensions of an event by estimating independent query models to rank documents. In our experiments on two datasets, we compare methods that consider different combinations of dimensions and find that the approach that leverages all dimensions suits our problem best.},
+  isbn      = {978-3-319-30671-1},
+  review    = {- for a small part of a wikipedia entry describing a historical event, find news articles (ranked list) describing the event in detail
 - useses text, time, geolocations, names entities
 - linking method unclear},
+}
+
+@Masterthesis{Paszcza2016,
+  author = {Paszcza, Bartosz},
+  title  = {Comparison of Microsoft Academic Graph with other scholarly citation databases},
+  month  = {11},
+  year   = {2016},
+  pages  = {69},
+}
+
+@Article{Herrmannova2016,
+  author    = {Drahomira Herrmannova and Petr Knoth},
+  title     = {An Analysis of the Microsoft Academic Graph},
+  journal   = {D-Lib Magazine},
+  year      = {2016},
+  volume    = {22},
+  number    = {9/10},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl    = {https://dblp.org/rec/bib/journals/dlib/HerrmannovaK16a},
+  doi       = {10.1045/september2016-herrmannova},
+  timestamp = {Sun, 28 May 2017 13:24:39 +0200},
+  url       = {https://doi.org/10.1045/september2016-herrmannova},
+}
+
+@Article{Hug2017,
+  author   = {Hug, Sven E. and Ochsner, Michael and Br{\"a}ndle, Martin P.},
+  title    = {Citation analysis with microsoft academic},
+  journal  = {Scientometrics},
+  year     = {2017},
+  volume   = {111},
+  number   = {1},
+  pages    = {371--378},
+  month    = {Apr},
+  issn     = {1588-2861},
+  abstract = {We explore if and how Microsoft Academic (MA) could be used for bibliometric analyses. First, we examine the Academic Knowledge API (AK API), an interface to access MA data, and compare it to Google Scholar (GS). Second, we perform a comparative citation analysis of researchers by normalizing data from MA and Scopus. We find that MA offers structured and rich metadata, which facilitates data retrieval, handling and processing. In addition, the AK API allows retrieving frequency distributions of citations. We consider these features to be a major advantage of MA over GS. However, we identify four main limitations regarding the available metadata. First, MA does not provide the document type of a publication. Second, the ``fields of study'' are dynamic, too specific and field hierarchies are incoherent. Third, some publications are assigned to incorrect years. Fourth, the metadata of some publications did not include all authors. Nevertheless, we show that an average-based indicator (i.e. the journal normalized citation score; JNCS) as well as a distribution-based indicator (i.e. percentile rank classes; PR classes) can be calculated with relative ease using MA. Hence, normalization of citation counts is feasible with MA. The citation analyses in MA and Scopus yield uniform results. The JNCS and the PR classes are similar in both databases, and, as a consequence, the evaluation of the researchers' publication impact is congruent in MA and Scopus. Given the fast development in the last year, we postulate that MA has the potential to be used for full-fledged bibliometric analyses.},
+  day      = {01},
+  doi      = {10.1007/s11192-017-2247-8},
+  url      = {https://doi.org/10.1007/s11192-017-2247-8},
+}
+
+@InProceedings{Sinha2015,
+  author        = {Sinha, Arnab and Shen, Zhihong and Song, Yang and Ma, Hao and Eide, Darrin and Hsu, Bo-June (Paul) and Wang, Kuansan},
+  title         = {An Overview of Microsoft Academic Service (MAS) and Applications},
+  booktitle     = {Proceedings of the 24th International Conference on World Wide Web},
+  year          = {2015},
+  series        = {WWW '15 Companion},
+  pages         = {243--246},
+  address       = {New York, NY, USA},
+  publisher     = {ACM},
+  note          = {r},
+  __markedentry = {[tarek:]},
+  acmid         = {2742839},
+  doi           = {10.1145/2740908.2742839},
+  isbn          = {978-1-4503-3473-0},
+  keywords      = {academic search, entity conflation, recommender systems},
+  location      = {Florence, Italy},
+  numpages      = {4},
+  review        = {- description of how MAG was created
+-> heterogeneous entity graph containing entities of type: field of study, author, institution, paper, venue (i.e. journal, ...), event
+- description of 2 applications
+-> semantic search (e.g. "papers citing <author> before <year> about <field-of-study> appearing in <journal>")
+-> recommendation (e.g. "given a field of study, find out the most prominent authors, the most influential papers, ...")},
+  url           = {http://doi.acm.org/10.1145/2740908.2742839},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -4,6 +4,7 @@
 * classical ML, therefore feature engineering?
 * other approaches often are a large ensemble of techniques/features/prior work reused — should I rather build from scratch or try to recreate/assemble existing things? in both cases: is trying for improvement just enough or do choices need to be justified further?
 * ^ pick/engineer vs "brute force"
+* not a single of the citerec approaches in CireRecSurvey use the Microsoft Academic Graph (oder arXiv) as dataset, right? (→existence of approaches to directly compare to?)
 
 # structured notes
 
@@ -31,3 +32,4 @@ asd
 * python
     * [scikit-learn](http://scikit-learn.org/)
     * [pandas](https://pandas.pydata.org/)
+* scipy random forest works column wise and therefore is more efficient on csc (not csr) sparse matrices

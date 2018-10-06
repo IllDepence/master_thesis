@@ -1,18 +1,43 @@
 # questions
 
-* goto example/paper for entity based citerec? (mby. in MAG papers)
+* goto example/paper for entity based citerec?
 * classical ML, therefore feature engineering?
 * other approaches often are a large ensemble of techniques/features/prior work reused — should I rather build from scratch or try to recreate/assemble existing things? in both cases: is trying for improvement just enough or do choices need to be justified further?
-* ^ pick/engineer vs "brute force"
-* not a single of the citerec approaches in CireRecSurvey use the Microsoft Academic Graph (oder arXiv) as dataset, right? (→existence of approaches to directly compare to?) (mby. in MAG papers)
+* ^ pick/engineer vs "brute force" (i.e. just try a lot of different stuff and see what contributes most to a good result)
+* not a single of the citerec approaches in CireRecSurvey use the Microsoft Academic Graph (oder arXiv) as dataset, right? (→existence of approaches to directly compare to?)
 
 # structured notes
 
 ## general
 
+* task
+    * An sich ist der Microsoft Academic Graph als Datensatz für citation recommendation geeignet, allerdings enthält er nur einen Satz als citation context -- und ein größerer Kontext wäre oft angebracht, besonders, wenn wir nicht nur Entitäten zitieren, sondern ganze Argumente. Ganze Papers (fulltext) sind an sich nicht im MAG verfügbar. Die Lösung läge darin, stattdessen die Paper von arXiv.org als Subset zu verwenden. Diese sind m.E. auch im MAG. Außerdem können diese von arXiv heruntergeladen werden und liegen im Format TeX (+bibtex) vor, was den Vorteil hat, besser an den Reintext und an die Zitate zu kommen. Allerdings müsste ein TeX parser geschrieben werden, der den Rohtext usw. extrahiert. In Haskell wurde ein solch einfacher Parser bereits entwickelt [1], allerdings ohne Berücksichtigung von section headers etc.
+    * Zitate kann man differenzieren dahingehend, ob eine Entität (z.B. ein Konzept oder ein Datensatz oder eine Methode) zitiert wird, oder eine Behauptung (claim), oder eine Behauptung/Argument im Zusammenspiel einer Argumentationskette. Demzufolge kann man für jede dieser Möglichkeiten geeignete Repräsentationsformen (aus der Computerlinguistik) für ein besseres citation recommendation verwenden. Konkret kann man z.B. mentions im Content des Papers zu Entitäten in Wikipedia oder Wikidata verlinken (entity linking bzw. text annotation), sowie claims oder ganze Argumentationsketten extrahieren und entsprechend formal repräsentieren (einige Beispiele diesbzgl. sind in [2-5]; die genauen Ansätze, die wir verwenden werden, können wir später festlegen). Insgesamt ginge es also hier um die Anwendung von NLP-Komponenten auf wissenschaftliche Texte.
 * argument = claim + one or more premises justifying the claim
     * [premises] [step(s) of deduction] [claim]
     * x (and y), therefore z
+
+## tex parser
+
+Build TeX parser (for allowing tex+bibtex as input and output and for allowing to use citation contexts of arXiv, which are more flexible than in MAG)
+
+#### existing software
+
+* [plastex](https://github.com/tiarno/plastex) — mature, last commit 1y ago, python
+* [TexSoup](https://github.com/alvinwan/texsoup) — smallish, recent commits, python
+    * doesn't handle definitions (`\dev`) [source](https://stackoverflow.com/a/50151171)
+    * [stackoverflow question](https://stackoverflow.com/questions/49779853/) specifically asking about arXiv TeX (by someone using TeXSoup)
+* [opendetex](https://github.com/pkubowicz/opendetex) — ?, recent commits, compiled
+    * specifically for getting plain text
+* [LaTeXML](https://github.com/brucemiller/LaTeXML) — *very* mature, recent commits, perl
+    * LaTeX→XML
+* [Tralics](https://jblevins.org/log/xml-tools) — ?, 2015, C++
+    * apparently *fast*
+
+#### arXiv sample from [2003](http://www.cs.cornell.edu/projects/kddcup/datasets.html)
+
+* `\cite` in text, then `\bibitem` lower down
+    * 109 out of 1019 sample items don't contain `\bibitem`
 
 ## citation recommendation based on entities
 
@@ -33,3 +58,4 @@ asd
     * [scikit-learn](http://scikit-learn.org/)
     * [pandas](https://pandas.pydata.org/)
 * scipy random forest works column wise and therefore is more efficient on csc (not csr) sparse matrices
+* probably not useful for the TeX parser but: [pybtex.org](https://pybtex.org/)

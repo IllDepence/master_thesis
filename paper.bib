@@ -131,9 +131,23 @@
   year      = {2016},
   volume    = {22},
   number    = {9/10},
+  note      = {r},
   bibsource = {dblp computer science bibliography, https://dblp.org},
   biburl    = {https://dblp.org/rec/bib/journals/dlib/HerrmannovaK16a},
   doi       = {10.1045/september2016-herrmannova},
+  review    = {- analysis of MAG and comparison to other data sets
+
+- MAG is over many disciplines (not just CS, of which it contains ~17 million papers)
+- MAG is automatically assembled -> before using it for a task, the MAG should be checked for noise and bias (what this paper does)
+- MAG is largest publicly available dataset of open citation data
+- only 30 out of 127 million papers in MAG have citation data
+- year of publication field is populated for all papers in MAG
+- MAG contains 35 million DOIs
+- field of study info in MAG is hierarchical (4 levels of granularity)
+
+- look on citation network from several perspectives
+- 80 million disconnected nodes (i.e. papers w/o citations (being cited) and references (citing))
+- differences concerning journals' and universities' citation counts compared to other citation ranking sources (but no way to dig deeper since latter are non transparent)},
   timestamp = {Sun, 28 May 2017 13:24:39 +0200},
   url       = {https://doi.org/10.1045/september2016-herrmannova},
 }
@@ -172,7 +186,7 @@
   location      = {Florence, Italy},
   numpages      = {4},
   review        = {- description of how MAG was created
--> heterogeneous entity graph containing entities of type: field of study, author, institution, paper, venue (i.e. journal, ...), event
+-> heterogeneous entity graph containing entities of type: field of study, author, institution, paper, venue (i.e. journal/conference), event (specific conference instance)
 - description of 2 applications
 -> semantic search (e.g. "papers citing <author> before <year> about <field-of-study> appearing in <journal>")
 -> recommendation (e.g. "given a field of study, find out the most prominent authors, the most influential papers, ...")},

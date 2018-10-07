@@ -75,9 +75,11 @@
         * required additional packages `libpcre++-dev`, `libpq-dev`, `libghc-hdbc-odbc-dev` (+500 MB of dependencies)
     * unpack arXiv dump
         * file given for param `--arxiv-meta-xml` has do be in cwd (giving a path results in `grabcite-datagen: InvalidRelFile "..."`)
-        * expects arXiv srouces with `.gz` extension in input folder
-        * has `gzHandler` and `tarGzHandler` (see `src/GrabCite/Arxiv.hs`)
-        * → arXiv files are `tar` archives w/o file extension → need to be gzipped and then renamed to have `.gz` file extension (*not* `.tar.gz`)
+        * arXiv: *"Note: Many of the formats above are served gzipped (Content-Encoding: x-gzip). Your browser may silently uncompress after downloading so the files you see saved may appear uncompressed."*
+        * grabcite:
+            * expects arXiv sources with `.gz` extension in input folder
+            * has `gzHandler` and `tarGzHandler` (see `src/GrabCite/Arxiv.hs`)
+            * → arXiv sources manually downloaded are mere `tar` archives w/o file extension → need to be gzipped and renamed to have `.gz` file extension (*not* `.tar.gz`)
     * generate data set
         * tries to connect to papergrep.com (expired namecheap.com registration that probably once hosted [this](https://github.com/agrafix/papergrep))
 * [opendetex](https://github.com/pkubowicz/opendetex) — ?, recent commits, compiled
@@ -86,9 +88,9 @@
 * [LaTeXML](https://github.com/brucemiller/LaTeXML) — *very* mature, recent commits, perl
     * LaTeX→XML
     * existing (dead?) [project on on arXiv data](https://kwarc.info/projects/arXMLiv/) ([active LaTeXML fork](https://github.com/KWARC/LaTeXML))
-* [Tralics](https://jblevins.org/log/xml-tools) — ?, 2015, C++
+* [Tralics](https://www-sop.inria.fr/marelle/tralics/) — ?, 2015, C++
     * LaTeX→XML
-    * apparently *fast*
+    * [apparently](https://jblevins.org/log/xml-tools) *fast*
 
 ##### arXiv
 

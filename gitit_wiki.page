@@ -71,10 +71,15 @@
                 print(cntnt)
         ```
 * [grabcite](https://github.com/agrafix/grabcite)
-    * installation required additional packages `libpcre++-dev`, `libpq-dev`, `libghc-hdbc-odbc-dev` (+500 MB of dependencies)
-    * file given for param `--arxiv-meta-xml` has do be in cwd (giving a path results in `grabcite-datagen: InvalidRelFile "..."`)
-    * expects arXiv srouces with `.gz`/`.tar.gz` extension in input folder
-        * `.tar.gz` triggers use of `tarGzHandler`, see `src/GrabCite/Arxiv.hs`
+    * installation
+        * required additional packages `libpcre++-dev`, `libpq-dev`, `libghc-hdbc-odbc-dev` (+500 MB of dependencies)
+    * unpack arXiv dump
+        * file given for param `--arxiv-meta-xml` has do be in cwd (giving a path results in `grabcite-datagen: InvalidRelFile "..."`)
+        * expects arXiv srouces with `.gz` extension in input folder
+        * has `gzHandler` and `tarGzHandler` (see `src/GrabCite/Arxiv.hs`)
+        * → arXiv files are `tar` archives w/o file extension → need to be gzipped and then renamed to have `.gz` file extension (*not* `.tar.gz`)
+    * generate data set
+        * tries to connect to papergrep.com (expired namecheap.com registration that probably once hosted [this](https://github.com/agrafix/papergrep))
 * [opendetex](https://github.com/pkubowicz/opendetex) — ?, recent commits, compiled
     * specifically for getting plain text
     * TEST: seems to leave in more control sequences than on system detex

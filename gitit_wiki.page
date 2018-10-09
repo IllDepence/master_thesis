@@ -30,8 +30,13 @@
 
 * task
     * mail
+        * <small>**keinen komplett neuen Ansatz** zu citation recommendation entwerfen, sondern eher ein gutes lauffähiges System zu citation recommendation bauen. Bereits die Nachimplementierung eines "state-of-the-art"-Systems wäre eine contribution</small>
+        * <small>Wahrscheinlich werden wir uns eher **semantisch-strukturierte Repräsentationsformen (entities, claims, arguments) für citation recommendation** widmen.</small>
+        * <small>(Ashwath ... Indizierung des großen Microsoft Academic Graphs (MAG) und um die Verwendung eines state-of-the-art approaches für citation recommendation)</small>
+        * <small>in Ihrer Arbeit eher mit **semantischen und pragmatischen Ansätzen für citation recommendation** beschäftigen. Diesbezüglich gibt es nämlich **in der Literatur noch recht wenig**</small>
         * <small>An sich ist der Microsoft Academic Graph als Datensatz für citation recommendation geeignet, allerdings enthält er nur einen Satz als citation context -- und ein größerer Kontext wäre oft angebracht, besonders, wenn wir nicht nur Entitäten zitieren, sondern ganze Argumente. Ganze Papers (fulltext) sind an sich nicht im MAG verfügbar. Die Lösung läge darin, stattdessen die Paper von arXiv.org als Subset zu verwenden. Diese sind m.E. auch im MAG. Außerdem können diese von arXiv heruntergeladen werden und liegen im Format TeX (+bibtex) vor, was den Vorteil hat, besser an den Reintext und an die Zitate zu kommen. Allerdings müsste ein TeX parser geschrieben werden, der den Rohtext usw. extrahiert. In Haskell wurde ein solch einfacher Parser bereits entwickelt [1], allerdings ohne Berücksichtigung von section headers etc.</small>
-        * <small>Zitate kann man differenzieren dahingehend, ob eine Entität (z.B. ein Konzept oder ein Datensatz oder eine Methode) zitiert wird, oder eine Behauptung (claim), oder eine Behauptung/Argument im Zusammenspiel einer Argumentationskette. Demzufolge kann man für jede dieser Möglichkeiten geeignete Repräsentationsformen (aus der Computerlinguistik) für ein besseres citation recommendation verwenden. Konkret kann man z.B. mentions im Content des Papers zu Entitäten in Wikipedia oder Wikidata verlinken (entity linking bzw. text annotation), sowie claims oder ganze Argumentationsketten extrahieren und entsprechend formal repräsentieren (einige Beispiele diesbzgl. sind in [2-5]; die genauen Ansätze, die wir verwenden werden, können wir später festlegen). Insgesamt ginge es also hier um die Anwendung von NLP-Komponenten auf wissenschaftliche Texte.</small>
+        * <small>Zitate kann man differenzieren dahingehend, ob eine Entität (z.B. ein Konzept oder ein Datensatz oder eine Methode) zitiert wird, oder eine Behauptung (claim), oder eine Behauptung/Argument im Zusammenspiel einer Argumentationskette. Demzufolge kann man für jede dieser Möglichkeiten geeignete Repräsentationsformen (aus der Computerlinguistik) für ein besseres citation recommendation verwenden. **Konkret kann man z.B. mentions im Content des Papers zu Entitäten in Wikipedia oder Wikidata verlinken (entity linking bzw. text annotation), sowie claims oder ganze Argumentationsketten extrahieren und entsprechend formal repräsentieren** (einige Beispiele diesbzgl. sind in [2-5]; die genauen Ansätze, die wir verwenden werden, können wir später festlegen). Insgesamt ginge es also hier um die **Anwendung von NLP-Komponenten auf wissenschaftliche Texte**.</small>
+        * <small>Im Rahmen der Masterarbeit würde man **für jedes Unterthema (z.B. entity, claim, argumentation) einen Ansatz für citation recommendation entwickeln**. Für eine Einschätzung der Schwierigkeiten bei der Ansatzentwicklung und dann später für eine Evaluation der Ansätze müssen wohl einige Texte auch manuell annotiert werden. Außerdem würde man die Implementierungen der einzelnen Systeme zur recommendation in das Gesamtsystem von Ashwath integrieren.</small>
     * gist
         * starting point
             * MAG has much going for it, but only one sentence citation context
@@ -40,6 +45,11 @@
         * get plain text from arXiv source
         * match MAG citation contexts to arXiv plain texts (? if so, plain text of arXiv would be sufficient (no need to retain citations))
         * → MAG with arbitrary large citation contexts
+        * ———
+        * in large citation contexts, find and formally represent "semantic NLP components" (using *all* the buzzwords)
+        * ML
+        * ???
+        * profit 
 * defs
     * argument = claim + one or more premises justifying the claim
         * [premises] [step(s) of deduction] [claim]

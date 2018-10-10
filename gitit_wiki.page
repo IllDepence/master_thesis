@@ -1,3 +1,17 @@
+# orga
+
+### actionable *now*
+
+* create arXiv extractor (identify tex and bib file(s))
+* think of how to evaluate tex2text methods
+* try building tex2text method w/ python TeXSoup
+* get (larger) MAG and arXiv samples
+
+### overall
+
+* thema verstehen → expose (mail mit details kommt noch) schreiben → thesis anemlden
+* genaue richtung noch nicht so fest wie vermutet
+
 # links
 
 * arXiv
@@ -92,9 +106,10 @@
             * → arXiv sources manually downloaded are mere `tar` archives w/o file extension → need to be gzipped and renamed to have `.gz` file extension (*not* `.tar.gz`)
     * generate data set
         * tries to connect to papergrep.com (expired namecheap.com registration that probably once hosted [this](https://github.com/agrafix/papergrep))
-* [opendetex](https://github.com/pkubowicz/opendetex) — ?, recent commits, compiled
+* [opendetex](https://github.com/pkubowicz/opendetex) / [detex](https://www.freebsd.org/cgi/man.cgi?query=detex) — ?, recent commits, compiled
     * specifically for getting plain text
-    * TEST: seems to leave in more control sequences than on system detex
+    * `-c` flag is supposed to preserve `\cite`s, but breaks output completely for first tested paper `1010.2903`
+    * TEST: opendetex seems to leave in more control sequences than on system detex
 * [LaTeXML](https://github.com/brucemiller/LaTeXML) — *very* mature, recent commits, perl
     * LaTeX→XML
     * existing (dead?) [project on on arXiv data](https://kwarc.info/projects/arXMLiv/) ([active LaTeXML fork](https://github.com/KWARC/LaTeXML))

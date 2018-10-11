@@ -24,12 +24,6 @@
 
 # questions
 
-* MAG + arXiv task
-    * TeX parsing subtask
-        * is speed or accuracy/coverage a higher priority?
-        * is only plain text output needed? or properly separated sentences? or citation markings/info?
-    * mapping of IDs?
-    * general gist (see below)
 * entity based citerec
     * go-to example/paper? (candidates for similar task see below)
 * general (still somewhat far away)
@@ -68,6 +62,25 @@
     * argument = claim + one or more premises justifying the claim
         * [premises] [step(s) of deduction] [claim]
         * x (and y), therefore z
+
+### start out w/ MAG or arXiv
+
+* MAG
+    * `+` matching MAG IDs to arXiv IDs should be quite reliable (could even use citation contexts to match to arXiv plain text)
+    * `+` citation network is already given
+    * `-` (blind?) reliance on MS / less transparent
+    * `-` citation markers might not be *that* reliable (need to match arXiv source bibitem strings to MAG IDs)
+* argument for arXiv
+    * `-` matching arXiv source bibitem strings to arXiv IDs might not be *that* reliable
+    * `+` more transparent
+    * `+` citation markers are (albeit dependent on initial matching) certain
+    * `+` (if we don't add in the MAG:) only rely on one source → cleaner approach (?)
+
+questions to be answered:
+
+* how hard is matching arXiv bibitem strings to arXiv IDs?
+* if starting from arXiv, what is gained from adding in the MAG?
+* ...
 
 ### tex parser
 

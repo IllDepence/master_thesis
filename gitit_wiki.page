@@ -12,7 +12,7 @@
 * thema verstehen → expose (mail mit details kommt noch) schreiben → thesis anemlden
 * genaue richtung noch nicht so fest wie vermutet
 
-# links
+# links / notes
 
 * arXiv
     * [sources](https://arxiv.org/year/cs/18) (single dl)
@@ -21,6 +21,16 @@
     * [schema](https://microsoftdocs.github.io/microsoft-academic/microsoft-academic-graph/reference/data-schema.html)
     * [blog post w/ stats](https://www.microsoft.com/en-us/research/?post_type=msr-blog-post&p=480543&preview=true)
     * [oldish examples on quora](https://www.quora.com/Where-can-I-obtain-a-schema-description-of-Microsoft-Academic-Graph-data/answer/Milind-Gokhale-1)
+    * availability of DOIs
+        * ```
+        saiert@shetland:~$ cut -f3 -d ' ' /vol1/mag/data/2018-07-19/dumps/Papers.txt | sed '/^\s*$/d' | wc -l
+        75266339
+        ```
+        * ```
+        saiert@shetland:~$ cat /vol1/mag/data/2018-07-19/dumps/Papers.txt | wc -l
+        206252196
+        ```
+        * → 36.5%
 
 # questions
 

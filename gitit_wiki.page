@@ -173,12 +173,16 @@ questions to be answered:
 * 流れ
     * step 1: normalize (separate steps to allow for separate evaluation of results)
         * check for file ending (pdf/gz)
-        * gz: unzip and check if tar archive or tex file (how?)
-        * tar: extract contents, identify main tex file (`\begin{document}` mby?), also check for `\includepdf`
+        * gz: unzip and check if tar archive or tex file (`tarfile.is_tarfile()`)
+        * tar: extract contents, identify main tex file (`\begin{document}` mby?), flatten with [flap](https://github.com/fchauvel/flap), also check for `\includepdf`
         * save tex[+bib] / pdf in output folder
     * step 2: get plain text
         * pdf: pdf2text (citation markers byebye)
         * tex: TeXSoup
+        * save metadata from XML (mby in JSON)
+        * tex: replace local citation markers w/ globally unique one (UUID, save UUID→original bibitem text, save UUID→citing paper ID index)
+    * step 3: networking
+        * try to match citation UUIDs to arXiv IDs (and mby at one point other identifiers)
 
 ### citation recommendation based on entities
 

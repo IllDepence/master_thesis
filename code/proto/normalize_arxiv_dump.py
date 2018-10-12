@@ -1,10 +1,27 @@
 import gzip
+import magic
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tarfile
 import tempfile
+
+
+def read_file(path):
+    try:
+        with open(path) as f:
+            cntnt = f.read()
+        return cntnt
+    except UnicodeDecodeError:
+        blob = open(path, 'rb').read()
+        m = magic.Magic(mime_encoding=True)
+        encoding = m.from_buffer(blob)
+        with open(path, encoding=encoding) as f:
+            cntnt = f.read()
+        return cntnt
+
 
 if len(sys.argv) != 3:
     print(('usage: python3 nomalize_arxiv_dump.py </path/to/dump/dir> </path/t'
@@ -22,8 +39,8 @@ if not os.path.isdir(IN_DIR):
 if not os.path.isdir(OUT_DIR):
     os.makedirs(OUT_DIR)
 
-for path in os.listdir(IN_DIR):
-    fn = os.path.basename(path)
+for fn in os.listdir(IN_DIR):
+    path = os.path.join(IN_DIR, fn)
     aid, ext = os.path.splitext(fn)
     if ext == '.pdf':
         # copy over pdf file as is
@@ -47,9 +64,7 @@ for path in os.listdir(IN_DIR):
                     if os.path.splitext(rfn)[1] != '.tex':
                         continue
                     tmp_file_path = os.path.join(tmp_dir_path, rfn)
-                    cntnt = ''
-                    with open(tmp_file_path) as f:
-                        cntnt = f.read()
+                    cntnt = read_file(tmp_file_path)
                     if MAIN_TEX_SIGN in cntnt:
                         main_tex_path = tmp_file_path
                 if main_tex_path is None:
@@ -62,9 +77,7 @@ for path in os.listdir(IN_DIR):
                     if os.path.splitext(rfn)[1] not in ['.bbl', '.bib']:
                         continue
                     tmp_file_path = os.path.join(tmp_dir_path, rfn)
-                    cntnt = ''
-                    with open(tmp_file_path) as f:
-                        cntnt = f.read()
+                    cntnt = read_file(tmp_file_path)
                     if BBL_SIGN in cntnt:
                         bbl_path = tmp_file_path
                 if bbl_path is None:
@@ -84,7 +97,7 @@ for path in os.listdir(IN_DIR):
             # extraxt gzipped tex file
             cntnt = ''
             with gzip.open(path, 'rt') as f:
-                cntnt = f.read()
+                cntnt = f.read()  # TODO ← protection against weird encodings?
             if not MAIN_TEX_SIGN in cntnt:
                 print('unexpected content in dump archive {}'.format(fn))
                 continue

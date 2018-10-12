@@ -91,6 +91,7 @@
     * `+` citation network is already given
     * `-` (blind?) reliance on MS / less transparent
     * `-` citation markers might not be *that* reliable (need to match arXiv source bibitem strings to MAG IDs)
+    * `o` might enable just using latexpand+detex for TeX processing
 * argument for arXiv
     * `-` matching arXiv source bibitem strings to arXiv IDs might not be *that* reliable
     * `+` more transparent
@@ -154,6 +155,9 @@ questions to be answered:
     * can be run from inside python by copying `flap/ui.py` and replacing bottom (click) part with `Controller(OSFileSystem(), Display(sys.stdout, False)).run('some.tex', 'out_folder')`
     * somewhat slow?
     * → try out [alternatives](https://tex.stackexchange.com/questions/21838/replace-inputfilex-by-the-content-of-filex-automatically)
+    * → latexpand looks good
+        * has `--expand-usepackage` flag
+        * has `--expand-bbl FILE` flag (mby useful)
 
 ##### arXiv
 

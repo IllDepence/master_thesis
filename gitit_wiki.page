@@ -150,6 +150,10 @@ questions to be answered:
 * [Tralics](https://www-sop.inria.fr/marelle/tralics/) — ?, 2015, C++
     * LaTeX→XML
     * [apparently](https://jblevins.org/log/xml-tools) *fast*
+* [flap](https://github.com/fchauvel/flap)
+    * can be run from inside python by copying `flap/ui.py` and replacing bottom (click) part with `Controller(OSFileSystem(), Display(sys.stdout, False)).run('some.tex', 'out_folder')`
+    * somewhat slow?
+    * → try out [alternatives](https://tex.stackexchange.com/questions/21838/replace-inputfilex-by-the-content-of-filex-automatically)
 
 ##### arXiv
 

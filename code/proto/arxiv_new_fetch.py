@@ -3,16 +3,21 @@
 
 from lxml import etree
 
-parser = etree.XMLParser(ns_clean=True)
+parser = etree.XMLParser()
 with open('arxiv-cs-all-until201712031.xml') as f:
     tree = etree.parse(f, parser)
 
+ns = {'dc':'http://purl.org/dc/elements/1.1/',
+      'oai_dc':'http://www.openarchives.org/OAI/2.0/oai_dc/',
+      'xsi':'http://www.w3.org/2001/XMLSchema-instance'}
+
 # number of DOIs
-r = tree.xpath("//dc:identifier[starts-with(text(),'doi')]",
-               namespaces={'dc':'http://purl.org/dc/elements/1.1/'})
+r = tree.xpath(("/ListRecords/record/metadata/oai_dc:dc/dc:identifier[starts-w"
+                "ith(text(),'doi')]"), namespaces=ns)
+print('number of DOIs: {}'.format(len(r)))
+# 29739
 
-# "//record/metadata/dc:identifier[starts-with(text(),'doi')]"
-# for some reason doesn't work
-
-# "//record//metadata//dc:identifier[starts-with(text(),'doi')]"
-# is too loose and takes ages to evaluate
+# number of records
+r = tree.xpath("/ListRecords/record")
+print('number of records: {}'.format(len(r)))
+# 155308

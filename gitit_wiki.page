@@ -17,13 +17,24 @@
 * arXiv
     * [sources](https://arxiv.org/year/cs/18) (single dl)
     * [IDs over time](https://arxiv.org/help/arxiv_identifier)
+    * availability of DOIs
+        * ```
+        >>> len(tree.xpath("//dc:identifier[starts-with(text(),'doi')]", namespaces={'dc':'http://purl.org/dc/elements/1.1/'}))
+        29739
+        ```
+        * → 28775 of which are contained in MAG
+        * ```
+        >>> len(tree.xpath("//ListRecords/record"))
+        155308
+        ```
+        * → 19%
 * MAG
     * [schema](https://microsoftdocs.github.io/microsoft-academic/microsoft-academic-graph/reference/data-schema.html)
     * [blog post w/ stats](https://www.microsoft.com/en-us/research/?post_type=msr-blog-post&p=480543&preview=true)
     * [oldish examples on quora](https://www.quora.com/Where-can-I-obtain-a-schema-description-of-Microsoft-Academic-Graph-data/answer/Milind-Gokhale-1)
-    * availability of DOIs
+    * availability of DOIs (in CS only dump from Dec. 2017)
         * ```
-        saiert@shetland:~$ cut -f3 -d ' ' /vol1/mag/data/2018-07-19/dumps/Papers.txt | sed '/^\s*$/d' | wc -l
+        saiert@shetland:~$ cut -f3 -d$'\t' /vol1/mag/data/2018-07-19/dumps/Papers.txt | sed '/^\s*$/d' | wc -l
         75266339
         ```
         * ```
@@ -150,6 +161,14 @@ questions to be answered:
 * problems
     * sometimes a paper's [v2](https://arxiv.org/format/1306.0555v2) gives empty source while it's [v1](https://arxiv.org/format/1306.0555v1) has proper source
     * [cases](https://arxiv.org/format/1607.00145) where "source" is just a single `\includepdf`
+
+##### arXiv source dump
+
+* lots of tar archives like `arXiv_src_0001_001.tar` and a manifest file `arXiv_src_manifest.xml` w/ some metadata
+* top level archive content examples:
+    * `cs0001012.gz` → `arXiv:cs/0001012`
+    * `gr-qc0001036.pdf` → `arXiv:gr-qc/0001036`
+    * `1502.00318.gz` → `arXiv:1502.00318`
 
 ### citation recommendation based on entities
 

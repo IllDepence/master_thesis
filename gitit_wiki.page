@@ -154,8 +154,9 @@ questions to be answered:
 ##### arXiv
 
 * IDs
-    * metadata record example: `<identifier>oai:arXiv.org:0704.0046</identifier>`
-    * equivalent web: `https://arxiv.org/abs/0704.0046`
+    * metadata record: `oai:arXiv.org:0704.0046`　　(xPath: `/ListRecords/record/header/identifier[text()='<id>']`)
+    * web: `https://arxiv.org/abs/0704.0046`
+    * data dump: `0704.0046.gz`
 * only *some* metadata records have DOIs
 * `\cite` in text, then `\bibitem` lower down or in `.bib` file
 * problems
@@ -169,6 +170,15 @@ questions to be answered:
     * `cs0001012.gz` → `arXiv:cs/0001012`
     * `gr-qc0001036.pdf` → `arXiv:gr-qc/0001036`
     * `1502.00318.gz` → `arXiv:1502.00318`
+* 流れ
+    * step 1: normalize (separate steps to allow for separate evaluation of results)
+        * check for file ending (pdf/gz)
+        * gz: unzip and check if tar archive or tex file (how?)
+        * tar: extract contents, identify main tex file (`\begin{document}` mby?), also check for `\includepdf`
+        * save tex[+bib] / pdf in output folder
+    * step 2: get plain text
+        * pdf: pdf2text (citation markers byebye)
+        * tex: TeXSoup
 
 ### citation recommendation based on entities
 

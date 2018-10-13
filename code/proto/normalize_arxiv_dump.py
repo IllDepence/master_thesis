@@ -16,7 +16,10 @@ if len(sys.argv) != 3:
 
 IN_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
-MAIN_TEX_PATT = re.compile(r'\\begin\s*\{\s*document\s*\}')
+MAIN_TEX_PATT = re.compile(r'\\begin\s*\{\s*document\s*\}', re.I)
+PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
+GZ_EXT_PATT = re.compile(r'^\.gz$', re.I)
+TEX_EXT_PATT = re.compile(r'^\.tex$', re.I)
 BBL_SIGN = '\\bibitem'
 
 
@@ -61,28 +64,23 @@ if not os.path.isdir(OUT_DIR):
 for fn in os.listdir(IN_DIR):
     path = os.path.join(IN_DIR, fn)
     aid, ext = os.path.splitext(fn)
-    if ext == '.pdf':
+    if PDF_EXT_PATT.match(ext):
         # copy over pdf file as is
         dest = os.path.join(OUT_DIR, fn)
         shutil.copyfile(path, dest)
-    elif ext == '.gz':
+    elif GZ_EXT_PATT.match(ext):
         if tarfile.is_tarfile(path):
             with tempfile.TemporaryDirectory() as tmp_dir_path:
                 # extract archive contents
                 tar = tarfile.open(path)
-                files = tar.getmembers()
-                rel_ext = ['.tex', '.bbl', '.bib', '.pdf']
-                rel_files = [f for f in files if
-                             os.path.splitext(f.name)[1] in rel_ext]
-                rfnames = [f.name for f in rel_files if
-                           os.path.splitext(f.name)[1]]
-                tar.extractall(path=tmp_dir_path, members=rel_files)
+                fnames = tar.getnames()
+                tar.extractall(path=tmp_dir_path)
                 # identify main tex file
                 main_tex_path = None
-                for rfn in rfnames:
-                    if os.path.splitext(rfn)[1] != '.tex':
+                for tfn in fnames:
+                    if not TEX_EXT_PATT.match(os.path.splitext(tfn)[1]):
                         continue
-                    tmp_file_path = os.path.join(tmp_dir_path, rfn)
+                    tmp_file_path = os.path.join(tmp_dir_path, tfn)
                     cntnt = read_file(tmp_file_path)
                     if re.search(MAIN_TEX_PATT, cntnt) is not None:
                         main_tex_path = tmp_file_path
@@ -92,13 +90,19 @@ for fn in os.listdir(IN_DIR):
                     continue
                 # identify bbl file if present
                 bbl_path = None
-                for rfn in rfnames:
-                    if os.path.splitext(rfn)[1] not in ['.bbl', '.bib']:
+                for tfn in fnames:
+                    tmp_file_path = os.path.join(tmp_dir_path, tfn)
+                    if os.path.splitext(tfn)[1] in ['.pdf', '.eps', '.jpg',
+                                                    '.png', '.gif']:
                         continue
-                    tmp_file_path = os.path.join(tmp_dir_path, rfn)
-                    cntnt = read_file(tmp_file_path)
-                    if BBL_SIGN in cntnt:
-                        bbl_path = tmp_file_path
+                    try:
+                        cntnt = read_file(tmp_file_path)
+                        if re.search(MAIN_TEX_PATT, cntnt) is not None:
+                            continue
+                        if BBL_SIGN in cntnt:
+                            bbl_path = tmp_file_path
+                    except:
+                        continue
                 if bbl_path is None:
                     latexpand_args = ['latexpand',
                                       main_tex_path]
@@ -112,7 +116,7 @@ for fn in os.listdir(IN_DIR):
                 tmp_dest = os.path.join(tmp_dir_path, new_tex_fn)
                 out = open(tmp_dest, mode='w')
                 err = open(os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a')
-                err.write('------------- {} -------------'.format(aid))
+                err.write('\n------------- {} -------------\n'.format(aid))
                 err.flush()
                 subprocess.run(latexpand_args, stdout=out, stderr=err)
                 out.close()

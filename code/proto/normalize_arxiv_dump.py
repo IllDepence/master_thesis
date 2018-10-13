@@ -1,3 +1,4 @@
+import chardet
 import gzip
 import magic
 import os
@@ -7,21 +8,6 @@ import subprocess
 import sys
 import tarfile
 import tempfile
-
-
-def read_file(path):
-    try:
-        with open(path) as f:
-            cntnt = f.read()
-        return cntnt
-    except UnicodeDecodeError:
-        blob = open(path, 'rb').read()
-        m = magic.Magic(mime_encoding=True)
-        encoding = m.from_buffer(blob)
-        with open(path, encoding=encoding) as f:
-            cntnt = f.read()
-        return cntnt
-
 
 if len(sys.argv) != 3:
     print(('usage: python3 nomalize_arxiv_dump.py </path/to/dump/dir> </path/t'
@@ -33,8 +19,41 @@ OUT_DIR = sys.argv[2]
 MAIN_TEX_SIGN = '\\begin{document}'
 BBL_SIGN = '\\bibitem'
 
+
+def log(msg):
+    with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
+        f.write('{}\n'.format(msg))
+
+
+def read_file(path):
+    try:
+        with open(path) as f:
+            cntnt = f.read()
+    except UnicodeDecodeError:
+        blob = open(path, 'rb').read()
+        m = magic.Magic(mime_encoding=True)
+        encoding = m.from_buffer(blob)
+        try:
+            cntnt = blob.decode(encoding)
+        except (UnicodeDecodeError, LookupError) as e:
+            encoding = chardet.detect(blob)['encoding']
+            cntnt = blob.decode(encoding, errors='replace')
+    return cntnt
+
+def read_gzipped_file(path):
+    blob = gzip.open(path, 'rb').read()
+    m = magic.Magic(mime_encoding=True)
+    encoding = m.from_buffer(blob)
+    try:
+        cntnt = blob.decode(encoding)
+    except (UnicodeDecodeError, LookupError) as e:
+        encoding = chardet.detect(blob)['encoding']
+        cntnt = blob.decode(encoding, errors='replace')
+    return cntnt
+
+
 if not os.path.isdir(IN_DIR):
-    print('invalid dump directory')
+    log('invalid dump directory')
 
 if not os.path.isdir(OUT_DIR):
     os.makedirs(OUT_DIR)
@@ -68,8 +87,8 @@ for fn in os.listdir(IN_DIR):
                     if MAIN_TEX_SIGN in cntnt:
                         main_tex_path = tmp_file_path
                 if main_tex_path is None:
-                    print(('couldn\'t find main tex file in dump archive {}'
-                           '').format(fn))
+                    log(('couldn\'t find main tex file in dump archive {}'
+                         '').format(fn))
                     continue
                 # identify bbl file if present
                 bbl_path = None
@@ -88,22 +107,31 @@ for fn in os.listdir(IN_DIR):
                                       '--expand-bbl',
                                       bbl_path,
                                       main_tex_path]
+                # flatten to single tex file and save
                 new_tex_fn = '{}.tex'.format(aid)
-                dest = os.path.join(OUT_DIR, new_tex_fn)
-                out = open(dest, 'w')
-                subprocess.run(latexpand_args, stdout=out)
+                tmp_dest = os.path.join(tmp_dir_path, new_tex_fn)
+                out = open(tmp_dest, mode='w')
+                err = open(os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a')
+                err.write('------------- {} -------------'.format(aid))
+                err.flush()
+                subprocess.run(latexpand_args, stdout=out, stderr=err)
                 out.close()
+                err.close()
+                # re-read and write to ensure utf-8 b/c latexpand doesn't
+                # behave
+                cntnt = read_file(tmp_dest)
+                dest = os.path.join(OUT_DIR, new_tex_fn)
+                with open(dest, mode='w', encoding='utf-8') as f:
+                    f.write(cntnt)
         else:
             # extraxt gzipped tex file
-            cntnt = ''
-            with gzip.open(path, 'rt') as f:
-                cntnt = f.read()  # TODO ← protection against weird encodings?
+            cntnt = read_gzipped_file(path)
             if not MAIN_TEX_SIGN in cntnt:
-                print('unexpected content in dump archive {}'.format(fn))
+                log('unexpected content in dump archive {}'.format(fn))
                 continue
             new_fn = '{}.tex'.format(aid)
             dest = os.path.join(OUT_DIR, new_fn)
-            with open(dest, 'w') as f:
+            with open(dest, mode='w', encoding='utf-8') as f:
                 f.write(cntnt)
     else:
-        print('unexpected file {} in dump directory'.format(fn))
+        log('unexpected file {} in dump directory'.format(fn))

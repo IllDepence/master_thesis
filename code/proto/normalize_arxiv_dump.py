@@ -20,6 +20,7 @@ MAIN_TEX_PATT = re.compile(r'\\begin\s*\{\s*document\s*\}', re.I)
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
 GZ_EXT_PATT = re.compile(r'^\.gz$', re.I)
 TEX_EXT_PATT = re.compile(r'^\.tex$', re.I)
+NON_TEXT_PATT = re.compile(r'^\.(pdf|eps|jpg|png|gif)$', re.I)
 BBL_SIGN = '\\bibitem'
 
 
@@ -77,13 +78,29 @@ for fn in os.listdir(IN_DIR):
                 tar.extractall(path=tmp_dir_path)
                 # identify main tex file
                 main_tex_path = None
+                ignored_names = []
+                # check .tex files first
                 for tfn in fnames:
                     if not TEX_EXT_PATT.match(os.path.splitext(tfn)[1]):
+                        ignored_names.append(tfn)
                         continue
                     tmp_file_path = os.path.join(tmp_dir_path, tfn)
                     cntnt = read_file(tmp_file_path)
                     if re.search(MAIN_TEX_PATT, cntnt) is not None:
                         main_tex_path = tmp_file_path
+                # try other files
+                if main_tex_path is None:
+                    for tfn in ignored_names:
+                        tmp_file_path = os.path.join(tmp_dir_path, tfn)
+                        if NON_TEXT_PATT.match(os.path.splitext(tfn)[1]):
+                            continue
+                        try:
+                            cntnt = read_file(tmp_file_path)
+                            if re.search(MAIN_TEX_PATT, cntnt) is not None:
+                                main_tex_path = tmp_file_path
+                        except:
+                            continue
+                # give up
                 if main_tex_path is None:
                     log(('couldn\'t find main tex file in dump archive {}'
                          '').format(fn))
@@ -92,8 +109,7 @@ for fn in os.listdir(IN_DIR):
                 bbl_path = None
                 for tfn in fnames:
                     tmp_file_path = os.path.join(tmp_dir_path, tfn)
-                    if os.path.splitext(tfn)[1] in ['.pdf', '.eps', '.jpg',
-                                                    '.png', '.gif']:
+                    if NON_TEXT_PATT.match(os.path.splitext(tfn)[1]):
                         continue
                     try:
                         cntnt = read_file(tmp_file_path)

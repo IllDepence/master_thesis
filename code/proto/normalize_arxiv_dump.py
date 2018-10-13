@@ -16,7 +16,7 @@ if len(sys.argv) != 3:
 
 IN_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
-MAIN_TEX_SIGN = '\\begin{document}'
+MAIN_TEX_PATT = re.compile(r'\\begin\s*\{\s*document\s*\}')
 BBL_SIGN = '\\bibitem'
 
 
@@ -84,7 +84,7 @@ for fn in os.listdir(IN_DIR):
                         continue
                     tmp_file_path = os.path.join(tmp_dir_path, rfn)
                     cntnt = read_file(tmp_file_path)
-                    if MAIN_TEX_SIGN in cntnt:
+                    if re.search(MAIN_TEX_PATT, cntnt) is not None:
                         main_tex_path = tmp_file_path
                 if main_tex_path is None:
                     log(('couldn\'t find main tex file in dump archive {}'
@@ -126,7 +126,7 @@ for fn in os.listdir(IN_DIR):
         else:
             # extraxt gzipped tex file
             cntnt = read_gzipped_file(path)
-            if not MAIN_TEX_SIGN in cntnt:
+            if re.search(MAIN_TEX_PATT, cntnt) is None:
                 log('unexpected content in dump archive {}'.format(fn))
                 continue
             new_fn = '{}.tex'.format(aid)

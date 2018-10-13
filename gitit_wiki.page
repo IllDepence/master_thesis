@@ -173,6 +173,9 @@ questions to be answered:
     * `physics0001026`: html instead of tex
     * `physics0001060`: postscript instead of tex
     * `astro-ph0001005`: using file extension .ltx for latex
+    * `hep-th0001079`: few sentences of plaintext
+    * `hep-th0001205`, `quant-ph0001041`, ...: TeX (not LaTeX)
+    * `ph0001041`: weird LaTeX?
 
 ##### arXiv source dump
 

@@ -1,3 +1,13 @@
+""" Normalize a arXiv dump
+
+    - copy PDF files as is
+    - unzip gzipped single files
+        - copy if it's a LaTeX file
+    - extract gzipped tar archives
+        - try to flatten contents to a single LaTeX file
+        - ignores non LaTeX contents (HTML, PS, TeX, ...)
+"""
+
 import chardet
 import gzip
 import magic

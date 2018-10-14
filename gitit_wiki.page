@@ -129,6 +129,9 @@ questions to be answered:
             if type(cntnt) == str:
                 print(cntnt)
         ```
+    * **TESTED** on larger sample: 32% fails
+        * 54 of 169 failed — can be reduced to 50 by replacing preamble w/ a clean one
+        * → mby do 70% TexSoup + 30% fallback sth. (e.g. detex + python script to put cites back in?)
 * [grabcite](https://github.com/agrafix/grabcite)
     * installation
         * required additional packages `libpcre++-dev`, `libpq-dev`, `libghc-hdbc-odbc-dev` (+500 MB of dependencies)
@@ -148,6 +151,20 @@ questions to be answered:
 * [LaTeXML](https://github.com/brucemiller/LaTeXML) — *very* mature, recent commits, perl
     * LaTeX→XML
     * existing (dead?) [project on on arXiv data](https://kwarc.info/projects/arXMLiv/) ([active LaTeXML fork](https://github.com/KWARC/LaTeXML))
+    * ~~install from source~~
+        * `sudo apt install cpanminus libxml-libxml-perl libxml-libxslt-perl libxml2-dev libimage-size-perl`
+        * `sudo cpanm XML::LibXML`
+        * `sudo cpanm Parse::RecDescent`
+        * `perl Makefile.PL`
+        * `make`
+        * `make test` → **fails**
+        * `make install`
+    * install:
+        * `sudo apt install latexml`
+    * misc notes:
+        * xpath matches in output require namespace. e.g.:
+            * `tree.xpath('//LaTeXML:Math', namespaces={'LaTeXML':'http://dlmf.nist.gov/LaTeXML'})`
+            * `etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}Math', with_tail=False)`
 * [Tralics](https://www-sop.inria.fr/marelle/tralics/) — ?, 2015, C++
     * LaTeX→XML
     * [apparently](https://jblevins.org/log/xml-tools) *fast*

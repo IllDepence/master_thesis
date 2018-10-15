@@ -15,6 +15,7 @@
 # links / notes
 
 * arXiv
+    * 1.4 M documents → processing each for **0.42 seconds** takes **~1 week**
     * [sources](https://arxiv.org/year/cs/18) (single dl)
     * [IDs over time](https://arxiv.org/help/arxiv_identifier)
     * availability of DOIs (in CS only dump from Dec. 2017)

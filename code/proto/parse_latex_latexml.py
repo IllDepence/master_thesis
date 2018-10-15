@@ -2,6 +2,8 @@
 
     TODO:
         - do sth. w/ white space caused by e.g. tables (?)
+        - plan B for latexml fails? (e.g. preable cleaning)
+        - SPEEDUP (currently ~10s per doc)
 """
 
 import json
@@ -9,74 +11,126 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import uuid
 from lxml import etree
 
-IN_FILE = sys.argv[1]
-OUT_DIR = '/tmp'
-latexml_tmp = 'out.xml'
+if len(sys.argv) != 3:
+    print(('usage: python3 parse_latex_latexml.py </path/to/in/dir> </path/to/'
+           'out/dir>'))
+    sys.exit()
 
-# run latexml
-latexml_args = ['latexml',
-                '--nocomments',
-                '--destination={}'.format(latexml_tmp),
-                IN_FILE]
+IN_DIR = sys.argv[1]
+OUT_DIR = sys.argv[2]
+PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
 
-out = open(latexml_tmp, mode='w')
-err = open(os.path.join(OUT_DIR, 'log_latexml.txt'), 'a')
-err.write('\n------------- {} -------------\n'.format(IN_FILE))
-err.flush()
-subprocess.run(latexml_args, stdout=out, stderr=err)
-out.close()
-err.close()
 
-# get mathless plain text from latexml output
-parser = etree.XMLParser()
-with open(latexml_tmp) as f:
-    tree = etree.parse(f, parser)
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}equationgroup', with_tail=False)
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}equation', with_tail=False)
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}Math', with_tail=False)
-# processing of citation markers
+def log(msg):
+    with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
+        f.write('{}\n'.format(msg))
 
-namespaces = {'LaTeXML':'http://dlmf.nist.gov/LaTeXML'}
-bibitems = tree.xpath('//LaTeXML:bibitem', namespaces=namespaces)
-bibkey_map = {}
-bibitem_map = {}
 
-for bi in bibitems:
-    uid = str(uuid.uuid4())
-    local_key = bi.get('key')
-    bibkey_map[local_key] = uid
-    etree.strip_elements(bi, '{http://dlmf.nist.gov/LaTeXML}bibtag')
-    text = etree.tostring(bi, encoding='unicode', method='text')
-    text = re.sub('\s+', ' ', text).strip()
-    bibitem_map[uid] = text
+if not os.path.isdir(IN_DIR):
+    print('input directory does not exist')
+    sys.exit()
 
-citations = tree.xpath('//LaTeXML:cite', namespaces=namespaces)
-for cit in citations:
-    elem = cit.find('{http://dlmf.nist.gov/LaTeXML}bibref')
-    sep = elem.get('separator')
-    refs = elem.get('bibrefs').split(sep)
-    replace_text = ''
-    for ref in refs:
-        if ref in bibkey_map:
-            marker = '{{{{cite:{}}}}}'.format(bibkey_map[ref])
-            replace_text += marker
-        else:
-            print(('WARNING: unmatched bibliography key {}'
-                   '').format(ref))
-    cit.tail = replace_text + cit.tail
+if not os.path.isdir(OUT_DIR):
+    os.makedirs(OUT_DIR)
 
-# /processing of citation markers
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}cite', with_tail=False)
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}bibliography', with_tail=False)
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}biblist', with_tail=False)
-etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}bibitem', with_tail=False)
-etree.strip_tags(tree, '*')
-tree_str = etree.tostring(tree, encoding='unicode', method='text')
+for fn in os.listdir(IN_DIR):
+    path = os.path.join(IN_DIR, fn)
+    aid, ext = os.path.splitext(fn)
+    print(aid)
+    if PDF_EXT_PATT.match(ext):
+        log('skipping file {}'.format(fn))
+        continue
 
-with open('out.txt', 'w') as f:
-    f.write(tree_str)
-with open('map.json', 'w') as f:
-    f.write(json.dumps(bibitem_map))
+    with tempfile.TemporaryDirectory() as tmp_dir_path:
+        tmp_xml_path = os.path.join(tmp_dir_path, 'out.xml')
+        # run latexml
+        latexml_args = ['latexml',
+                        '--nocomments',
+                        '--destination={}'.format(tmp_xml_path),
+                        path]
+
+        out = open(tmp_xml_path, mode='w')
+        err = open(os.path.join(OUT_DIR, 'log_latexml.txt'), 'a')
+        err.write('\n------------- {} -------------\n'.format(aid))
+        err.flush()
+        subprocess.run(latexml_args, stdout=out, stderr=err)
+        out.close()
+        err.close()
+
+        # get mathless plain text from latexml output
+        parser = etree.XMLParser()
+        with open(tmp_xml_path) as f:
+            try:
+                tree = etree.parse(f, parser)
+            except etree.XMLSyntaxError as e:
+                print('FAILED {}. skipping'.format(aid))
+                log('\n--- {} ---\n{}\n----------\n'.format(fn, e))
+                continue
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}equationgroup',
+                             with_tail=False)
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}equation',
+                             with_tail=False)
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}Math',
+                             with_tail=False)
+
+        # processing of citation markers
+        namespaces = {'LaTeXML':'http://dlmf.nist.gov/LaTeXML'}
+        bibitems = tree.xpath('//LaTeXML:bibitem', namespaces=namespaces)
+        bibkey_map = {}
+        bibitem_map = {}
+
+        for bi in bibitems:
+            uid = str(uuid.uuid4())
+            local_key = bi.get('key')
+            bibkey_map[local_key] = uid
+            etree.strip_elements(bi, '{http://dlmf.nist.gov/LaTeXML}bibtag')
+            text = etree.tostring(bi, encoding='unicode', method='text')
+            text = re.sub('\s+', ' ', text).strip()
+            bibitem_map[uid] = text
+
+        citations = tree.xpath('//LaTeXML:cite', namespaces=namespaces)
+        for cit in citations:
+            elem = cit.find('{http://dlmf.nist.gov/LaTeXML}bibref')
+            sep = elem.get('separator')
+            refs = elem.get('bibrefs').split(sep)
+            replace_text = ''
+            for ref in refs:
+                if ref in bibkey_map:
+                    marker = '{{{{cite:{}}}}}'.format(bibkey_map[ref])
+                    replace_text += marker
+                else:
+                    log(('WARNING: unmatched bibliography key {} for doc {}'
+                         '').format(ref, aid))
+            if cit.tail:
+                cit.tail = replace_text + cit.tail
+            else:
+                cit.tail = replace_text
+        # /processing of citation markers
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}cite',
+                             with_tail=False)
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}bibliography',
+                             with_tail=False)
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}biblist',
+                             with_tail=False)
+        etree.strip_elements(tree,
+                             '{http://dlmf.nist.gov/LaTeXML}bibitem',
+                             with_tail=False)
+        etree.strip_tags(tree, '*')
+        tree_str = etree.tostring(tree, encoding='unicode', method='text')
+
+        out_txt_path = os.path.join(OUT_DIR, '{}.txt'.format(aid))
+        out_map_path = os.path.join(OUT_DIR, '{}_map.json'.format(aid))
+        with open(out_txt_path, 'w') as f:
+            f.write(tree_str)
+        with open(out_map_path, 'w') as f:
+            f.write(json.dumps(bibitem_map))

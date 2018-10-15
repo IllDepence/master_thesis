@@ -67,7 +67,8 @@ def read_gzipped_file(path):
 
 
 if not os.path.isdir(IN_DIR):
-    log('invalid dump directory')
+    print('dump directory does not exist')
+    sys.exit()
 
 if not os.path.isdir(OUT_DIR):
     os.makedirs(OUT_DIR)

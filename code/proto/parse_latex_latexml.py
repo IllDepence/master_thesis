@@ -15,7 +15,6 @@ from lxml import etree
 
 IN_FILE = sys.argv[1]
 OUT_DIR = '/tmp'
-BEGIN_DOC_PATT = re.compile(r'<document[^<]*?>', re.I)
 latexml_tmp = 'out.xml'
 
 # run latexml
@@ -41,11 +40,7 @@ etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}equation', with_tail=F
 etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}Math', with_tail=False)
 # TODO: pre removal processing of citation markers
 etree.strip_tags(tree, '*')
-# remove remaining XML parts etree won't let go of
-tree_bytes = etree.tostring(tree)
-tree_str = tree_bytes.decode('utf-8')
-parts = re.split(BEGIN_DOC_PATT, tree_str, maxsplit=1)
-tree_str = parts[1].split('</document>')[0]
+tree_str = etree.tostring(tree, encoding='unicode', method='text')
 
 with open('out.txt', 'w') as f:
     f.write(tree_str)

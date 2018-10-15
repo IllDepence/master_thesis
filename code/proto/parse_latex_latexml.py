@@ -1,4 +1,4 @@
-""" convert a latex file to plain text with nice citation markers
+""" convert latex files to plain text with nice citation markers
 
     TODO:
         - do sth. w/ white space caused by e.g. tables (?)
@@ -57,7 +57,7 @@ for fn in os.listdir(IN_DIR):
         err = open(os.path.join(OUT_DIR, 'log_latexml.txt'), 'a')
         err.write('\n------------- {} -------------\n'.format(aid))
         err.flush()
-        subprocess.run(latexml_args, stdout=out, stderr=err)
+        subprocess.run(latexml_args, stdout=out, stderr=err, timeout=60)
         out.close()
         err.close()
 
@@ -81,7 +81,7 @@ for fn in os.listdir(IN_DIR):
                              with_tail=False)
 
         # processing of citation markers
-        namespaces = {'LaTeXML':'http://dlmf.nist.gov/LaTeXML'}
+        namespaces = {'LaTeXML': 'http://dlmf.nist.gov/LaTeXML'}
         bibitems = tree.xpath('//LaTeXML:bibitem', namespaces=namespaces)
         bibkey_map = {}
         bibitem_map = {}
@@ -99,7 +99,11 @@ for fn in os.listdir(IN_DIR):
         for cit in citations:
             elem = cit.find('{http://dlmf.nist.gov/LaTeXML}bibref')
             sep = elem.get('separator')
-            refs = elem.get('bibrefs').split(sep)
+            refs_list = elem.get('bibrefs')
+            if refs_list:
+                refs = refs_list.split(sep)
+            else:
+                refs = []
             replace_text = ''
             for ref in refs:
                 if ref in bibkey_map:

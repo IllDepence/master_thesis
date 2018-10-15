@@ -161,6 +161,7 @@ questions to be answered:
         * `make test` → **fails**
         * `make install`
     * install:
+        * `sudo apt install libtext-unidecode-perl`
         * `sudo apt install latexml`
     * misc notes:
         * xpath matches in output require namespace. e.g.:
@@ -215,6 +216,16 @@ questions to be answered:
         * tex: replace local citation markers w/ globally unique one (UUID, save UUID→original bibitem text, save UUID→citing paper ID index)
     * step 3: networking
         * try to match citation UUIDs to arXiv IDs (and mby at one point other identifiers)
+
+**test w/ 2364 input docs**
+```
+saiert@shetland:~/arxiv_test$ time python3 normalize_arxiv_dump.py /home/saiert/arxiv_test/0001_001/0001/ /home/saiert/arxiv_test/0001_001/normalized
+
+real    3m37.049s
+user    3m16.520s
+sys     0m20.866s
+```
+→ all of arXiv in 37 hours
 
 ### citation recommendation based on entities
 

@@ -1,4 +1,10 @@
 """ convert a latex file to plain text (soon^TM) with nice citation markers
+
+    TODO:
+        - citation markers
+        - html entities (&#8217;) back to text
+        - do sth. w/ white space caused by e.g. tables
+        - cutting away of references (?)
 """
 
 import os

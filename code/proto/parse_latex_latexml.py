@@ -1,16 +1,15 @@
-""" convert a latex file to plain text (soon^TM) with nice citation markers
+""" convert a latex file to plain text with nice citation markers
 
     TODO:
-        - citation markers
-        - html entities (&#8217;) back to text
-        - do sth. w/ white space caused by e.g. tables
-        - cutting away of references (?)
+        - do sth. w/ white space caused by e.g. tables (?)
 """
 
+import json
 import os
 import re
 import subprocess
 import sys
+import uuid
 from lxml import etree
 
 IN_FILE = sys.argv[1]
@@ -38,9 +37,46 @@ with open(latexml_tmp) as f:
 etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}equationgroup', with_tail=False)
 etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}equation', with_tail=False)
 etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}Math', with_tail=False)
-# TODO: pre removal processing of citation markers
+# processing of citation markers
+
+namespaces = {'LaTeXML':'http://dlmf.nist.gov/LaTeXML'}
+bibitems = tree.xpath('//LaTeXML:bibitem', namespaces=namespaces)
+bibkey_map = {}
+bibitem_map = {}
+
+for bi in bibitems:
+    uid = str(uuid.uuid4())
+    local_key = bi.get('key')
+    bibkey_map[local_key] = uid
+    etree.strip_elements(bi, '{http://dlmf.nist.gov/LaTeXML}bibtag')
+    text = etree.tostring(bi, encoding='unicode', method='text')
+    text = re.sub('\s+', ' ', text).strip()
+    bibitem_map[uid] = text
+
+citations = tree.xpath('//LaTeXML:cite', namespaces=namespaces)
+for cit in citations:
+    elem = cit.find('{http://dlmf.nist.gov/LaTeXML}bibref')
+    sep = elem.get('separator')
+    refs = elem.get('bibrefs').split(sep)
+    replace_text = ''
+    for ref in refs:
+        if ref in bibkey_map:
+            marker = '{{{{cite:{}}}}}'.format(bibkey_map[ref])
+            replace_text += marker
+        else:
+            print(('WARNING: unmatched bibliography key {}'
+                   '').format(ref))
+    cit.tail = replace_text + cit.tail
+
+# /processing of citation markers
+etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}cite', with_tail=False)
+etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}bibliography', with_tail=False)
+etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}biblist', with_tail=False)
+etree.strip_elements(tree, '{http://dlmf.nist.gov/LaTeXML}bibitem', with_tail=False)
 etree.strip_tags(tree, '*')
 tree_str = etree.tostring(tree, encoding='unicode', method='text')
 
 with open('out.txt', 'w') as f:
     f.write(tree_str)
+with open('map.json', 'w') as f:
+    f.write(json.dumps(bibitem_map))

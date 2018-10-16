@@ -26,7 +26,8 @@ if len(sys.argv) != 3:
 
 IN_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
-MAIN_TEX_PATT = re.compile(r'\\begin\s*\{\s*document\s*\}', re.I)
+MAIN_TEX_PATT = re.compile(r'(\\begin\s*\{\s*document\s*\})', re.I)
+# ^ with capturing parentheses so that the pattern can be used for splitting
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
 GZ_EXT_PATT = re.compile(r'^\.gz$', re.I)
 TEX_EXT_PATT = re.compile(r'^\.tex$', re.I)
@@ -35,8 +36,9 @@ BBL_SIGN = '\\bibitem'
 # agressive math pre-removal
 PRE_FILTER_MATH = True
 FILTER_PATTS = []
-for env in ['equation', 'displaymath', 'array', 'eqnarray']:
-    s = r'\\begin\{{{0}\}}.+?\\end\{{{0}\}}'.format(env)
+for env in ['equation', 'displaymath', 'array', 'eqnarray', 'align', 'gather',
+            'multline', 'flalign', 'alignat']:
+    s = r'\\begin\{{{0}[*]?\}}.+?\\end\{{{0}\}}'.format(env)
     patt = re.compile(s, re.I | re.M | re.S)
     FILTER_PATTS.append(patt)
 FILTER_PATTS.append(re.compile(r'\$\$.+?\$\$', re.S))
@@ -78,10 +80,11 @@ def read_gzipped_file(path):
     return cntnt
 
 
-def remove_math(latex_str)
+def remove_math(latex_str):
+    parts = re.split(MAIN_TEX_PATT, latex_str, maxsplit=1)
     for patt in FILTER_PATTS:
-         latex_str = re.sub(patt, '', latex_str)
-    return latex_str
+         parts[2] = re.sub(patt, '', parts[2])
+    return ''.join(parts)
 
 
 if not os.path.isdir(IN_DIR):

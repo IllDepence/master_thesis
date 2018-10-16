@@ -227,11 +227,14 @@ user    3m16.520s
 sys     0m20.866s
 ```
 (~0.09 sec per doc)  
-→ all of arXiv in 37 hours
+→ all of arXiv in 37 hours  
+→ 2364m→2250 95% success
 
 **step 2**  
-on shetland, 50min for 392 docs (~7 sec per doc)  
-→ all of arXiv in 128 days (>4 months)
+on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 sec per doc)  
+→ all of arXiv in 128 days (>4 months)  
+→ 2218\*→2138 96% success (90% overall)  
+\*32 PDFs, therefore not 2250
 
 ##### arXiv processing speedup
 

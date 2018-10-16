@@ -239,8 +239,10 @@ on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 se
 ##### arXiv processing speedup
 
 * current math pre removal
-    * time: 3m53s (~0.09s/doc) | 122m (5.5s/doc)
+    * time: 3m53s (~0.09s/doc) | 122m (3.3s/doc)
     * coverage: unchanged | 2066 **93%**
+* ーネ申 **tralics** ネ申ー
+    * 2218 docs in 53s → 0.024s/doc
 * hep-lat0001017 is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***
 
 ### citation recommendation based on entities

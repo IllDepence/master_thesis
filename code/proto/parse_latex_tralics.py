@@ -20,6 +20,7 @@ IN_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
 
+
 def log(msg):
     with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
         f.write('{}\n'.format(msg))
@@ -57,12 +58,12 @@ for fn in os.listdir(IN_DIR):
                         '-output_dir={}'.format(tmp_dir_path),
                         path]
 
-        out = open(os.path.join(OUT_DIR, 'tralics_out.txt'), mode='w')
-        err = open(os.path.join(OUT_DIR, 'log_tralics.txt'), 'a')
-        err.write('\n------------- {} -------------\n'.format(aid))
-        err.flush()
+        out = open(os.path.join(OUT_DIR, 'log_tralics.txt'), 'a')
+        err = open(os.path.join(tmp_dir_path, 'tralics_out.txt'), mode='w')
+        out.write('\n------------- {} -------------\n'.format(aid))
+        out.flush()
         try:
-            subprocess.run(tralics_args, stdout=out, stderr=err, timeout=60)
+            subprocess.run(tralics_args, stdout=out, stderr=err, timeout=5)
         except subprocess.TimeoutExpired as e:
             print('FAILED {}. skipping'.format(aid))
             log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
@@ -72,6 +73,11 @@ for fn in os.listdir(IN_DIR):
 
         # get mathless plain text from latexml output
         parser = etree.XMLParser()
+        if not os.path.isfile(tmp_xml_path):
+            print('FAILED {}. skipping'.format(aid))
+            log('\n--- {} ---\n{}\n----------\n'.format(aid,
+                                                        'no tralics output'))
+            continue
         with open(tmp_xml_path) as f:
             try:
                 tree = etree.parse(f, parser)

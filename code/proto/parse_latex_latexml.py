@@ -25,7 +25,6 @@ IN_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
 
-
 def log(msg):
     with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
         f.write('{}\n'.format(msg))

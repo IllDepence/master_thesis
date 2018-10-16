@@ -32,6 +32,17 @@ GZ_EXT_PATT = re.compile(r'^\.gz$', re.I)
 TEX_EXT_PATT = re.compile(r'^\.tex$', re.I)
 NON_TEXT_PATT = re.compile(r'^\.(pdf|eps|jpg|png|gif)$', re.I)
 BBL_SIGN = '\\bibitem'
+# agressive math pre-removal
+PRE_FILTER_MATH = True
+FILTER_PATTS = []
+for env in ['equation', 'displaymath', 'array', 'eqnarray']:
+    s = r'\\begin\{{{0}\}}.+?\\end\{{{0}\}}'.format(env)
+    patt = re.compile(s, re.I | re.M | re.S)
+    FILTER_PATTS.append(patt)
+FILTER_PATTS.append(re.compile(r'\$\$.+?\$\$', re.S))
+FILTER_PATTS.append(re.compile(r'\$.+?\$', re.S))
+FILTER_PATTS.append(re.compile(r'\\\(.+?\\\)', re.S))
+FILTER_PATTS.append(re.compile(r'\\\[.+?\\\]', re.S))
 
 
 def log(msg):
@@ -54,6 +65,7 @@ def read_file(path):
             cntnt = blob.decode(encoding, errors='replace')
     return cntnt
 
+
 def read_gzipped_file(path):
     blob = gzip.open(path, 'rb').read()
     m = magic.Magic(mime_encoding=True)
@@ -64,6 +76,12 @@ def read_gzipped_file(path):
         encoding = chardet.detect(blob)['encoding']
         cntnt = blob.decode(encoding, errors='replace')
     return cntnt
+
+
+def remove_math(latex_str)
+    for patt in FILTER_PATTS:
+         latex_str = re.sub(patt, '', latex_str)
+    return latex_str
 
 
 if not os.path.isdir(IN_DIR):
@@ -151,6 +169,8 @@ for fn in os.listdir(IN_DIR):
                 # re-read and write to ensure utf-8 b/c latexpand doesn't
                 # behave
                 cntnt = read_file(tmp_dest)
+                if PRE_FILTER_MATH:
+                    cntnt = remove_math(cntnt)
                 dest = os.path.join(OUT_DIR, new_tex_fn)
                 with open(dest, mode='w', encoding='utf-8') as f:
                     f.write(cntnt)
@@ -161,6 +181,8 @@ for fn in os.listdir(IN_DIR):
                 log('unexpected content in dump archive {}'.format(fn))
                 continue
             new_fn = '{}.tex'.format(aid)
+            if PRE_FILTER_MATH:
+                cntnt = remove_math(cntnt)
             dest = os.path.join(OUT_DIR, new_fn)
             with open(dest, mode='w', encoding='utf-8') as f:
                 f.write(cntnt)

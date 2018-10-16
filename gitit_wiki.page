@@ -238,7 +238,10 @@ on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 se
 
 ##### arXiv processing speedup
 
-* pre removal of `equation`, `displaymath`, `array`, `eqnarray`, `$...$`, `$$...$$`, `\[...\]` and `\(...\)` resulted in speedup from 70s to 20s on shinobu (output seems unharmed but *needs further testing*)
+* current math pre removal
+    * time: 3m53s (~0.09s/doc) | 122m (5.5s/doc)
+    * coverage: unchanged | 2066 **93%**
+* hep-lat0001017 is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***
 
 ### citation recommendation based on entities
 

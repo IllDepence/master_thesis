@@ -20,6 +20,7 @@ if len(sys.argv) != 3:
            'out/dir>'))
     sys.exit()
 
+INCREMENTAL = True
 IN_DIR = sys.argv[1]
 OUT_DIR = sys.argv[2]
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
@@ -40,9 +41,13 @@ if not os.path.isdir(OUT_DIR):
 for fn in os.listdir(IN_DIR):
     path = os.path.join(IN_DIR, fn)
     aid, ext = os.path.splitext(fn)
+    out_txt_path = os.path.join(OUT_DIR, '{}.txt'.format(aid))
+    if INCREMENTAL and os.path.isfile(out_txt_path):
+        print('{} already in output directory, skipping'.format(aid))
+        continue
     print(aid)
     if PDF_EXT_PATT.match(ext):
-        log('skipping file {}'.format(fn))
+        log('skipping file {} (PDF)'.format(fn))
         continue
 
     with tempfile.TemporaryDirectory() as tmp_dir_path:
@@ -141,7 +146,6 @@ for fn in os.listdir(IN_DIR):
         etree.strip_tags(tree, '*')
         tree_str = etree.tostring(tree, encoding='unicode', method='text')
 
-        out_txt_path = os.path.join(OUT_DIR, '{}.txt'.format(aid))
         out_map_path = os.path.join(OUT_DIR, '{}_map.json'.format(aid))
         with open(out_txt_path, 'w') as f:
             f.write(tree_str)

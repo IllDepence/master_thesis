@@ -217,7 +217,8 @@ questions to be answered:
     * step 3: networking
         * try to match citation UUIDs to arXiv IDs (and mby at one point other identifiers)
 
-**test w/ 2364 input docs**
+**test w/ 2364 input docs**  
+**step 1**
 ```
 saiert@shetland:~/arxiv_test$ time python3 normalize_arxiv_dump.py /home/saiert/arxiv_test/0001_001/0001/ /home/saiert/arxiv_test/0001_001/normalized
 
@@ -225,7 +226,12 @@ real    3m37.049s
 user    3m16.520s
 sys     0m20.866s
 ```
+(~0.09 sec per doc)  
 → all of arXiv in 37 hours
+
+**step 2**  
+on shetland, 50min for 392 docs (~7 sec per doc)  
+→ all of arXiv in 128 days (>4 months)
 
 ### citation recommendation based on entities
 

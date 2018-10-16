@@ -57,7 +57,12 @@ for fn in os.listdir(IN_DIR):
         err = open(os.path.join(OUT_DIR, 'log_latexml.txt'), 'a')
         err.write('\n------------- {} -------------\n'.format(aid))
         err.flush()
-        subprocess.run(latexml_args, stdout=out, stderr=err, timeout=60)
+        try:
+            subprocess.run(latexml_args, stdout=out, stderr=err, timeout=60)
+        except subprocess.TimeoutExpired as e:
+            print('FAILED {}. skipping'.format(aid))
+            log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
+            continue
         out.close()
         err.close()
 
@@ -68,7 +73,7 @@ for fn in os.listdir(IN_DIR):
                 tree = etree.parse(f, parser)
             except etree.XMLSyntaxError as e:
                 print('FAILED {}. skipping'.format(aid))
-                log('\n--- {} ---\n{}\n----------\n'.format(fn, e))
+                log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
                 continue
         etree.strip_elements(tree,
                              '{http://dlmf.nist.gov/LaTeXML}equationgroup',
@@ -98,6 +103,10 @@ for fn in os.listdir(IN_DIR):
         citations = tree.xpath('//LaTeXML:cite', namespaces=namespaces)
         for cit in citations:
             elem = cit.find('{http://dlmf.nist.gov/LaTeXML}bibref')
+            if elem is None:
+                log(('WARNING: cite element in {} contains no bibref element'
+                     '').format(aid))
+                continue
             sep = elem.get('separator')
             refs_list = elem.get('bibrefs')
             if refs_list:

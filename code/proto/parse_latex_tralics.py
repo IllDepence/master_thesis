@@ -3,9 +3,7 @@
     TODO:
         - mby get rid of tables (and figures)?
         - mby remove commas between citations?
-        - remove non textbody leftovers (e.g. astro-ph0001007.txt,
-          astro-ph0001133.txt, astro-ph0001181.txt, math-ph0001006.txt), i.e.
-          inspect XML
+        - remove non textbody leftovers somehow?
 """
 
 import json
@@ -135,6 +133,7 @@ for fn in os.listdir(IN_DIR):
         etree.strip_elements(tree, 'cit', with_tail=False)
         etree.strip_tags(tree, '*')
         tree_str = etree.tostring(tree, encoding='unicode', method='text')
+        # tree_str = re.sub('\s+', ' ', tree_str).strip()
 
         out_map_path = os.path.join(OUT_DIR, '{}_map.json'.format(aid))
         with open(out_txt_path, 'w') as f:

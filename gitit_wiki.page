@@ -244,6 +244,7 @@ on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 se
 * ーネ申 **tralics** ネ申ー
     * on shinobu: 2218 docs in 53s → 0.024s/doc
     * in: 2216, out: 2199 (30 messed up) → 98% (91.8% overall) (latexml only 2138)
+    * a bit more preamble noise (already in the XML in `<p>`s, so no straightforward way to deal with it)
 * hep-lat0001017 is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***
 
 **tralics problem docs with latexml**  

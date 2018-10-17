@@ -242,8 +242,43 @@ on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 se
     * time: 3m53s (~0.09s/doc) | 122m (3.3s/doc)
     * coverage: unchanged | 2066 **93%**
 * ーネ申 **tralics** ネ申ー
-    * 2218 docs in 53s → 0.024s/doc
+    * on shinobu: 2218 docs in 53s → 0.024s/doc
+    * in: 2216, out: 2199 (30 messed up) → 98% (91.8% overall) (latexml only 2138)
 * hep-lat0001017 is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***
+
+**tralics problem docs with latexml**  
+(messed up output (but not skip b/c error) for 0001_001; for which latexml outputs 2138, tralics 2199)
+```
+tralics problem         latexml out                 latexml better
+astro-ph0001027.txt     none                        (x)
+astro-ph0001100.txt     none                        (x)
+astro-ph0001144.txt     also messed up
+astro-ph0001152.txt     also messed up
+astro-ph0001153.txt     also messed up
+(astro-ph0001462.txt)   fine (more content)         x
+astro-ph0001540.txt     none                        (x)
+astro-ph0001546.txt     none                        (x)
+(cond-mat0001187.txt)   same
+(cond-mat0001222.txt)   no weird "aaaaaaaaa"
+cs0001010.txt           same
+gr-qc0001071.txt        fine                        x
+hep-lat0001018.txt      fine                        x
+hep-ph0001051.txt       also messed up
+hep-ph0001203.txt       fine                        x
+(hep-th0001048.txt)     same
+hep-th0001109.txt       fine                        x
+hep-th0001139.txt       same
+hep-th0001146.txt       same
+hep-th0001181.txt       fine                        x
+hep-th0001199.txt       fine                        x
+math0001022.txt         same
+math0001029.txt         same
+math0001070.txt         same
+math0001103.txt         same
+math0001164.txt         fine                        x
+math0001166.txt         same
+nucl-th0001065.txt      fine                        x
+```
 
 ### citation recommendation based on entities
 

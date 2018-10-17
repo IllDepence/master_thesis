@@ -1,4 +1,26 @@
 """ convert latex files to plain text with nice citation markers
+
+    TODO:
+        - mby get rid of tables (and figures)?
+        - mby remove commas between citations?
+        - remove non textbody leftovers (e.g. astro-ph0001007.txt,
+          astro-ph0001133.txt, astro-ph0001181.txt), i.e. inspect XML
+        - look into what went wrong with (and check them in latexml output)
+            astro-ph0001027.txt
+            astro-ph0001100.txt
+            astro-ph0001144.txt
+            astro-ph0001152.txt
+            astro-ph0001153.txt
+            (astro-ph0001462.txt)
+            astro-ph0001540.txt
+            astro-ph0001546.txt
+            (cond-mat0001187.txt)
+            (cond-mat0001222.txt)
+            cs0001010.txt
+            gr-qc0001071.txt
+
+
+    continue checking at gr-qc0001094.txt (1075/2202)
 """
 
 import json

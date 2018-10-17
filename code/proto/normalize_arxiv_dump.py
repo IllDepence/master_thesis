@@ -34,7 +34,7 @@ TEX_EXT_PATT = re.compile(r'^\.tex$', re.I)
 NON_TEXT_PATT = re.compile(r'^\.(pdf|eps|jpg|png|gif)$', re.I)
 BBL_SIGN = '\\bibitem'
 # agressive math pre-removal
-PRE_FILTER_MATH = True
+PRE_FILTER_MATH = False
 FILTER_PATTS = []
 for env in ['equation', 'displaymath', 'array', 'eqnarray', 'align', 'gather',
             'multline', 'flalign', 'alignat']:
@@ -166,7 +166,8 @@ for fn in os.listdir(IN_DIR):
                 err = open(os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a')
                 err.write('\n------------- {} -------------\n'.format(aid))
                 err.flush()
-                subprocess.run(latexpand_args, stdout=out, stderr=err)
+                subprocess.run(latexpand_args, stdout=out, stderr=err,
+                               cwd=tmp_dir_path)
                 out.close()
                 err.close()
                 # re-read and write to ensure utf-8 b/c latexpand doesn't

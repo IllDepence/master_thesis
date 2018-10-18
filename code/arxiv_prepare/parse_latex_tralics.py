@@ -14,11 +14,14 @@ import sys
 import tempfile
 import uuid
 from lxml import etree
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from db_model import Base, Bibitem, BibitemArxivIDMap
 
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
 
 
-def parse(IN_DIR, OUT_DIR, INCREMENTAL=True):
+def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
     def log(msg):
         with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
             f.write('{}\n'.format(msg))
@@ -30,14 +33,23 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL=True):
     if not os.path.isdir(OUT_DIR):
         os.makedirs(OUT_DIR)
 
+    if not db_uri:
+        db_path = os.path.join(OUT_DIR, 'metadata.db')
+        db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
+    engine = create_engine(db_uri)
+    Base.metadata.create_all(engine)
+    Base.metadata.bind = engine
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+
     for fn in os.listdir(IN_DIR):
         path = os.path.join(IN_DIR, fn)
         aid, ext = os.path.splitext(fn)
         out_txt_path = os.path.join(OUT_DIR, '{}.txt'.format(aid))
         if INCREMENTAL and os.path.isfile(out_txt_path):
-            print('{} already in output directory, skipping'.format(aid))
+            # print('{} already in output directory, skipping'.format(aid))
             continue
-        print(aid)
+        # print(aid)
         if PDF_EXT_PATT.match(ext):
             log('skipping file {} (PDF)'.format(fn))
             continue
@@ -87,7 +99,6 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL=True):
             # processing of citation markers
             bibitems = tree.xpath('//bibitem')
             bibkey_map = {}
-            bibitem_map = {}
 
             for bi in bibitems:
                 uid = str(uuid.uuid4())
@@ -98,7 +109,9 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL=True):
                                       encoding='unicode',
                                       method='text')
                 text = re.sub('\s+', ' ', text).strip()
-                bibitem_map[uid] = text
+                bibitem_db = Bibitem(uuid=uid, in_doc=aid, bibitem_string=text)
+                session.add(bibitem_db)
+                session.flush()
 
             citations = tree.xpath('//cit')
             for cit in citations:
@@ -127,11 +140,9 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL=True):
             tree_str = etree.tostring(tree, encoding='unicode', method='text')
             # tree_str = re.sub('\s+', ' ', tree_str).strip()
 
-            out_map_path = os.path.join(OUT_DIR, '{}_map.json'.format(aid))
             with open(out_txt_path, 'w') as f:
                 f.write(tree_str)
-            with open(out_map_path, 'w') as f:
-                f.write(json.dumps(bibitem_map))
+            session.commit()
     return True
 
 

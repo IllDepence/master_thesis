@@ -1,2 +1,4 @@
-chardet>=3.0.4
-python-magic>=0.4.15
+chardet==3.0.4
+lxml==4.2.5
+python-magic==0.4.15
+sqlalchemy==1.2.12

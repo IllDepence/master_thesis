@@ -238,11 +238,31 @@ on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 se
 
 ##### arXiv processing speed up
 
-* current math pre removal
+* math pre removal
     * time: 3m53s (~0.09s/doc) | 122m (3.3s/doc)
     * coverage: unchanged | 2066 **93%**
+
+```
+saiert@shetland:~/arxiv_test$ time python3 normalize_arxiv_dump.py /home/saiert/arxiv_test/0001_001/0001/ /home/saiert/arxiv_test/0001_001/normalized
+
+real    3m53.446s
+user    3m33.779s
+sys     0m19.952s
+
+output: 2218 docs
+
+saiert@shetland:~/arxiv_test$ time python3 parse_latex_latexml.py 0001_001/normalized/ 0001_001/text
+
+real    122m26.729s
+user    113m3.402s
+sys     8m43.531s
+
+output 2066 docs
+```
+
 * ーネ申 **tralics** ネ申ー
     * on shinobu: 2218 docs in 53s → 0.024s/doc
+    * on shinobu w/ SQLite DB instead of separate text files for metadata: 2m13s
     * in: 2216, out: 2199 (30 messed up) → 98% (91.8% overall) (latexml only 2138)
     * a bit more preamble noise (already in the XML in `<p>`s, so no straightforward way to deal with it)
 * hep-lat0001017 is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***
@@ -279,6 +299,10 @@ math0001103.txt         same
 math0001164.txt         fine                        x
 math0001166.txt         same
 nucl-th0001065.txt      fine                        x
+```
+
+```
+python3 parse_latex_tralics.py ~/dl/foo/0001_normalized ~/dl/foo/0001_text_new 70,28s user 20,82s system 68% cpu 2:13,90 total
 ```
 
 ##### bibitem matching

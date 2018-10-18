@@ -6,7 +6,6 @@
         - remove non textbody leftovers somehow?
 """
 
-import json
 import os
 import re
 import subprocess

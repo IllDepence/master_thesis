@@ -236,7 +236,7 @@ on shetland, 50min for 392 docs (~7 sec per doc); 289 min for 2364 docs (~7.7 se
 → 2218\*→2138 96% success (90% overall)  
 \*32 PDFs, therefore not 2250
 
-##### arXiv processing speedup
+##### arXiv processing speed up
 
 * current math pre removal
     * time: 3m53s (~0.09s/doc) | 122m (3.3s/doc)
@@ -280,6 +280,13 @@ math0001164.txt         fine                        x
 math0001166.txt         same
 nucl-th0001065.txt      fine                        x
 ```
+
+##### bibitem matching
+
+* match for e.g. first bibitem in `1711.00002`
+    * original: `L. J. Ba and R. Caruana. Do deep nets really need to be deep? In Proceedings of NIPS, 2014.`
+    * query: `http://export.arxiv.org/api/query?search_query=all:Caruana%20deep%20nets%20really%20need%20deep%20Proceedings%20NIPS%202014` (words longer 2 letters)
+
 
 ### citation recommendation based on entities
 

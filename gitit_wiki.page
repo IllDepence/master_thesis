@@ -318,7 +318,24 @@ sqlite> select count(distinct uuid) from bibitemlinkmap;
 sqlite> select count(distinct uuid) from bibitemarxividmap;
 476
 ```
-* for search based on bibitem string: look into Apache lucene (mby +Solr)
+* Solr test
+
+```
+$ time python3 solrize.py
+no metadata in 1008.3138 in arxiv-physics-oai_dc-cursor147000.xml
+no metadata in 1008.3138 in arxiv-physics:quant-ph-oai_dc-cursor13000.xml
+no metadata in 1005.0836 in arxiv-math-oai_dc-cursor50000.xml
+python3 solrize.py  430,84s user 8,54s system 98% cpu 7:27,43 total
+```
+
+```
+$ time ./bin/post -c arxiv_meta ~/dl/foo/newArxivMetaHarvesting201712/solrized
+[...]
+2643 files indexed.
+COMMITting Solr index changes to http://localhost:8983/solr/arxiv_meta/update...
+Time spent: 0:19:19.727
+./bin/post -c arxiv_meta ~/dl/foo/newArxivMetaHarvesting201712/solrized  10,20s user 28,05s system 3% cpu 19:20,09 total
+```
 
 ### citation recommendation based on entities
 

@@ -10,6 +10,13 @@ class Bibitem(Base):
     bibitem_string = Column(UnicodeText())
 
 
+class BibitemLinkMap(Base):
+    __tablename__ = 'bibitemlinkmap'
+    id = Column(Integer(), autoincrement=True, primary_key=True)
+    uuid = Column(String(36), ForeignKey('bibitem.uuid'))
+    link = Column(UnicodeText())
+
+
 class BibitemArxivIDMap(Base):
     __tablename__ = 'bibitemarxividmap'
     id = Column(Integer(), autoincrement=True, primary_key=True)

@@ -15,9 +15,11 @@ import uuid
 from lxml import etree
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db_model import Base, Bibitem, BibitemArxivIDMap
+from db_model import Base, Bibitem, BibitemLinkMap, BibitemArxivIDMap
 
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
+ARXIV_URL_PATT = re.compile((r'arxiv\.org\/[a-z0-9]{1,10}\/(([a-z0-9-]{1,15}\/'
+                              ')?[\d\.]{5,10}(v\d)?$)'), re.I)
 
 
 def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
@@ -111,6 +113,15 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                 bibitem_db = Bibitem(uuid=uid, in_doc=aid, bibitem_string=text)
                 session.add(bibitem_db)
                 session.flush()
+                for xref in containing_p.findall('xref'):
+                    link = xref.get('url')
+                    match = ARXIV_URL_PATT.search(link)
+                    if match:
+                        id_part = match.group(1)
+                        BibitemArxivIDMap(uuid=uid, arxiv_id=id_part)
+                    link_db = BibitemLinkMap(uuid=uid, link=link)
+                    session.add(link_db)
+                    session.flush()
 
             citations = tree.xpath('//cit')
             for cit in citations:

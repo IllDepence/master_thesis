@@ -34,9 +34,10 @@ def match(db_uri=None, in_dir=None):
                   'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
 
     for bibitem_db in bibitems_db:
+        t1 = datetime.datetime.now()
         text = bibitem_db.bibitem_string
         print('Text: {}'.format(text))
-        clean_text = re.sub('[^a-zA-Z0-9\s]+', ' ', text)
+        clean_text = re.sub('[^\w\s]+', ' ', text)
         years = [w for w in clean_text.split(' ') if w in feasible_years]
         cleaner_text = re.sub('[0-9]+', '', clean_text)
         words = [w for w in cleaner_text.split(' ') if
@@ -66,6 +67,9 @@ def match(db_uri=None, in_dir=None):
             aid = res_elem.find('{http://www.w3.org/2005/Atom}id').text
             title = res_elem.find('{http://www.w3.org/2005/Atom}title').text
             print('Found: {} ({})'.format(title, aid))
+        t2 = datetime.datetime.now()
+        d = t2 - t1
+        print('- - - [{}.{} s] - - -'.format(d.seconds, d.microseconds))
         print('enter to continue')
         input()
 

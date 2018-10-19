@@ -2,7 +2,8 @@
 
 ### actionable *now*
 
-* ...
+* look into Apache lucene (mby +Solr)
+* create system overview
 
 ### overall
 
@@ -304,10 +305,20 @@ python3 parse_latex_tralics.py ~/dl/foo/0001_normalized ~/dl/foo/0001_text_new 7
 
 ##### bibitem matching
 
-* match for e.g. first bibitem in `1711.00002`
-    * original: `L. J. Ba and R. Caruana. Do deep nets really need to be deep? In Proceedings of NIPS, 2014.`
-    * query: `http://export.arxiv.org/api/query?search_query=all:Caruana%20deep%20nets%20really%20need%20deep%20Proceedings%20NIPS%202014` (words longer 2 letters)
-
+* arxiv.org web API test (use unrealistic b/c time)
+    * match for e.g. first bibitem in `1711.00002`
+        * original: `L. J. Ba and R. Caruana. Do deep nets really need to be deep? In Proceedings of NIPS, 2014.`
+        * query: `http://export.arxiv.org/api/query?search_query=all:Caruana%20deep%20nets%20really%20need%20deep%20Proceedings%20NIPS%202014` (words longer 2 letters)
+* source given links/arXiv IDs (tested w/ 377 docs from 2017)  
+```
+sqlite> select count(*) from bibitem;
+10270
+sqlite> select count(distinct uuid) from bibitemlinkmap;
+1615
+sqlite> select count(distinct uuid) from bibitemarxividmap;
+476
+```
+* for search based on bibitem string: look into Apache lucene (mby +Solr)
 
 ### citation recommendation based on entities
 

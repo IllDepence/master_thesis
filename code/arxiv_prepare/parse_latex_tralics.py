@@ -118,7 +118,9 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                     match = ARXIV_URL_PATT.search(link)
                     if match:
                         id_part = match.group(1)
-                        BibitemArxivIDMap(uuid=uid, arxiv_id=id_part)
+                        aid_db = BibitemArxivIDMap(uuid=uid, arxiv_id=id_part)
+                        session.add(aid_db)
+                        session.flush()
                     link_db = BibitemLinkMap(uuid=uid, link=link)
                     session.add(link_db)
                     session.flush()

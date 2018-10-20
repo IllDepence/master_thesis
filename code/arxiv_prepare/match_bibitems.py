@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import re
 import requests
@@ -29,7 +30,8 @@ def match(db_uri=None, in_dir=None):
     session = DBSession()
 
     bibitems_db = session.query(Bibitem).all()
-    base_url = 'http://export.arxiv.org/api/query?search_query=all:'
+    base_url = 'http://localhost:8983/solr/arxiv_meta/select?q='
+
     namespaces = {'atom': 'http://www.w3.org/2005/Atom',
                   'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
 
@@ -42,31 +44,26 @@ def match(db_uri=None, in_dir=None):
         cleaner_text = re.sub('[0-9]+', '', clean_text)
         words = [w for w in cleaner_text.split(' ') if
                  len(w) > 2 and w not in stop_words]
-        query = ' '.join(words + years)
-        print('Query: {}'.format(query))
-        resp = requests.get('{}{}&start=0&max_results=10'.format(base_url,
-                                                                 query))
+        query = '%2B'.join(words + years)
+        resp = requests.get(('{0}title:{1}%20AND%20creator:{1}&rows=1&wt=json'
+                             '').format(base_url, query))
         if resp.status_code != 200:
             print('unexpected API response: {}\n{}'.format(resp.status_code,
                                                            resp.text))
             print('enter to continue')
             input()
             continue
-        xml_root = etree.fromstring(resp.text.encode('utf-8'))
-        num_result_elems = xml_root.xpath('/atom:feed/opensearch:totalResults',
-                                          namespaces=namespaces)
-        num_results = int(num_result_elems[0].text)
+        resp_json = resp.json()
+        num_results = resp_json.get('response', {}).get('numFound', 0)
         if num_results < 1:
             print('no results')
             print('enter to continue')
             input()
             continue
-        result_elems = xml_root.xpath('/atom:feed/atom:entry',
-                                      namespaces=namespaces)
-        for res_elem in result_elems:
-            aid = res_elem.find('{http://www.w3.org/2005/Atom}id').text
-            title = res_elem.find('{http://www.w3.org/2005/Atom}title').text
-            print('Found: {} ({})'.format(title, aid))
+        doc = resp_json.get('response', {}).get('docs', [{}])[0]
+        title = doc.get('title', [''])[0]
+        creator = '; '.join(doc.get('creator', ['']))
+        print('Found: {} ({})'.format(title, creator))
         t2 = datetime.datetime.now()
         d = t2 - t1
         print('- - - [{}.{} s] - - -'.format(d.seconds, d.microseconds))

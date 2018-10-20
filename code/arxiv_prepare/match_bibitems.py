@@ -1,3 +1,10 @@
+""" Match bibitem strings to arXiv IDs
+
+    TODO:
+        - look through should've matched items
+        - generate stats of coverage by complete run
+"""
+
 import datetime
 import json
 import os
@@ -8,6 +15,87 @@ from lxml import etree
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db_model import Base, Bibitem, BibitemArxivIDMap
+
+ARXIV_URL_PATT = re.compile((r'arxiv\.org\/[a-z0-9]{1,10}\/(([a-z0-9-]{1,15}\/'
+                              ')?[\d\.]{5,10}(v\d)?$)'), re.I)
+PROCEEDINGS_TAIL_PATT = re.compile(r'.{10,}Proceedings of', re.I)
+PROCEEDINGS_START_PATT = re.compile(r'^\s*(in)?\s*Proceedings of', re.I)
+
+
+def send_query(query):
+    base_url = 'http://localhost:8983/solr/arxiv_meta/select?q='
+    resp = requests.get(base_url + query)
+    if resp.status_code != 200:
+        print('unexpected API response: {}\n{}'.format(resp.status_code,
+                                                       resp.text))
+        return False
+    resp_json = resp.json()
+    num_results = resp_json.get('response', {}).get('numFound', 0)
+    if num_results < 1:
+        print('no results')
+        return False
+    doc = resp_json.get('response', {}).get('docs', [{}])[0]
+    return doc
+
+
+def clean(s):
+    s = re.sub('[^\w\s]+', '', s)
+    s = re.sub('\s+', ' ', s)
+    return s.strip().lower()
+
+
+def check_result(bibitem_string, result_doc, debug=False):
+    clean_orig = clean(bibitem_string)
+    clean_result_title = clean(result_doc.get('title', [''])[0])
+    creators = result_doc.get('creator', [])
+    clean_creators = [clean(c) for c in creators]
+    # check for author match
+    one_valid_author = False
+    for cc in clean_creators:
+        if one_valid_author:
+            break
+        names = cc.split(' ')
+        for name in names:
+            if one_valid_author:
+                break
+            name = name.strip()
+            if len(name) < 2 or name in ['et', 'al', 'and']:
+                continue
+            if name in clean_orig:
+                one_valid_author = True
+    if debug:
+        print('any of: {}\nin\n{}\n→{}'.format(clean_creators, clean_orig,
+                                               one_valid_author))
+    if not one_valid_author:
+        return False
+    # check for exact title match
+    exact_title = clean_result_title in clean_orig
+    if debug:
+        print('{}\nin\n{}\n→{}'.format(clean_result_title, clean_orig,
+                                       exact_title))
+    if exact_title:
+        return True
+    # check for good enough title match
+    needles = clean_result_title.split(' ')
+    haystack = clean_orig.split(' ')
+    found_count = 0
+    correct_order_count = 0
+    last_index = -1
+    for needle in needles:
+        try:
+            index = haystack.index(needle)
+            found_count += 1
+            if index > last_index:
+                correct_order_count += 1
+                last_index = index
+        except ValueError:
+            continue
+    found_ratio = len(needles) / found_count
+    order_ratio = found_count / correct_order_count
+    if debug:
+        print('found ratio: {}\norder ratio: {}'.format(found_ratio,
+                                                        order_ratio))
+    return found_ratio > 0.67 and order_ratio > 0.8
 
 def match(db_uri=None, in_dir=None):
     if not (db_uri or in_dir):
@@ -30,37 +118,57 @@ def match(db_uri=None, in_dir=None):
     session = DBSession()
 
     bibitems_db = session.query(Bibitem).all()
-    base_url = 'http://localhost:8983/solr/arxiv_meta/select?q='
-
-    namespaces = {'atom': 'http://www.w3.org/2005/Atom',
-                  'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
-
     for bibitem_db in bibitems_db:
         t1 = datetime.datetime.now()
         text = bibitem_db.bibitem_string
         print('Text: {}'.format(text))
-        clean_text = re.sub('[^\w\s]+', ' ', text)
-        years = [w for w in clean_text.split(' ') if w in feasible_years]
-        cleaner_text = re.sub('[0-9]+', '', clean_text)
-        words = [w for w in cleaner_text.split(' ') if
-                 len(w) > 2 and w not in stop_words]
-        query = '%2B'.join(words + years)
-        resp = requests.get(('{0}title:{1}%20AND%20creator:{1}&rows=1&wt=json'
-                             '').format(base_url, query))
-        if resp.status_code != 200:
-            print('unexpected API response: {}\n{}'.format(resp.status_code,
-                                                           resp.text))
-            print('enter to continue')
-            input()
+
+        # try to find match by title
+        title_candidates = text.split('.')
+        for idx, tc in enumerate(title_candidates):
+            if PROCEEDINGS_START_PATT.search(tc):
+                title_candidates[idx] = ''
+            if PROCEEDINGS_TAIL_PATT.search(tc):
+                cut = tc.split('Proceedings')[0]
+                cut = cut.split('proceedings')[0]
+                title_candidates[idx] = cut
+        title_guess = max(title_candidates, key=len).strip()
+        print('Title guess: {}'.format(title_guess))
+        author_str = text.split(title_guess)[0]
+        author_str = re.sub('[^\w\s]+', ' ', author_str)
+        author_strs = [s for s in author_str.split(' ') if len(s) > 2]
+        print('Author strings: {}'.format(' '.join(author_strs)))
+        doc = send_query('title:"{}"'.format(title_guess))
+        if not doc:
+            # print('enter to continue')
+            # input()
             continue
-        resp_json = resp.json()
-        num_results = resp_json.get('response', {}).get('numFound', 0)
-        if num_results < 1:
-            print('no results')
-            print('enter to continue')
-            input()
-            continue
-        doc = resp_json.get('response', {}).get('docs', [{}])[0]
+        match = check_result(text, doc)
+        if not match:
+            clean_text = re.sub('[^\w\s]+', ' ', text)
+            years = [w for w in clean_text.split(' ') if w in feasible_years]
+            cleaner_text = re.sub('[0-9]+', '', clean_text)
+            words = [w for w in cleaner_text.split(' ') if
+                     len(w) > 2 and w not in stop_words]
+            query_string = '%2B'.join(words + years)
+            query = ('title:{0}%20AND%20creator:{0}'
+                     '&rows=1&wt=json').format(query_string)
+            doc = send_query('title:"{}"'.format(title_guess))
+            if not doc:
+                # print('enter to continue')
+                # input()
+                continue
+            match = check_result(text, doc)
+            if not match:
+                print('No match.')
+                for idf in doc.get('identifier', []):
+                    if ARXIV_URL_PATT.search(idf):
+                        print(('###############\nBUT SHOULD HAVE MATCHED\n{}\n'
+                               '###############').format(idf))
+                        match = check_result(text, doc, debug=True)
+                print('enter to continue')
+                input()
+                continue
         title = doc.get('title', [''])[0]
         creator = '; '.join(doc.get('creator', ['']))
         print('Found: {} ({})'.format(title, creator))
@@ -68,7 +176,7 @@ def match(db_uri=None, in_dir=None):
         d = t2 - t1
         print('- - - [{}.{} s] - - -'.format(d.seconds, d.microseconds))
         print('enter to continue')
-        input()
+        # input()
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or (sys.argv[1] not in ['path', 'uri']):

@@ -64,6 +64,18 @@ def clean(s):
 
 
 def check_result(bibitem_string, result_doc, debug=False):
+    """ For a result doc to pass as fitting require that:
+
+            - at least one original author name appears in the bibitem string
+            AND
+            (
+            - the original title is contained in the bibitem string
+             OR
+            - the bibitem string contains most of the original title's words in
+              correct order
+            )
+    """
+
     clean_orig = clean(bibitem_string)
     clean_result_title = clean(result_doc.get('title', [''])[0])
     creators = result_doc.get('creator', [])
@@ -183,17 +195,41 @@ def title_by_succeeding_string(text):
     return title_guess
 
 
+def title_query_split_heuristic(text):
+    title_guess = title_by_succeeding_string(text)
+    # title_guess = title_by_length_and_exclusion(text)
+    # print('Title guess:    {}'.format(title_guess))
+    if len(title_guess) == 0:
+        return False
+    author_str = text.split(title_guess)[0]
+    author_str = re.sub('[^\w\s]+', ' ', author_str)
+    author_strs = [s for s in author_str.split(' ') if len(s) > 2]
+    # print('Author strings: {}'.format(' '.join(author_strs)))
+    return 'title:"{}"'.format(title_guess)
+
+
+def title_author_query_words(text):
+    with open('stopwords.txt') as f:
+        stop_lines = f.readlines()
+    stop_words = [line.strip() for line in stop_lines]
+    # current_year = datetime.datetime.today().year
+    # # https://en.wikipedia.org/wiki/Scientific_journal#History
+    # feasible_years = list(range(1665, current_year+1, 1))
+    # feasible_years = [str(y) for y in feasible_years]
+
+    clean_text = re.sub('[^\w\s]+', ' ', text)
+    # years = [w for w in clean_text.split(' ') if w in feasible_years]
+    cleaner_text = re.sub('[0-9]+', '', clean_text)
+    words = [w for w in cleaner_text.split(' ') if
+             len(w) > 2 and w not in stop_words]
+    query_string = '%2B'.join(words)  #  + years
+    return 'title:{0}%20AND%20creator:{0}'.format(query_string)
+
+
 def match(db_uri=None, in_dir=None):
     if not (db_uri or in_dir):
         # print('need either DB URI or input directory path')
         return False
-    with open('stopwords.txt') as f:
-        stop_lines = f.readlines()
-    stop_words = [line.strip() for line in stop_lines]
-    current_year = datetime.datetime.today().year
-    # https://en.wikipedia.org/wiki/Scientific_journal#History
-    feasible_years = list(range(1665, current_year+1, 1))
-    feasible_years = [str(y) for y in feasible_years]
     if in_dir:
         db_path = os.path.join(in_dir, 'metadata.db')
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
@@ -207,6 +243,7 @@ def match(db_uri=None, in_dir=None):
     shuffle(bibitems_db)
     num_matches = 0
     num_obv_misses = 0
+    num_tex_seperated_parts = 0
     for bibitem_db in bibitems_db:
         t1 = datetime.datetime.now()
         text = bibitem_db.bibitem_string
@@ -214,48 +251,35 @@ def match(db_uri=None, in_dir=None):
         # print('--------------- {} ---------------'.format(in_doc))
         # print('Text:           {}'.format(text))
 
+        # tex_seperated_parts = text.split('¦') TODO: use
+        # if len(tex_seperated_parts) > 2:
+        #     num_tex_seperated_parts += 1
+        text = text.replace('¦', '')
+
         # try to find match by title
-        title_guess = title_by_succeeding_string(text)
-        # title_guess = title_by_length_and_exclusion(text)
-        # print('Title guess:    {}'.format(title_guess))
-        if len(title_guess) == 0:
+        # q = title_query_split_heuristic(text)
+        q = title_author_query_words(text)
+        if not q:
+            # print('enter to continue')
+            # input()
             continue
-        author_str = text.split(title_guess)[0]
-        author_str = re.sub('[^\w\s]+', ' ', author_str)
-        author_strs = [s for s in author_str.split(' ') if len(s) > 2]
-        # print('Author strings: {}'.format(' '.join(author_strs)))
-        doc = send_query('title:"{}"'.format(title_guess))
+        doc = send_query(q)
         if doc:
             m = check_result(text, doc)
         else:
             m = False
         if not m:
-            # print('>>>> 2nd try >>>>')
-            clean_text = re.sub('[^\w\s]+', ' ', text)
-            years = [w for w in clean_text.split(' ') if w in feasible_years]
-            cleaner_text = re.sub('[0-9]+', '', clean_text)
-            words = [w for w in cleaner_text.split(' ') if
-                     len(w) > 2 and w not in stop_words]
-            query_string = '%2B'.join(words + years)
-            query = ('title:{0}%20AND%20creator:{0}'
-                     '&rows=1&wt=json').format(query_string)
-            doc = send_query('title:"{}"'.format(title_guess))
-            if not doc:
-                # print('enter to continue')
-                # input()
-                continue
-            m = check_result(text, doc)
-            if not m:
-                # print('No match.')
+            # print('No match.')
+            if doc:
                 for idf in doc.get('identifier', []):
                     if ARXIV_URL_PATT.search(idf):
                         num_obv_misses += 1
-                        # print(('####################\nBUT SHOULD HAVE MATCHED:'
-                        #        ' {} ({})\n####################'
+                        # print(('####################\nBUT SHOULD HAVE MATCHE'
+                        #        'D: {} ({})\n####################'
                         #        '').format(doc.get('title', [''])[0], idf))
-                # print('enter to continue')
-                # input()
-                continue
+            # print('enter to continue')
+            # input()
+            continue
         if m:
             num_matches += 1
         # title = doc.get('title', [''])[0]
@@ -269,6 +293,7 @@ def match(db_uri=None, in_dir=None):
     print('total: {}'.format(len(bibitems_db)))
     print('matches: {}'.format(num_matches))
     print('obv. misses: {}'.format(num_obv_misses))
+    print('tex seperated parts: {}'.format(num_tex_seperated_parts))
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or (sys.argv[1] not in ['path', 'uri']):

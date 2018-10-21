@@ -336,6 +336,25 @@ COMMITting Solr index changes to http://localhost:8983/solr/arxiv_meta/update...
 Time spent: 0:19:19.727
 ./bin/post -c arxiv_meta ~/dl/foo/newArxivMetaHarvesting201712/solrized  10,20s user 28,05s system 3% cpu 19:20,09 total
 ```
+* bibitem matching w/ Solr
+
+```
+- - - - - using title_query_split_heuristic - - - - -
+$ time python3 match_bibitems.py path ~/dl/foo/1712_text
+total: 10270
+matches: 650
+obv. misses: 110
+python3 match_bibitems.py path ~/dl/foo/1712_text  25,74s user 1,61s system 67% cpu 40,523 total
+```
+
+```
+- - - - - using title_author_query_words - - - - -
+$ time python3 match_bibitems.py path ~/dl/foo/1712_text
+total: 10270
+matches: 7364
+obv. misses: 749
+python3 match_bibitems.py path ~/dl/foo/1712_text  26,54s user 1,66s system 36% cpu 1:17,74 total
+```
 
 ### citation recommendation based on entities
 

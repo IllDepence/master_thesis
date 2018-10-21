@@ -106,6 +106,10 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                 local_key = bi.get('id')
                 bibkey_map[local_key] = uid
                 containing_p = bi.getparent()
+                while containing_p.tag != 'p':
+                    # sometimes the bibitem element is not the direct child of the
+                    # containing p item we want
+                    containing_p = containing_p.getparent()
                 text = etree.tostring(containing_p,
                                       encoding='unicode',
                                       method='text')

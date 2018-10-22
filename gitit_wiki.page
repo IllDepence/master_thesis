@@ -361,6 +361,10 @@ python3 match_bibitems.py path ~/dl/foo/1712_text  38,76s user 1,87s system 43% 
 
 **NOTE**: bibitems that include IDs might be more likely to not include a title. In a sample of 250 of above 476 checked bibitems, only 117 included a proper title.
 
+**optimistic extrapolation**  
+1703 + 315 out of 10270 → 19.6%  
+assuming 1.45 M papers each 27 citations → 7.6 M citations
+
 
 ### citation recommendation based on entities
 

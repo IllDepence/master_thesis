@@ -64,7 +64,7 @@ def clean(s):
     return s.strip().lower()
 
 
-def check_result(bibitem_string, result_doc, debug=False):
+def check_result(bibitem_string, result_doc, debug=False, strict=True):
     """ For a result doc to pass as fitting require that:
 
             - at least one original author name appears in the bibitem string
@@ -106,7 +106,8 @@ def check_result(bibitem_string, result_doc, debug=False):
                                        exact_title))
     if exact_title:
         return True
-    return False
+    if strict:
+        return False
     # check for year match
     # result_date_strs = result_doc.get('date', [''])
     # result_years = []

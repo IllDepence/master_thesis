@@ -34,7 +34,7 @@ IN_X_DELIM_PATT = re.compile(
 VOLUME_DELIM_PATT = re.compile(r'(,|\.|;)\s*Volume\s+\d+', re.I)
 
 
-def send_query(query):
+def send_query(query, debug=False):
     base_url = 'http://localhost:8983/solr/arxiv_meta/select?q='
     try:
         resp = requests.get(base_url + query)
@@ -51,9 +51,10 @@ def send_query(query):
         # print('No results')
         return False
     docs = resp_json.get('response', {}).get('docs', [{}])
-    # print('Top 5 results:')
-    # for doc in docs[:5]:
-    #     print('        - {}'.format(doc.get('title', [''])[0]))
+    if debug:
+        print('Top 5 results:')
+        for doc in docs[:5]:
+            print('        - {}'.format(doc.get('title', [''])[0]))
     return docs[0]
 
 
@@ -80,7 +81,6 @@ def check_result(bibitem_string, result_doc, debug=False):
     clean_result_title = clean(result_doc.get('title', [''])[0])
     creators = result_doc.get('creator', [])
     clean_creators = [clean(c) for c in creators]
-    # check for author match
     one_valid_author = False
     for cc in clean_creators:
         if one_valid_author:
@@ -106,6 +106,24 @@ def check_result(bibitem_string, result_doc, debug=False):
                                        exact_title))
     if exact_title:
         return True
+    return False
+    # check for year match
+    # result_date_strs = result_doc.get('date', [''])
+    # result_years = []
+    # for rds in result_date_strs:
+    #     rds = rds.split('T')[0]  # cut time zone if present
+    #     try:
+    #         year = datetime.datetime.strptime(rds, '%Y-%m-%d').year
+    #     except ValueError:
+    #         print(rds)
+    #         continue
+    #     result_years.append(str(year))
+    # for ry in result_years:
+    #     if debug:
+    #         print('{} in\n{}\n→ {}'.format(ry, bibitem_string,
+    #                                     ry in bibitem_string))
+    #     if ry in bibitem_string:
+    #         return True
     # check for good enough title match
     needles = clean_result_title.split(' ')
     haystack = clean_orig.split(' ')
@@ -122,11 +140,11 @@ def check_result(bibitem_string, result_doc, debug=False):
         except ValueError:
             continue
     try:
-        found_ratio = len(needles) / found_count
+        found_ratio = found_count / len(needles)
     except ZeroDivisionError:
         found_ratio = 0
     try:
-        order_ratio = found_count / correct_order_count
+        order_ratio = correct_order_count / found_count
     except ZeroDivisionError:
         order_ratio = 0
     if debug:
@@ -242,8 +260,9 @@ def match(db_uri=None, in_dir=None):
     bibitems_db = session.query(Bibitem).all()
     shuffle(bibitems_db)
     num_matches = 0
-    num_obv_misses = 0
-    num_tex_seperated_parts = 0
+    num_checked = 0
+    num_false_positives = 0
+    num_false_negatives = 0
     for bibitem_db in bibitems_db:
         t1 = datetime.datetime.now()
         text = bibitem_db.bibitem_string
@@ -251,7 +270,7 @@ def match(db_uri=None, in_dir=None):
         # print('--------------- {} ---------------'.format(in_doc))
         # print('Text:           {}'.format(text))
 
-        # tex_seperated_parts = text.split('¦') TODO: use
+        # tex_seperated_parts = text.split('¦')  # TODO: use (~80% of bibitems)
         # if len(tex_seperated_parts) > 2:
         #     num_tex_seperated_parts += 1
         text = text.replace('¦', '')
@@ -268,20 +287,55 @@ def match(db_uri=None, in_dir=None):
             m = check_result(text, doc)
         else:
             m = False
+        ids_db = session.query(BibitemArxivIDMap).filter_by(
+                    uuid=bibitem_db.uuid).first()
+        if ids_db:
+            num_checked += 1
         if not m:
+            if ids_db:
+                num_false_negatives += 1
+            # ids_db = session.query(BibitemArxivIDMap).filter_by(
+            #         uuid=bibitem_db.uuid).all()
             # print('No match.')
-            if doc:
-                for idf in doc.get('identifier', []):
-                    if ARXIV_URL_PATT.search(idf):
-                        num_obv_misses += 1
-                        # print(('####################\nBUT SHOULD HAVE MATCHE'
-                        #        'D: {} ({})\n####################'
-                        #        '').format(doc.get('title', [''])[0], idf))
-            # print('enter to continue')
-            # input()
+            # if ids_db:
+            #         print(('--------------- {} ---------------'
+            #                '').format(in_doc))
+            #         print('Text: {}'.format(text))
+            #         print(('####################\nSHOULD HAVE MATCHE'
+            #                'D: {}\n####################'
+            #                '').format(id_db.arxiv_id))
+            #         doc = send_query(q, debug=True)
+            #         if doc:
+            #             m = check_result(text, doc, debug=True)
+            #         else:
+            #             print('no Solr results')
+            #         print('enter to continue')
+            #         input()
             continue
         if m:
+            # print(text)
+            # print('- - - - - - - - - - - - - - - - - - - - - - - - -')
+            # aid = ''
+            # for idf in doc.get('identifier', []):
+            #     if ARXIV_URL_PATT.search(idf):
+            #         aid = idf
+            # creators = '; '.join(doc.get('creator', ['']))
+            # dates = ' | '.join(doc.get('date', ['']))
+            # print('{} ({})\n{}\n{}'.format(doc.get('title', [''])[0], aid,
+            #                            creators, dates))
+            # print('\n\n\n')
+            # input()
             num_matches += 1
+            ids_db = session.query(BibitemArxivIDMap).filter_by(
+                        uuid=bibitem_db.uuid).first()
+            if ids_db:
+                for idf in doc.get('identifier', []):
+                    if ARXIV_URL_PATT.search(idf):
+                        if not ids_db.arxiv_id in idf:
+                            num_false_positives += 1
+                            # print('identified {}'.format(idf))
+                            # print('but should\'ve been {}'.format(ids_db.arxiv_id))
+                            # input()
         # title = doc.get('title', [''])[0]
         # creator = '; '.join(doc.get('creator', ['']))
         # print('Found: {} ({})'.format(title, creator))
@@ -292,8 +346,9 @@ def match(db_uri=None, in_dir=None):
         # input()
     print('total: {}'.format(len(bibitems_db)))
     print('matches: {}'.format(num_matches))
-    print('obv. misses: {}'.format(num_obv_misses))
-    print('tex seperated parts: {}'.format(num_tex_seperated_parts))
+    print('checked: {}'.format(num_checked))
+    print('false negatives: {}'.format(num_false_negatives))
+    print('false positives: {}'.format(num_false_positives))
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or (sys.argv[1] not in ['path', 'uri']):

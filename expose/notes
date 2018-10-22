@@ -1,0 +1,13 @@
+- contributions and/or research questions (why you work on that topic, what is the research "gap")
+    - apparently semantic stuff not very explored (mby cite survey if possible)
+    - creation of another nice dataset like gold standard paper
+    - 
+- related approaches/systems (overview of related work, ideally also with a table with columns like reference to paper,
+                              year and venue of paper, kind of approach, input, output, dataset, etc. [just as inspiration])
+    - survey stuff
+    - wiki page news article papers (?)
+- the approach/work in some more detail
+    
+- the proposed evaluation
+    
+- the schedule.

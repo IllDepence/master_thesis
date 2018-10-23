@@ -1452,7 +1452,7 @@
 \def\crdata#1{\global\acmcopyr{#1}}
 \def\permission#1{\global\boilerplate{#1}}
 %
-\global\boilerplate={Winter semester 2018 -- 2019\\~}
+\global\boilerplate={Winter semester 2018/19\\~}
 \newtoks\copyrightetc
 \global\copyrightetc{}
 \toappear{\the\boilerplate\par

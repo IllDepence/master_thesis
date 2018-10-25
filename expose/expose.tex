@@ -47,18 +47,64 @@
 \section{Introduction}
 This expos\'e will outline a prospective Master Thesis in the area of scientific citation recommendation and argue for its value. The approach will encompass the creation of a dataset and development of supervised learning methods with a focus on semantic analysis of citation contexts. Evaluation of the resulting implementation will follow the most prevalent methods in the field.
 
-The remainder of this document is structured as follows. Section 2 will provide some theoretical background on relevant areas and give a quick overview of related work. A detailed description of the planned methodology and approach will be given in section 3; followed in section 4 by an outline of the planned evaluation. Section 5 and 6 conclude the expos\'e by listing the foreseen contributions of the Thesis and a proposed schedule.
+The remainder of this document is structured as follows. Section 2 will provide some theoretical background on relevant areas and give a quick overview of related work. A detailed description of the planned methodology and approach will be given in section 3; followed in section 4 by an outline of the planned evaluation. Section 5 and 6 conclude the expos\'e by listing the expected contributions of the Thesis and a proposed schedule.
 
 \section{Background}
-The goal of citation recommendation is to provide adequate citations to a given input text. This can involve evaluating whether or not a given input text includes parts that are suitable to add citations to in the first place. Citations recommended can be given as just one citation for a given section of or position in an input text, or a ranked list of multiple possible citations. Another distinction can be made concerning the granularity of text that a citation is recommended for. This can range from a complete document to a specific point within a string of text. There are also approaches where so called citation markers---annotations in the text that show where a citation is to be placed---are given for the input text. In such a case the evaluation whether or not a citation should be recommended as well as the decision where exactly to put a citation are not necessary. In an ideal case, citation recommendation can even involve evaluating cited documents in terms of their quality.
+\subsection{Citation recommendation}
+The goal of citation recommendation is to provide adequate citations to a given input text. This can involve evaluating whether or not a given input text includes parts that are suitable to add citations to in the first place. For a given section of or position in an input text, the ouput recommendation can either be a single citation or a ranked list of multiple possible citations. A further distinction can be made concerning the granularity of text that a citation is recommended for. This can range from a complete document to a specific point within a string of text. There are also approaches where citation markers---annotations in the text that show where a citation was in the original---are left in the input text. In such a case the evaluation whether or not a citation should be recommended as well as the decision where exactly to put a citation are not necessary. In an ideal case, citation recommendation can even involve evaluating cited documents in terms of their quality.
 
-Given there are a lot of dimensions along which approaches can differ, the following sub section will first explain relevant terminology and then give an overview of these distinguishing dimensions. This will enable a more easily understandable overview of related work. (add citation)
+Given there are a lot of dimensions along which approaches can differ, the section \ref{terminology} will explain relevant terminology and section \ref{dimensions} will give an overview of these distinguishing dimensions. This will enable a more easily understandable overview of related work. (add citation)
 
-\subsection{Terminology}
-foo
+\subsection{Semantic analysis}
+The idea of this thesis is to focus on semantic aspects of citation contexts. This means, rather than taking into account only syntactical aspects like n-grams, the analysis will go to a higher level of abstraction where the input's \emph{meaning} is of importance. Because the focus of this analysis will most likely revolve around entities, claims and arguments, these terms will be defined in the following section.
 
-\subsection{Dimensions}
-bar
+\subsection{Terminology}\label{terminology}
+\paragraph{Citing/cited document}
+The former is the document making a reference while the latter the document being referenced. The contents of can be taken into account when developing a citation recommendation approach, but in a considerable amount of approaches the cit\emph{ed} documents' content is not.
+
+\paragraph{Citation context}
+Within the citing document and concerning a single citation act of recommendation, this is the extend of text provided as input. Examples would be the citing documents abstract, a centence containing a citation marker or a whole document.
+
+\paragraph{Citation marker}
+A citation marker is an annotation in the input text (or a data set) that marks the location of a citation. In scientific publications this would, for example, be a \emph{[1]}.
+
+\paragraph{Citation function}
+The role of a citation or, put differently, the motivation that was behind putting a citation in a particular place. This can, for example, be just for referencing a data set that was used (by citing a data paper), backing up a claim, arguing for or against the overall proposition of a publication, etc.
+
+\paragraph{Reference}
+For each citation marker there usually is a corresponding referenceat the bottom of the page or near the end of the document. This reference identifies the cited document.
+
+\paragraph{Meta data}
+In addition to a documents content, information \emph{about} the document is also often taken into consideration during the recommendation process. This is referred to as meta data.
+
+\paragraph{Entity}
+A physical or abstract thing in the real world. Generally speaking entities like for example people, places, events and topics can be of interest.
+
+\paragraph{Claim}
+In this setting a claim can be defined as an assertion which can be judged in tems of its factuality. While non-factual claims also exist (i.e. an opinion being stated), they do not need backing up by citations.
+
+\paragraph{Argument}
+An argument is composed of a claim and one or more premises justifying the claim. To illustrate, this can take the form <premises> <step(s) of deduction> <claim> where the claim is a conclusion.\cite{Besnard2008}
+
+\subsection{Dimensions}\label{dimensions}
+\begin{verbatim}
+input
+    citing doc
+        amount of info provided for learning
+            citation context (length)
+            citation markers
+            (what) metadata
+        amount of info provided/needed in use
+            citation context (length)
+            citation markers
+            (what) metadata
+    cited doc(s) / "corpus"
+        amount of info provided for learning
+output
+    citation placement granularity
+\end{verbatim}
+
+% TODO: name personal ___ recommendation and that it's a different thing
 
 \subsection{Related work}
 - survey stuff (take more narrow look)\\

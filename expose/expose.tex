@@ -51,66 +51,78 @@ The remainder of this document is structured as follows. Section 2 will provide 
 
 \section{Background}
 \subsection{Citation recommendation}
-The goal of citation recommendation is to provide adequate citations to a given input text. This can involve evaluating whether or not a given input text includes parts that are suitable to add citations to in the first place. For a given section of or position in an input text, the ouput recommendation can either be a single citation or a ranked list of multiple possible citations. A further distinction can be made concerning the granularity of text that a citation is recommended for. This can range from a complete document to a specific point within a string of text. There are also approaches where citation markers---annotations in the text that show where a citation was in the original---are left in the input text. In such a case the evaluation whether or not a citation should be recommended as well as the decision where exactly to put a citation are not necessary. In an ideal case, citation recommendation can even involve evaluating cited documents in terms of their quality.
+The goal of citation recommendation is to provide adequate citations to a given input text. This can involve evaluating whether or not a given input text includes parts that are suitable to add citations to in the first place. For a given section of or position in an input text, the ouput recommendation can either be a single citation or a ranked list of multiple possible citations. A further distinction can be made concerning the granularity of text that a citation is recommended for. This can range from a complete document (global citation recommendation) to a specific point within a string of text (context aware/local citation recommendation). There are also approaches where citation markers---annotations in the text that mark the position of a citation---are left in the input text. In such a case the evaluation whether or not a citation should be recommended as well as the decision where exactly to put a citation are not necessary. In an ideal case, citation recommendation can even involve evaluating candididate documents in terms of their quality.
 
-Given there are a lot of dimensions along which approaches can differ, the section \ref{terminology} will explain relevant terminology and section \ref{dimensions} will give an overview of these distinguishing dimensions. This will enable a more easily understandable overview of related work. (add citation)
+Given there are a lot of dimensions along which approaches can differ, section \ref{terminology} will explain relevant terminology and section \ref{dimensions} will give an overview of these distinguishing dimensions. This will enable a more easily understandable overview of related work.
 
 \subsection{Semantic analysis}
 The idea of this thesis is to focus on semantic aspects of citation contexts. This means, rather than taking into account only syntactical aspects like n-grams, the analysis will go to a higher level of abstraction where the input's \emph{meaning} is of importance. Because the focus of this analysis will most likely revolve around entities, claims and arguments, these terms will be defined in the following section.
 
 \subsection{Terminology}\label{terminology}
 \paragraph{Citing/cited document}
-The former is the document making a reference while the latter the document being referenced. The contents of can be taken into account when developing a citation recommendation approach, but in a considerable amount of approaches the cit\emph{ed} documents' content is not.
+The former is the document making a reference while the latter the document being referenced. The contents of both can be taken into account when developing a citation recommendation approach, but in a considerable amount of approaches the cit\emph{ed} documents' content is not.
 
 \paragraph{Citation context}
-Within the citing document and concerning a single citation act of recommendation, this is the extend of text provided as input. Examples would be the citing documents abstract, a centence containing a citation marker or a whole document.
+Within the citing document and concerning a single recommendation being made, this is the extend of text provided as input. Examples would be the citing documents abstract, a centence containing a citation marker or a whole document.
 
 \paragraph{Citation marker}
-A citation marker is an annotation in the input text (or a data set) that marks the location of a citation. In scientific publications this would, for example, be a \emph{[1]}.
-
-\paragraph{Citation function}
-The role of a citation or, put differently, the motivation that was behind putting a citation in a particular place. This can, for example, be just for referencing a data set that was used (by citing a data paper), backing up a claim, arguing for or against the overall proposition of a publication, etc.
+A citation marker is an annotation in the input text (or a data set) that marks the location of a citation. In scientific publications this could, for example, be a \emph{[42]}. When left in the input text for a recommendation process, the marker's association to its corresponding reference entry is, of course, removed (e.g. \emph{[42]} could be changed to \emph{[]}, replaced by another type of annotation or the citing document's reference section could be made unavailable during the processing of the input).
 
 \paragraph{Reference}
-For each citation marker there usually is a corresponding referenceat the bottom of the page or near the end of the document. This reference identifies the cited document.
+For each citation marker there usually is a corresponding reference at the bottom of the page or near the end of the document. This reference identifies the cited document.
 
-\paragraph{Meta data}
-In addition to a documents content, information \emph{about} the document is also often taken into consideration during the recommendation process. This is referred to as meta data.
+\paragraph{Citation function}
+The role of a citation or, put differently, the motivation that was behind putting a citation in a particular place. This can, for example, be just for referencing a data set that was used (by citing a data paper), backing up a claim or arguing for or against the overall proposition of a publication.
+
+\paragraph{Metadata}
+In addition to a document's content, information \emph{about} the document is also often taken into consideration during the recommendation process. This is referred to as metadata.
 
 \paragraph{Entity}
 A physical or abstract thing in the real world. Generally speaking entities like for example people, places, events and topics can be of interest.
 
 \paragraph{Claim}
-In this setting a claim can be defined as an assertion which can be judged in tems of its factuality. While non-factual claims also exist (i.e. an opinion being stated), they do not need backing up by citations.
+In this setting a claim can be defined as an assertion which can be judged in tems of its factuality. While non-factual claims also exist (i.e. an opinion being stated), they do not need backing up by citations and are therefore not of interest for citation recommendation.
 
 \paragraph{Argument}
-An argument is composed of a claim and one or more premises justifying the claim. To illustrate, this can take the form <premises> <step(s) of deduction> <claim> where the claim is a conclusion.\cite{Besnard2008}
+An argument can, in alignment with \cite{Besnard2008}, be defined as being composed of a claim and one or more premises justifying the claim. To illustrate, this can take the form <premises> <step(s) of deduction> <claim> where the claim is the conclusion of the deduction.
 
 \subsection{Dimensions}\label{dimensions}
-\begin{verbatim}
-input
-    citing doc
-        amount of info provided for learning
-            citation context (length)
-            citation markers
-            (what) metadata
-        amount of info provided/needed in use
-            citation context (length)
-            citation markers
-            (what) metadata
-    cited doc(s) / "corpus"
-        amount of info provided for learning
-output
-    citation placement granularity
-\end{verbatim}
+To systematically categorize approaches to citation recommendation, distinctions can be made concerning the input and the ouput of a mechanism. With regards to the input, the dimensions \emph{citation context} (length/position), \emph{citation markers} (available or not) and \emph{metadata} (available to what extend) can be used. In part, these can be further broken down as shown in the following table.
 
-% TODO: name personal ___ recommendation and that it's a different thing
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{r|c|c}
+&learning&use\\ \hline
+citing doc & <val> & <val>\\ \hline
+cited doc & <val> & <val>\\
+\end{tabular}
+\end{table}
+
+That is, citing and cited documents can be looked at separately, and a distinction can be made as to what is available during the learning phase and what needs to be provided as input during actual use of the resulting system. Note that for citation markers and context, only the \emph{citing doc} row is applicable\footnote{The term ''citation context'' is used to refer to the context in the citing document. One could make a point, though, to furthermore introduce the notion of a context in the cited document. This could then be used, for example, to distinguish whether or not a mechanism outputs only a recommended document or also a specific section that is relevant; or to distinguish whether or not (parts of) cited documents are used during the learning phase.} and for metadata most likely only the \emph{learning} column is\footnote{Although metadata aspects like the ''date of the citing doc'' could also be used in the online system. That is, given a newly written text without citations, an approach could interpret the input as a ''recent citing doc'' and recommend citations accordingly.}. Because dimensions along tree axis are hard to visualize effectively, the distinction can be flattened to the following aspects:
+
+\begin{itemize}
+    \item citation context (learning)
+    \item citation context (use)
+    \item citation markers (learning)
+    \item citation markers (use)
+    \item metadata (citing doc)
+    \item metadata (cited doc)
+\end{itemize}
+
+To give a concrete example, an approach could be trained on input with citation markers (citation markers learning),  but be able to give useful output for input without markers (citation markers use) as well.
+
+Above example also suggests, that there is a distinction to be made concerning an approaches output. A dimension \emph{citation placement granularity} can be used to distinguish whether citation recommendations are given for a whole document, on a sentence level or if specific points within the text are identified.
 
 \subsection{Related work}
-- survey stuff (take more narrow look)\\
-- wiki page news article papers (for entitiy stuff)
+In \cite{Faerber} F\"arber et al. give a comprehensive overview of the field of citation recommendation as well as a comparison of concrete approaches. Focus in the following will be works with distinct similarities or differences to the proposed approach (explained in section \ref{meth}) which are therefore helpful in defining it.
 
-\section{Methodology and approach}
+Mishra et al. describe in \cite{Mishra2016} an approach to recommend news articles that can be used as references for Wikipedia articles describing historical events. Their goal is to offer readers an insight into the detailed view on and reporting of an event \emph{at the time} as an addition to the more overarching representation on Wikipedia. This approach employs named entities as a key component to identify appropriate news articles to recommend. It is therefore similar in this regard to the first step in the Master Thesis' approach where the focus also will lie on recommendation based on entities. The domain, being Wikipedia and news articles, differs from scientific publications.
+
+In \cite{Levy2014}, Levy et al. describe a method for claim detection using a cascade of classifiers. The detection of claims will also be necessary in the proposed Thesis' second step (citation recommendation based on claims). Levy et al. do, however, restrict their detection of claims to those related to a predefined topic and include claims that are statements of an opinion, which will most likely not be the case in the Master Thesis.
+
+In a similar fashion Goudas et al. tackle argument extraction in \cite{Goudas2014}, which will need to be done in the Thesis' thrid step (citation recommendation based on arguments). The document type being social media texts is, however, different.
+
+\section{Methodology and approach}\label{meth}
 foo bar\\
 MAG\cite{Paszcza2016}\cite{Herrmannova2016}\cite{Hug2017}\cite{Sinha2015}\\
 entity\cite{Mishra2016}\\

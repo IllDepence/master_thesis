@@ -114,13 +114,19 @@ To give a concrete example, an approach could be trained on input with citation 
 Above example also suggests, that there is a distinction to be made concerning an approaches output. A dimension \emph{citation placement granularity} can be used to distinguish whether citation recommendations are given for a whole document, on a sentence level or if specific points within the text are identified.
 
 \subsection{Related work}
-In \cite{Faerber} F\"arber et al. give a comprehensive overview of the field of citation recommendation as well as a comparison of concrete approaches. Focus in the following will be works with distinct similarities or differences to the proposed approach (explained in section \ref{meth}) which are therefore helpful in defining it.
+\cite{Faerber} (F\"arber et al.) offers a comprehensive overview of the field of citation recommendation as well as a comparison of concrete approaches. Focus in the following will be works with distinct similarities or differences to the proposed approach (explained in section \ref{meth}) which are therefore helpful in defining it.
 
 Mishra et al. describe in \cite{Mishra2016} an approach to recommend news articles that can be used as references for Wikipedia articles describing historical events. Their goal is to offer readers an insight into the detailed view on and reporting of an event \emph{at the time} as an addition to the more overarching representation on Wikipedia. This approach employs named entities as a key component to identify appropriate news articles to recommend. It is therefore similar in this regard to the first step in the Master Thesis' approach where the focus also will lie on recommendation based on entities. The domain, being Wikipedia and news articles, differs from scientific publications.
 
 In \cite{Levy2014}, Levy et al. describe a method for claim detection using a cascade of classifiers. The detection of claims will also be necessary in the proposed Thesis' second step (citation recommendation based on claims). Levy et al. do, however, restrict their detection of claims to those related to a predefined topic and include claims that are statements of an opinion, which will most likely not be the case in the Master Thesis.
 
 In a similar fashion Goudas et al. tackle argument extraction in \cite{Goudas2014}, which will need to be done in the Thesis' thrid step (citation recommendation based on arguments). The document type being social media texts is, however, different.
+
+Tbahriti et al. semantically analyse abstracts of scientific publications in \cite{Tbahriti2006} to aid the retrieval of similar documents. They classify sentences into one of \emph{purpose}, \emph{methods}, \emph{results} and \emph{conclusion} and show that treating these classes of sentences in a distinct manner can help finding documents with similar references. While mentioning that a system like theirs could also be used for recommending citations, this was not part of the approach. Furthermore, the semantic classes of sentences are identified within the abstract and therefore differ in terms of the citation context from the proposed Thesis.
+
+In \cite{Duma2016} Duma et al. apply the rhetorical annotation scheme CoreSC\cite{Liakata2010} (including classes like \emph{hypothesis}, \emph{background}, \emph{me\-thod}, etc.) to citation contexts and use this classification as part of the query when determining the citations to recommend. This determination of the function of a citation within the argumentative structure of an input text is an aspect that is likely going to be part of the Master Thesis' thrid step (citation recommendation based on arguments). The used citation context length of 3 sentences is likely to be in the realm of what will be used in the Master Thesis as well. A difference lies in the research domain of the publications used. While Duma et al. use publications from biomedical science, the Thesis will most likely use publications form the eight fields found on arxiv.org.
+
+Kobayashi et al. classify citations into three discourse facets (\emph{objective}, \emph{method}, \emph{result}) in \cite{Kobayashi2018}. For their citation recommendation approach they then use facet based vector representations of their citation graph. While, as with \cite{Duma2016}, the rhetorical analysis of citation contexts is a similarity to the proposed Thesis, the focus on the citation graph will most likely not be one.
 
 \section{Methodology and approach}\label{meth}
 foo bar\\
@@ -136,7 +142,8 @@ MAG start and arXiv start scenario (see wiki)
 details of arXiv processing, challenges, etc. (MAG for evaluation where citation marker position is not relevant)
 
 \section{Evaluation}
-foo bar
+foo bar n-fold cross-validation
+% mby Normalized Discounted Cumulative Gain (NDCG) ("a smooth discounting scheme over ranks" + top-1 accuracy
 
 \section{Contributions}
 - apparently semantic stuff not very explored (cite survey if possible, look at tables)  

@@ -45,28 +45,30 @@
 \maketitle
 
 \section{Introduction}
-This expos\'e will outline a prospective Master Thesis in the area of scientific citation recommendation and argue for its value. The approach will encompass the creation of a dataset and development of supervised learning methods with a focus on semantic analysis of citation contexts. Evaluation of the resulting implementation will follow the most prevalent methods in the field.
+This expos\'e will outline a prospective master thesis in the area of scientific citation recommendation and argue for its value. The approach will encompass the creation of a dataset and development of supervised learning methods with a focus on semantic analysis of citation contexts. Evaluation of the resulting implementation will follow the most prevalent methods in the field.
 
-The remainder of this document is structured as follows. Section 2 will provide some theoretical background on relevant areas and give a quick overview of related work. A detailed description of the planned methodology and approach will be given in section 3; followed in section 4 by an outline of the planned evaluation. Section 5 and 6 conclude the expos\'e by listing the expected contributions of the Thesis and a proposed schedule.
+The remainder of this document is structured as follows. Section 2 will provide some theoretical background in relevant areas and give a quick overview of related work. A detailed description of the planned methodology and approach will be given in section 3; followed in section 4 by an outline of the planned evaluation. Section 5 and 6 conclude the expos\'e by listing the expected contributions of the thesis and a proposed schedule.
 
 \section{Background}
+With the ever increasing number of papers being published it is becoming harder and harder to attain and keep an overview of relevant works within a particular field. As a consequence the difficulty of ensuring the use of appropriate citations and necessary time to do so is getting higher. This is the problem that citation recommendation tries to address.
+
 \subsection{Citation recommendation}
 The goal of citation recommendation is to provide adequate citations to a given input text. This can involve evaluating whether or not a given input text includes parts that are suitable to add citations to in the first place. For a given section of or position in an input text, the ouput recommendation can either be a single citation or a ranked list of multiple possible citations. A further distinction can be made concerning the granularity of text that a citation is recommended for. This can range from a complete document (global citation recommendation) to a specific point within a string of text (context aware/local citation recommendation). There are also approaches where citation markers---annotations in the text that mark the position of a citation---are left in the input text. In such a case the evaluation whether or not a citation should be recommended as well as the decision where exactly to put a citation are not necessary. In an ideal case, citation recommendation can even involve evaluating candididate documents in terms of their quality.
 
-Given there are a lot of dimensions along which approaches can differ, section \ref{terminology} will explain relevant terminology and section \ref{dimensions} will give an overview of these distinguishing dimensions. This will enable a more easily understandable overview of related work.
+Given there are a lot of dimensions along which approaches can differ, section \ref{terminology} will explain relevant terminology and section \ref{dimensions} will give an overview of these distinguishing dimensions. This will enable a more easily understandable overview of related work and explanation of the relative position of the presented approach.
 
 \subsection{Semantic analysis}
 The idea of this thesis is to focus on semantic aspects of citation contexts. This means, rather than taking into account only syntactical aspects like n-grams, the analysis will go to a higher level of abstraction where the input's \emph{meaning} is of importance. Because the focus of this analysis will most likely revolve around entities, claims and arguments, these terms will be defined in the following section.
 
 \subsection{Terminology}\label{terminology}
 \paragraph{Citing/cited document}
-The former is the document making a reference while the latter the document being referenced. The contents of both can be taken into account when developing a citation recommendation approach, but in a considerable amount of approaches the cit\emph{ed} documents' content is not.
+The former is the document making a reference while the latter the document being referenced. The contents of both can be taken into account when developing a citation recommendation approach.
 
 \paragraph{Citation context}
-Within the citing document and concerning a single recommendation being made, this is the extend of text provided as input. Examples would be the citing documents abstract, a centence containing a citation marker or a whole document.
+Within the citing document and concerning a single recommendation being made, this is the extend of text provided as input. Examples would be the citing documents abstract, a sentence containing a citation marker or a whole document.
 
 \paragraph{Citation marker}
-A citation marker is an annotation in the input text (or a data set) that marks the location of a citation. In scientific publications this could, for example, be a \emph{[42]}. When left in the input text for a recommendation process, the marker's association to its corresponding reference entry is, of course, removed (e.g. \emph{[42]} could be changed to \emph{[]}, replaced by another type of annotation or the citing document's reference section could be made unavailable during the processing of the input).
+A citation marker is an annotation in the input text (or a data set) that marks the location of a citation. In scientific publications this could, for example, be a \emph{[42]}. When left in the input text for a recommendation process, the marker's association to its corresponding reference entry is, of course, removed (e.g. \emph{[42]} could be changed to \emph{[]}, replaced by another type of annotation or the citing document's reference section could be made unavailable during the processing of the input). Such a decoupled citation marker is also referred to as \emph{citation placeholder}.
 
 \paragraph{Reference}
 For each citation marker there usually is a corresponding reference at the bottom of the page or near the end of the document. This reference identifies the cited document.
@@ -109,30 +111,30 @@ That is, citing and cited documents can be looked at separately, and a distincti
     \item metadata (cited doc)
 \end{itemize}
 
-To give a concrete example, an approach could be trained on input with citation markers (citation markers learning),  but be able to give useful output for input without markers (citation markers use) as well.
+To give a concrete example, an approach could be trained on input with citation markers (citation markers (learning)),  but be able to give useful output for input without markers (citation markers (use)) as well.
 
 Above example also suggests, that there is a distinction to be made concerning an approaches output. A dimension \emph{citation placement granularity} can be used to distinguish whether citation recommendations are given for a whole document, on a sentence level or if specific points within the text are identified.
 
 \subsection{Related work}
 \cite{Faerber} (F\"arber et al.) offers a comprehensive overview of the field of citation recommendation as well as a comparison of concrete approaches. Focus in the following will be works with distinct similarities or differences to the proposed approach (explained in section \ref{meth}) which are therefore helpful in defining it.
 
-Mishra et al. describe in \cite{Mishra2016} an approach to recommend news articles that can be used as references for Wikipedia articles describing historical events. Their goal is to offer readers an insight into the detailed view on and reporting of an event \emph{at the time} as an addition to the more overarching representation on Wikipedia. This approach employs named entities as a key component to identify appropriate news articles to recommend. It is therefore similar in this regard to the first step in the Master Thesis' approach where the focus also will lie on recommendation based on entities. The domain, being Wikipedia and news articles, differs from scientific publications.
+Mishra et al. describe in \cite{Mishra2016} an approach to recommend news articles that can be used as references in Wikipedia articles describing historical events. Their goal is to offer readers an insight into the detailed view on and reporting of an event \emph{at the time} as an addition to the more overarching representation on Wikipedia. This approach employs named entities as a key component to identify appropriate news articles to recommend. It is therefore similar in this regard to the first step in the master thesis' approach where the focus also will lie on recommendation based on entities. The domain, being Wikipedia and news articles, differs from scientific publications.
 
-In \cite{Levy2014}, Levy et al. describe a method for claim detection using a cascade of classifiers. The detection of claims will also be necessary in the proposed Thesis' second step (citation recommendation based on claims). Levy et al. do, however, restrict their detection of claims to those related to a predefined topic and include claims that are statements of an opinion, which will most likely not be the case in the Master Thesis.
+In \cite{Levy2014}, Levy et al. describe a method for claim detection using a cascade of classifiers. The detection of claims will also be necessary in the proposed thesis' second step (citation recommendation based on claims). Levy et al. do, however, restrict their detection of claims to those related to a predefined topic and include claims that are statements of an opinion, which will most likely not be the case in the master thesis.
 
-In a similar fashion Goudas et al. tackle argument extraction in \cite{Goudas2014}, which will need to be done in the Thesis' thrid step (citation recommendation based on arguments). The document type being social media texts is, however, different.
+In a similar fashion Goudas et al. tackle argument extraction in \cite{Goudas2014}, which will need to be done in the thesis' thrid step (citation recommendation based on arguments). The document type being social media texts is, however, different.
 
-Tbahriti et al. semantically analyse abstracts of scientific publications in \cite{Tbahriti2006} to aid the retrieval of similar documents. They classify sentences into one of \emph{purpose}, \emph{methods}, \emph{results} and \emph{conclusion} and show that treating these classes of sentences in a distinct manner can help finding documents with similar references. While mentioning that a system like theirs could also be used for recommending citations, this was not part of the approach. Furthermore, the semantic classes of sentences are identified within the abstract and therefore differ in terms of the citation context from the proposed Thesis.
+Tbahriti et al. semantically analyse abstracts of scientific publications in \cite{Tbahriti2006} to aid the retrieval of similar documents. They classify sentences into one of \emph{purpose}, \emph{methods}, \emph{results} and \emph{conclusion} and show that treating these classes of sentences in a distinct manner can help finding documents with similar references. While mentioning that a system like theirs could also be used for recommending citations, this was not part of the approach. Furthermore, the semantic classes of sentences are identified within the abstract and therefore differ in terms of the citation context from the proposed thesis.
 
-In \cite{Duma2016} Duma et al. apply the rhetorical annotation scheme CoreSC\cite{Liakata2010} (including classes like \emph{hypothesis}, \emph{background}, \emph{me\-thod}, etc.) to citation contexts and use this classification as part of the query when determining the citations to recommend. This determination of the function of a citation within the argumentative structure of an input text is an aspect that is likely going to be part of the Master Thesis' thrid step (citation recommendation based on arguments). The used citation context length of 3 sentences is likely to be in the realm of what will be used in the Master Thesis as well. A difference lies in the research domain of the publications used. While Duma et al. use publications from biomedical science, the Thesis will most likely use publications form the eight fields found on arxiv.org.
+In \cite{Duma2016} Duma et al. apply the rhetorical annotation scheme CoreSC\cite{Liakata2010} (including classes like \emph{hypothesis}, \emph{background}, \emph{me\-thod}, etc.) to citation contexts and use this classification as part of the query when determining the citations to recommend. This determination of the function of a citation within the argumentative structure of an input text is an aspect that is likely going to be part of the master thesis' thrid step (citation recommendation based on arguments). The used citation context length of 3 sentences is likely to be in the realm of what will be used in the master thesis as well. A difference lies in the research domain of the publications used. While Duma et al. use publications from biomedical science, the thesis will most likely use publications form the eight fields found on arxiv.org.
 
-Kobayashi et al. classify citations into three discourse facets (\emph{objective}, \emph{method}, \emph{result}) in \cite{Kobayashi2018}. For their citation recommendation approach they then use facet based vector representations of their citation graph. While, as with \cite{Duma2016}, the rhetorical analysis of citation contexts is a similarity to the proposed Thesis, the focus on the citation graph will most likely not be one.
+Kobayashi et al. classify citations into three discourse facets (\emph{objective}, \emph{method}, \emph{result}) in \cite{Kobayashi2018}. For their citation recommendation approach they then use facet based vector representations of their citation graph. While, as with \cite{Duma2016}, the rhetorical analysis of citation contexts is a similarity to the proposed thesis, the focus on the citation graph will most likely not be one.
 
 \section{Methodology and approach}\label{meth}
 Proposed is a context based citation recommendation approach for scientific publications. In the following subsections considerations concerning the data set and the recommendation process will be explained.
 
 \subsection{Dataset}
-In the field of citation recommendation a lot of different datasets are used and there is no real de facto standard as of yet. Following the analysis in \cite{Faerber} it can be seen that each of the more widely used datasets has benefits and drawbacks. Since the proposed approach for the Master Thesis will involve semantic analysis of citation contexts, the availability of large citation contexts as well as the availability of exact citation markers/placeholders is desirable. \cite{Faerber2018} show that based on arXiv.org publication sources it is possible to generate a very clean and reliable dataset for citation recommendation. Their approach involving linking publications to DBLP restricts them, however, to only use one of the eight domains available on arXiv.org (namely computer science) resulting in only a medium sized data set. The PubMedCentral Open Access collection\footnote{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/} would offer a comparably reliable input (XML files with publications' full text, following the NLM/JATS DTD\footnote{https://jats.nlm.nih.gov/publishing/}). \texttt{\#FIXME: any good argument against the PMC Open Access collection? Even in\-clu\-des structured references ("bibitem strings")}
+In the field of citation recommendation a lot of different datasets are used and there is no real de facto standard as of yet. Following the analysis in \cite{Faerber} it can be seen that each of the more widely used datasets has benefits and drawbacks. Since the proposed approach for the master thesis will involve semantic analysis of citation contexts, the availability of large citation contexts as well as the availability of exact citation markers/placeholders is desirable. \cite{Faerber2018} show that based on arXiv.org publication sources it is possible to generate a very clean and reliable dataset for citation recommendation. Their approach involving linking publications to DBLP restricts them, however, to only use one of the eight domains available on arXiv.org (namely computer science) resulting in only a medium sized data set. The PubMedCentral Open Access collection\footnote{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/} would offer a comparably reliable input (XML files with publications' full text, following the NLM/JATS DTD\footnote{https://jats.nlm.nih.gov/publishing/}). \texttt{\#FIXME: any good argument against the PMC Open Access collection? Even in\-clu\-des structured references ("bibitem strings")}
 
 Going for size, another possible approach would be to use a matadata set like the Microsoft Academic Graph\cite{Sinha2015} (MAG), which is very lage \emph{and} contains citations contexts---albeit only with a length of one sentence. An advantage of using the MAG would be, that the citation graph is already built. In case of generating a data set from arXiv.org sources, reference texts would first have to be linked to publications. \cite{Herrmannova2016} report, however, that in case of the MAG, 80 out of the 127 million papers have neither references nor citations.
 
@@ -141,9 +143,9 @@ Considering the above, the use of arXiv.org sources (1.4 M documents) as well as
 Considering the size of citation contexts used in other approaches that semantically analyse them like \cite{Duma2016} and \cite{Kobayashi2018}, it could be argued that generating a dataset based on arXiv.org sources is the more promising approach for the goal at hand. The proposed generation of a dataset will therefore look as follows.
 
 \subsubsection{Generating a dataset from arXiv.org sources}
-arXiv.org sources are availabe for bulk download and consist, for the most part, of LaTeX source files. There are, however, publications for which there's only TeX, DVI, PostScript or HTML sources or even just a PDF. Where LaTeX source files are available they can be either converted into XML by software like LaTeXML\footnote{https://github.com/brucemiller/LaTeXML} or Tralics\footnote{https://www-sop.inria.fr/marelle/tralics/} to generate plain text with citation annotations from XML, or parsed by libraries like plastex\footnote{https://github.com/tiarno/plastex} or TexSoup\footnote{https://github.com/alvinwan/texsoup}, skipping the inbetween XML format. In case of a restriction to Computer Science publications, grabcite\footnote{https://github.com/agrafix/grabcite} could be used as a tool for the whole dataset generation process.
+arXiv.org sources are availabe for bulk download and consist, for the most part, of LaTeX source files. There are, however, publications for which there's only TeX, DVI, PostScript or HTML sources or even just a PDF. Where LaTeX source files are available they can be either converted into XML by software like LaTeXML\footnote{https://github.com/brucemiller/LaTeXML} or Tralics\footnote{https://www-sop.inria.fr/marelle/tralics/} to generate plain text with citation annotations from XML, or parsed by libraries like plastex\footnote{https://github.com/tiarno/plastex} or TexSoup\footnote{https://github.com/alvinwan/texsoup}, skipping the inbetween XML format. In case of a restriction to computer science publications, grabcite\footnote{https://github.com/agrafix/grabcite} could be used as a tool for the whole dataset generation process.
 
-For the general case, after parsing the LaTeX sources and obtaining plain text with citation annotations, the reference strings corresponding to these citations still need to be resolved (i.e. matched to some kind of global ID). For citations \emph{within} the publications on arXiv.org (i.e. matching to arXiv IDs), this can for example be done by indexing the publications' metadata with a software like Apache Lucene\footnote{https://lucene.apache.org/} and the querying the resulting indices with the reference strings. Because some LaTeX sources include arXiv IDs in their bibliographies this step is not necessary every time.
+For the general case, after parsing the LaTeX sources and obtaining plain text with citation annotations, the reference strings corresponding to these citations still need to be resolved (i.e. matched to some set of global IDs). For citations \emph{within} the publications on arXiv.org (i.e. matching to arXiv IDs), this can for example be done by indexing the publications' metadata with a software like Apache Lucene\footnote{https://lucene.apache.org/} and then querying the resulting indices with the reference strings. Because some LaTeX sources include arXiv IDs in their bibliographies this step is not necessary every time.
 
 In a preliminary test with 10270 citations from 377 publications posted to arXiv in December 2017, 315 of the reference entries already included arXiv IDs and a further 1703 could be matched with the technique described above. While this is only close to 20\%, optimistically extrapolating the numbers to the complete 1.4 M documents in arXiv this would still result in a dataset of 7.6 M citations.
 
@@ -152,7 +154,7 @@ Categorizing the proposed approach according to the dimensions defined in sectio
 
 \begin{itemize}
     \item citation context (learning): in accordance with what will turn out to be effective when using entities, claims, arguments or any combination of those. Gauging by related approaches this is probably going to be in the realm of one two a few sentences.
-    \item citation context (use): how much input the system will need to give useful output can hardly be estimated at this point.
+    \item citation context (use): how much input the system will need in order to produce useful output, can hardly be estimated at this point.
     \item citation markers (learning): will be provided at their exact position, because the dataset will be generated from LaTeX sources.
     \item citation markers (use): whether citation placeholders will be needed in the input or whether the approach will include a mechanism to decide on where to put citations is still open.
     \item metadata (citing doc): will be available\footnote{https://arxiv.org/help/oa/arXiv\_meta\_format.html}
@@ -166,10 +168,12 @@ A straightforward approach to evaluating the resulting recommender system is re-
 
 To measure the quality of the resulting recommendation a combination of a ''hard'' measure like \emph{top-1 accuracy} and a more ''soft'' measure like \emph{normalized discounted cumulative gain} (NDCG)\footnote{Making good use of NDCG might necessitate defining a relevance measure for recommendations that differ from the original one.} can be used.
 
+If possible, it would be ideal to also test the resulting appraoch on existing datasets to allow for a direct comparison of performance. Whether this is a possibility or not will have to be assessed when the project has made some progress and there are less unknowns.
+
 \section{Contributions}
-- apparently semantic stuff not very explored (cite survey if possible, look at tables)  
-- creation of another nice (exact citation markers, large citation context, etc.) dataset like gold standard paper\cite{Faerber2018}  
-- a nice dataset like gold standard paper\cite{Faerber2018} but not restricted to CS domain
+As can be seen in \cite{Faerber}, the body of work on semantic approaches to scientific citation recommendation is not that large. A contribution of the proposed thesis would therefore be an extension of this body of work.
+
+Furthermore, similar to \cite{Faerber2018}, another contribution will be a high quality dataset that can be used to evaluate citation recommendation approaches. This dataset will also encompass several difference domains of research.
 
 \section{Schedule}
 The proposed schedule can be seen in table \ref{schedule}.
@@ -182,17 +186,17 @@ The proposed schedule can be seen in table \ref{schedule}.
 Time frame&Task&Results\\ \hline
 Oct 1 -- Oct 21 & Develop mechanism to generate dataset with citation markers from arXiv source dump & Dataset boilerplate (i.e. with citation markers but no semantic annotation)\\ \hline
 Oct 22 -- Oct 28 & Write expos\'e  & Thesis approval\\ \hline
-Oct 29 -- Nov 04 & Addd entity annotations to dataset & Dataset usable for supervised learning\\ \hline
-Nov 05 -- Nov 18 & Develop entity based recommendation approach & -\\ \hline
-Nov 19 -- Nov 25 & Addd claim annotations to dataset & -\\ \hline
-Nov 26 -- Dec 09 & Develop claim based recommendation approach & -\\ \hline
-Dec 10 -- Dec 22 & Coordination with simultaneous tangential theses and integration into CiteRec system & -\\ \hline
+Oct 29 -- Nov 04 & Add entity annotations to dataset & Dataset usable for supervised learning\\ \hline
+Nov 05 -- Nov 18 & Develop entity based recommendation approach & Basic code boilerplate done and first recommendation process implemented\\ \hline
+Nov 19 -- Nov 25 & Add claim annotations to dataset & Added value for the data set\\ \hline
+Nov 26 -- Dec 09 & Develop claim based recommendation approach & Second recommendation approach\\ \hline
+Dec 10 -- Dec 22 & Coordination with simultaneous tangential theses and integration into CiteRec system & Compatibility of code base\\ \hline
 Dec 23 -- Jan 06 & break/buffer & -\\ \hline
-Jan 07 -- Jan 13 & Addd argument annotations to dataset & -\\ \hline
-Jan 14 -- Jan 27 & Develop argument based recommendation approach and start offline evaluation & -\\ \hline
-Jan 28 -- Feb 10 & Offline evaluation & -\\ \hline
-Feb 11 -- Feb 24 & Online evaluation & -\\ \hline
-Feb 25 -- Mar 17 & Thesis writing & -\\ \hline
+Jan 07 -- Jan 13 & Add argument annotations to dataset & Added value for the data set\\ \hline
+Jan 14 -- Jan 27 & Develop argument based recommendation approach and start offline evaluation & Thrid recommendation approach\\ \hline
+Jan 28 -- Feb 10 & Offline evaluation & Evaluation results\\ \hline
+Feb 11 -- Feb 24 & Online evaluation & Evaluation results\\ \hline
+Feb 25 -- Mar 17 & Thesis writing & Written thesis\\ \hline
 Mar 18 -- Mar 31 & buffer/paper writing & -\\ \hline\end{tabular}
 \end{table*}
 

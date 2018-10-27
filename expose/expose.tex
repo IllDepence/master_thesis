@@ -141,21 +141,30 @@ Considering the above, the use of arXiv.org sources (1.4 M documents) as well as
 Considering the size of citation contexts used in other approaches that semantically analyse them like \cite{Duma2016} and \cite{Kobayashi2018}, it could be argued that generating a dataset based on arXiv.org sources is the more promising approach for the goal at hand. The proposed generation of a dataset will therefore look as follows.
 
 \subsubsection{Generating a dataset from arXiv.org sources}
-challenges n' stuff
+arXiv.org sources are availabe for bulk download and consist, for the most part, of LaTeX source files. There are, however, publications for which there's only TeX, DVI, PostScript or HTML sources or even just a PDF. Where LaTeX source files are available they can be either converted into XML by software like LaTeXML\footnote{https://github.com/brucemiller/LaTeXML} or Tralics\footnote{https://www-sop.inria.fr/marelle/tralics/} to generate plain text with citation annotations from XML, or parsed by libraries like plastex\footnote{https://github.com/tiarno/plastex} or TexSoup\footnote{https://github.com/alvinwan/texsoup}, skipping the inbetween XML format. In case of a restriction to Computer Science publications, grabcite\footnote{https://github.com/agrafix/grabcite} could be used as a tool for the whole dataset generation process.
+
+For the general case, after parsing the LaTeX sources and obtaining plain text with citation annotations, the reference strings corresponding to these citations still need to be resolved (i.e. matched to some kind of global ID). For citations \emph{within} the publications on arXiv.org (i.e. matching to arXiv IDs), this can for example be done by indexing the publications' metadata with a software like Apache Lucene\footnote{https://lucene.apache.org/} and the querying the resulting indices with the reference strings. Because some LaTeX sources include arXiv IDs in their bibliographies this step is not necessary every time.
+
+In a preliminary test with 10270 citations from 377 publications posted to arXiv in December 2017, 315 of the reference entries already included arXiv IDs and a further 1703 could be matched with the technique described above. While this is only close to 20\%, optimistically extrapolating the numbers to the complete 1.4 M documents in arXiv this would still result in a dataset of 7.6 M citations.
 
 \subsection{Recommendation}
+Categorizing the proposed approach according to the dimensions defined in section \ref{dimensions}, it would look as follows:
+
 \begin{itemize}
-    \item citation context (learning):
-    \item citation context (use):
-    \item citation markers (learning):
-    \item citation markers (use):
-    \item metadata (citing doc):
-    \item metadata (cited doc):
+    \item citation context (learning): in accordance with what will turn out to be effective when using entities, claims, arguments or any combination of those. Gauging by related approaches this is probably going to be in the realm of one two a few sentences.
+    \item citation context (use): how much input the system will need to give useful output can hardly be estimated at this point.
+    \item citation markers (learning): will be provided at their exact position, because the dataset will be generated from LaTeX sources.
+    \item citation markers (use): whether citation placeholders will be needed in the input or whether the approach will include a mechanism to decide on where to put citations is still open.
+    \item metadata (citing doc): will be available\footnote{https://arxiv.org/help/oa/arXiv\_meta\_format.html}
+    \item metadata (cited doc): same as above
 \end{itemize}
 
+With regards to the actual recommendation, the machine learning approach will need to allow for the integration of comparatively explicitly modeled concepts (entities, claims, arguments). Furthermore the separate development of approaches (again, for entities, claims, arguments) and their combination afterwards has to be possible. One option would therefore be to go with engineering features that capture abovementioned semantic concepts and use these in a vector space model.
+
 \section{Evaluation}
-foo bar n-fold cross-validation
-% mby Normalized Discounted Cumulative Gain (NDCG) ("a smooth discounting scheme over ranks" + top-1 accuracy
+A straightforward approach to evaluating the resulting recommender system is re-prediction of citations. As is the norm with evaluating machine learning approaches the data is split into a training and testing set. While the training set is left ''intact'' the citations are removed from the test set (citation placeholders might be left in place). The system then trains on the training set and tries to re-predict the citations in the test set that were originally there (or rather, recommend a list of fitting citations). To get more reliable results, above procedure is not just performed with one random split but in the manner of a k-fold cross-validation.
+
+To measure the quality of the resulting recommendation a combination of a ''hard'' measure like \emph{top-1 accuracy} and a more ''soft'' measure like \emph{normalized discounted cumulative gain} (NDCG)\footnote{Making good use of NDCG might necessitate defining a relevance measure for recommendations that differ from the original one.} can be used.
 
 \section{Contributions}
 - apparently semantic stuff not very explored (cite survey if possible, look at tables)  
@@ -163,10 +172,12 @@ foo bar n-fold cross-validation
 - a nice dataset like gold standard paper\cite{Faerber2018} but not restricted to CS domain
 
 \section{Schedule}
+The proposed schedule can be seen in table \ref{schedule}.
+
 \begin{table*}
 \centering
-% \caption{Schedule}
-% \hphantom{ }
+\caption{Schedule}\label{schedule}
+\hphantom{ }
 \begin{tabular}{|p{2.5cm}|p{6cm}|p{4cm}|} \hline
 Time frame&Task&Results\\ \hline
 Oct 1 -- Oct 21 & Develop mechanism to generate dataset with citation markers from arXiv source dump & Dataset boilerplate (i.e. with citation markers but no semantic annotation)\\ \hline

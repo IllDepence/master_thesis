@@ -129,17 +129,29 @@ In \cite{Duma2016} Duma et al. apply the rhetorical annotation scheme CoreSC\cit
 Kobayashi et al. classify citations into three discourse facets (\emph{objective}, \emph{method}, \emph{result}) in \cite{Kobayashi2018}. For their citation recommendation approach they then use facet based vector representations of their citation graph. While, as with \cite{Duma2016}, the rhetorical analysis of citation contexts is a similarity to the proposed Thesis, the focus on the citation graph will most likely not be one.
 
 \section{Methodology and approach}\label{meth}
-foo bar\\
-MAG\cite{Paszcza2016}\cite{Herrmannova2016}\cite{Hug2017}\cite{Sinha2015}\\
-entity\cite{Mishra2016}\\
-claim\cite{Levy2014}\\
-argument\cite{Goudas2014}
+Proposed is a context based citation recommendation approach for scientific publications. In the following subsections considerations concerning the data set and the recommendation process will be explained.
 
-data sets that were considered and why (benefits, drawbacks, ... (cite accodingly))
+\subsection{Dataset}
+In the field of citation recommendation a lot of different datasets are used and there is no real de facto standard as of yet. Following the analysis in \cite{Faerber} it can be seen that each of the more widely used datasets has benefits and drawbacks. Since the proposed approach for the Master Thesis will involve semantic analysis of citation contexts, the availability of large citation contexts as well as the availability of exact citation markers/placeholders is desirable. \cite{Faerber2018} show that based on arXiv.org publication sources it is possible to generate a very clean and reliable dataset for citation recommendation. Their approach involving linking publications to DBLP restricts them, however, to only use one of the eight domains available on arXiv.org (namely computer science) resulting in only a medium sized data set. The PubMedCentral Open Access collection\footnote{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/} would offer a comparably reliable input (XML files with publications' full text, following the NLM/JATS DTD\footnote{https://jats.nlm.nih.gov/publishing/}). \texttt{\#FIXME: any good argument against the PMC Open Access collection? Even in\-clu\-des structured references ("bibitem strings")}
 
-MAG start and arXiv start scenario (see wiki)
+Going for size, another possible approach would be to use a matadata set like the Microsoft Academic Graph\cite{Sinha2015} (MAG), which is very lage \emph{and} contains citations contexts---albeit only with a length of one sentence. An advantage of using the MAG would be, that the citation graph is already built. In case of generating a data set from arXiv.org sources, reference texts would first have to be linked to publications. \cite{Herrmannova2016} report, however, that in case of the MAG, 80 out of the 127 million papers have neither references nor citations.
 
-details of arXiv processing, challenges, etc. (MAG for evaluation where citation marker position is not relevant)
+Considering the above, the use of arXiv.org sources (1.4 M documents) as well as the use of the MAG (30 M connected entities of document metadata) could be considered. Advantages of the MAG are the already built citation graph\footnote{Although, given the MAG is generated automatically, relying on this pre-built graph could be seen as making an approach less transparent.} and its size. The citation context length of just one sentence is a bit small. It might be possible to work on an intersection of MAG and arXiv.org sources and thereby extend the citation contexts (utilizing the MAG's pre-built graph structure and the arXiv.org sources' full text availability), but this would then negate the size argument. Advantages of a dataset generated from arXiv.org sources are the freedom to decide on arbitrarily large citation contexts, the availability of citation markers and the transparency of the approach. A drawback is the necessity to match references (which in the end are just arbitrary strings input by authors) with publications to generate a citation graph.
+
+Considering the size of citation contexts used in other approaches that semantically analyse them like \cite{Duma2016} and \cite{Kobayashi2018}, it could be argued that generating a dataset based on arXiv.org sources is the more promising approach for the goal at hand. The proposed generation of a dataset will therefore look as follows.
+
+\subsubsection{Generating a dataset from arXiv.org sources}
+challenges n' stuff
+
+\subsection{Recommendation}
+\begin{itemize}
+    \item citation context (learning):
+    \item citation context (use):
+    \item citation markers (learning):
+    \item citation markers (use):
+    \item metadata (citing doc):
+    \item metadata (cited doc):
+\end{itemize}
 
 \section{Evaluation}
 foo bar n-fold cross-validation

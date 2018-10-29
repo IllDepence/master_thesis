@@ -2,8 +2,13 @@
 
 ### actionable *now*
 
-* look into Apache lucene (mby +Solr)
-* create system overview
+* Exposé pre feedback:
+    * be more explicit in 3.2:
+        * 3 approaches (entity, claim, argument), also name related works (show stuff was already read)
+        * explain larger example, from beginning to end, with illustration
+    * for related works
+        * table: input, output, dataset, ml approach
+    * arguments agains PMC (for arXiv): (mby) always new data, has CS
 
 ### overall
 
@@ -370,9 +375,29 @@ assuming 1.45 M papers each 27 citations → 7.6 M citations
 
 * mby equivalent [1](https://link.springer.com/content/pdf/10.1007%2F978-3-319-30671-1_3.pdf), [2](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.721.8098&rep=rep1&type=pdf), [3](http://l3s.de/~fetahu/publications/cikm2016.pdf), [4](http://www.l3s.de/~fetahu/publications/fetahu_cikm2015.pdf) (recommend news articles for wikipedia articles referencing past events)
 
+##### name entity linking
+
+* find tool for linking stuff to wiki-/dbpedia
+
+##### ~~named entity recognition~~ (probably not so important)
+
+* [NLTK](https://www.nltk.org/)
+    * simple example:  
+        ```
+        import nltk
+        s = 'Some sentence with named entities like Bill Gates.'
+        sent = nltk.word_tokenize(s)
+        sent = nltk.pos_tag(s)
+        print(nltk.ne_chunk(sent, binary=True))
+        ```
+* spaCy
+    * apparently faster than NLTK but opinionated (offers one implementation per task, not multiple to choose from)
+* gensim
+    * "most commonly used for topic modeling and similarity detection"
+
 ### citation recommendation based on claims
 
-asd
+* [ClausIE](https://gate.d5.mpi-inf.mpg.de/ClausIEGate/ClausIEGate/)
 
 ### citation recommendation based on arguments
 
@@ -383,6 +408,9 @@ asd
 * [Daniel Hershcovich](http://www.cs.huji.ac.il/~danielh/)
 * python
     * [scikit-learn](http://scikit-learn.org/)
+        * `fit-predict` pattern
+        * classification: `train_test_split` function has useful param `stratify` to ensure balanced distribution over classes
     * [pandas](https://pandas.pydata.org/)
+        * classification: `pd.plotting.scatter_matrix` in case of not so many features
 * scipy random forest works column wise and therefore is more efficient on csc (not csr) sparse matrices
 * probably not useful for the TeX parser but: [pybtex.org](https://pybtex.org/)

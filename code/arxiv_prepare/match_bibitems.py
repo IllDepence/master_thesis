@@ -1,6 +1,10 @@
 """ Match bibitem strings to arXiv IDs
 
     TODO:
+        _ title_author_query_words has almost no false positives:
+            -> use to actually expand BibitemArxivIDMap
+            -> create bigger sample w/ ideally multiple contexts per cited doc
+            -> create experiment boilerplate code
         - look through should've matched items
         - generate stats of coverage by complete run
 """

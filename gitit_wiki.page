@@ -401,7 +401,24 @@ assuming 1.45 M papers each 27 citations → 7.6 M citations
 
 ### citation recommendation based on arguments
 
-asd
+##### michael notes
+
+* definition in paper Argumentation Mining: The Detection, Classification and Structure of Arguments in Text
+    * challenges/goals of argumentation mining:
+        * extract arguments ("Component identification" sometimes)
+        * extract and represent the internal structure of arguments, i.e., the propositions and their relations (an argument consists of at least two propositions, so the assumption here; "Component classification" sometimes)
+        * extract the argumentation structure, i.e., the interaction between arguments ("structure identification" sometimes).
+* good survey: [Parsing Argumentation Structures in Persuasive Essays](https://arxiv.org/pdf/1604.07370.pdf)
+* good survey: [Argumentation Mining in User-Generated Web Discourse](https://www.mitpressjournals.org/doi/pdf/10.1162/COLI_a_00276)
+    * dort u.a. Erwähnung/Verlinkung von confirmation bias: Link zu *Recognizing the Absence of Opposing Arguments in Persuasive Essays* (darin: "tendency to ignore opposing arguments is known as *myside bias* or *confirmation bias* (Stanovich et al., 2013). It has been shown that guiding students to include opposing arguments in their writings significantly improves the argumentation quality, the precision of claims and the elaboration of reasons (Wolfe and Britt, 2009). Therefore, it is likely that a system which automatically recognizes the absence of opposing arguments effectively guides students to improve thier argumentation".
+* Weitere aktuelle Arbeiten (z.B. gute und schlechte Ansätze) im ["Argument Mining"-Workshop](http://aclweb.org/anthology/W17-51) (z.B. "What works and what does not: Classifier and feature analysis for argument mining")
+* Auch noch leicht verwandt: [SemEval-2018 Task12: Argument Reasoning Comprehension](https://competitions.codalab.org/competitions/17327)
+* further resources
+    * Sehr nützlich: ["Transition words"](https://msu.edu/~jdowell/135/transw.html) benutzt in Recognizing the Absence of Opposing Arguments in Persuasive Essays.
+* also
+    * Discourse Theory, e.g. Discourse Representation Theory, bzw. Discourse Analysis:
+        * "Similar  to  the  identification  of  argumentation structures,  discourse  analysis  aims  at identifying elementary discourse units and discourse relations between them. Existing approaches on discourse analysis mainly differ in the employed discourse theory." [https://arxiv.org/pdf/1604.07370.pdf](https://arxiv.org/pdf/1604.07370.pdf)
+    * Argumentation theory
 
 # misc notes
 

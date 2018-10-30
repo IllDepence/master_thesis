@@ -32,6 +32,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 
+\DeclareGraphicsExtensions{.pdf}
+
 \begin{document}
 
 \conferenceinfo{Albert-Ludwigs Universit\"at Freiburg\\Technische Fakult\"at, Institut f\"ur Informatik\\Lehrstuhl f\"ur Datenbanken \& Informationssysteme}{}
@@ -115,7 +117,7 @@ To give a concrete example, an approach could be trained on input with citation 
 
 Above example also suggests, that there is a distinction to be made concerning an approaches output. A dimension \emph{citation placement granularity} can be used to distinguish whether citation recommendations are given for a whole document, on a sentence level or if specific points within the text are identified.
 
-\subsection{Related work}
+\subsection{Related work}\label{relwork}
 \cite{Faerber} (F\"arber et al.) offers a comprehensive overview of the field of citation recommendation as well as a comparison of concrete approaches. Focus in the following will be works with distinct similarities or differences to the proposed approach (explained in section \ref{meth}) which are therefore helpful in defining it.
 
 Mishra et al. describe in \cite{Mishra2016} an approach to recommend news articles that can be used as references in Wikipedia articles describing historical events. Their goal is to offer readers an insight into the detailed view on and reporting of an event \emph{at the time} as an addition to the more overarching representation on Wikipedia. This approach employs named entities as a key component to identify appropriate news articles to recommend. It is therefore similar in this regard to the first step in the master thesis' approach where the focus also will lie on recommendation based on entities. The domain, being Wikipedia and news articles, differs from scientific publications.
@@ -134,13 +136,13 @@ Kobayashi et al. classify citations into three discourse facets (\emph{objective
 Proposed is a context based citation recommendation approach for scientific publications. In the following subsections considerations concerning the data set and the recommendation process will be explained.
 
 \subsection{Dataset}
-In the field of citation recommendation a lot of different datasets are used and there is no real de facto standard as of yet. Following the analysis in \cite{Faerber} it can be seen that each of the more widely used datasets has benefits and drawbacks. Since the proposed approach for the master thesis will involve semantic analysis of citation contexts, the availability of large citation contexts as well as the availability of exact citation markers/placeholders is desirable. \cite{Faerber2018} show that based on arXiv.org publication sources it is possible to generate a very clean and reliable dataset for citation recommendation. Their approach involving linking publications to DBLP restricts them, however, to only use one of the eight domains available on arXiv.org (namely computer science) resulting in only a medium sized data set. The PubMedCentral Open Access collection\footnote{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/} would offer a comparably reliable input (XML files with publications' full text, following the NLM/JATS DTD\footnote{https://jats.nlm.nih.gov/publishing/}). \texttt{\#FIXME: any good argument against the PMC Open Access collection? Even in\-clu\-des structured references ("bibitem strings")}
+In the field of citation recommendation a lot of different datasets are used and there is no real de facto standard as of yet. Following the analysis in \cite{Faerber} it can be seen that each of the more widely used datasets has benefits and drawbacks. Since the proposed approach for the master thesis will involve semantic analysis of citation contexts, the availability of large citation contexts as well as the availability of exact citation markers/placeholders is desirable. \cite{Faerber2018} show that based on arXiv.org publication sources it is possible to generate a very clean and reliable dataset for citation recommendation. Their approach involving linking publications to DBLP restricts them, however, to only use one of the eight domains available on arXiv.org (namely computer science) resulting in only a medium sized data set. The PubMedCentral Open Access collection\footnote{http://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/} also offers publication source files, but in an already processed XML format.
 
 Going for size, another possible approach would be to use a matadata set like the Microsoft Academic Graph\cite{Sinha2015} (MAG), which is very lage \emph{and} contains citations contexts---albeit only with a length of one sentence. An advantage of using the MAG would be, that the citation graph is already built. In case of generating a data set from arXiv.org sources, reference texts would first have to be linked to publications. \cite{Herrmannova2016} report, however, that in case of the MAG, 80 out of the 127 million papers have neither references nor citations.
 
-Considering the above, the use of arXiv.org sources (1.4 M documents) as well as the use of the MAG (30 M connected entities of document metadata) could be considered. Advantages of the MAG are the already built citation graph\footnote{Although, given the MAG is generated automatically, relying on this pre-built graph could be seen as making an approach less transparent.} and its size. The citation context length of just one sentence is a bit small. It might be possible to work on an intersection of MAG and arXiv.org sources and thereby extend the citation contexts (utilizing the MAG's pre-built graph structure and the arXiv.org sources' full text availability), but this would then negate the size argument. Advantages of a dataset generated from arXiv.org sources are the freedom to decide on arbitrarily large citation contexts, the availability of citation markers and the transparency of the approach. A drawback is the necessity to match references (which in the end are just arbitrary strings input by authors) with publications to generate a citation graph.
+Considering the above, the use of arXiv.org sources (1.4 M documents) or PubMedCentral Open Access sources (2.1 M documents) as well as the use of the MAG (30 M connected entities of document metadata) could be considered. Advantages of the MAG are the already built citation graph\footnote{Although, given the MAG is generated automatically, relying on this pre-built graph could be seen as making an approach less transparent.} and its size. The citation context length of just one sentence is a bit small. It might be possible to work on an intersection of MAG and publication sources and thereby extend the citation contexts (utilizing the MAG's pre-built graph structure and the sources' full text), but this would then negate the size argument. Advantages of a dataset generated from source files are the freedom to decide on arbitrarily large citation contexts, the availability of citation markers and the transparency of the approach. Here, the pre-processed nature of the PubMedCentral Open Access collection takes away part of the transparency. A general drawback is the necessity to match references (which in the end are just arbitrary strings input by authors) with publications to generate a citation graph.
 
-Considering the size of citation contexts used in other approaches that semantically analyse them like \cite{Duma2016} and \cite{Kobayashi2018}, it could be argued that generating a dataset based on arXiv.org sources is the more promising approach for the goal at hand. The proposed generation of a dataset will therefore look as follows.
+Considering the size of citation contexts used in other approaches that semantically analyse them like \cite{Duma2016} and \cite{Kobayashi2018}, it could be argued that generating a dataset based on arXiv.org sources is the most promising approach for the goal at hand. While the PubMedCentral Open Access collection looks like a viable alternative to arXiv.org sources, the lack of familiarity with the dataset would necessitate additional checks and analysis to make a resonably justified decision between the two. The proposed generation of a dataset will therefore look as follows.
 
 \subsubsection{Generating a dataset from arXiv.org sources}
 arXiv.org sources are availabe for bulk download and consist, for the most part, of LaTeX source files. There are, however, publications for which there's only TeX, DVI, PostScript or HTML sources or even just a PDF. Where LaTeX source files are available they can be either converted into XML by software like LaTeXML\footnote{https://github.com/brucemiller/LaTeXML} or Tralics\footnote{https://www-sop.inria.fr/marelle/tralics/} to generate plain text with citation annotations from XML, or parsed by libraries like plastex\footnote{https://github.com/tiarno/plastex} or TexSoup\footnote{https://github.com/alvinwan/texsoup}, skipping the inbetween XML format. In case of a restriction to computer science publications, grabcite\footnote{https://github.com/agrafix/grabcite} could be used as a tool for the whole dataset generation process.
@@ -149,7 +151,11 @@ For the general case, after parsing the LaTeX sources and obtaining plain text w
 
 In a preliminary test with 10270 citations from 377 publications posted to arXiv in December 2017, 315 of the reference entries already included arXiv IDs and a further 1703 could be matched with the technique described above. While this is only close to 20\%, optimistically extrapolating the numbers to the complete 1.4 M documents in arXiv this would still result in a dataset of 7.6 M citations.
 
+\subsubsection{Extension with the MAG}
+In addition to publication sources, arXiv.org also offers structured metadata on their publications. The MAG, being a metadata set, could be used to enrich this metadata. This could be beneficial for the recommendation process, would however require a matching of arXiv IDs to MAG IDs. Gauging prospective gains and feasibility will be a task further down the line.
+
 \subsection{Recommendation}
+\subsubsection{Categorization}
 Categorizing the proposed approach according to the dimensions defined in section \ref{dimensions}, it would look as follows:
 
 \begin{itemize}
@@ -161,7 +167,22 @@ Categorizing the proposed approach according to the dimensions defined in sectio
     \item metadata (cited doc): same as above
 \end{itemize}
 
-With regards to the actual recommendation, the machine learning approach will need to allow for the integration of comparatively explicitly modeled concepts (entities, claims, arguments). Furthermore the separate development of approaches (again, for entities, claims, arguments) and their combination afterwards has to be possible. One option would therefore be to go with engineering features that capture abovementioned semantic concepts and use these in a vector space model.
+\subsubsection{Overview}
+The gist of how the proposed recommendation process will look like is illustrated in figure \ref{fig:schema}. The dataset is built from LaTeX source files and is comprised of plain text with special annotations for citations. This means per citation we can obtain a citation context (i.e. surrounding text) of appropriate length. The idea is then to learn an abstract representation of those citation contexts. A query to the resulting system is then similarly mapped onto its abstract representation and compared to all the citation contexts in the data set. With this comparison the most similar contexts can be identified and their respective citations recommended.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[scale=0.3]{img/recommendation_process_schema}
+ \caption{Schematic view on the recommendation process of citations.}
+ \label{fig:schema}
+\end{figure}
+
+Abovementioned abstract representations of citation contexts will be created in such a way that they capture the text's semantic content. To be more precise, first an approach will be developed to identify entities. Second, the same will be done for claims and lastly arguments will be captured. The basic idea is that for the same citations are usable for similar semantic surroundings (e.g. the same claim backed up by the same citation).
+
+As mentioned in capter \ref{relwork}, \cite{Mishra2016} by Mishra et al. is an example for the use of entities as an indicator to find relevant citations, an example of claim detection can be seen in \cite{Levy2014} by Levy et al. and in \cite{Goudas2014} Goudas et al. tackle argument extraction.
+
+\subsubsection{Machine learning approach}
+The machine learning approach will need to allow for the integration of comparatively explicitly modeled concepts (entities, claims, arguments). Furthermore the separate development of approaches (again, for entities, claims, arguments) and their combination afterwards has to be possible. One option would therefore be to go with engineering features that capture abovementioned semantic concepts and use these in a vector space model.
 
 \section{Evaluation}
 A straightforward approach to evaluating the resulting recommender system is re-prediction of citations. As is the norm with evaluating machine learning approaches the data is split into a training and testing set. While the training set is left ''intact'' the citations are removed from the test set (citation placeholders might be left in place). The system then trains on the training set and tries to re-predict the citations in the test set that were originally there (or rather, recommend a list of fitting citations). To get more reliable results, above procedure is not just performed with one random split but in the manner of a k-fold cross-validation.

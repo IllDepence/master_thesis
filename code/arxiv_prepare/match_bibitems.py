@@ -333,14 +333,21 @@ def match(db_uri=None, in_dir=None):
             num_matches += 1
             ids_db = session.query(BibitemArxivIDMap).filter_by(
                         uuid=bibitem_db.uuid).first()
-            if ids_db:
-                for idf in doc.get('identifier', []):
-                    if ARXIV_URL_PATT.search(idf):
-                        if not ids_db.arxiv_id in idf:
-                            num_false_positives += 1
-                            # print('identified {}'.format(idf))
-                            # print('but should\'ve been {}'.format(ids_db.arxiv_id))
-                            # input()
+            for idf in doc.get('identifier', []):
+                arxiv_url_match = ARXIV_URL_PATT.search(idf)
+                if arxiv_url_match:
+                    if ids_db and not ids_db.arxiv_id in idf:
+                        num_false_positives += 1
+                        # print('identified {}'.format(idf))
+                        # print('but should\'ve been {}'.format(ids_db.arxiv_id))
+                        # input()
+                    else:
+                        aid_db = BibitemArxivIDMap(
+                            uuid=bibitem_db.uuid,
+                            arxiv_id=arxiv_url_match.group(1)
+                            )
+                        session.add(aid_db)
+                        session.flush()
         # title = doc.get('title', [''])[0]
         # creator = '; '.join(doc.get('creator', ['']))
         # print('Found: {} ({})'.format(title, creator))
@@ -349,6 +356,7 @@ def match(db_uri=None, in_dir=None):
         # print('- - - [{}.{} s] - - -'.format(d.seconds, d.microseconds))
         # print('enter to continue')
         # input()
+    session.commit()
     print('total: {}'.format(len(bibitems_db)))
     print('matches: {}'.format(num_matches))
     print('checked: {}'.format(num_checked))

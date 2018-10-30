@@ -2,13 +2,14 @@
 
 ### actionable *now*
 
+* experiment boilerplate code (actual bibitem maching, fuction for extraction of variable size citation context, train/test splitting, ...)
 * Exposé pre feedback:
-    * be more explicit in 3.2:
+    * ✔ be more explicit in 3.2:
         * 3 approaches (entity, claim, argument), also name related works (show stuff was already read)
         * explain larger example, from beginning to end, with illustration
     * for related works
         * table: input, output, dataset, ml approach
-    * arguments agains PMC (for arXiv): (mby) always new data, has CS
+    * ✔ arguments agains PMC (for arXiv): (mby) always new data, has CS
 
 ### overall
 
@@ -386,6 +387,19 @@ sqlite> select count(distinct arxiv_id) from bibitemarxividmap;
 ```  
 → only one citation context per cited document  
 → huge risk of overfitting
+
+0001_001.tar.gz  
+```
+sqlite> select count(*) from bibitemarxividmap;
+2135
+sqlite> select count(distinct arxiv_id) from bibitemarxividmap;
+1778
+```
+
+**get all citations that have more than one context**  
+`sqlite> select uuid, arxiv_id from bibitemarxividmap where arxiv_id in (select arxiv_id from bibitemarxividmap group by arxiv_id having count(arxiv_id) > 1) order by arxiv_id desc;`  
+with `in_doc`:  
+`sqlite> select in_doc, bibitem.uuid, arxiv_id from bibitemarxividmap join bibitem on bibitemarxividmap.uuid = bibitem.uuid where arxiv_id in (select arxiv_id from bibitemarxividmap group by arxiv_id having count(arxiv_id) > 1) order by arxiv_id desc;`
 
 ##### name entity linking
 

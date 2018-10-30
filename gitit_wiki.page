@@ -394,6 +394,8 @@ sqlite> select count(*) from bibitemarxividmap;
 2135
 sqlite> select count(distinct arxiv_id) from bibitemarxividmap;
 1778
+sqlite> select count(distinct arxiv_id) from bibitemarxividmap where arxiv_id in (select arxiv_id from bibitemarxividmap group by arxiv_id having count(arxiv_id) > 1);
+227    <- citations w/ more than one context
 ```
 
 **get all citations that have more than one context**  

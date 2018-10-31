@@ -1,4 +1,8 @@
 """ Generate datasets from a parsed and matched arXiv dump
+
+    TODO:
+        - for LARGER sample, create plot of number of contexts per cited doc
+          (many 1s, few 2s, etc. long tail)
 """
 
 import json
@@ -57,7 +61,7 @@ def generate(in_dir, db_uri=None):
         print('>{}[42]{}<'.format(pre[-window:], post[:window]))
 
 if __name__ == '__main__':
-    if not len(sys.argv) in [2, 3]:
+    if len(sys.argv) not in [2, 3]:
         print(('usage: python3 generate_dataset.py </path/to/in/dir> [<db_uri>'
                ']'))
         sys.exit()

@@ -247,7 +247,7 @@ def title_author_query_words(text):
 
 def match(db_uri=None, in_dir=None):
     if not (db_uri or in_dir):
-        # print('need either DB URI or input directory path')
+        print('need either DB URI or input directory path')
         return False
     if in_dir:
         db_path = os.path.join(in_dir, 'metadata.db')

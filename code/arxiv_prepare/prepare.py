@@ -12,9 +12,9 @@ def prepare(in_dir, out_dir_dir, db_uri=None):
     if not os.path.isdir(in_dir):
         print('input directory does not exist')
         return False
-    ext_sample = os.path.splitext((os.listdir(in_dir)[0]))[-1]
 
-    # heristic to tell apart single uncompressed "sub dump" from a folder of
+    ext_sample = os.path.splitext((os.listdir(in_dir)[0]))[-1]
+    # heuristic to tell apart single uncompressed "sub dump" from a folder of
     # many still compressed dumps
     if ext_sample in ['.gz', '.pdf']:
         in_folder_name = os.path.normpath(in_dir).split(os.sep)[-1]
@@ -58,13 +58,11 @@ def prepare(in_dir, out_dir_dir, db_uri=None):
             os.makedirs(out_dir)
     normalize(in_dir, out_dir_norm)
     if db_uri:
-        parse(out_dir_norm, out_dir_text, INCREMENTAL=True)
-        match(in_dir=in_dir)
-    else:
         parse(out_dir_norm, out_dir_text, INCREMENTAL=True, db_uri=db_uri)
         match(db_uri=db_uri)
-
-
+    else:
+        parse(out_dir_norm, out_dir_text, INCREMENTAL=True)
+        match(in_dir=out_dir_text)
 
 
 if __name__ == '__main__':

@@ -91,7 +91,7 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
             with open(tmp_xml_path) as f:
                 try:
                     tree = etree.parse(f, parser)
-                except etree.XMLSyntaxError, UnicodeDecodeError as e:
+                except (etree.XMLSyntaxError, UnicodeDecodeError) as e:
                     print('FAILED {}. skipping'.format(aid))
                     log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
                     continue

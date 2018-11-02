@@ -431,6 +431,26 @@ $ du -hs metadata.db
     * [*simple* python code example using only pandas and scikit-learn](http://blog.untrod.com/2016/06/simple-similar-products-recommendation-engine-in-python.html)
     * [graph database](https://www.kernix.com/blog/an-efficient-recommender-system-based-on-graph-database_p9) [based thingy](https://www.kernix.com/blog/recommender-system-based-on-natural-language-processing_p10)
 
+**TFIDF baseline test w/ gensim**  
+(many fails, below a lucky nice example)  
+```
+$ python3 recommend.py items_1712_100w_4mincont.csv
+similar to: math/9904022 (6768)
+correct: [6186, 9728, 9771]
+- - - - - - - -
+✔ 0.309774786233902: 9770
+✔ 0.179429829120636: 6186
+  0.1443936824798584: 10067
+  0.13785989582538605: 7983
+  0.13637538254261017: 4082
+  0.1355295479297638: 3858
+  0.13414070010185242: 9969
+  0.1162891760468483: 1831
+  0.11208947747945786: 4716
+  0.11141400039196014: 3620
+  0.10494373738765717: 6270
+```
+
 ### citation recommendation based on entities
 
 * mby equivalent [1](https://link.springer.com/content/pdf/10.1007%2F978-3-319-30671-1_3.pdf), [2](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.721.8098&rep=rep1&type=pdf), [3](http://l3s.de/~fetahu/publications/cikm2016.pdf), [4](http://www.l3s.de/~fetahu/publications/fetahu_cikm2015.pdf) (recommend news articles for wikipedia articles referencing past events)

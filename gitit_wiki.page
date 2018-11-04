@@ -309,6 +309,12 @@ nucl-th0001065.txt      fine                        x
 python3 parse_latex_tralics.py ~/dl/foo/0001_normalized ~/dl/foo/0001_text_new 70,28s user 20,82s system 68% cpu 2:13,90 total
 ```
 
+**tralics citation/bibitem parsing** (tested on Dec 2017 complete dump)    
+```
+Citations: 488725
+Unmatched citations: 93315
+```
+
 ##### bibitem matching
 
 * arxiv.org web API test (use unrealistic b/c time)
@@ -418,6 +424,8 @@ user    101m10.978s
 sys     12m8.748s
 ```
 
+(parse_latex_tralics (run individually later) is only 19m4.407s of above)
+
 ```
 $ du -hs metadata.db 
 80M	metadata.db
@@ -449,6 +457,16 @@ correct: [6186, 9728, 9771]
   0.11208947747945786: 4716
   0.11141400039196014: 3620
   0.10494373738765717: 6270
+```
+
+**TFIDF baseline test w/ gensim** (80/20 split, then combine training vectors for same cited doc)  
+```
+$ python3 recommend.py items_1712_100w_4mincont.csv
+- - - - - 2269/2269 - - - - -
+#1: 499                     <-- top-1-accuracy: 21.9%
+in top 5: 1319              <-- 58.1%
+in top 10: 1677             <-- 73.9%
+avg: 15.012780960775672
 ```
 
 ### citation recommendation based on entities

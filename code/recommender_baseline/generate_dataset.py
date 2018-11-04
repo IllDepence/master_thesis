@@ -40,7 +40,8 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                 subquery()
     non_unique = session.query(Bibitem, BibitemArxivIDMap).\
                 filter(BibitemArxivIDMap.arxiv_id.in_(sub)).\
-                filter(Bibitem.uuid == BibitemArxivIDMap.uuid).all()
+                filter(Bibitem.uuid == BibitemArxivIDMap.uuid).\
+                order_by(BibitemArxivIDMap.arxiv_id.desc()).all()
     items = []
     for nu in non_unique:
         fn = '{}.txt'.format(nu.Bibitem.in_doc)
@@ -52,6 +53,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
             idx = text.index(marker)
         except ValueError:
             # Reference with no corresponding citation marker
+            # but (probably) matched anyway b/c arXiv ID given in the reference
             continue
             # print('{} | {} | {}'.format(
             #     nu.Bibitem.in_doc,
@@ -65,6 +67,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
         #           in metadata/cited doc fulltext aspects?
         #
         # QUESTION: how to "encode" citation marker position?
+        #
+        # QUESTION: if combining vector representations of all contexts for the
+        #           same cited doc, how to combine features where position or
+        #           order matters? (not relevant for BOW stuff)
         margin = int(context_size/2)
         edx = idx+len(marker)
         pre = text[:idx]

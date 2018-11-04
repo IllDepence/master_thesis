@@ -43,6 +43,9 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    num_citations = 0
+    num_citations_notfound = 0
+
     for fn in os.listdir(IN_DIR):
         path = os.path.join(IN_DIR, fn)
         aid, ext = os.path.splitext(fn)
@@ -134,6 +137,7 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
 
             citations = tree.xpath('//cit')
             for cit in citations:
+                num_citations += 1
                 elem = cit.find('ref')
                 if elem is None:
                     log(('WARNING: cite element in {} contains no ref element'
@@ -147,6 +151,7 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                 else:
                     log(('WARNING: unmatched bibliography key {} for doc {}'
                          '').format(ref, aid))
+                    num_citations_notfound += 1
                 if cit.tail:
                     cit.tail = replace_text + cit.tail
                 else:
@@ -162,6 +167,8 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
             with open(out_txt_path, 'w') as f:
                 f.write(tree_str)
             session.commit()
+    log(('Citations: {}\nUnmatched citations: {}'
+         '').format(num_citations, num_citations_notfound))
     return True
 
 

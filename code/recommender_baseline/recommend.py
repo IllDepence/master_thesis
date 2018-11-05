@@ -29,6 +29,7 @@ def recommend(docs_path):
             # tmp_bag now contains all lines sharing ID tmp_bag_current_aid
             num_contexts = len(tmp_bag)
             if num_contexts >= 4:
+                random.shuffle(tmp_bag)  # TODO: for real eval do k-fold cross
                 # b/c some bibitems don't have a context we have to sort out
                 # cases w/ too few contexts here
                 num_train = math.floor(num_contexts * 0.8)
@@ -58,6 +59,10 @@ def recommend(docs_path):
     num_top = 0
     num_top_5 = 0
     num_top_10 = 0
+    ndcg_sum = 0
+    map_sum = 0
+    ndcg_sum_5 = 0
+    map_sum_5 = 0
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
     for tpl in test:
         test_aid = tpl[0]
@@ -83,10 +88,14 @@ def recommend(docs_path):
             if train_aids[sim[0]] == test_aid:
                 placement = idx+1
                 break
+        ndcg_sum += 1 / math.log2(1 + placement)
+        map_sum += 1 / placement
         if placement == 1:
             num_top += 1
         if placement <= 5:
             num_top_5 += 1
+            ndcg_sum_5 += 1 / math.log2(1 + placement)
+            map_sum_5 += 1 / placement
         if placement <= 10:
             num_top_10 += 1
         total += placement
@@ -96,6 +105,10 @@ def recommend(docs_path):
         print('in top 5: {}'.format(num_top_5))
         print('in top 10: {}'.format(num_top_10))
         print('avg: {}'.format(total/num_cur))
+        print('ndcg: {}'.format(ndcg_sum/num_cur))
+        print('map: {}'.format(map_sum/num_cur))
+        print('ndcg@5: {}'.format(ndcg_sum_5/num_cur))
+        print('map@5: {}'.format(map_sum_5/num_cur))
 
 
 if __name__ == '__main__':

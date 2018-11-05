@@ -377,6 +377,16 @@ python3 match_bibitems.py path ~/dl/foo/1712_text  38,76s user 1,87s system 43% 
 1703 + 315 out of 10270 → 19.6%  
 assuming 1.45 M papers each 27 citations → 7.6 M citations
 
+**(!!!) somewhere along the line duplicates found there way in arXiv ID map(!!!)** (05.11.2017)  
+→ add constraints to DB, rerun pipleline for Dec. 2017  
+```
+sqlite> select count(*) from bibitemarxividmap;
+70353
+sqlite> delete from bibitemarxividmap where id not in (select min(id) from bibitemarxividmap group by uuid, arxiv_id);
+sqlite> select count(*) from bibitemarxividmap;
+62232
+```
+
 ##### experiments
 
 1712_001.tar.gz probably way too small:  

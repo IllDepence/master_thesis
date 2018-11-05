@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, UnicodeText, ForeignKey
+from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -15,6 +16,7 @@ class BibitemLinkMap(Base):
     id = Column(Integer(), autoincrement=True, primary_key=True)
     uuid = Column(String(36), ForeignKey('bibitem.uuid'))
     link = Column(UnicodeText())
+    UniqueConstraint('uuid', 'link', name='uid_link_uniq')
 
 
 class BibitemArxivIDMap(Base):
@@ -22,3 +24,4 @@ class BibitemArxivIDMap(Base):
     id = Column(Integer(), autoincrement=True, primary_key=True)
     uuid = Column(String(36), ForeignKey('bibitem.uuid'))
     arxiv_id = Column(String(36))
+    UniqueConstraint('uuid', 'arxiv_id', name='uid_aid_uniq')

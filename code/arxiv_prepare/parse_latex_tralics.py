@@ -167,7 +167,7 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
             with open(out_txt_path, 'w') as f:
                 f.write(tree_str)
             session.commit()
-    log(('Citations: {}\nUnmatched citations: {}'
+    log(('Citations: {} (not unique)\nUnmatched citations: {}'
          '').format(num_citations, num_citations_notfound))
     return True
 

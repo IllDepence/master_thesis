@@ -311,7 +311,7 @@ python3 parse_latex_tralics.py ~/dl/foo/0001_normalized ~/dl/foo/0001_text_new 7
 
 **tralics citation/bibitem parsing** (tested on Dec 2017 complete dump)    
 ```
-Citations: 488725
+Citations: 488725    *(295710 unique)
 Unmatched citations: 93315
 ```
 
@@ -471,26 +471,38 @@ correct: [6186, 9728, 9771]
 
 **TFIDF baseline test w/ gensim** (80/20 split, then combine training vectors for same cited doc)  
 ```
-$ python3 recommend.py items_1712_100w_4mincont.csv
-- - - - - 2269/2269 - - - - -
-#1: 499                     <-- top-1-accuracy: 21.9%
-in top 5: 1319              <-- 58.1%
-in top 10: 1677             <-- 73.9%
-avg: 15.012780960775672
+$ time python3 recommend.py items_1712_100w_4mincont_stemmed.csv
+- - - - - 1404/1404 - - - - -
+#1: 199
+in top 5: 663
+in top 10: 954
+avg: 14.554843304843304
+ndcg: 0.4466429864293447
+map: 0.2992083662933575
+ndcg@5: 0.3093782646226242
+map@5: 0.25600664767331355
+
+real    15m13.260s
+user    15m14.722s
+sys     0m14.319s
 ```
 
 similar run, more metrics  
 ```
-- - - - - 2269/2269 - - - - -
-#1: 472
-in top 5: 1300
-in top 10: 1672
-avg: 16.34200088144557
-ndcg: 0.5070337354497555
-map: 0.3738396821759451
-ndcg@5: 0.3981771377786959
-map@5: 0.3403775525194666
-python3 recommend.py items_1712_100w_4mincont.csv  3394,56s user 6,50s system 99% cpu 56:41,92 total
+$ time python3 recommend.py items_1712_100w_4mincont_not_stemmed.csv
+- - - - - 1404/1404 - - - - -
+#1: 254
+in top 5: 753
+in top 10: 980
+avg: 18.957264957264957
+ndcg: 0.48227821110408237
+map: 0.3448019509227324
+ndcg@5: 0.3660963359894245
+map@5: 0.3098765432098757
+
+real    15m10.916s
+user    15m12.664s
+sys     0m13.642s
 ```
 
 ### citation recommendation based on entities

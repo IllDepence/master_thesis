@@ -1,0 +1,46 @@
+(01) extract and flatten
+    > in: .gz and .pdf
+    > out: .tex (and .pdf)
+    - flatten .tex inports, .bbl, etc. with latexpand
+    - ignore cases where .gz contains HTML, PS, TeX, etc.
+
+(02) parse latex
+    > in: .tex (ignores .pdf)
+    > out: .txt + metadata.db
+    - save plain text with uuid citation markers
+    - save DB with bibitem string
+                   doc ID
+                   uuid->arXiv ID mappings
+                   uuid->other links mappings (not used)
+    - ~98% success rate (documents)
+    - ~68% success rate (citations) (1712: 488k, 295k unique -> 202k matched)
+
+(03)(pre) arXiv metadata into Solr
+    - post metadata from `newArxivMetaHarvesting201712` to Solr instance
+      (convert <metadata><dc:...> to <add><doc><field ... and upload)
+
+(03) match bibitem strings
+    > in: bibitem string
+    > out: arXiv ID
+    - clean bibitem strings of non word characters, short words, stop words
+    - send above as query to Solr for title and creator field
+    - check if: at least one name of one author is part of bibitem string
+                title is contained in bibitem string
+    - use bibitems with arXiv link given for evaluation
+    - ~18% success rate (1712: 295.710 -> 52.800
+                               evaluation on 17.329: 9.141 FN (52%)
+                                                       159 FP (0.9%))
+
+(04) recommend (test/baseline)
+    - 100 word citation context
+    - remove punctuation
+    - generate BOWs (combine contexts for same cited doc)
+    - calculate TFIDF
+    - recommend based on cosine similarity
+
+(05) evaluate
+    - minimum 4 contexts
+    - 80/20 split
+    - calculate top-1 accuracy
+                NDCG@5
+                MAP@5

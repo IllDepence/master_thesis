@@ -15,6 +15,7 @@ from lxml import etree
 from random import shuffle
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 from db_model import Base, Bibitem, BibitemArxivIDMap
 
 ARXIV_URL_PATT = re.compile(
@@ -327,23 +328,30 @@ def match(db_uri=None, in_dir=None):
             # print('\n\n\n')
             # input()
             num_matches += 1
-            ids_db = session.query(BibitemArxivIDMap).filter_by(
-                        uuid=bibitem_db.uuid).first()
             for idf in doc.get('identifier', []):
                 arxiv_url_match = ARXIV_URL_PATT.search(idf)
                 if arxiv_url_match:
-                    if ids_db and not ids_db.arxiv_id in idf:
-                        num_false_positives += 1
-                        # print('identified {}'.format(idf))
-                        # print('but should\'ve been {}'.format(ids_db.arxiv_id))
-                        # input()
-                    else:
-                        aid_db = BibitemArxivIDMap(
-                            uuid=bibitem_db.uuid,
-                            arxiv_id=arxiv_url_match.group(1)
-                            )
-                        session.add(aid_db)
-                        session.flush()
+                    aid = arxiv_url_match.group(1)
+            arxiv_url_match = ARXIV_URL_PATT.search(idf)
+            aid_db = BibitemArxivIDMap(
+                uuid=bibitem_db.uuid,
+                arxiv_id=aid
+                )
+            # try to add to DB
+            session.begin_nested()
+            try:
+                session.add(aid_db)
+                session.flush()
+            except IntegrityError:
+                # duplicate link
+                session.rollback()
+            session.commit()
+            if ids_db and not ids_db.arxiv_id == aid:
+                num_false_positives += 1
+                # print('identified {}'.format(idf))
+                # print(('but should\'ve been {}'
+                #        '').format(ids_db.arxiv_id))
+                # input()
         # title = doc.get('title', [''])[0]
         # creator = '; '.join(doc.get('creator', ['']))
         # print('Found: {} ({})'.format(title, creator))

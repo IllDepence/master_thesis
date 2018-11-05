@@ -15,6 +15,7 @@ import uuid
 from lxml import etree
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import IntegrityError
 from db_model import Base, Bibitem, BibitemLinkMap, BibitemArxivIDMap
 
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
@@ -128,12 +129,18 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                     match = ARXIV_URL_PATT.search(link)
                     if match:
                         id_part = match.group(1)
-                        aid_db = BibitemArxivIDMap(uuid=uid, arxiv_id=id_part)
-                        session.add(aid_db)
+                        map_db = BibitemArxivIDMap(uuid=uid, arxiv_id=id_part)
+                    else:
+                        map_db = BibitemLinkMap(uuid=uid, link=link)
+                    # try to add link to DB
+                    session.begin_nested()
+                    try:
+                        session.add(map_db)
                         session.flush()
-                    link_db = BibitemLinkMap(uuid=uid, link=link)
-                    session.add(link_db)
-                    session.flush()
+                    except IntegrityError:
+                        # duplicate link
+                        session.rollback()
+                    session.commit()
 
             citations = tree.xpath('//cit')
             for cit in citations:

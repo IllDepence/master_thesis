@@ -28,19 +28,16 @@ def recommend(docs_path):
         if aid != tmp_bag_current_aid:
             # tmp_bag now contains all lines sharing ID tmp_bag_current_aid
             num_contexts = len(tmp_bag)
-            if num_contexts >= 4:
-                random.shuffle(tmp_bag)  # TODO: for real eval do k-fold cross
-                # b/c some bibitems don't have a context we have to sort out
-                # cases w/ too few contexts here
-                num_train = math.floor(num_contexts * 0.8)
-                num_test = num_contexts - num_train
-                train_tuples = tmp_bag[:num_train]
-                test_tuples = tmp_bag[-num_test:]
-                test.extend(test_tuples)
-                # because we use BOW we can just combine train docs here
-                train_text_combined = ' '.join(tpl[1] for tpl in train_tuples)
-                train_aids.append(tmp_bag_current_aid)
-                train_texts.append(train_text_combined.split())
+            random.shuffle(tmp_bag)  # TODO: for real eval do k-fold cross
+            num_train = math.floor(num_contexts * 0.8)
+            num_test = num_contexts - num_train
+            train_tuples = tmp_bag[:num_train]
+            test_tuples = tmp_bag[-num_test:]
+            test.extend(test_tuples)
+            # because we use BOW we can just combine train docs here
+            train_text_combined = ' '.join(tpl[1] for tpl in train_tuples)
+            train_aids.append(tmp_bag_current_aid)
+            train_texts.append(train_text_combined.split())
             # reset bag
             tmp_bag = []
             tmp_bag_current_aid = aid

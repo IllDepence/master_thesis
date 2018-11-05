@@ -5,7 +5,10 @@ import json
 import os
 import re
 import sys
-from gensim.parsing.preprocessing import preprocess_documents
+from gensim.parsing.preprocessing import (preprocess_documents,
+                                          preprocess_string,
+                                          strip_multiple_whitespaces,
+                                          strip_punctuation)
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from db_model import Base, Bibitem, BibitemArxivIDMap
@@ -15,11 +18,13 @@ CITE_PATT = re.compile((r'\{\{cite:[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB]'
 
 
 def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
-             with_placeholder=True):
+             with_placeholder=True, preprocess=False):
     """ Generate a list of citation contexts, given criteria:
             context_size (in words)
             min_contexts
             with_placeholder
+            preprocess  (preprocess_documents default; if off only punctuation
+                         and multiple whitespaces are removed)
 
         If no db_uri is given, a SQLite file metadata.db is expected in in_dir.
     """
@@ -43,7 +48,21 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                 filter(Bibitem.uuid == BibitemArxivIDMap.uuid).\
                 order_by(BibitemArxivIDMap.arxiv_id.desc()).all()
     items = []
+    tmp_bag = []
+    tmp_bag_current_aid = non_unique[0].BibitemArxivIDMap.arxiv_id
     for nu in non_unique:
+        if nu.BibitemArxivIDMap.arxiv_id != tmp_bag_current_aid:
+            # non_unique retrieved sorted by arXiv ID. ID change in list
+            # therefore marks end of a group of items belonging to the same
+            # cited doc, meaning we can check the size of the group now and,
+            # if large enough, add it to items.
+            if len(tmp_bag) >= min_contexts:
+                # enough contexts
+                items.extend(tmp_bag)
+            # start new bag
+            tmp_bag = []
+            tmp_bag_current_aid = nu.BibitemArxivIDMap.arxiv_id
+        # new or still the same arXiv ID; continue filling tmp_bag
         fn = '{}.txt'.format(nu.Bibitem.in_doc)
         text_file = os.path.join(in_dir, fn)
         with open(text_file) as f:
@@ -82,7 +101,12 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
         # heuristic pre-cutting (10 times average word length)
         pre = pre[-margin*6*10:]
         post = post[:margin*6*10]
-        pre, post = preprocess_documents([pre, post])
+        if preprocess:
+            pre, post = preprocess_documents([pre, post])
+        else:
+            custom_filter = [strip_punctuation, strip_multiple_whitespaces]
+            pre = preprocess_string(pre, custom_filter)
+            post = preprocess_string(post, custom_filter)
         placeholder = ''
         if with_placeholder:
             placeholder = ' [] '
@@ -90,8 +114,8 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                                   placeholder,
                                   ' '.join(post[:margin]))
         cited_doc = nu.BibitemArxivIDMap.arxiv_id
-        items.append((cited_doc, context))
-        # print('>{}<'.format(cntxt))
+        tmp_bag.append((cited_doc, context))
+        # print('>{}<'.format(context))
     print(len(items))
     with open('items.csv', 'w') as f:
         for item in items:

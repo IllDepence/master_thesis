@@ -26,6 +26,11 @@ GZ_EXT_PATT = re.compile(r'^\.gz$', re.I)
 TEX_EXT_PATT = re.compile(r'^\.tex$', re.I)
 NON_TEXT_PATT = re.compile(r'^\.(pdf|eps|jpg|png|gif)$', re.I)
 BBL_SIGN = '\\bibitem'
+# natbib fix
+PRE_FIX_NATBIB = True
+NATBIB_PATT = re.compile((r'\\cite(t|p|alt|alp|author|year|yearpar)\s*?\*?\s*?'
+                           '(\[[^\]]*?\]\s*?)*?\s*?\*?\s*?\{([^\}]+?)\}'),
+                         re.I)
 # agressive math pre-removal
 PRE_FILTER_MATH = False
 FILTER_PATTS = []
@@ -130,52 +135,32 @@ def normalize(IN_DIR, OUT_DIR):
                         log(('couldn\'t find main tex file in dump archive {}'
                              '').format(fn))
                         continue
-                    # identify bbl file if present
-                    # below *should* not be necessary, b/c arXiv requires
-                    # bbl files to have the same name as the mail .tex file
-                    # https://arxiv.org/help/submit_tex#bibtex
-                    # (resulting in cases like 1712.02951, where the file name
-                    #  is changed to match the main .tex file, but the same
-                    #  change is *not* performed for the actual \bibliography{}
-                    #  command in latex)
-                    bbl_path = None
-                    for tfn in fnames:
-                        tmp_file_path = os.path.join(tmp_dir_path, tfn)
-                        if NON_TEXT_PATT.match(os.path.splitext(tfn)[1]):
-                            continue
-                        try:
-                            cntnt = read_file(tmp_file_path)
-                            if re.search(MAIN_TEX_PATT, cntnt) is not None:
-                                continue
-                            if BBL_SIGN in cntnt:
-                                bbl_path = tmp_file_path
-                        except:
-                            continue
-                    # TODO: try flatex instead
-                    if bbl_path is None:
-                        latexpand_args = ['latexpand',
-                                          main_tex_path]
-                    else:
-                        latexpand_args = ['latexpand',
-                                          '--expand-bbl',
-                                          bbl_path,
-                                          main_tex_path]
                     # flatten to single tex file and save
-                    new_tex_fn = '{}.tex'.format(aid)
-                    tmp_dest = os.path.join(tmp_dir_path, new_tex_fn)
-                    out = open(tmp_dest, mode='w')
-                    err = open(os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a')
-                    err.write('\n------------- {} -------------\n'.format(aid))
-                    err.flush()
-                    subprocess.run(latexpand_args, stdout=out, stderr=err,
-                                   cwd=tmp_dir_path)
+                    #
+                    # FIXME: revert back to latexpand.
+                    #        flatex messes up files like arxiv:1712.00360
+                    #        badly (repeats document >1k times)
+                    # FIXME: but keep natbib fix
+                    flatex_args = ['flatex', main_tex_path]
+                    main_tex_fn = os.path.normpath(
+                        main_tex_path).split(os.sep)[-1]
+                    main_tex_basename = os.path.splitext(main_tex_path)[0]
+                    tmp_tex_fn = '{}.flt'.format(main_tex_basename)
+                    tmp_dest = os.path.join(tmp_dir_path, tmp_tex_fn)
+                    out = open(os.path.join(OUT_DIR, 'log_flatex.txt'), 'a')
+                    out.write('\n------------- {} -------------\n'.format(aid))
+                    out.flush()
+                    subprocess.run(flatex_args, stdout=out,
+                                   stderr=subprocess.STDOUT, cwd=tmp_dir_path)
                     out.close()
-                    err.close()
-                    # re-read and write to ensure utf-8 b/c latexpand doesn't
+                    # re-read and write to ensure utf-8 b/c flatex doesn't
                     # behave
                     cntnt = read_file(tmp_dest)
+                    if PRE_FIX_NATBIB:
+                        cntnt = NATBIB_PATT.sub(r'\\cite{\3}', cntnt)
                     if PRE_FILTER_MATH:
                         cntnt = remove_math(cntnt)
+                    new_tex_fn = '{}.tex'.format(aid)
                     dest = os.path.join(OUT_DIR, new_tex_fn)
                     with open(dest, mode='w', encoding='utf-8') as f:
                         f.write(cntnt)
@@ -186,6 +171,8 @@ def normalize(IN_DIR, OUT_DIR):
                     log('unexpected content in dump archive {}'.format(fn))
                     continue
                 new_fn = '{}.tex'.format(aid)
+                if PRE_FIX_NATBIB:
+                    cntnt = NATBIB_PATT.sub(r'\\cite{\3}', cntnt)
                 if PRE_FILTER_MATH:
                     cntnt = remove_math(cntnt)
                 dest = os.path.join(OUT_DIR, new_fn)

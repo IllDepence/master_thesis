@@ -6,12 +6,10 @@
 """
 
 import datetime
-import json
 import os
 import re
 import requests
 import sys
-from lxml import etree
 from random import shuffle
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -159,10 +157,10 @@ def guess_delimiter(text):
     delim = '.'
     match = IN_X_DELIM_PATT.search(text)
     if match:
-        delim =  match.group(1)
+        delim = match.group(1)
     match = VOLUME_DELIM_PATT.search(text)
     if match:
-        delim =  match.group(1)
+        delim = match.group(1)
     return delim
 
 
@@ -242,7 +240,7 @@ def title_author_query_words(text):
     cleaner_text = re.sub('[0-9]+', '', clean_text)
     words = [w for w in cleaner_text.split(' ') if
              len(w) > 2 and w not in stop_words]
-    query_string = '%2B'.join(words)  #  + years
+    query_string = '%2B'.join(words)  # + years
     return 'title:{0}%20AND%20creator:{0}'.format(query_string)
 
 
@@ -284,55 +282,55 @@ def match(db_uri=None, in_dir=None):
             # print('enter to continue')
             # input()
             continue
-        doc = send_query(q)
-        if doc:
-            m = check_result(text, doc)
+        solr_resp = send_query(q)
+        if solr_resp:
+            solr_match = check_result(text, solr_resp)
         else:
-            m = False
-        ids_db = session.query(BibitemArxivIDMap).filter_by(
-                    uuid=bibitem_db.uuid).first()
-        if ids_db:
+            solr_match = False
+        given_aid_db = session.query(BibitemArxivIDMap).filter_by(
+                        uuid=bibitem_db.uuid).first()
+        if given_aid_db:
             num_checked += 1
-        if not m:
-            if ids_db:
+        if not solr_match:
+            if given_aid_db:
                 num_false_negatives += 1
-            # ids_db = session.query(BibitemArxivIDMap).filter_by(
+            # given_aid_db = session.query(BibitemArxivIDMap).filter_by(
             #         uuid=bibitem_db.uuid).all()
             # print('No match.')
-            # if ids_db:
+            # if given_aid_db:
             #         print(('--------------- {} ---------------'
             #                '').format(in_doc))
             #         print('Text: {}'.format(text))
             #         print(('####################\nSHOULD HAVE MATCHE'
             #                'D: {}\n####################'
             #                '').format(id_db.arxiv_id))
-            #         doc = send_query(q, debug=True)
-            #         if doc:
-            #             m = check_result(text, doc, debug=True)
+            #         solr_resp = send_query(q, debug=True)
+            #         if solr_resp:
+            #             solr_match = check_result(text, solr_resp,
+            #                                             debug=True)
             #         else:
             #             print('no Solr results')
             #         print('enter to continue')
             #         input()
             continue
-        if m:
+        if solr_match:
             # print(text)
             # print('- - - - - - - - - - - - - - - - - - - - - - - - -')
             # aid = ''
-            # for idf in doc.get('identifier', []):
+            # for idf in solr_resp.get('identifier', []):
             #     if ARXIV_URL_PATT.search(idf):
             #         aid = idf
-            # creators = '; '.join(doc.get('creator', ['']))
-            # dates = ' | '.join(doc.get('date', ['']))
-            # print('{} ({})\n{}\n{}'.format(doc.get('title', [''])[0], aid,
-            #                            creators, dates))
+            # creators = '; '.join(solr_resp.get('creator', ['']))
+            # dates = ' | '.join(solr_resp.get('date', ['']))
+            # print('{} ({})\n{}\n{}'.format(solr_resp.get('title', [''])[0],
+            #                                            aid, creators, dates))
             # print('\n\n\n')
             # input()
             num_matches += 1
-            for idf in doc.get('identifier', []):
+            for idf in solr_resp.get('identifier', []):
                 arxiv_url_match = ARXIV_URL_PATT.search(idf)
                 if arxiv_url_match:
                     aid = arxiv_url_match.group(1)
-            arxiv_url_match = ARXIV_URL_PATT.search(idf)
             aid_db = BibitemArxivIDMap(
                 uuid=bibitem_db.uuid,
                 arxiv_id=aid
@@ -346,11 +344,11 @@ def match(db_uri=None, in_dir=None):
                 # duplicate link
                 session.rollback()
             session.commit()
-            if ids_db and not ids_db.arxiv_id == aid:
+            if given_aid_db and not given_aid_db.arxiv_id == aid:
                 num_false_positives += 1
                 # print('identified {}'.format(idf))
                 # print(('but should\'ve been {}'
-                #        '').format(ids_db.arxiv_id))
+                #        '').format(given_aid_db.arxiv_id))
                 # input()
         # title = doc.get('title', [''])[0]
         # creator = '; '.join(doc.get('creator', ['']))
@@ -366,6 +364,7 @@ def match(db_uri=None, in_dir=None):
     print('checked: {}'.format(num_checked))
     print('false negatives: {}'.format(num_false_negatives))
     print('false positives: {}'.format(num_false_positives))
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 3 or (sys.argv[1] not in ['path', 'uri']):

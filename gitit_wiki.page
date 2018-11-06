@@ -487,7 +487,7 @@ user    15m14.722s
 sys     0m14.319s
 ```
 
-similar run, more metrics  
+not stemmed  
 ```
 $ time python3 recommend.py items_1712_100w_4mincont_not_stemmed.csv
 - - - - - 1404/1404 - - - - -
@@ -503,6 +503,24 @@ map@5: 0.3098765432098757
 real    15m10.916s
 user    15m12.664s
 sys     0m13.642s
+```
+
+minimum of 2 citation contexts  
+```
+$ time python3 recommend.py items_1712_100w_2mincont_not_stemmed.csv
+- - - - - 6843/6843 - - - - -
+#1: 596
+in top 5: 1895
+in top 10: 2690
+avg: 333.87315504895514
+ndcg: 0.3212211934067741
+map: 0.1825363717938699
+ndcg@5: 0.18340135284347936
+map@5: 0.15270836377807132
+
+real    234m12.826s
+user    233m30.086s
+sys     0m54.815s
 ```
 
 ### citation recommendation based on entities

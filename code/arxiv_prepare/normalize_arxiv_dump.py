@@ -131,6 +131,13 @@ def normalize(IN_DIR, OUT_DIR):
                              '').format(fn))
                         continue
                     # identify bbl file if present
+                    # below *should* not be necessary, b/c arXiv requires
+                    # bbl files to have the same name as the mail .tex file
+                    # https://arxiv.org/help/submit_tex#bibtex
+                    # (resulting in cases like 1712.02951, where the file name
+                    #  is changed to match the main .tex file, but the same
+                    #  change is *not* performed for the actual \bibliography{}
+                    #  command in latex)
                     bbl_path = None
                     for tfn in fnames:
                         tmp_file_path = os.path.join(tmp_dir_path, tfn)
@@ -144,6 +151,7 @@ def normalize(IN_DIR, OUT_DIR):
                                 bbl_path = tmp_file_path
                         except:
                             continue
+                    # TODO: try flatex instead
                     if bbl_path is None:
                         latexpand_args = ['latexpand',
                                           main_tex_path]

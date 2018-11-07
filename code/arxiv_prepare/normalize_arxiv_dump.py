@@ -148,22 +148,14 @@ def normalize(IN_DIR, OUT_DIR):
                         main_tex_path).split(os.sep)[-1]
                     fn_base = os.path.splitext(main_tex_path)[0]
                     bbl_fn = '{}.bbl'.format(fn_base)
-                    # for tfn in fnames:
-                    #     tmp_file_path = os.path.join(tmp_dir_path, tfn)
-                    #     if NON_TEXT_PATT.match(os.path.splitext(tfn)[1]):
-                    #         continue
-                    #     try:
-                    #         cntnt = read_file(tmp_file_path)
-                    #         if re.search(MAIN_TEX_PATT, cntnt) is not None:
-                    #             continue
-                    #         if BBL_SIGN in cntnt:
-                    #             bbl_path = tmp_file_path
-                    #     except:
-                    #         continue
-                    latexpand_args = ['latexpand',
-                                      '--expand-bbl',
-                                      bbl_fn,
-                                      main_tex_fn]
+                    if os.path.isfile(os.path.join(tmp_dir_path, bbl_fn)):
+                        latexpand_args = ['latexpand',
+                                          '--expand-bbl',
+                                          bbl_fn,
+                                          main_tex_fn]
+                    else:
+                        latexpand_args = ['latexpand',
+                                          main_tex_fn]
                     # flatten to single tex file and save
                     new_tex_fn = '{}.tex'.format(aid)
                     tmp_dest = os.path.join(tmp_dir_path, new_tex_fn)

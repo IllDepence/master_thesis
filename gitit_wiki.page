@@ -334,6 +334,8 @@ Citations: 565613 (not unique)
 Unmatched citations: 28372
 ```
 
+**→ increase from 70% to 95%** (assuming above 565613 are 100%)
+
 ##### bibitem matching
 
 * arxiv.org web API test (use unrealistic b/c time)
@@ -458,6 +460,16 @@ sys     12m8.748s
 ```
 $ du -hs metadata.db 
 80M	metadata.db
+```
+
+**re-run w/ natbib fixes**  
+```
+$ python3 match_bibitems.py path /home/saiert/arxiv_test_2017_12_all_tralics_preprocessing/all_text
+total: 317010
+matches: 59277
+checked: 21294
+false negatives: 10364
+false positives: 197
 ```
 
 ### citation recommendation baseline

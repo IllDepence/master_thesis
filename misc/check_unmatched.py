@@ -42,17 +42,17 @@ for aid, num in um_map.items():
     per_cat[pcat].append(aid)
     time.sleep(.1)
 
-# sorted_per_doc = sorted(per_doc.items(), key=operator.itemgetter(1),
-#                         reverse=True)
-# sorted_per_cit = sorted(per_cit.items(), key=operator.itemgetter(1),
-#                         reverse=True)
+sorted_per_doc = sorted(per_doc.items(), key=operator.itemgetter(1),
+                        reverse=True)
+sorted_per_cit = sorted(per_cit.items(), key=operator.itemgetter(1),
+                        reverse=True)
 
 with open('per_cat', 'w') as f:
     f.write(json.dumps(per_cat))
-# with open('per_doc', 'w') as f:
-#     f.write('\n'.join(['{}: {}'.format(tup[0], tup[1])
-#                        for tup in sorted_per_doc]))
+with open('per_doc', 'w') as f:
+    f.write('\n'.join(['{}: {}'.format(tup[0], tup[1])
+                       for tup in sorted_per_doc]))
 
-# with open('per_cit', 'w') as f:
-#     f.write('\n'.join(['{}: {}'.format(tup[0], tup[1])
-#                        for tup in sorted_per_cit]))
+with open('per_cit', 'w') as f:
+    f.write('\n'.join(['{}: {}'.format(tup[0], tup[1])
+                       for tup in sorted_per_cit]))

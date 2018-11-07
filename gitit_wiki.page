@@ -315,6 +315,14 @@ Citations: 488725    *(295710 unique)
 Unmatched citations: 93315
 ```
 
+→ Tralics is supposed to be able to understand [commands from a lot of packages](https://www-sop.inria.fr/marelle/tralics/packages.html) (esp. natbib is relevant here) but apparently doesn't  
+→ fixing `\citep`s, `\bibitem[bla{problem}bla]{key}`s etc. helps with a lot of citations (test incoming)  
+→ still a problem are [nmras](https://www-sop.inria.fr/marelle/tralics/packages.html) style bibliographies (predictable format so mby. #TODO)
+
+```
+insert test here
+```
+
 ##### bibitem matching
 
 * arxiv.org web API test (use unrealistic b/c time)
@@ -377,7 +385,7 @@ python3 match_bibitems.py path ~/dl/foo/1712_text  38,76s user 1,87s system 43% 
 1703 + 315 out of 10270 → 19.6%  
 assuming 1.45 M papers each 27 citations → 7.6 M citations
 
-**(!!!) somewhere along the line duplicates found there way in arXiv ID map(!!!)** (05.11.2017)  
+~~**(!!!) somewhere along the line duplicates found there way in arXiv ID map(!!!)** (05.11.2017)~~ (fixed)  
 → add constraints to DB, rerun pipleline for Dec. 2017  
 ```
 sqlite> select count(*) from bibitemarxividmap;

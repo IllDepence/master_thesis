@@ -31,6 +31,13 @@ PRE_FIX_NATBIB = True
 NATBIB_PATT = re.compile((r'\\cite(t|p|alt|alp|author|year|yearpar)\s*?\*?\s*?'
                            '(\[[^\]]*?\]\s*?)*?\s*?\*?\s*?\{([^\}]+?)\}'),
                          re.I)
+# bibitem option fix
+PRE_FIX_BIBOPT = True
+BIBOPT_PATT = re.compile(r'\\bibitem\s*?\[[^]]*?\]', re.I|re.M)
+
+# ↑ above two solve most tralics problems; except for mnras style bibitems
+# (https://ctan.org/pkg/mnras)
+
 # agressive math pre-removal
 PRE_FILTER_MATH = False
 FILTER_PATTS = []
@@ -135,32 +142,48 @@ def normalize(IN_DIR, OUT_DIR):
                         log(('couldn\'t find main tex file in dump archive {}'
                              '').format(fn))
                         continue
-                    # flatten to single tex file and save
-                    #
-                    # FIXME: revert back to latexpand.
-                    #        flatex messes up files like arxiv:1712.00360
-                    #        badly (repeats document >1k times)
-                    # FIXME: but keep natbib fix
-                    flatex_args = ['flatex', main_tex_path]
+                    # "identify" bbl file
+                    # https://arxiv.org/help/submit_tex#bibtex
                     main_tex_fn = os.path.normpath(
                         main_tex_path).split(os.sep)[-1]
-                    main_tex_basename = os.path.splitext(main_tex_path)[0]
-                    tmp_tex_fn = '{}.flt'.format(main_tex_basename)
-                    tmp_dest = os.path.join(tmp_dir_path, tmp_tex_fn)
-                    out = open(os.path.join(OUT_DIR, 'log_flatex.txt'), 'a')
-                    out.write('\n------------- {} -------------\n'.format(aid))
-                    out.flush()
-                    subprocess.run(flatex_args, stdout=out,
-                                   stderr=subprocess.STDOUT, cwd=tmp_dir_path)
+                    fn_base = os.path.splitext(main_tex_path)[0]
+                    bbl_fn = '{}.bbl'.format(fn_base)
+                    # for tfn in fnames:
+                    #     tmp_file_path = os.path.join(tmp_dir_path, tfn)
+                    #     if NON_TEXT_PATT.match(os.path.splitext(tfn)[1]):
+                    #         continue
+                    #     try:
+                    #         cntnt = read_file(tmp_file_path)
+                    #         if re.search(MAIN_TEX_PATT, cntnt) is not None:
+                    #             continue
+                    #         if BBL_SIGN in cntnt:
+                    #             bbl_path = tmp_file_path
+                    #     except:
+                    #         continue
+                    latexpand_args = ['latexpand',
+                                      '--expand-bbl',
+                                      bbl_fn,
+                                      main_tex_fn]
+                    # flatten to single tex file and save
+                    new_tex_fn = '{}.tex'.format(aid)
+                    tmp_dest = os.path.join(tmp_dir_path, new_tex_fn)
+                    out = open(tmp_dest, mode='w')
+                    err = open(os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a')
+                    err.write('\n------------- {} -------------\n'.format(aid))
+                    err.flush()
+                    subprocess.run(latexpand_args, stdout=out, stderr=err,
+                                   cwd=tmp_dir_path)
                     out.close()
-                    # re-read and write to ensure utf-8 b/c flatex doesn't
+                    err.close()
+                    # re-read and write to ensure utf-8 b/c latexpand doesn't
                     # behave
                     cntnt = read_file(tmp_dest)
                     if PRE_FIX_NATBIB:
                         cntnt = NATBIB_PATT.sub(r'\\cite{\3}', cntnt)
+                    if PRE_FIX_BIBOPT:
+                        cntnt = BIBOPT_PATT.sub(r'\\bibitem', cntnt)
                     if PRE_FILTER_MATH:
                         cntnt = remove_math(cntnt)
-                    new_tex_fn = '{}.tex'.format(aid)
                     dest = os.path.join(OUT_DIR, new_tex_fn)
                     with open(dest, mode='w', encoding='utf-8') as f:
                         f.write(cntnt)
@@ -173,6 +196,8 @@ def normalize(IN_DIR, OUT_DIR):
                 new_fn = '{}.tex'.format(aid)
                 if PRE_FIX_NATBIB:
                     cntnt = NATBIB_PATT.sub(r'\\cite{\3}', cntnt)
+                if PRE_FIX_BIBOPT:
+                    cntnt = BIBOPT_PATT.sub('\\bibitem', cntnt)
                 if PRE_FILTER_MATH:
                     cntnt = remove_math(cntnt)
                 dest = os.path.join(OUT_DIR, new_fn)

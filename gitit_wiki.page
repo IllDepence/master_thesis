@@ -316,11 +316,22 @@ Unmatched citations: 93315
 ```
 
 → Tralics is supposed to be able to understand [commands from a lot of packages](https://www-sop.inria.fr/marelle/tralics/packages.html) (esp. natbib is relevant here) but apparently doesn't  
-→ fixing `\citep`s, `\bibitem[bla{problem}bla]{key}`s etc. helps with a lot of citations (test incoming)  
+→ fixing `\citep`s, `\bibitem[bla{problem}bla]{key}`s etc. helps with a lot of citations (see regex and results below)  
 → still a problem are [nmras](https://www-sop.inria.fr/marelle/tralics/packages.html) style bibliographies (predictable format so mby. #TODO)
 
 ```
-insert test here
+NATBIB_PATT = re.compile((r'\\cite(t|p|alt|alp|author|year|yearpar)\s*?\*?\s*?'                                         
+                           '(\[[^\]]*?\]\s*?)*?\s*?\*?\s*?\{([^\}]+?)\}'),                                              
+                         re.I)
+cntnt = NATBIB_PATT.sub(r'\\cite{\3}', cntnt)
+
+BIBOPT_PATT = re.compile(r'\\bibitem\s*?\[[^]]*?\]', re.I|re.M)
+cntnt = BIBOPT_PATT.sub(r'\\bibitem', cntnt)
+```
+
+```
+Citations: 565613 (not unique)                                                  
+Unmatched citations: 28372
 ```
 
 ##### bibitem matching

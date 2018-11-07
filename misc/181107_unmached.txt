@@ -1,0 +1,8 @@
+explanation:
+
+parse_latex_tralics.py writes a log message, whenever it encounters a citation
+for which it found no matching bibitem (reference text). this happens, when
+tralics can not parse bibitems. primary suspect culprit for this is nmras style
+bibitems.
+the JSON file lists the documents in which there were unmatched citations and
+how many unmatched citations there were.

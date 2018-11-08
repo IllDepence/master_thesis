@@ -336,6 +336,16 @@ Unmatched citations: 28372
 
 **→ increase from 70% to 95%** (assuming above 565613 are 100%)
 
+impact on example data set:
+
+```
+$ cat items_1712_100w_2mincont_not_stemmed.csv | wc -l
+17640
+$ cat items_1712_100w_2mincont_not_stemmed_NATBIB_FIX.csv | wc -l
+28673
+
+```
+
 ##### bibitem matching
 
 * arxiv.org web API test (use unrealistic b/c time)

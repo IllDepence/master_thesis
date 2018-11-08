@@ -25,6 +25,12 @@ def generate(in_dir, db_uri=None):
     # count_map = {}
     x = []
     y = []
+
+    # Ｆ　Ｉ　Ｘ　Ｍ　Ｅ
+    #  FIXME: below only calculates in how many *DOCUMENTS* a context appears
+    #  FIXME: and disregards multiple contexts in a single document
+    # Ｆ　Ｉ　Ｘ　Ｍ　Ｅ
+
     # for count in range(1, 11):
     for count in range(50, 151):
         res = session.query(BibitemArxivIDMap.arxiv_id).\

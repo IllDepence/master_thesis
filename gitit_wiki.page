@@ -1,15 +1,11 @@
 # orga
 
-### actionable *now*
+### recent notes
 
-* experiment boilerplate code (actual bibitem maching, fuction for extraction of variable size citation context, train/test splitting, ...)
-* Exposé pre feedback:
-    * ✔ be more explicit in 3.2:
-        * 3 approaches (entity, claim, argument), also name related works (show stuff was already read)
-        * explain larger example, from beginning to end, with illustration
-    * for related works
-        * table: input, output, dataset, ml approach
-    * ✔ arguments agains PMC (for arXiv): (mby) always new data, has CS
+* match to MAG IDs instead of arXiv IDs
+* mby treat "co-appearing" citations as valid (e.g. "some stuff super important [1][2][3]" <- all three count)
+* general idea: high weight on smaller local context, then also consider (with some lower weight) larger context
+* aim for citesight like system (see [96] in survey)
 
 ### overall
 

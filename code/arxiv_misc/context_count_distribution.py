@@ -78,7 +78,8 @@ def generate(in_dir, db_uri=None):
     plt.xticks(np.arange(2, 21, step=1))
     plt.yticks(np.arange(0, 12001, step=2000))
     for i, j in zip(x, y):
-        ax.annotate(str(j), xy=(i-0.23,j+1000+(j*0.05)), color='grey', rotation=90)
+        ax.annotate(str(j), xy=(i-0.23,j+1000+(j*0.05)),
+                    color='grey', rotation=90)
     plt.show()
 
 if __name__ == '__main__':

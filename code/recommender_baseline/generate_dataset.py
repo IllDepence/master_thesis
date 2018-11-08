@@ -38,87 +38,66 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    print('querying DB')
     sub = session.query(BibitemArxivIDMap.arxiv_id).\
-                group_by(BibitemArxivIDMap.arxiv_id).\
-                having(func.count(BibitemArxivIDMap.arxiv_id)
-                        > min_contexts-1).\
                 subquery()
-    non_unique = session.query(Bibitem, BibitemArxivIDMap).\
-                filter(BibitemArxivIDMap.arxiv_id.in_(sub)).\
+    res = session.query(Bibitem, BibitemArxivIDMap).\
                 filter(Bibitem.uuid == BibitemArxivIDMap.uuid).\
-                order_by(BibitemArxivIDMap.arxiv_id.desc()).all()
-    items = []
-    tmp_bag = []
-    tmp_bag_current_aid = non_unique[0].BibitemArxivIDMap.arxiv_id
-    for nu in non_unique:
-        if nu.BibitemArxivIDMap.arxiv_id != tmp_bag_current_aid:
-            # non_unique retrieved sorted by arXiv ID. ID change in list
-            # therefore marks end of a group of items belonging to the same
-            # cited doc, meaning we can check the size of the group now and,
-            # if large enough, add it to items.
-            if len(tmp_bag) >= min_contexts:
-                # enough contexts
-                items.extend(tmp_bag)
-            # start new bag
-            tmp_bag = []
-            tmp_bag_current_aid = nu.BibitemArxivIDMap.arxiv_id
-        # new or still the same arXiv ID; continue filling tmp_bag
-        fn = '{}.txt'.format(nu.Bibitem.in_doc)
-        text_file = os.path.join(in_dir, fn)
-        with open(text_file) as f:
-            text = f.read()
-        marker = '{{{{cite:{}}}}}'.format(nu.Bibitem.uuid)
-        try:
-            idx = text.index(marker)
-        except ValueError:
-            # Reference with no corresponding citation marker
-            # but (probably) matched anyway b/c arXiv ID given in the reference
-            continue
-            # print('{} | {} | {}'.format(
-            #     nu.Bibitem.in_doc,
-            #     nu.Bibitem.uuid,
-            #     nu.BibitemArxivIDMap.arxiv_id))
-        # TODO: retrieve metadata for cited document (and mby full text) and
-        #       include it into dataset (description of cited doc = citation
-        #       context + meta data)
-        # nu.BibitemArxivIDMap.arxiv_id
-        # QUESTION: input is only a prospective citation context, how to work
-        #           in metadata/cited doc fulltext aspects?
-        #
-        # QUESTION: how to "encode" citation marker position?
-        #
-        # QUESTION: if combining vector representations of all contexts for the
-        #           same cited doc, how to combine features where position or
-        #           order matters? (not relevant for BOW stuff)
-        margin = int(context_size/2)
-        edx = idx+len(marker)
-        pre = text[:idx]
-        post = text[edx:]
-        pre = re.sub(CITE_PATT, '', pre)
-        post = re.sub(CITE_PATT, '', post)
-        # pre = re.sub(r'([^\w\s]+|\n)', '', pre)
-        # post = re.sub(r'([^\w\s]+|\n)', '', post)
-        # heuristic pre-cutting (10 times average word length)
-        pre = pre[-margin*6*10:]
-        post = post[:margin*6*10]
-        if preprocess:
-            pre, post = preprocess_documents([pre, post])
-        else:
-            custom_filter = [strip_punctuation, strip_multiple_whitespaces]
-            pre = preprocess_string(pre, custom_filter)
-            post = preprocess_string(post, custom_filter)
-        placeholder = ''
-        if with_placeholder:
-            placeholder = ' [] '
-        context = '{}{}{}'.format(' '.join(pre[-margin:]),
-                                  placeholder,
-                                  ' '.join(post[:margin]))
-        cited_doc = nu.BibitemArxivIDMap.arxiv_id
-        tmp_bag.append((cited_doc, context))
-        # print('>{}<'.format(context))
-    print(len(items))
+                filter(BibitemArxivIDMap.arxiv_id.in_(sub)).\
+                all()
+    print('merging bibitems')
+    cited_docs = {}
+    for bibitem in res:
+        aid = bibitem.BibitemArxivIDMap.arxiv_id
+        if aid not in cited_docs:
+            cited_docs[aid] = []
+        cited_docs[aid].append({
+            'uuid': bibitem.Bibitem.uuid,
+            'in_doc': bibitem.Bibitem.in_doc
+            })
+    print('going through docs')
+    count_1 = 0
+    count_2 = 0
+    contexts = []
+    for aid, doc_list in cited_docs.items():
+        tmp_list = []
+        for doc in doc_list:
+            fn = '{}.txt'.format(doc['in_doc'])
+            text_file = os.path.join(in_dir, fn)
+            with open(text_file) as f:
+                text = f.read()
+            marker = '{{{{cite:{}}}}}'.format(doc['uuid'])
+            count_1 += text.count(marker)
+            for m in re.finditer(marker, text):
+                count_2 += 1
+                margin = int(context_size/2)
+                idx = m.start()
+                edx = m.end()
+                pre = text[:idx]
+                post = text[edx:]
+                pre = re.sub(CITE_PATT, '', pre)
+                post = re.sub(CITE_PATT, '', post)
+                # heuristic pre-cutting (10 times average word length)
+                pre = pre[-margin*6*10:]
+                post = post[:margin*6*10]
+                if preprocess:
+                    pre, post = preprocess_documents([pre, post])
+                else:
+                    custom_filter = [strip_punctuation, strip_multiple_whitespaces]
+                    pre = preprocess_string(pre, custom_filter)
+                    post = preprocess_string(post, custom_filter)
+                placeholder = ''
+                if with_placeholder:
+                    placeholder = ' [] '
+                context = '{}{}{}'.format(' '.join(pre[-margin:]),
+                                          placeholder,
+                                          ' '.join(post[:margin]))
+                tmp_list.append((aid, context))
+        if len(tmp_list) >= min_contexts:
+            contexts.extend(tmp_list)
+    print(len(contexts))
     with open('items.csv', 'w') as f:
-        for item in items:
+        for item in contexts:
             line = '{},{}\n'.format(item[0], item[1])
             f.write(line)
 

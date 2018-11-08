@@ -560,6 +560,22 @@ user    233m30.086s
 sys     0m54.815s
 ```
 
+more data (natbib fix)  
+```
+$ python3 recommend.py items_1712_100w_2mincont_not_stemmed_NATBIB_FIX.csv
+- - - - - 10497/10497 - - - - -
+#1: 699
+in top 5: 2382
+in top 10: 3600
+avg: 481.9152138706297
+ndcg: 0.2925079165753687
+map: 0.15257636645208303
+ndcg@5: 0.14781602404672087
+map@5: 0.12187450382649058
+```
+
+currently running evals: test difference between one per doc (2.7k) and many per doc (18k)
+
 ##### notes on evaluation
 
 * considerations when train/test splitting

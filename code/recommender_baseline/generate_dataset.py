@@ -56,8 +56,6 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
             'in_doc': bibitem.Bibitem.in_doc
             })
     print('going through docs')
-    count_1 = 0
-    count_2 = 0
     contexts = []
     for aid, doc_list in cited_docs.items():
         tmp_list = []
@@ -67,9 +65,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
             with open(text_file) as f:
                 text = f.read()
             marker = '{{{{cite:{}}}}}'.format(doc['uuid'])
-            count_1 += text.count(marker)
             for m in re.finditer(marker, text):
-                count_2 += 1
                 margin = int(context_size/2)
                 idx = m.start()
                 edx = m.end()

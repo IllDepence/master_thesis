@@ -99,7 +99,26 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                     print('FAILED {}. skipping'.format(aid))
                     log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
                     continue
-            etree.strip_elements(tree, 'formula', with_tail=False)
+            # tags things that could be treatetd specially
+            # - <Metadata>
+            #     - <title>
+            #     - <authors><author>
+            # - <head>
+            # - <proof>
+            # - <abstract>
+            # - <maketitle>
+            # - <list> (might be used for larger chunks of text like
+            #           related work)
+            #
+            # tags *NOT* to tuch
+            # - <unknown>: can surround whole content
+            strip_tags = ['formula', 'figure', 'table']
+            for stag in strip_tags:
+                etree.strip_elements(tree, stag, with_tail=False)
+            mby_noise = tree.xpath('//unexpected')
+            for mn in mby_noise:
+                if len(mn.getchildren()) == 0:
+                    mn.getparent().remove(mn)
 
             # processing of citation markers
             bibitems = tree.xpath('//bibitem')

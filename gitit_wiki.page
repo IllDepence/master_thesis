@@ -5,7 +5,9 @@
 * match to MAG IDs instead of arXiv IDs
 * mby treat "co-appearing" citations as valid (e.g. "some stuff super important [1][2][3]" <- all three count)
 * general idea: high weight on smaller local context, then also consider (with some lower weight) larger context
-* aim for citesight like system (see [96] in survey)
+* do doc wise split (train/test)
+* do pre-selection before cosine sim (or similar) -> how?
+* (NEL) annotate documents, *then* extract citation contexts (b/c annotators use large context -> better annotation results)
 
 ### overall
 
@@ -596,15 +598,15 @@ sys     0m21.400s
 
 many per doc (途中snapshot):  
 ```
-- - - - - 10237/18438 - - - - -
-#1: 2531
-in top 5: 6135
-in top 10: 7456
-avg: 43.600761941975186
-ndcg: 0.5289402535657106
-map: 0.4052886750361298
-ndcg@5: 0.43256463738519113
-map@5: 0.3772605906678406
+- - - - - 12658/18438 - - - - -
+#1: 3445
+in top 5: 7893
+in top 10: 9423
+avg: 41.29720334966029
+ndcg: 0.5482810759703048
+map: 0.42917708578046615
+ndcg@5: 0.45801004395265654
+map@5: 0.403012587559906
 ```
 
 ##### notes on evaluation
@@ -614,6 +616,7 @@ map@5: 0.3772605906678406
     * because an author's word choice and a paper's content can be a strong signal, it would be ideal to not have citations from one paper split (some in test, some in training)
         * just like typhoon/sequence wise splits in pyphoon
         * → require at least 2 *containing docs* for evaluation, then do a document wise train/test split
+* minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
 
 
 ### citation recommendation based on entities

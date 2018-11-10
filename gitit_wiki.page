@@ -480,6 +480,15 @@ false negatives: 10364
 false positives: 197
 ```
 
+(complete) **re-run w/ throwing out tables and figures**  
+```
+total: 312536
+matches: 58613
+checked: 20784
+false negatives: 10110
+false positives: 188
+```
+
 ### citation recommendation baseline
 
 * idea: only syntax (mby +metadata) based

@@ -21,11 +21,11 @@ def recommend(docs_path):
     tmp_bag = []
     tmp_bag_current_aid = lines[0].split(',')[0]
     texts = []  # for dictionary generation
-    for line in lines:
-        aid, text = line.split(',')
+    for idx, line in enumerate(lines):
+        aid, adjacent, in_doc, text = line.split(',')
         text = text.replace('[]', '')
         texts.append(text.split())
-        if aid != tmp_bag_current_aid:
+        if aid != tmp_bag_current_aid or idx == len(lines)-1:
             # tmp_bag now contains all lines sharing ID tmp_bag_current_aid
             num_contexts = len(tmp_bag)
             random.shuffle(tmp_bag)  # TODO: for real eval do k-fold cross

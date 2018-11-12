@@ -650,9 +650,21 @@ map@5: 0.46789872365042323
     * `proper Noun (+ "dataset") + []` (e.g. *DBpedia []*) (mentioned in Abu-Jbara2013 (there: noun phrase + []))
     * `preposition (+ Authors) + []` (most general case; e.g. *in []*, *by []*, *from []*)
     * `[].` (sentence end; could be anything)
-* spotlight docker install
+* spotlight docker test
     * `$ docker pull dbpedia/spotlight-english`
     * `$ docker run -i -p 2222:80 dbpedia/spotlight-english:latest spotlight.sh`
+    * `$ time python3 spotlight_annotate.py /home/saiert/arxiv_test_2017_12_all_181110/all_text/`  
+        ```
+        real    40m35.011s
+        user    3m25.997s
+        sys     0m5.937s
+        ```  
+        ```
+        $ ls arxiv_test_2017_12_all_181110/all_text/ | grep txt | wc -l
+        8996
+        $ ls arxiv_test_2017_12_all_181110/all_text/ | grep json | wc -l
+        8821
+        ```
 
 ##### ~~named entity recognition~~ (probably not so important)
 

@@ -1,4 +1,4 @@
-""" Generate datasets from a parsed and matched arXiv dump
+""" Generate datasets from a parsed, matched and annotated arXiv dump
 """
 
 import json
@@ -45,9 +45,6 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                 filter(Bibitem.uuid == BibitemArxivIDMap.uuid).\
                 filter(BibitemArxivIDMap.arxiv_id.in_(sub)).\
                 all()
-    # FIXME: require 2 in_docs
-    #        having(func.count(Bibitem.in_doc) > 1)
-    #        *and* do doc wise splitting
     print('merging bibitems')
     cited_docs = {}
     for bibitem in res:
@@ -74,24 +71,35 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                 edx = m.end()
                 pre = text[:idx]
                 post = text[edx:]
-                pre = re.sub(CITE_PATT, '', pre)
-                post = re.sub(CITE_PATT, '', post)
-                # heuristic pre-cutting (10 times average word length)
-                pre = pre[-margin*6*10:]
-                post = post[:margin*6*10]
-                if preprocess:
-                    pre, post = preprocess_documents([pre, post])
-                else:
-                    custom_filter = [strip_punctuation, strip_multiple_whitespaces]
-                    pre = preprocess_string(pre, custom_filter)
-                    post = preprocess_string(post, custom_filter)
-                placeholder = ''
-                if with_placeholder:
-                    placeholder = ' [] '
-                context = '{}{}{}'.format(' '.join(pre[-margin:]),
-                                          placeholder,
-                                          ' '.join(post[:margin]))
-                tmp_list.append((aid, context))
+                # TODO:
+                # - treat citation markers directly next to each other
+                #   speacially (e.g. adding extra markers also to CSV
+                #   e.g. "arxiv:honmono,[arxiv:also|arxiv:metoo],lorem ipsum ."
+                # - figure out which DBpedia annotations are within the chosen
+                #   citation context
+                # - make features out of those entities
+                # - make special features in case of <NE>[]
+                # - mby also POS tagging then <preposition>[] special treatment
+                #   etc.
+                #
+                # pre = re.sub(CITE_PATT, '', pre)
+                # post = re.sub(CITE_PATT, '', post)
+                # # heuristic pre-cutting (10 times average word length)
+                # pre = pre[-margin*6*10:]
+                # post = post[:margin*6*10]
+                # if preprocess:
+                #     pre, post = preprocess_documents([pre, post])
+                # else:
+                #     custom_filter = [strip_punctuation, strip_multiple_whitespaces]
+                #     pre = preprocess_string(pre, custom_filter)
+                #     post = preprocess_string(post, custom_filter)
+                # placeholder = ''
+                # if with_placeholder:
+                #     placeholder = ' [] '
+                # context = '{}{}{}'.format(' '.join(pre[-margin:]),
+                #                           placeholder,
+                #                           ' '.join(post[:margin]))
+                # tmp_list.append((aid, context))
         if len(tmp_list) >= min_contexts:
             contexts.extend(tmp_list)
     print(len(contexts))

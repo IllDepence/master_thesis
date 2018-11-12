@@ -56,7 +56,7 @@ def annotate(in_dir):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print('usage: python3 nel_annotate.py </path/to/in_dir>')
+        print('usage: python3 xlisa_annotate.py </path/to/in_dir>')
         sys.exit()
     in_dir = sys.argv[1]
     annotate(in_dir)

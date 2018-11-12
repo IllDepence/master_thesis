@@ -1,5 +1,11 @@
 # orga
 
+### big TODOs
+
+* switch from arXiv IDs to MAG IDs
+* implement document wise splitting for evaluation
+* generate a complete dataset (instead of just one month)
+
 ### recent notes
 
 * match to MAG IDs instead of arXiv IDs
@@ -641,9 +647,12 @@ map@5: 0.46789872365042323
 * citations + POS tags (only in part involving named entities):
     * `[] (+ sub clause) + verb` (e.g. *[] show that* or *[], cited a gazillion times, found that*)
     * `proper Noun (+ et al.) + []` (e.g. *the work of ____ []*)
-    * `proper Noun (+ "dataset") + []` (e.g. *DBpedia []*) (mentioned in Abu-Jbara2013)
+    * `proper Noun (+ "dataset") + []` (e.g. *DBpedia []*) (mentioned in Abu-Jbara2013 (there: noun phrase + []))
     * `preposition (+ Authors) + []` (most general case; e.g. *in []*, *by []*, *from []*)
     * `[].` (sentence end; could be anything)
+* spotlight docker install
+    * `$ docker pull dbpedia/spotlight-english`
+    * `$ docker run -i -p 2222:80 dbpedia/spotlight-english:latest spotlight.sh`
 
 ##### ~~named entity recognition~~ (probably not so important)
 

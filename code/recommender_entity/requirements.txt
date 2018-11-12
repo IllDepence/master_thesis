@@ -2,3 +2,4 @@ sqlalchemy==1.2.12
 gensim==3.6.0
 lxml==4.2.5
 nltk==3.3
+pyspotlight==0.7.2

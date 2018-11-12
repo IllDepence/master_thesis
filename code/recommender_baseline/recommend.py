@@ -23,25 +23,46 @@ def recommend(docs_path):
     texts = []  # for dictionary generation
     for idx, line in enumerate(lines):
         aid, adjacent, in_doc, text = line.split(',')
+        # TODO: create adjacent map for later use in eval
         text = text.replace('[]', '')
         texts.append(text.split())
         if aid != tmp_bag_current_aid or idx == len(lines)-1:
             # tmp_bag now contains all lines sharing ID tmp_bag_current_aid
             num_contexts = len(tmp_bag)
-            random.shuffle(tmp_bag)  # TODO: for real eval do k-fold cross
-            num_train = math.floor(num_contexts * 0.8)
-            num_test = num_contexts - num_train
-            train_tuples = tmp_bag[:num_train]
-            test_tuples = tmp_bag[-num_test:]
-            test.extend(test_tuples)
+            sub_bags_dict = {}
+            for item in tmp_bag:
+                item_in_doc = item[0]
+                item_text = item[1]
+                if item_in_doc not in sub_bags_dict:
+                    sub_bags_dict[item_in_doc] = []
+                sub_bags_dict[item_in_doc].append(item_text)
+            order = sorted(sub_bags_dict,
+                           key=lambda k: len(sub_bags_dict[k]),
+                           reverse=True)
+            # ↑ keys for sub_bags_dict, ordered for largest bag to smallest
+            min_num_train = math.floor(num_contexts * 0.8)
+            train_texts_comb = []
+            test_texts = []
+            # TODO: how to do k-fold cross val with this?
+            for jdx, sub_bag_key in enumerate(order):
+                sb_texts = sub_bags_dict[sub_bag_key]
+                if len(train_texts_comb) > min_num_train or jdx == len(order)-1:
+                    test_texts.extend(sb_texts)
+                else:
+                    train_texts_comb.extend(sb_texts)
+            l_tr = len(train_texts_comb)
+            l_te = len(test_texts)
+            l_tr_perc = (l_tr/(l_tr+l_te))*100
+            l_te_perc = (l_te/(l_tr+l_te))*100
+            test.extend([(tmp_bag_current_aid, txt) for txt in test_texts])
             # because we use BOW we can just combine train docs here
-            train_text_combined = ' '.join(tpl[1] for tpl in train_tuples)
+            train_text_combined = ' '.join(txt for txt in train_texts_comb)
             train_aids.append(tmp_bag_current_aid)
             train_texts.append(train_text_combined.split())
             # reset bag
             tmp_bag = []
             tmp_bag_current_aid = aid
-        tmp_bag.append((aid, text))
+        tmp_bag.append([in_doc, text])
     dictionary = corpora.Dictionary(texts)
     # dictionary.save('1712_test.dict')
     num_unique_tokens = len(dictionary.keys())

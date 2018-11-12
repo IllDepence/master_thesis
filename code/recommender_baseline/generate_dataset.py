@@ -99,6 +99,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
     contexts = []
     for aid, doc_list in cited_docs.items():
         tmp_list = []
+        num_docs = 0
         for doc in doc_list:
             in_doc = doc['in_doc']
             fn = '{}.txt'.format(in_doc)
@@ -106,6 +107,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
             with open(text_file) as f:
                 text = f.read()
             marker = '{{{{cite:{}}}}}'.format(doc['uuid'])
+            marker_found = False
             for m in re.finditer(marker, text):
                 margin = int(context_size/2)
                 idx = m.start()
@@ -136,7 +138,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                                           ' '.join(post[:margin]))
                 adj_cit_str = '[{}]'.format('|'.join(adjacent_citations))
                 tmp_list.append([aid, adj_cit_str, in_doc, context])
-        if len(tmp_list) >= min_contexts:
+                marker_found = True
+            if marker_found:
+                num_docs += 1
+        if len(tmp_list) >= min_contexts and num_docs > 1:
             contexts.extend(tmp_list)
     print(len(contexts))
     with open('items.csv', 'w') as f:

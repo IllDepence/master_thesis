@@ -503,6 +503,16 @@ false positives: 188
     * [*simple* python code example using only pandas and scikit-learn](http://blog.untrod.com/2016/06/simple-similar-products-recommendation-engine-in-python.html)
     * [graph database](https://www.kernix.com/blog/an-efficient-recommender-system-based-on-graph-database_p9) [based thingy](https://www.kernix.com/blog/recommender-system-based-on-natural-language-processing_p10)
 
+**train/test data generation stuff**  
+```
+$ cat items_1712_100w_4mincont_not_stemmed_oneperdoc.csv | wc -l    ← only one context per uuid per doc
+11613
+$ cat items_1712_100w_4mincont_not_stemmed.csv | wc -l              ← notice there's multiple contexts per doc
+77121
+$ cat items_1712_100w_4mincont_2mindoc_not_stemmed.csv | wc -l      ← notice you should do per doc splitting (require >1 docs)
+41359
+```
+
 **TFIDF baseline test w/ gensim**  
 (many fails, below a lucky nice example)  
 ```

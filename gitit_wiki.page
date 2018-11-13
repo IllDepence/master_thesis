@@ -648,6 +648,17 @@ ndcg@5: 0.25365219494863167
 map@5: 0.21056675656007817
 ```
 
+counting adjacent citations as half relevant:  
+```
+$ python3 recommend.py items_1712_100w_4mincont_2mindoc_not_stemmed.csv
+- - - - - 7787/7787 - - - - -
+#1: 909
+in top 5: 2995
+in top 10: 4081
+ndcg@5: 0.23297871616321733   <-- slightly worse, because IDCG in nDCG Formula > 1 and apparently not many co citations in top 5
+map@5: 0.21056675656007817
+```
+
 ##### notes on evaluation
 
 * considerations when train/test splitting

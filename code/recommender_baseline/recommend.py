@@ -21,9 +21,18 @@ def recommend(docs_path):
     tmp_bag = []
     tmp_bag_current_aid = lines[0].split(',')[0]
     texts = []  # for dictionary generation
+    adjacent_cit_map = {}
     for idx, line in enumerate(lines):
         aid, adjacent, in_doc, text = line.split(',')
-        # TODO: create adjacent map for later use in eval
+        # create adjacent map for later use in eval
+        if aid not in adjacent_cit_map:
+            adjacent_cit_map[aid] = []
+        if len(adjacent) > 2:
+            adj_cits = adjacent[1:-1].split('|')
+            for adj_cit in adj_cits:
+                if adj_cit not in adjacent_cit_map[aid]:
+                    adjacent_cit_map[aid].append(adj_cit)
+        # fill texts
         text = text.replace('[]', '')
         texts.append(text.split())
         if aid != tmp_bag_current_aid or idx == len(lines)-1:
@@ -63,6 +72,11 @@ def recommend(docs_path):
             tmp_bag = []
             tmp_bag_current_aid = aid
         tmp_bag.append([in_doc, text])
+    # average number of adjacent docs
+    # adj_sum = 0
+    # for k, v in adjacent_cit_map.items():
+    #     adj_sum += len(v)
+    # print(adj_sum/len(adjacent_cit_map))
     dictionary = corpora.Dictionary(texts)
     # dictionary.save('1712_test.dict')
     num_unique_tokens = len(dictionary.keys())
@@ -72,13 +86,10 @@ def recommend(docs_path):
     # print(corpus)
     tfidf = models.TfidfModel(corpus)
 
-    total = 0
     num_cur = 0
     num_top = 0
     num_top_5 = 0
     num_top_10 = 0
-    ndcg_sum = 0
-    map_sum = 0
     ndcg_sum_5 = 0
     map_sum_5 = 0
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
@@ -101,30 +112,51 @@ def recommend(docs_path):
         #     else:
         #         pre += '  '
         #     print('{}{}: {}'.format(pre, sim[1], train_aids[sim[0]]))
-        placement = len(sims_list)
+        rank = len(sims_list)
         for idx, sim in enumerate(sims_list):
             if train_aids[sim[0]] == test_aid:
-                placement = idx+1
+                rank = idx+1
                 break
-        ndcg_sum += 1 / math.log2(1 + placement)
-        map_sum += 1 / placement
-        if placement == 1:
+            if idx >= 10:
+                break
+        dcg = 0
+        idcg = 0
+        num_rel = 1 + len(adjacent_cit_map[test_aid])
+        for i in range(5):
+            placement = i+1
+            sim = sims_list[i]
+            result_aid = train_aids[sim[0]]
+            if result_aid == test_aid:
+                relevance = 1
+            elif result_aid in adjacent_cit_map[test_aid]:
+                relevance = .5
+            else:
+                relevance = 0
+            denom = math.log2(placement + 1)
+            dcg_numer = math.pow(2, relevance) - 1
+            dcg += dcg_numer / denom
+            if placement == 1:
+                ideal_rel = 1
+            elif placement <= num_rel:
+                ideal_rel = .5
+            else:
+                ideal_rel = 0
+            idcg_numer = math.pow(2, ideal_rel) - 1
+            idcg += idcg_numer / denom
+        ndcg = dcg / idcg
+        if rank == 1:
             num_top += 1
-        if placement <= 5:
+        if rank <= 5:
             num_top_5 += 1
-            ndcg_sum_5 += 1 / math.log2(1 + placement)
-            map_sum_5 += 1 / placement
-        if placement <= 10:
+            map_sum_5 += 1 / rank
+            ndcg_sum_5 += ndcg
+        if rank <= 10:
             num_top_10 += 1
-        total += placement
         num_cur += 1
         print('- - - - - {}/{} - - - - -'.format(num_cur, len(test)))
         print('#1: {}'.format(num_top))
         print('in top 5: {}'.format(num_top_5))
         print('in top 10: {}'.format(num_top_10))
-        print('avg: {}'.format(total/num_cur))
-        print('ndcg: {}'.format(ndcg_sum/num_cur))
-        print('map: {}'.format(map_sum/num_cur))
         print('ndcg@5: {}'.format(ndcg_sum_5/num_cur))
         print('map@5: {}'.format(map_sum_5/num_cur))
 

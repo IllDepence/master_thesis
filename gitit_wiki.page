@@ -3,7 +3,7 @@
 ### big TODOs
 
 * switch from arXiv IDs to MAG IDs
-* implement document wise splitting for evaluation
+* k-fold cross validation (somehow)
 * generate a complete dataset (instead of just one month)
 
 ### recent notes
@@ -11,7 +11,6 @@
 * match to MAG IDs instead of arXiv IDs
 * mby treat "co-appearing" citations as valid (e.g. "some stuff super important [1][2][3]" <- all three count)
 * general idea: high weight on smaller local context, then also consider (with some lower weight) larger context
-* do doc wise split (train/test)
 * do pre-selection before cosine sim (or similar) -> how?
 * (NEL) annotate documents, *then* extract citation contexts (b/c annotators use large context -> better annotation results)
 
@@ -633,6 +632,20 @@ ndcg: 0.597700200736707
 map: 0.48999624579362355
 ndcg@5: 0.5218584144074571
 map@5: 0.46789872365042323
+```
+
+may per doc *with* per doc splitting:  
+```
+$ python3 recommend.py items_1712_100w_4mincont_2mindoc_not_stemmed.csv
+- - - - - 7787/7787 - - - - -
+#1: 909
+in top 5: 2995
+in top 10: 4081
+avg: 97.53460896365738
+ndcg: 0.38836365919123905
+map: 0.24484656370685862
+ndcg@5: 0.25365219494863167
+map@5: 0.21056675656007817
 ```
 
 ##### notes on evaluation

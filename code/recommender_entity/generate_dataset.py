@@ -6,17 +6,13 @@ import os
 import re
 import sys
 import string
-from gensim.parsing.preprocessing import (preprocess_documents,
-                                          preprocess_string,
-                                          strip_multiple_whitespaces,
-                                          strip_punctuation)
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from db_model import Base, Bibitem, BibitemArxivIDMap
 
 CITE_PATT = re.compile((r'\{\{cite:([0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}'
                          '-[89AB][0-9A-F]{3}-[0-9A-F]{12})\}\}'), re.I)
-RE_WHITESPACE = re.compile(r'[\s]', re.UNICODE)
+RE_WHITESPACE = re.compile(r'[\s]+', re.UNICODE)
 RE_PUNCT = re.compile('[%s]' % re.escape(string.punctuation), re.UNICODE)
 # ↑ modified from gensim.parsing.preprocessing.RE_PUNCT
 RE_WORD = re.compile('[^\s%s]+' % re.escape(string.punctuation), re.UNICODE)
@@ -56,8 +52,13 @@ def clean_window_distance_words(adfix, num_words, backwards=False):
                 continue
             elif RE_WORD.match(char):
                 # count and jump word
-                jump = len(RE_WORD.findall(adfix[:pos])[-1])
-                win_dist += jump
+                word_len = 0
+                word_char = char
+                while RE_WORD.match(word_char):
+                    shift = word_len + 1
+                    word_char = adfix[pos-1-shift:pos-shift]
+                    word_len += 1
+                win_dist += word_len
                 words += 1
             elif char == '':
                 break
@@ -83,7 +84,7 @@ def clean_window_distance_words(adfix, num_words, backwards=False):
             elif RE_WORD.match(char):
                 # count and jump word
                 jump = RE_WORD.search(adfix[win_dist:]).end()
-                win_dist += jump
+                win_dist += max(jump, 1)
                 words += 1
             elif char == '':
                 break
@@ -117,13 +118,11 @@ def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
 
 
 def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
-             with_placeholder=True, preprocess=False):
+             with_placeholder=True):
     """ Generate a list of citation contexts, given criteria:
             context_size (in words)
             min_contexts
             with_placeholder
-            preprocess  (preprocess_documents default; if off only punctuation
-                         and multiple whitespaces are removed)
 
         If no db_uri is given, a SQLite file metadata.db is expected in in_dir.
     """
@@ -183,7 +182,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
             fn_annot = '{}_annot.json'.format(in_doc)
             annot_file = os.path.join(in_dir, fn_annot)
             if os.path.isfile(annot_file):
-                with open(text_file) as f:
+                with open(annot_file) as f:
                     annots = json.load(f)
             else:
                 annots = []
@@ -206,32 +205,31 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
 
                 pre = pre[-win_pre:]
                 post = post[:win_post]
-                # - ↑ based on windows size, determine contained annotations
-                # for annot in annots:
-                #     ...
-                # - make features out of those entities
-                # - make special features in case of <NE>[]
-                # - mby also POS tagging then <preposition>[] special treatment
-                #   etc.
 
-                pre = re.sub(CITE_PATT, '', pre)
-                post = re.sub(CITE_PATT, '', post)
+                # determine contained annotations
+                min_end = idx-win_pre
+                max_start = edx+win_post
+                context_annot = []
+                for annot in annots:
+                    start = annot[0]
+                    end = annot[1]
+                    dbp_id = annot[2]
+                    if start <= max_start and end >= min_end:
+                        context_annot.append(dbp_id)
 
-                if preprocess:
-                    pre, post = preprocess_documents([pre, post])
-                else:
-                    custom_filter = [strip_punctuation,
-                                     strip_multiple_whitespaces]
-                    pre = preprocess_string(pre, custom_filter)
-                    post = preprocess_string(post, custom_filter)
                 placeholder = ''
                 if with_placeholder:
-                    placeholder = ' [] '
-                context = '{}{}{}'.format(' '.join(pre[-margin:]),
-                                          placeholder,
-                                          ' '.join(post[:margin]))
-                adj_cit_str = '[{}]'.format('|'.join(adjacent_citations))
-                tmp_list.append([aid, adj_cit_str, in_doc, context])
+                    placeholder = ' MAINCIT '
+                context = '{}{}{}'.format(pre, placeholder, post)
+
+                context = re.sub(CITE_PATT, ' CIT ', context)
+                context = re.sub(r'[\r\n]+', ' ', context)
+                context = re.sub(RE_WHITESPACE, ' ', context)
+
+                adj_cit_str = '{}'.format('\u241F'.join(adjacent_citations))
+                annot_str = '{}'.format('\u241F'.join(context_annot))
+                tmp_list.append([aid, adj_cit_str, in_doc, context,
+                                 annot_str])
                 marker_found = True
             if marker_found:
                 num_docs += 1
@@ -240,7 +238,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
     print(len(contexts))
     with open('items.csv', 'w') as f:
         for vals in contexts:
-            line = '{}\n'.format(','.join(vals))
+            line = '{}\n'.format('\u241E'.join(vals))
             f.write(line)
 
 if __name__ == '__main__':

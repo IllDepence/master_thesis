@@ -1,4 +1,4 @@
-""" Recommend using TFIDF/BOW approach.
+""" Recommend, using entities.
 """
 
 import os
@@ -23,6 +23,12 @@ def recommend(docs_path):
     texts = []  # for dictionary generation
     adjacent_cit_map = {}
     for idx, line in enumerate(lines):
+        # TODO
+        # - update splitting
+        # - make features out of entities
+        # - make special features in case of <NE>[]
+        # - mby also POS tagging then <preposition>[] special treatment
+        #   etc.
         aid, adjacent, in_doc, text = line.split(',')
         # create adjacent map for later use in eval
         if aid not in adjacent_cit_map:

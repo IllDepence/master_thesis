@@ -5,6 +5,7 @@ import json
 import os
 import re
 import sys
+import string
 from gensim.parsing.preprocessing import (preprocess_documents,
                                           preprocess_string,
                                           strip_multiple_whitespaces,
@@ -15,7 +16,80 @@ from db_model import Base, Bibitem, BibitemArxivIDMap
 
 CITE_PATT = re.compile((r'\{\{cite:([0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}'
                          '-[89AB][0-9A-F]{3}-[0-9A-F]{12})\}\}'), re.I)
+RE_WHITESPACE = re.compile(r'[\s]', re.UNICODE)
+RE_PUNCT = re.compile('[%s]' % re.escape(string.punctuation), re.UNICODE)
+# ↑ modified from gensim.parsing.preprocessing.RE_PUNCT
+RE_WORD = re.compile('[^\s%s]+' % re.escape(string.punctuation), re.UNICODE)
 
+
+def clean_window_distance_words(adfix, num_words, backwards=False):
+    """ In the given direction, calculate how many characters you have to pass
+        to include <num_words> words (not counting citations as words).
+
+        Example:
+          adfix:     ", {{cite:foo}} this is an example {{cite:bar}}. Baz bam."
+          num_words: 5
+          backwards: false
+
+        -> 51
+    """
+
+    words = 0
+    win_dist = 0
+    if backwards:
+        while words < num_words:
+            pos = (len(adfix) - win_dist)
+            char = adfix[pos-1:pos]
+            if char == '}':
+                if CITE_PATT.match(adfix[pos-45:pos]):
+                    # jump citation
+                    win_dist += 45
+                    continue
+                else:
+                    win_dist += 1
+                    continue
+            elif RE_PUNCT.match(char):
+                win_dist += 1
+                continue
+            elif RE_WHITESPACE.match(char):
+                win_dist += 1
+                continue
+            elif RE_WORD.match(char):
+                # count and jump word
+                jump = len(RE_WORD.findall(adfix[:pos])[-1])
+                win_dist += jump
+                words += 1
+            elif char == '':
+                break
+            else:
+                print('something went wrong in clean_window_distance_words')
+    else:
+        while words < num_words:
+            char = adfix[win_dist:win_dist+1]
+            if char == '{':
+                if CITE_PATT.match(adfix[win_dist:win_dist+45]):
+                    # jump citation
+                    win_dist += 45
+                    continue
+                else:
+                    win_dist += 1
+                    continue
+            elif RE_PUNCT.match(char):
+                win_dist += 1
+                continue
+            elif RE_WHITESPACE.match(char):
+                win_dist += 1
+                continue
+            elif RE_WORD.match(char):
+                # count and jump word
+                jump = RE_WORD.search(adfix[win_dist:]).end()
+                win_dist += jump
+                words += 1
+            elif char == '':
+                break
+            else:
+                print('something went wrong in clean_window_distance_words')
+    return win_dist
 
 def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
     """ Given text after or before a citation, find all directly adjacent
@@ -102,10 +176,17 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
         num_docs = 0
         for doc in doc_list:
             in_doc = doc['in_doc']
-            fn = '{}.txt'.format(in_doc)
-            text_file = os.path.join(in_dir, fn)
+            fn_txt = '{}.txt'.format(in_doc)
+            text_file = os.path.join(in_dir, fn_txt)
             with open(text_file) as f:
                 text = f.read()
+            fn_annot = '{}_annot.json'.format(in_doc)
+            annot_file = os.path.join(in_dir, fn_annot)
+            if os.path.isfile(annot_file):
+                with open(text_file) as f:
+                    annots = json.load(f)
+            else:
+                annots = []
             marker = '{{{{cite:{}}}}}'.format(doc['uuid'])
             marker_found = False
             for m in re.finditer(marker, text):
@@ -118,26 +199,24 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                                                   backwards=True)
                 adj_post = find_adjacent_citations(post, uuid_aid_map)
                 adjacent_citations = adj_pre + adj_post
-                pre = re.sub(CITE_PATT, '', pre)
-                post = re.sub(CITE_PATT, '', post)
 
-                # - figure out which DBpedia annotations are within the chosen
-                #   citation context
-                #       - similar-ish to find_adjacent_citations function:
-                #           - go in each direction, thereby
-                #             count words (up to <margin>)
-                #             jump citations
-                #             keep count of total number of characters passed
-                #           - based on resulting, larger windows size,
-                #             determine contained annotations
+                win_pre = clean_window_distance_words(pre, margin,
+                                                      backwards=True)
+                win_post = clean_window_distance_words(post, margin)
+
+                pre = pre[-win_pre:]
+                post = post[:win_post]
+                # - ↑ based on windows size, determine contained annotations
+                # for annot in annots:
+                #     ...
                 # - make features out of those entities
                 # - make special features in case of <NE>[]
                 # - mby also POS tagging then <preposition>[] special treatment
                 #   etc.
 
-                # heuristic pre-cutting (10 times average word length)
-                pre = pre[-margin*6*10:]
-                post = post[:margin*6*10]
+                pre = re.sub(CITE_PATT, '', pre)
+                post = re.sub(CITE_PATT, '', post)
+
                 if preprocess:
                     pre, post = preprocess_documents([pre, post])
                 else:

@@ -5,6 +5,7 @@
 * switch from arXiv IDs to MAG IDs
 * k-fold cross validation (somehow)
 * generate a complete dataset (instead of just one month)
+* pre-selection of candidate recommendations to speed up process
 
 ### recent notes
 

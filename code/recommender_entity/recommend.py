@@ -6,6 +6,10 @@ import math
 import sys
 import random
 from gensim import corpora, models, similarities
+from gensim.parsing.preprocessing import (preprocess_documents,
+                                          preprocess_string,
+                                          strip_multiple_whitespaces,
+                                          strip_punctuation)
 
 
 def recommend(docs_path):
@@ -19,7 +23,7 @@ def recommend(docs_path):
     train_aids = []
     train_texts = []
     tmp_bag = []
-    tmp_bag_current_aid = lines[0].split(',')[0]
+    tmp_bag_current_aid = lines[0].split('\u241E')[0]
     texts = []  # for dictionary generation
     adjacent_cit_map = {}
     for idx, line in enumerate(lines):
@@ -29,18 +33,26 @@ def recommend(docs_path):
         # - make special features in case of <NE>[]
         # - mby also POS tagging then <preposition>[] special treatment
         #   etc.
-        aid, adjacent, in_doc, text = line.split(',')
+        aid, adjacent, in_doc, text, annot_str = line.split('\u241E')
         # create adjacent map for later use in eval
         if aid not in adjacent_cit_map:
             adjacent_cit_map[aid] = []
-        if len(adjacent) > 2:
-            adj_cits = adjacent[1:-1].split('|')
+        if len(adjacent) > 0:
+            adj_cits = adjacent.split('\u241F')
             for adj_cit in adj_cits:
                 if adj_cit not in adjacent_cit_map[aid]:
                     adjacent_cit_map[aid].append(adj_cit)
+        if len(annot_str) > 0:
+            annots = annot_str.split('\u241F')
+        else:
+            annots = []
         # fill texts
-        text = text.replace('[]', '')
-        texts.append(text.split())
+        custom_filter = [strip_punctuation,
+                         strip_multiple_whitespaces]
+        words = preprocess_string(text, custom_filter)
+        tokens = words + annots
+        texts.append(tokens)
+        text = ' '.join(tokens)
         if aid != tmp_bag_current_aid or idx == len(lines)-1:
             # tmp_bag now contains all lines sharing ID tmp_bag_current_aid
             num_contexts = len(tmp_bag)

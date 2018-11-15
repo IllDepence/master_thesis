@@ -6,8 +6,19 @@
 * k-fold cross validation (somehow)
 * generate a complete dataset (instead of just one month)
 * pre-selection of candidate recommendations to speed up process
+    * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
+    * clustering of comparison taregets, "
+    * [k4nn](https://arxiv.org/abs/1802.08301), "
 
 ### recent notes
+
+* refine usage of entities
+    * manual evaluation: get some citation context and the contained linked entities; check: are the linkings correct; check: is the presence of the entities relevant for the citation itself (also consider special cases like <NEL>[] like ImageNet[1])
+* storage of annotations for now okay
+* do use replacement tokens (CIT, FORMULA, etc.) instead of just deleting them from plain text
+* maybe have a look at MAG citation contexts (feed into current baseline?)
+
+---
 
 * match to MAG IDs instead of arXiv IDs
 * mby treat "co-appearing" citations as valid (e.g. "some stuff super important [1][2][3]" <- all three count)
@@ -350,12 +361,13 @@ $ cat items_1712_100w_2mincont_not_stemmed_NATBIB_FIX.csv | wc -l
 
 ```
 
-##### bibitem matching
+##### bibitem matching (arxiv)
 
 * arxiv.org web API test (use unrealistic b/c time)
     * match for e.g. first bibitem in `1711.00002`
         * original: `L. J. Ba and R. Caruana. Do deep nets really need to be deep? In Proceedings of NIPS, 2014.`
         * query: `http://export.arxiv.org/api/query?search_query=all:Caruana%20deep%20nets%20really%20need%20deep%20Proceedings%20NIPS%202014` (words longer 2 letters)
+            * (comment added afterwards: in general way better results when concatenating words with %2B (+) instead of %20)
 * source given links/arXiv IDs (tested w/ 377 docs from 2017)  
 ```
 sqlite> select count(*) from bibitem;
@@ -421,6 +433,13 @@ sqlite> delete from bibitemarxividmap where id not in (select min(id) from bibit
 sqlite> select count(*) from bibitemarxividmap;
 62232
 ```
+
+##### bibitem matching (MAG)
+
+* e.g. `$ curl 'localhost:8983/solr/mag_papers/select?q=original_title:Buda%2BMaki%2Band%2BMazurowski%2Bsystematic%2Bstudy%2Bthe%2Bclass%2Bimbalance%2Bproblem%2Bconvolutionalneural%2Bnetworks%2BCoRR%2Babs'`
+    * fields of interest: `paper_id`, `normalized_title`, `original_title`, `publication_year`, `citation_count`, `estimated_citation_count`, (`doi`)
+    * for authors: `mag_paper_author_affiliations/select?q=paper_id:` → `author_id`, `mag_authors/select?q=author_id:` → `display_name` / `normalized_name`
+
 
 ##### experiments
 
@@ -700,6 +719,17 @@ map@5: 0.21056675656007817
         $ ls arxiv_test_2017_12_all_181110/all_text/ | grep json | wc -l
         8821
         ```
+
+**simply feeding annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
+```
+$ python3 recommend.py items.csv    (1712 100w 4mincont 2mindoc spotlight_annot)
+- - - - - 7787/7787 - - - - - simply feed | artificially let each DBpedia IDs appear unique in corpus (boost TFIDF)
+#1: 900 | 890
+in top 5: 2993 | 2916
+in top 10: 4080 | 4016
+ndcg@5: 0.232 | 0.227
+map@5: 0.209 | 0.205
+```
 
 ##### ~~named entity recognition~~ (probably not so important)
 

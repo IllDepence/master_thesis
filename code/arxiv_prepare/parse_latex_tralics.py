@@ -1,7 +1,6 @@
 """ convert latex files to plain text with nice citation markers
 
     TODO:
-        - mby get rid of tables (and figures)?
         - mby remove commas between citations?
         - remove non textbody leftovers somehow?
 """
@@ -110,15 +109,28 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
             # - <list> (might be used for larger chunks of text like
             #           related work)
             #
-            # tags *NOT* to tuch
+            # tags *NOT* to touch
             # - <unknown>: can surround whole content
             strip_tags = ['formula', 'figure', 'table']
-            for stag in strip_tags:
-                etree.strip_elements(tree, stag, with_tail=False)
+            for stag_name in strip_tags:
+                for stag in tree.xpath('//{}'.format(stag_name)):
+                    if stag.tail:
+                        stag.tail = '{} {}'.format(stag_name.upper(),
+                                                   stag.tail)
+                    else:
+                        stag.tail = ' {}'.format(stag_name.upper())
+                etree.strip_elements(tree, stag_name, with_tail=False)
+            # remove what is most likely noise
             mby_noise = tree.xpath('//unexpected')
             for mn in mby_noise:
                 if len(mn.getchildren()) == 0:
                     mn.getparent().remove(mn)
+            # replace non citation references with REF
+            for rtag in tree.xpath('//ref[starts-with(@target, "uid")]'):
+                    if rtag.tail:
+                        rtag.tail = '{} {}'.format('REF', rtag.tail)
+                    else:
+                        rtag.tail = ' {}'.format('REF')
 
             # processing of citation markers
             bibitems = tree.xpath('//bibitem')

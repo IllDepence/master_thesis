@@ -27,3 +27,12 @@ class BibitemArxivIDMap(Base):
     id = Column(Integer(), autoincrement=True, primary_key=True)
     uuid = Column(String(36), ForeignKey('bibitem.uuid'))
     arxiv_id = Column(String(36))
+
+
+class BibitemMAGIDMap(Base):
+    __tablename__ = 'bibitemmagidmap'
+    __table_args__ = (UniqueConstraint(
+                      'uuid', 'mag_id', name='uid_mid_uniq'),)
+    id = Column(Integer(), autoincrement=True, primary_key=True)
+    uuid = Column(String(36), ForeignKey('bibitem.uuid'))
+    mag_id = Column(String(36))

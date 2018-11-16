@@ -170,6 +170,8 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                     })
     print('going through docs')
     contexts = []
+    # rands = [2553, 3962, 4338, 10912, 11885, 12470, 17478, 20545, 25184, 26708, 27623, 27831, 28887, 29230, 33179, 33297, 35111, 36293, 39451, 41346]
+    # ridx = 0
     for aid, doc_list in cited_docs.items():
         tmp_list = []
         num_docs = 0
@@ -210,18 +212,22 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                 min_end = idx-win_pre
                 max_start = edx+win_post
                 context_annot = []
+                # debug_annots = []
                 for annot in annots:
                     start = annot[0]
                     end = annot[1]
                     dbp_id = annot[2]
                     if start <= max_start and end >= min_end:
                         context_annot.append(dbp_id)
+                        # debug_annots.append([annot[0]-min_end, annot[1]-min_end, annot[2]])
 
                 placeholder = ''
                 if with_placeholder:
                     placeholder = ' MAINCIT '
                 context = '{}{}{}'.format(pre, placeholder, post)
 
+                # org_context = context
+                # org_context = re.sub(r'[\r\n]', ' ', org_context)
                 context = re.sub(CITE_PATT, ' CIT ', context)
                 context = re.sub(r'[\r\n]+', ' ', context)
                 context = re.sub(RE_WHITESPACE, ' ', context)
@@ -231,11 +237,21 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
                 tmp_list.append([aid, adj_cit_str, in_doc, context,
                                  annot_str])
                 marker_found = True
+
+                # if ridx in rands:
+                #     print('-----------------------------------------')
+                #     print('{} is citing {}'.format(in_doc, aid))
+                #     print('co-citations: {}'.format(adjacent_citations))
+                #     print(org_context)
+                #     print(debug_annots)
+                #     print('-----------------------------------------')
+                # ridx += 1
             if marker_found:
                 num_docs += 1
         if len(tmp_list) >= min_contexts and num_docs > 1:
             contexts.extend(tmp_list)
     print(len(contexts))
+    # sys.exit()
     with open('items.csv', 'w') as f:
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))

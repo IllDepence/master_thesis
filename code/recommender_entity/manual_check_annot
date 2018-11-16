@@ -1,0 +1,255 @@
+-----------------------------------------
+1712.05755 is citing 1204.4152
+Numerical evaluation of two-loop integrals with pySecDec ->
+-> Numerical evaluation of multi-loop integrals for arbitrary kinematics with SecDec 2.0
+co-citations: []
+regulated singularities is sector decomposition {{cite:3ae18e6a-ca07-4d48-a1d8-edaeff64f14d}}, {{cite:d1b07d8c-6484-4c87-aadb-9cace277a9c8}}, {{cite:aa20b406-a884-4ab0-a0e2-0dfc0eea67b8}}, {{cite:e47c9a46-ff29-4579-9ba7-1d0bfcfdc63f}}, as it provides an algorithm to factorise such singularities in an automated way. The coefficients of the resulting Laurent series in the regulator are parametric integrals which can be integrated numerically. This algorithm has been implemented in the program SecDec {{cite:b5685075-f011-4395-af11-da941ea095da}}, {{cite:778bcaaf-cfe1-46bc-9e2b-af837370d75e}}, {{cite:44eee7e4-0a54-4457-9bb4-1016a3ea9827}}, {{cite:ec53947e-5542-4581-9244-9232dda1828a}}, where from version 2.0  MAINCIT  the restriction to Euclidean kinematics was lifted by combining sector decomposition with a method to deform the multi-dimensional integration contour into the complex plane {{cite:c8c8711d-ca8e-4d13-8f54-bed9f9a6d17b}}, {{cite:b3050667-4e3f-401a-a98e-0cca3ad42e16}}. Other implementations of the sector decomposition algorithm can be found in Refs. {{cite:faec29af-acd3-4be2-b40b-64a7cff36991}}, {{cite:f18f6cec-72f9-47f8-af3c-672698c16dc5}}, {{cite:9e99d701-5672-4e84-84df-c334d8b1ee50}}, {{cite:5425fd9a-83cb-471e-9daf-5d2c9a5bd02b}}, {{cite:011212fa-ba4a-4b1e-bd8a-8e9492cec2a5}}, {{cite:5624f0ef-926e-4f98-9b0a-81dbe163a6af}}, {{cite:2920a8ba-1aba-4cab-97a8-16cbdc34dacd}}, {{cite:cfc6850b-bc6b-4b87-acdc-e8d8d633d65f}}. In this article, we describe the new version of the SecDec program, called
+[[10, 23, 'Gravitational_singularity'       △
+34, 47, 'Matrix_decomposition'              △
+121, 125, 'Financial_Reporting_Council'     X
+254, 263, 'Algorithm'                       O   O
+282, 295, 'Gravitational_singularity'       X
+351, 358, 'List_of_Twilight_characters'     X
+387, 397, 'Parameter'                       O
+450, 459, 'Algorithm'                       O   O
+710, 713, 'USB'                             X
+779, 788, 'Euclidean_space'                 O   O
+789, 799, 'Kinematics'                      O   O
+831, 844, 'Matrix_decomposition'            X
+891, 910, 'Methods_of_contour_integration'  O   O
+920, 933, 'Complex_number'                  O   O
+1078, 1087, 'Algorithm']]                   O   O
+-----------------------------------------
+-----------------------------------------
+1712.06522 is citing 1703.09144
+CNO Neutrino Grand Prix: The race to solve the solar metallicity problem ->
+-> LUX-ZEPLIN (LZ) Technical Design Report
+co-citations: ['1705.06655', '1608.07648']
+- First Dark Matter Search Results from the XENON1T Experiment
+- Results from a search for dark matter in the complete LUX exposure
+also work well as neutrino detectors {{cite:2f8ea507-720e-45bc-80f5-b33e3138098f}}, {{cite:c39e4823-52da-4a97-8848-ff75908ac3b8}}, {{cite:fe21bd66-ebea-446c-b104-77b14e550c22}}, {{cite:abaf177a-9d51-468b-857d-5af9ba6632f1}}, {{cite:0304f973-5433-4694-933c-48746ec1c4cf}}. The energy thresholds of the most successful dark matter direct detection experiments are currently too high for a CNO neutrino search, for example the liquid-xenon-based LZ and XENON1T experiments have thresholds around a keV, meaning they will not see any CNO neutrinos {{cite:5c07006d-101d-492e-815f-16ca0cfda957}}, {{cite:26f4e1e6-a15d-4998-ab6c-2fc3a1fab8b5}},  MAINCIT . However there has been much recent progress on the development of experiments with lower thresholds. For example, the CRESST-III experiment which looks for small temperature changes of a cryogenically-cooled CaWO crystal, had a low-energy threshold conservatively set at 100 eV for their most recent analysis with  kg
+[[18, 26, 'Neutrino'
+276, 282, 'Electronvolt'
+317, 328, 'Dark_matter'
+329, 345, 'Weakly_interacting_massive_particles'
+387, 390, 'CNO_cycle'
+391, 399, 'Neutrino'
+443, 445, 'Landing_zone'
+495, 498, 'Electronvolt'
+530, 533, 'CNO_cycle'
+534, 543, 'Neutrino'
+847, 858, 'Temperature'
+960, 962, 'Electronvolt']]
+-----------------------------------------
+-----------------------------------------
+1712.03811 is citing 1412.6980
+Improving Direct Physical Properties Prediction of Heterogeneous Materials from Imaging Data via Convolutional Neural Network and a Morphology-Aware Generative Model ->
+-> Adam: A Method for Stochastic Optimization
+co-citations: []
+demonstrate the necessity of this treatment in Fig. , where we show the generation results from an alternative method where microstructures from a standard normal distribution are randomly paired with the authentic ones for style loss calculation, leading to averaged morphology across all random generations (Fig. b). We use Adam optimizer  MAINCIT  for training, with 200K iterations and a learning rate of 0.001.   The training of the predictive model We divide the raw data into training, validation, and test sets. The loss function for training the predictive structure-property model is the mean square error of the predicted properties of the
+[[147, 175, 'Normal_distribution'
+268, 278, 'Shape'
+474, 490, 'Predictive_modelling'
+560, 573, 'Loss_function']]
+-----------------------------------------
+-----------------------------------------
+1712.08185 is citing 1212.3616
+Universality at large transverse spin in defect CFT ->
+-> The Analytic Bootstrap and AdS Superhorizon Locality
+co-citations: ['1212.4103']
+- Convexity and Liberation at Large Spin
+OPE limit, and cannot be excluded from the integral:  An alternative way to understand this fact is through a saddle-point approximation of the simple integral in eq. (), as in {{cite:949ac68b-7b63-4994-b455-df048ea7b7ed}}, which is accurate for large . The relation () should be contrasted with the one relevant to double twist operators, that is  {{cite:949ac68b-7b63-4994-b455-df048ea7b7ed}},  MAINCIT . The different behavior here is responsible for the different finite spin exponent  - see eq. () below - of the transverse derivatives with respect to the one of double twists. Finite spin corrections to eqs. () and () can be computed by taking into account subleading contributions to the bulk OPE in the  limit. A
+[[0, 3, 'Ope'
+43, 51, 'Integral'
+110, 122, 'Method_of_steepest_descent'
+151, 159, 'Integral'
+203, 207, 'B_roads_in_Zone_4_of_the_Great_Britain_numbering_scheme'
+375, 379, 'B_roads_in_Zone_4_of_the_Great_Britain_numbering_scheme'
+504, 510, 'Infinity'
+511, 515, 'Rotation'
+626, 630, 'Spin_quantum_number'
+646, 649, 'Equalization_(audio)'
+737, 740, 'Ope']]
+-----------------------------------------
+-----------------------------------------
+1712.00985 is citing 0905.2211
+Scalar CFTs and Their Large N Limits ->
+-> Universal Constraints on Conformal Operator Dimensions
+co-citations: []
+The central charges of these models and the scaling dimensions of their  irreducible representations are given by,   where  and  are positive integers whose range are ,  and . The horizontal and vertical axis in Figure  corresponds to operators with  respectively. They satisfy  which saturates the numerical bootstrap bound. It was discovered in  MAINCIT  that minimal models of the Virasoro algebra also saturate the numerical bootstrap bound for CFTs with  symmetry. It is interesting to observe that  algebra also share the same feature. It would be interesting to extend this result to other -algebras.  Discussion We have shown that there exist two series of
+[[73, 84, 'Irreducible_representation'
+309, 318, 'Bootstrapping'
+420, 436, 'Virasoro_algebra'
+465, 474, 'Bootstrapping'
+496, 504, 'Symmetry']]
+-----------------------------------------
+-----------------------------------------
+1712.01991 is citing 1011.1500
+On Synthetic Gravitational Waves from Multi-field Inflation ->
+-> Large Nongaussianity in Axion Inflation
+co-citations: []
+the power spectrum. We refer interested readers to the Appendix C. It is hard to evaluate the bispectrum for a general shape triangle that is formed by the three external momenta in (). We therefore spell out the result in the equilateral configuration which nevertheless is expected to dominate the bispectrum  MAINCIT :  Note that scalar contribution to non-gaussianities we found here is much larger than the level of non-gaussianity induced by tensor perturbations {{cite:729da26a-074c-41d5-bc89-4ae1d19b1463}}. To match with the CMB data, we are interested in the non-linearity parameter  which can be defined at the equilateral configuration as  Finally, combining () and () gives
+[[4, 18, 'Spectral_density'
+94, 104, 'Bispectrum'
+125, 133, 'Triangle'
+171, 178, 'Momentum'
+227, 238, 'Equilateral_triangle'
+300, 310, 'Bispectrum'
+369, 375, 'Scalar_field'
+484, 490, 'Tensor'
+491, 504, 'Perturbation_theory'
+570, 573, 'Cosmic_microwave_background'
+605, 618, 'Nonlinear_system'
+658, 669, 'Equilateral_triangle']]
+-----------------------------------------
+-----------------------------------------
+1712.04456 is citing 1602.04221
+The Green-Schwarz Mechanism and Geometric Anomaly Relations in 2d (0,2) F-theory Vacua ->
+-> UV Completions for Non-Critical Strings
+co-citations: ['1601.02015']
+- F-theory and 2d (0,2) Theories
+complex anti-chiral Weyl fermion. Each of these matter fields is counted by a certain cohomology group on  involving the vector bundle . The chiral index of massless matter in a given complex representation, defined as the difference of chiral and anti-chiral fermions in complex representation , is then given by {{cite:9a2f09ae-eb6a-4133-9f18-f7a0fd51f634}},  MAINCIT   For real representations, this expression is to be multiplied with a factor of . In particular, the chiral index of the adjoint representation depends purely on the geometry and takes the form . Extra matter states in representation  of  localizes on complex 2-dimensional surfaces  on . This occurs whenever some of the
+[[20, 32, 'Weyl_semimetal'
+86, 96, 'Cohomology'
+121, 134, 'Vector_bundle'
+141, 147, 'Chirality'
+237, 243, 'Chirality'
+260, 268, 'Fermion'
+439, 449, 'Gene_expression'
+508, 514, 'Chirality'
+528, 550, 'Adjoint_representation'
+573, 581, 'Algebraic_geometry']]
+-----------------------------------------
+-----------------------------------------
+1712.03946 is citing 1710.10071
+Planar Two-Loop Five-Gluon Amplitudes from Numerical Unitarity ->
+-> Analytic all-plus-helicity gluon amplitudes in QCD
+co-citations: ['1605.06351']
+- Two-loop six gluon all plus helicity amplitude
+first obtained by integrating the optimized integrands numerically and later by explicit reduction to master integrals {{cite:f6dbd647-19a5-426a-832a-493904428044}}. The relevant master integrals have been independently evaluated in ref. {{cite:6c043669-6af9-41fe-a1e8-ca091e714927}}. More recently, the all-plus two-loop amplitudes were obtained from a recursive approach {{cite:606ba650-04a9-4d09-b6b5-b03040811a69}} that was also extended to six and seven external gluons {{cite:628ecc00-bad7-407d-9dae-191f27dd84b1}},  MAINCIT . During the final stages of this work, benchmark results for planar five-gluon amplitudes with generic helicity assignments were presented {{cite:bd6ce359-8f99-4c4b-ac32-61c2ac8cc97c}}. The amplitudes were integrated with a combination of numeric and analytic techniques, after partial reduction using unitarity cuts. In this paper, we apply the numerical unitarity approach {{cite:16e6d177-dc94-4e15-98af-0314a18203b9}}, {{cite:931a8b72-b7e3-4526-921f-284c4fd41661}}, {{cite:0d36ba2c-861e-4bb6-b8b7-b2729a126254}}, {{cite:676e9f3b-c018-4bf0-b8e7-70266ae49997}}, which was recently
+[[354, 363, 'Recursion'
+468, 474, 'Gluon'
+607, 616, 'Benchmarking'
+629, 635, 'Planar_graph'
+671, 679, 'Circular_dichroism'
+870, 879, 'Unitary_operator'
+924, 933, 'Unitary_operator']]
+-----------------------------------------
+-----------------------------------------
+1712.00926 is citing 1511.04491
+Deep Sampling Networks ->
+-> Deeply-Recursive Convolutional Network for Image Super-Resolution
+co-citations: ['1511.04587']
+- Accurate Image Super-Resolution Using Very Deep Convolutional Networks
+defined by  where  is the sub-pixel residual prediction. It is effective to be implemented by a tile layer and an element-wise sum layer.  Experiments Implementation Details The model is trained on 91 images from {{cite:b7572fd3-68b5-48a0-bd45-c45b9a7bb82a}} and 200 images from the training set of {{cite:c923f7c7-8d7c-4086-a8d5-7a6778c751e1}}, which are widely used for SR {{cite:3765d971-5ec8-4dbc-afb1-5953f19f8042}},  MAINCIT , {{cite:ec569ef1-5dc9-4ea5-bc36-1dd615559faa}}, {{cite:60019eff-a49c-4137-851e-872ae2abe0ff}}. Following {{cite:9ac64a0e-b9cb-48ac-9c77-f86186efa93c}}, the luminance channel is only considered in YCbCr colour space, because humans are more sensitive to luminance changes. We train a specific network for each upscaling factor (). Detailed configurations and parameter settings of RSRNet shown in Figure  are summarized in Table . Motivated by the experiment, a leaky ReLU (LReLU
+[[26, 35, 'Pixel'
+96, 100, 'Tessellation'
+283, 295, 'Training,_test,_and_validation_sets'
+372, 374, 'Endoplasmic_reticulum'
+624, 641, 'Luma_(video)'
+664, 669, 'YCbCr'
+670, 682, 'Color_space'
+777, 786, 'Image_scaling']]
+-----------------------------------------
+-----------------------------------------
+1712.02943 is citing math/0412127
+Comparing Three Notions of Discrete Ricci Curvature on Biological Networks ->
+-> Ricci curvature for metric-measure spaces via optimal transport
+co-citations: []
+correlated with entropy at the steady sate. In other words, the fluctuation theorem implies that an increase in entropy entails a greater robustness to the perturbation of the network. This indicates that the network entropy and robustness are positively correlated:  As we previously remarked, the work of Lott-Sturm-Villani  MAINCIT , {{cite:5455fe1b-c1d9-441e-9e74-06d90a8c0caa}} indicates the positively correlation of increases in entropy and Ricci curvature. Given the Fluctuation Theorem, one can conclude that Ricci curvature and robustness of a network are positively correlated:  In conclusion, this correlation enables us to identify the network robustness and to quantify the difference between robust and normal networks
+[[16, 23, 'Entropy'
+38, 42, 'Satay'
+64, 83, 'Fluctuation_theorem'
+112, 119, 'Entropy'
+138, 148, 'Robust_statistics'
+156, 168, 'Perturbation_theory'
+217, 224, 'Entropy'
+229, 239, 'Robust_statistics'
+444, 455, 'Correlation_and_dependence'
+472, 479, 'Entropy'
+484, 499, 'Ricci_curvature'
+511, 530, 'Fluctuation_theorem'
+554, 569, 'Ricci_curvature'
+574, 584, 'Robust_statistics'
+646, 657, 'Correlation_and_dependence']]
+-----------------------------------------
+-----------------------------------------
+1712.00216 is citing 1303.5778
+Micro Hand Gesture Recognition System Using Ultrasonic Active Sensing ->
+-> Speech Recognition with Deep Recurrent Neural Networks
+co-citations: []
+of features, we implemented our network consisting of 5 conv-layers, 3 pooling layers. The concrete architectures are illustrated in Fig.8. Another network architecture we implemented is suitable to do time sequential classification called Recurrent Neural Network(RNN), especially a specific kind of it called Long short-term memory  MAINCIT  are designed to solve long-term dependencies. RNN architecture is different from other feedforward networks as it contains loops, allowing information to accumulate and persist. The network produces frame-level classification of the gesture by putting output  into a softmax layer. We add the same filter as in End-to
+[[91, 99, 'Abstract_and_concrete'
+148, 168, 'Network_architecture'
+250, 264, 'Artificial_neural_network'
+311, 333, 'Long_short-term_memory'
+430, 442, 'Computer_architecture'
+467, 487, 'Feedforward_neural_network'
+647, 654, 'Softmax_function'
+678, 684, 'Electronic_filter']]
+-----------------------------------------
+-----------------------------------------
+1712.05654 is citing 1403.4699
+Catalyst Acceleration for First-order Convex Optimization: from Theory to Practice ->
+-> A Proximal Stochastic Gradient Method with Progressive Variance Reduction
+co-citations: []
+extended to deal with non-differentiable penalties  for which the proximal operator defined below is easy to compute {{cite:28160600-d207-46e2-83fe-fb5305ad6bb8}}, {{cite:7f336d70-5926-4f26-9e06-087c3acf2ef7}}.  where  denotes the Euclidean norm. For machine learning problems involving a large sum of  functions, a recent effort has been devoted to developing fast incremental algorithms such as SAG {{cite:faceb14a-8476-4bad-9a63-a65a90a1ca4e}}, SAGA {{cite:46d0f70f-9ed9-461c-b287-d8a66558b5b4}}, SDCA {{cite:de76e4e2-b171-4d80-8e2d-e38025f47aa3}}, SVRG {{cite:38eeb5b5-7a53-4cb0-b48e-74c182a4b085}},  MAINCIT , or Finito/MISO {{cite:a0ca0c58-cc47-47d0-9853-e70756772f52}}, {{cite:a68a433c-5747-43f7-a010-65260dc9f439}}, which can exploit the particular structure (). Unlike full gradient approaches, which require computing and averaging  gradients  at every iteration, incremental techniques have a cost per-iteration that is independent of . The price to pay is the need to store a moderate amount of information regarding past iterates
+[[231, 245, 'Euclidean_distance'
+251, 267, 'Machine_learning'
+397, 400, 'Screen_Actors_Guild'
+661, 665, 'System_analysis'
+819, 827, 'Gradient_descent']]
+-----------------------------------------
+-----------------------------------------
+1712.10138 is citing math/0403046
+On the Diophantine equation F_{n}-F_{m}=2^{a} ->
+-> Classical and modular approaches to exponential Diophantine equations. I. Fibonacci and Lucas perfect powers
+co-citations: ['1706.10294']
+- On perfect powers that are sums of two Fibonacci numbers
+with   It is well known that  where  and  which are the roots of the characteristic equations  The relations between Fibonacci and Lucas number, and  are given by  and  for . The inequality () can be proved by induction. It can be seen that  and  The following theorem and lemma are given in  MAINCIT  and {{cite:5feec308-e65c-44e5-8318-35fc18b05cdd}}, respectively. Theorem 3  The only perfect powers in the Fibonacci sequence are  and  The only perfect powers in the Lucas sequence are  and   Lemma 4 Assume that  Then    Main theorem Theorem 5 The only solutions of the Diophantine equation () in nonnegative integers  and  are given by  and   Proof. Assume
+[[117, 126, 'Fibonacci'
+131, 143, 'Lucas_number'
+179, 189, 'Social_inequality'
+261, 268, 'Theorem'
+423, 437, 'Perfect_power'
+445, 454, 'Fibonacci'
+483, 497, 'Perfect_power'
+505, 519, 'Lucas_number'
+565, 572, 'Theorem'
+609, 629, 'Diophantine_equation'
+683, 688, 'Mathematical_proof']]
+-----------------------------------------
+-----------------------------------------
+1712.09739 is citing 1004.3931
+Ergodic theory for Riemann surface laminations: a survey ->
+-> Heat equation and ergodic theorems for Riemann surface laminations
+co-citations: []
+finite Poincaré mass near .  Problem 4.7 Can one generalize Theorem  to higher dimensions?   Heat equation and ergodic theorems In this section we will report some recent techniques used to obtain ergodic theorems for Riemann surface laminations. Ergodic theorems associated with the heat diffusions In collaboration with Dinh and Sibony  MAINCIT , we introduce the heat equation relative to a positive harmonic closed current and apply it to the directed positive harmonic currents of a Riemann surface laminations with singularities. This permits to construct the heat diffusion with respect to various Laplacians that could be defined almost everywere with respect to the
+[[-8, 6, 'Locally_finite_measure'
+7, 15, 'Henri_Poincaré'
+16, 20, 'Mass'
+93, 106, 'Heat_equation'
+111, 118, 'Ergodicity'
+197, 204, 'Ergodicity'
+218, 233, 'Riemann_surface'
+284, 288, 'Thermal_conduction'
+402, 415, 'Heat_equation'
+439, 447, 'Harmonic_analysis'
+501, 509, 'Harmonic_analysis'
+524, 539, 'Riemann_surface'
+557, 570, 'Singular_point_of_an_algebraic_variety'
+602, 616, 'Heat_equation']]
+-----------------------------------------
+-----------------------------------------
+1712.09235 is citing 1212.4018
+Boundedness of the bilinear Bochner-Riesz Means in the non-Banach triangle case ->
+-> The bilinear Bochner-Riesz problem
+co-citations: []
+to .   Remark: Fefferman {{cite:c08d20d4-e64d-424c-b1e1-3afe96df2f1b}} pointed out that the restriction estimates apply to the study of the boundedness of Bochner-Riesz means. Stein's earlier result in {{cite:f3551f59-36ef-4f48-883a-445894306ff5}} was improved by using the restriction theorem (see {{cite:bbdb918d-bd63-436d-8266-c97e93ab4945}}). Our results are obtained without the help of non-trivial restriction estimates. In contrast, the results in  MAINCIT  depend heavily on the restriction-extension estimates. It seems still a problem that how apply the restriction estimates to obtain a better result about the boundedness of the bilinear Bochner-Riesz means.  Preliminaries We state some facts about the Bessel function and the kernel of the Bochner-Riesz operator. These
+[[176, 181, 'Heinrich_Friedrich_Karl_vom_und_zum_Stein'
+286, 293, 'Theorem'
+677, 685, 'Bilinear_form'
+752, 767, 'Bessel_function'
+776, 782, 'Integral_transform']]
+-----------------------------------------
+41359

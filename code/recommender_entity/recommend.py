@@ -28,7 +28,6 @@ def recommend(docs_path):
     adjacent_cit_map = {}
     for idx, line in enumerate(lines):
         # TODO
-        # - update splitting
         # - make features out of entities
         # - make special features in case of <NE>[]
         # - mby also POS tagging then <preposition>[] special treatment

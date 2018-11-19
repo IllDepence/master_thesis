@@ -439,26 +439,20 @@ sqlite> select count(*) from bibitemarxividmap;
 * e.g. `$ curl 'localhost:8983/solr/mag_papers/select?q=original_title:Buda%2BMaki%2Band%2BMazurowski%2Bsystematic%2Bstudy%2Bthe%2Bclass%2Bimbalance%2B...'`
     * fields of interest: `paper_id`, `normalized_title`, `original_title`, `publication_year`, `citation_count`, `estimated_citation_count`, (`doi`)
     * for authors: `mag_paper_author_affiliations/select?q=paper_id:` → `author_id`, `mag_authors/select?q=author_id:` → `display_name` / `normalized_name`
-* first mini run w/ unreliable Solr and non strict matching  
-```
-- - - - - - - - - - - - - - - - -
-226/312536
-matches: 151
-checked: 21
-false negatives: 5
-false positives: 3
-can't connect so Solr ... exiting
-```
-* strict maching 途中  
-```
-- - - - - - - - - - - - - - - - -
-168433/312536
-matches: 85827
-checked: 19246
-false negatives: 11904
-false positives: 596
-```
-
+* strict title matching
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/all_text/
+    - - - - - - - - - - - - - - - - -
+    312534/312536
+    matches: 159201
+    checked: 35876
+    false negatives: 22141
+    false positives: 1102
+    
+    real    1115m19.231s
+    user    42m41.461s
+    sys     3m40.510s
+    ```
 * TODO
     * strip "(in) Proceedings" and co.
     * check complete Solr result for matches (not just top 10)

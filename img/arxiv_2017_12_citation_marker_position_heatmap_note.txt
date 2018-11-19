@@ -14,3 +14,14 @@ normalizing 'along the line distribution':
 i.e. no matter where in the document, it's always
 most likely that the citation is at the end and
 unlikely that it's inbetween
+
+result looks basically the same if only citations
+are considered that have
+- a proper noun before the marker
+- a prepositon before the marker
+- an adjective within the sentence
+- a comparative/superlative adjective within the
+  sentence
+- etc.
+only significant difference for citations that
+have a verb after the marker

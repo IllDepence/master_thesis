@@ -436,7 +436,7 @@ sqlite> select count(*) from bibitemarxividmap;
 
 ##### bibitem matching (MAG)
 
-* e.g. `$ curl 'localhost:8983/solr/mag_papers/select?q=original_title:Buda%2BMaki%2Band%2BMazurowski%2Bsystematic%2Bstudy%2Bthe%2Bclass%2Bimbalance%2Bproblem%2Bconvolutionalneural%2Bnetworks%2BCoRR%2Babs'`
+* e.g. `$ curl 'localhost:8983/solr/mag_papers/select?q=original_title:Buda%2BMaki%2Band%2BMazurowski%2Bsystematic%2Bstudy%2Bthe%2Bclass%2Bimbalance%2B...'`
     * fields of interest: `paper_id`, `normalized_title`, `original_title`, `publication_year`, `citation_count`, `estimated_citation_count`, (`doi`)
     * for authors: `mag_paper_author_affiliations/select?q=paper_id:` → `author_id`, `mag_authors/select?q=author_id:` → `display_name` / `normalized_name`
 * first mini run w/ unreliable Solr and non strict matching  
@@ -458,6 +458,11 @@ checked: 19246
 false negatives: 11904
 false positives: 596
 ```
+
+* TODO
+    * strip "(in) Proceedings" and co.
+    * check complete Solr result for matches (not just top 10)
+    * when DOI is given and no result found, re-query with DOI
 
 ##### experiments
 
@@ -747,6 +752,21 @@ in top 5: 2993 | 2916
 in top 10: 4080 | 4016
 ndcg@5: 0.232 | 0.227
 map@5: 0.209 | 0.205
+```
+
+**only using annotations**  
+```
+$ python3 recommend.py items.csv    (1712 100w 4mincont 2mindoc spotlight_annot)
+- - - - - 7787/7787 - - - - -
+#1: 559
+in top 5: 1760
+in top 10: 2571
+ndcg@5: 0.13512704458191738
+map@5: 0.12488763323487953
+
+real    67m51.744s
+user    67m43.101s
+sys     0m22.163s
 ```
 
 ##### ~~named entity recognition~~ (probably not so important)

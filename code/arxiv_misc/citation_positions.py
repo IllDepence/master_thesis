@@ -25,6 +25,9 @@ def sent_pos(in_dir):
     punkt_param.abbrev_types = set(abbreviation)
     tokenizer = PunktSentenceTokenizer(punkt_param)
 
+    with open('hedge_words') as f:
+        hedge_words = [l.strip() for l in f.readlines()]
+
     x = []
     y = []
     file_names = os.listdir(in_dir)
@@ -47,6 +50,7 @@ def sent_pos(in_dir):
 
         sentences = tokenizer.tokenize(text)
         doc_len = len(sentences)
+        # ↓ word wise
         for sent_idx, sentence in enumerate(sentences):
             if marker in sentence:
                 doc_pos = 1 - (sent_idx/doc_len)
@@ -56,13 +60,16 @@ def sent_pos(in_dir):
                 words = pos_tag(sentence.split())
                 words = [w for w in words if re.search(r'[\w|\u241F]', w[0])]
                 sent_len = len(words)
+                sent_tags_str = ' '.join([tup[1] for tup in words])
                 indices = [i for i, tup in enumerate(words)
                            if tup[0] == marker.strip()]
+                if 'JJS' not in sent_tags_str:
+                    continue  # FIXME: currently only looking at superlatives
                 for word_idx in indices:
                     word = words[word_idx][0]
-                    # if word == marker.strip():
                     # if word == marker.strip() and \
                     #     words[word_idx-1][1] == 'IN':
+
                     # if word == marker.strip() and \
                     #     ((word_idx > 0 and \
                     #       'FORMULA' not in words[word_idx-1][0] and \
@@ -71,9 +78,12 @@ def sent_pos(in_dir):
                     #       words[word_idx-1][1] in ['NN', 'NNS'] and \
                     #       'FORMULA' not in words[word_idx-2][0] and \
                     #       words[word_idx-2][1] in ['NNP', 'NNPS'])):
-                    if word == marker.strip() and \
-                        word_idx+1 < len(words) and \
-                        'VB' in words[word_idx+1][1]:
+
+                    # if word == marker.strip() and \
+                    #     word_idx+1 < len(words) and \
+                    #     'VB' in words[word_idx+1][1]:
+
+                    if word == marker.strip():
                         # print(words)
                         # print('doc pos:  {}'.format((sent_idx/doc_len)))
                         # print('sent pos: {}/{}'.format((word_idx+1),sent_len))
@@ -85,8 +95,18 @@ def sent_pos(in_dir):
                         if buck_x_idx == 10:
                             buck_x_idx = 9
                         buckets[buck_y_idx][buck_x_idx] += 1
-        # ↓ character wise
+        if file_idx > 1000:
+            break
+
+        # # ↓ character wise
         # for sent_idx, sentence in enumerate(sentences):
+        #     # has_hw = False
+        #     # for hw in hedge_words:
+        #     #     if hw in sentence:
+        #     #         has_hw = True
+        #     #         break
+        #     # if not has_hw:
+        #     #     continue
         #     sent_len = len(sentence)
         #     doc_pos = 1 - (sent_idx/doc_len)
         #     buck_y_idx = math.floor(doc_pos*10)

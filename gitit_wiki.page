@@ -439,7 +439,25 @@ sqlite> select count(*) from bibitemarxividmap;
 * e.g. `$ curl 'localhost:8983/solr/mag_papers/select?q=original_title:Buda%2BMaki%2Band%2BMazurowski%2Bsystematic%2Bstudy%2Bthe%2Bclass%2Bimbalance%2Bproblem%2Bconvolutionalneural%2Bnetworks%2BCoRR%2Babs'`
     * fields of interest: `paper_id`, `normalized_title`, `original_title`, `publication_year`, `citation_count`, `estimated_citation_count`, (`doi`)
     * for authors: `mag_paper_author_affiliations/select?q=paper_id:` → `author_id`, `mag_authors/select?q=author_id:` → `display_name` / `normalized_name`
-
+* first mini run w/ unreliable Solr and non strict matching  
+```
+- - - - - - - - - - - - - - - - -
+226/312536
+matches: 151
+checked: 21
+false negatives: 5
+false positives: 3
+can't connect so Solr ... exiting
+```
+* strict maching 途中  
+```
+- - - - - - - - - - - - - - - - -
+168433/312536
+matches: 85827
+checked: 19246
+false negatives: 11904
+false positives: 596
+```
 
 ##### experiments
 

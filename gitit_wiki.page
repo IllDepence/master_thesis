@@ -704,12 +704,19 @@ map@5: 0.21056675656007817
 
 ##### notes on evaluation
 
+* thoughts on exact re-recommendation
+    * exact re-recommendation would imply the assumption, that for a given context only this very citation is acceptable
+    * including direct co-citations (`\cite{a,b}`) acknowledges, that either of the cited docs is relevant
+        * a performance drop of nDCG is due to a more realistic shift in expectation: ideal is *not* to have a relevant doc somewhere in the top 5 but to have 5 relevant docs to choose from
+        * in the same vein, "indirect co-citation" (in the same context) could very well be considered somewhat relevant
 * considerations when train/test splitting
     * always ensure a "stratified" split (i.e. don't just split 80/20 along all items in some order, split each *grouped per cited doc*-mini-package 80/20)
     * because an author's word choice and a paper's content can be a strong signal, it would be ideal to not have citations from one paper split (some in test, some in training)
         * just like typhoon/sequence wise splits in pyphoon
         * → require at least 2 *containing docs* for evaluation, then do a document wise train/test split
-* minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
+* misc
+    * minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
+ 
 
 
 ### citation recommendation based on entities

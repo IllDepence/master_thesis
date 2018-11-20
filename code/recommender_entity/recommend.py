@@ -49,7 +49,7 @@ def recommend(docs_path):
         custom_filter = [strip_punctuation,
                          strip_multiple_whitespaces]
         words = preprocess_string(text, custom_filter)
-        tokens = words + annots
+        tokens = words + annots  # FIXME: make better use of annots
         texts.append(tokens)
         text = ' '.join(tokens)
         if aid != tmp_bag_current_aid or idx == len(lines)-1:

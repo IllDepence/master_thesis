@@ -21,6 +21,15 @@ from db_model import (Base, Bibitem, BibitemArxivIDMap, BibitemMAGIDMap,
                       BibitemLinkMap)
 
 DOI_PATT = re.compile(r'10.\d{4,9}/[-._;()/:A-Z0-9]+$', re.I)
+IN_PJ_START_PATT = re.compile(
+    r'^(in)?\s*(the)?\s*(Proceedings|Journal)\s+of', re.I)
+TRANSACTIONS_START_PATT = re.compile(
+    r'^\s*[\w\/]+?\s*(Transactions)\s+on', re.I)
+PAGE_VOL_START_PATT = re.compile(
+    r'^\s*,?\s*(pages?|pp|vol(ume)?s?)\.?\s+\d', re.I)
+ARXIV_URL_PATT = re.compile(
+    r'arxiv\.org\/[a-z0-9]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?$)',
+    re.I)
 
 
 def send_query(query, debug=False):
@@ -44,13 +53,32 @@ def send_query(query, debug=False):
         print('Top 10 results:')
         for doc in docs[:10]:
             print('        - {}'.format(doc.get('original_title', '')))
-    return docs[:10]
+    return docs
 
 
 def clean(s):
     s = re.sub('[^\w\s]+', '', s)
     s = re.sub('\s+', ' ', s)
     return s.strip().lower()
+
+
+def clean_by_segments(text_with_delim):
+    segments = text_with_delim.split('¦')
+    clean_title = ''
+    for seg in segments:
+        if IN_PJ_START_PATT.search(seg):
+            break
+        elif TRANSACTIONS_START_PATT.search(seg):
+            break
+        elif PAGE_VOL_START_PATT.search(seg):
+            break
+        elif ARXIV_URL_PATT.search(seg):
+            m = ARXIV_URL_PATT.search(seg)
+            if len(m.group(0))/len(seg) > .8:
+                break
+        clean_title += seg
+    return clean_title
+
 
 def check_result(bibitem_string, result_doc, debug=False, strict=True):
     """ For a result doc to pass as fitting require that:
@@ -131,12 +159,14 @@ def match(db_uri=None, in_dir=None):
     num_checked = 0
     num_false_positives = 0
     num_false_negatives = 0
+    num_doi_rebounds = 0
     bi_total = len(bibitems_db)
     for bi_idx, bibitem_db in enumerate(bibitems_db):
         t1 = datetime.datetime.now()
         text = bibitem_db.bibitem_string
         in_doc = bibitem_db.in_doc
-        text = text.replace('¦', '')
+        text_orig = text.replace('¦', '')
+        text = clean_by_segments(text)
 
         q = title_query_words(text)
         if not q:
@@ -148,7 +178,7 @@ def match(db_uri=None, in_dir=None):
         if solr_resps:
             for resp_idx in range(len(solr_resps)):
                 candidate = solr_resps[resp_idx]
-                solr_match = check_result(text, candidate)
+                solr_match = check_result(text_orig, candidate)
                 if solr_match:
                     # print('-> matched at result pos. #{}'.format(resp_idx+1))
                     solr_resp = candidate
@@ -157,12 +187,6 @@ def match(db_uri=None, in_dir=None):
             solr_match = False
         if not solr_match:
             solr_resp = False
-            
-        # if not solr_match:
-        #     print('-> no match')
-
-        # input()
-        # continue
 
         given_link_db = session.query(BibitemLinkMap).filter_by(
                                       uuid=bibitem_db.uuid).first()
@@ -178,7 +202,20 @@ def match(db_uri=None, in_dir=None):
         if not solr_match:
             if given_doi:
                 num_false_negatives += 1
-            continue
+            # retry w/ DOI
+            solr_re_resps = send_query('doi:{0}'.format(given_doi))
+            if solr_re_resps:
+                for resp_re_idx in range(len(solr_re_resps)):
+                    candidate_re = solr_re_resps[resp_re_idx]
+                    solr_re_match = check_result(text_orig, candidate_re)
+                    if solr_re_match:
+                        solr_re_resp = candidate_re
+            if solr_re_resp:
+                num_doi_rebounds += 1
+                solr_match = solr_re_match
+                solr_resp = solr_re_resp
+            else:
+                continue
         if solr_match:
             num_matches += 1
             mag_id = solr_resp.get('paper_id', False)
@@ -213,6 +250,7 @@ def match(db_uri=None, in_dir=None):
         print('checked: {}'.format(num_checked))
         print('false negatives: {}'.format(num_false_negatives))
         print('false positives: {}'.format(num_false_positives))
+        print('DOI rebounds: {}'.format(num_doi_rebounds))
     session.commit()
 
 

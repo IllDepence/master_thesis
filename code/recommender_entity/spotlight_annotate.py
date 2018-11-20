@@ -42,6 +42,7 @@ def annotate(in_dir):
         new_path = os.path.join(in_dir, new_fn)
         annots_minimal = [[a['offset'],
                            a['offset']+len(a['surfaceForm']),
+                           a['surfaceForm'],
                            a['URI'].replace('http://dbpedia.org/resource/', '')
                            ] for a in annotations]
         with open(new_path, 'w') as f:

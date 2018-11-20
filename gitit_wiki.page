@@ -12,6 +12,11 @@
 
 ### recent notes
 
+* test MAG thingy linking (could be used for pre-filtering)
+* using NEL *only* for `<dataset/algo/etc.> []` and the claim and argument approaches for all other citation contexts (by first classifying the context) could be an option
+
+---
+
 * refine usage of entities
     * manual evaluation: get some citation context and the contained linked entities; check: are the linkings correct; check: is the presence of the entities relevant for the citation itself (also consider special cases like <NEL>[] like ImageNet[1])
 * storage of annotations for now okay

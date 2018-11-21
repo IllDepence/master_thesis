@@ -11,7 +11,7 @@ from gensim.parsing.preprocessing import (preprocess_documents,
                                           strip_punctuation)
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from db_model import Base, Bibitem, BibitemArxivIDMap
+from db_model import Base, Bibitem, BibitemArxivIDMap, BibitemMAGIDMap
 
 CITE_PATT = re.compile((r'\{\{cite:([0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}'
                          '-[89AB][0-9A-F]{3}-[0-9A-F]{12})\}\}'), re.I)
@@ -43,7 +43,7 @@ def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
 
 
 def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
-             with_placeholder=True, preprocess=False):
+             with_placeholder=True, preprocess=False, global_ids='mag'):
     """ Generate a list of citation contexts, given criteria:
             context_size (in words)
             min_contexts
@@ -64,17 +64,28 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=4,
     session = DBSession()
 
     print('querying DB')
-    have_global_id = session.query(BibitemArxivIDMap.arxiv_id).\
-                        subquery()
-    bibitems = session.query(Bibitem, BibitemArxivIDMap).\
-                filter(Bibitem.uuid == BibitemArxivIDMap.uuid).\
-                filter(BibitemArxivIDMap.arxiv_id.in_(have_global_id)).\
-                all()
+    if global_ids == 'mag':
+        have_global_id = session.query(BibitemMAGIDMap.mag_id).\
+                            subquery()
+        bibitems = session.query(Bibitem, BibitemMAGIDMap).\
+                    filter(Bibitem.uuid == BibitemMAGIDMap.uuid).\
+                    filter(BibitemMAGIDMap.mag_id.in_(have_global_id)).\
+                    all()
+    else:
+        have_global_id = session.query(BibitemArxivIDMap.arxiv_id).\
+                            subquery()
+        bibitems = session.query(Bibitem, BibitemArxivIDMap).\
+                    filter(Bibitem.uuid == BibitemArxivIDMap.uuid).\
+                    filter(BibitemArxivIDMap.arxiv_id.in_(have_global_id)).\
+                    all()
     print('merging bibitems')
     cited_docs_pre = {}
     uuid_aid_map = {}
     for bibitem in bibitems:
-        aid = bibitem.BibitemArxivIDMap.arxiv_id
+        if global_ids == 'mag':
+            aid = bibitem.BibitemMAGIDMap.mag_id
+        else:
+            aid = bibitem.BibitemArxivIDMap.arxiv_id
         uuid = bibitem.Bibitem.uuid
         uuid_aid_map[uuid] = aid
         in_doc = bibitem.Bibitem.in_doc

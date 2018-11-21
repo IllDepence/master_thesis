@@ -213,12 +213,27 @@ questions to be answered:
 * problems
     * sometimes a paper's [v2](https://arxiv.org/format/1306.0555v2) gives empty source while it's [v1](https://arxiv.org/format/1306.0555v1) has proper source
     * [cases](https://arxiv.org/format/1607.00145) where "source" is just a single `\includepdf`
-    * `physics0001026`: html instead of tex
-    * `physics0001060`: postscript instead of tex
+    * `physics0001026`: html instead of latex
+    * `physics0001060`: postscript instead of latex
     * `astro-ph0001005`: using file extension .ltx for latex
     * `hep-th0001079`: few sentences of plaintext
     * `hep-th0001205`, `quant-ph0001041`, ...: TeX (not LaTeX)
     * `ph0001041`: weird LaTeX?
+    * `1712.10228` is in Japanese
+    * `hep-lat0001017` is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***  
+        ```
+        [...]
+        \begin{document}                                                                                                        
+        \newcommand{\nc}{\newcommand}                                                                                           
+        \nc{\be}{\begin{equation}}                                                                                              
+        \nc{\ee}{\end{equation}}                                                                                                
+        \nc{\bea}{\begin{eqnarray}}                                                                                             
+        \nc{\eea}{\end{eqnarray}}                                                                                               
+        \nc{\bib}{\bibitem}                                                                                                     
+        \nc{\1}{16^3\times{32}}                                                                                                 
+        \nc{\2}{24^3\times{36}}
+        [...]
+        ```
 
 ##### arXiv source dump
 
@@ -289,7 +304,6 @@ output 2066 docs
     * on shinobu w/ SQLite DB instead of separate text files for metadata: 2m13s
     * in: 2216, out: 2199 (30 messed up) → 98% (91.8% overall) (latexml only 2138)
     * a bit more preamble noise (already in the XML in `<p>`s, so no straightforward way to deal with it)
-* hep-lat0001017 is creating new commands for marking math environments, *with a newly created command for newcommand*, ***outside the preamble***
 
 **tralics problem docs with latexml**  
 (messed up output (but not skip b/c error) for 0001_001; for which latexml outputs 2138, tralics 2199)
@@ -459,9 +473,26 @@ sqlite> select count(*) from bibitemarxividmap;
     sys     3m40.510s
     ```
 * TODO
-    * strip "(in) Proceedings" and co.
-    * check complete Solr result for matches (not just top 10)
-    * when DOI is given and no result found, re-query with DOI
+    * check DOI rebounds
+    * name pattern? `S. Reed, Z. Akata, S. Mohan, S. Tenka, B. Schiele, and H. Lee`, also just (`x and y`), also double initials (`x. y. foo`) etc.
+* problems:
+    * phys rev's
+    * bibitems without title
+    * formulas in bibitems:
+        * `measurement of longrange nearside twoparticle angular correlations in pp collisions at s 13 tev` not in  
+            `vardan khachatryan et al measurement of longrange nearside twoparticle angular correlations in pp collisions at formula 13 tev phys rev lett 11617172302 2016 151003068`  
+            b/c of FORMULA replacement
+        * *"ARGUS Collaboration, H. Albrecht et al., “Observation of FORMULA semileptonic decay”, Phys. Lett. B303 (1993) 368."*
+    * author typos: *"S. Chakraborty M. Hanmandlu, K. R. Murali Mohan et al. Uncon**ss**trained handwritten character recognition based on fuzzy logic. Pattern Recognition, 2003."*
+    * special characters
+        * bibitem: "s-step iterative methods for symmetric linear systems"
+        * MAG: "s -step iterative methods for symmetric linear systems"
+        * ---
+        * bibitem: "É. Cancès, A. Levitt, G. Panati, and G. Stoltz. Robust determination of maximally localized Wannier functions. Phys. Rev. B 95(7), 075114 (2017)."
+        * MAG: "Robust determination of maximally-localized Wannier functions"
+    * MAG noise:
+        * *Pascual Jordan: Schwerkraft und Weltall, Vieweg and Sohn, Braunschweig(1952), VII+207p. 1,680円*
+
 
 ##### experiments
 

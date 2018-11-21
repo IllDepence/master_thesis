@@ -187,6 +187,19 @@ def match(db_uri=None, in_dir=None):
             solr_match = False
         if not solr_match:
             solr_resp = False
+            # # check fails
+            # print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
+            # print('original text: {}'.format(text_orig))
+            # print('query text:    {}'.format(text))
+            # print('cleaned:       {}'.format(clean(text)))
+            # print('found in non of:')
+            # for resp_idx in range(len(solr_resps)):
+            #     rtext = solr_resps[resp_idx].get('original_title', '')
+            #     print('    {}'.format(rtext))
+            #     print('    ({})\n'.format(clean(rtext)))
+            # input()
+        # print('.')
+        # continue
 
         given_link_db = session.query(BibitemLinkMap).filter_by(
                                       uuid=bibitem_db.uuid).first()
@@ -202,20 +215,23 @@ def match(db_uri=None, in_dir=None):
         if not solr_match:
             if given_doi:
                 num_false_negatives += 1
-            # retry w/ DOI
-            solr_re_resps = send_query('doi:{0}'.format(given_doi))
-            if solr_re_resps:
-                for resp_re_idx in range(len(solr_re_resps)):
-                    candidate_re = solr_re_resps[resp_re_idx]
-                    solr_re_match = check_result(text_orig, candidate_re)
-                    if solr_re_match:
-                        solr_re_resp = candidate_re
-            if solr_re_resp:
-                num_doi_rebounds += 1
-                solr_match = solr_re_match
-                solr_resp = solr_re_resp
-            else:
-                continue
+                # -- retry w/ DOI --
+                solr_re_resp = False
+                solr_re_resps = send_query('doi:{0}'.format(given_doi))
+                if solr_re_resps:
+                    for resp_re_idx in range(len(solr_re_resps)):
+                        candidate_re = solr_re_resps[resp_re_idx]
+                        solr_re_match = check_result(text_orig, candidate_re)
+                        if solr_re_match:
+                            solr_re_resp = candidate_re
+                            break
+                if solr_re_resp:
+                    num_doi_rebounds += 1
+                    solr_match = solr_re_match
+                    solr_resp = solr_re_resp
+                else:
+                    continue
+                # -- /retry w/ DOI --
         if solr_match:
             num_matches += 1
             mag_id = solr_resp.get('paper_id', False)

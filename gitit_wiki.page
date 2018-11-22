@@ -472,6 +472,21 @@ sqlite> select count(*) from bibitemarxividmap;
     user    42m41.461s
     sys     3m40.510s
     ```
+* +filtering Proceedings/Transactions/etc. *segments*
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/all_text/
+    - - - - - - - - - - - - - - - - -
+    312535/312536
+    matches: 160350
+    checked: 35875
+    false negatives: 22183
+    false positives: 1043
+    DOI rebounds: 259
+    
+    real    1374m51.740s
+    user    37m37.951s
+    sys     3m37.655s
+    ```
 * TODO
     * check DOI rebounds
     * name pattern? `S. Reed, Z. Akata, S. Mohan, S. Tenka, B. Schiele, and H. Lee`, also just (`x and y`), also double initials (`x. y. foo`) etc.

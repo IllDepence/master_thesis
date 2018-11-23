@@ -11,6 +11,18 @@
     * [k4nn](https://arxiv.org/abs/1802.08301), "
 
 ### recent notes
+* heatmap 引き続き
+    * commonness/frequency of pos tags/pos pattern (e.g. is "proper noun [] verb" common)
+    * heatmap per discipline
+* MAG matching
+    * (neural) parcit /sliding window/fuzzy matching test
+* NEL
+    * mag annotations as normal entities → eval.
+    * mag annotations recall (manual check, check contexts and see if anything should've been annotated that is not)
+    * mag / spotlight entities, most frequent in 1712 (show e.g. top 15 most frequent entities)
+        * do they fit do distribution of fields of research in 1712
+
+---
 
 * test MAG thingy linking (could be used for pre-filtering)
 * using NEL *only* for `<dataset/algo/etc.> []` and the claim and argument approaches for all other citation contexts (by first classifying the context) could be an option

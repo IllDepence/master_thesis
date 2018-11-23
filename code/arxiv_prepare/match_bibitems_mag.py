@@ -13,6 +13,7 @@ import os
 import re
 import requests
 import sys
+from lxml import etree
 from random import shuffle
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -25,11 +26,22 @@ IN_PJ_START_PATT = re.compile(
     r'^(in)?\s*(the)?\s*(Proceedings|Journal)\s+of', re.I)
 TRANSACTIONS_START_PATT = re.compile(
     r'^\s*[\w\/]+?\s*(Transactions)\s+on', re.I)
+IN_STH_PATT = re.compile(
+    '(In\s+)?(the\s+)?(Proceedings|Journal|Transactions)\s+(of|on)\s+(the\s+)?\w+',
+    re.I)
 PAGE_VOL_START_PATT = re.compile(
     r'^\s*,?\s*(pages?|pp|vol(ume)?s?)\.?\s+\d', re.I)
-ARXIV_URL_PATT = re.compile(
-    r'arxiv\.org\/[a-z0-9]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?$)',
+ARXIV_URL_PATT_END = re.compile(
+    r'arxiv\.org\/[a-z0-9-]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?$)',
     re.I)
+ARXIV_URL_PATT = re.compile(
+    r'arxiv\.org\/[a-z0-9-]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?)',
+    re.I)
+ARXIV_ID_PATT = re.compile(
+    r'arXiv:(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?)', re.I)
+NAME_LIST_PATT = re.compile(
+   r'^(([A-ZÀ-ÖØ-öø-ÿ].\s+){1,3}[A-ZÀ-ÖØ-öø-ÿ][a-zÀ-ÖØ-öø-ÿ\'-]+(,?\sand|,)\s+)+',
+   re.I)
 
 
 def send_query(query, debug=False):
@@ -62,6 +74,25 @@ def clean(s):
     return s.strip().lower()
 
 
+def remove_name_list(text):
+    return NAME_LIST_PATT.sub('', text)
+
+
+def remove_containing_work(text):
+    return IN_STH_PATT.sub('', text)
+
+
+def find_arxiv_id(text):
+    match = ARXIV_ID_PATT.search(text)
+    if match:
+        return match.group(1)
+    else:
+        match = ARXIV_URL_PATT.search(text)
+        if match:
+            return match.group(1)
+    return False
+
+
 def clean_by_segments(text_with_delim):
     segments = text_with_delim.split('¦')
     clean_title = ''
@@ -72,8 +103,8 @@ def clean_by_segments(text_with_delim):
             break
         elif PAGE_VOL_START_PATT.search(seg):
             break
-        elif ARXIV_URL_PATT.search(seg):
-            m = ARXIV_URL_PATT.search(seg)
+        elif ARXIV_URL_PATT_END.search(seg):
+            m = ARXIV_URL_PATT_END.search(seg)
             if len(m.group(0))/len(seg) > .8:
                 break
         clean_title += seg
@@ -153,6 +184,10 @@ def match(db_uri=None, in_dir=None):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    arxiv_base_url = 'http://export.arxiv.org/api/query?search_query=id:'
+    arxiv_ns = {'atom': 'http://www.w3.org/2005/Atom',
+                'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
+
     bibitems_db = session.query(Bibitem).all()
     shuffle(bibitems_db)
     num_matches = 0
@@ -160,13 +195,37 @@ def match(db_uri=None, in_dir=None):
     num_false_positives = 0
     num_false_negatives = 0
     num_doi_rebounds = 0
+    num_phys_rev = 0
+    num_by_aid = 0
+    num_by_aid_fail = 0
     bi_total = len(bibitems_db)
     for bi_idx, bibitem_db in enumerate(bibitems_db):
         t1 = datetime.datetime.now()
         text = bibitem_db.bibitem_string
         in_doc = bibitem_db.in_doc
-        text_orig = text.replace('¦', '')
-        text = clean_by_segments(text)
+        aid = ARXIV_ID_PATT.search(text)
+        arxiv_api_success = False
+        if aid:
+            try:
+                resp = requests.get(
+                        '{}{}&start=0&max_results=1'.format(arxiv_base_url, aid))
+                xml_root = etree.fromstring(resp.text.encode('utf-8'))
+                result_elems = xml_root.xpath('/atom:feed/atom:entry',
+                                              namespaces=arxiv_ns)
+                result = result_elems[0]
+                text = result.find('{http://www.w3.org/2005/Atom}title').text
+                text_orig = text
+                num_by_aid += 1
+                arxiv_api_success = True
+            except:
+                pass
+        if not arxiv_api_success:
+            text_orig = text.replace('¦', '')
+            if 'Phys. Rev.' in text_orig:
+                num_phys_rev += 1
+            text = clean_by_segments(text)
+            text = remove_name_list(text)
+            text = remove_containing_work(text)
 
         q = title_query_words(text)
         if not q:
@@ -185,10 +244,13 @@ def match(db_uri=None, in_dir=None):
                     break
         else:
             solr_match = False
+            if arxiv_api_success:
+                num_by_aid_fail += 1
         if not solr_match:
             solr_resp = False
             # # check fails
             # print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
+            # print('in doc: {}'.format(in_doc))
             # print('original text: {}'.format(text_orig))
             # print('query text:    {}'.format(text))
             # print('cleaned:       {}'.format(clean(text)))
@@ -265,8 +327,11 @@ def match(db_uri=None, in_dir=None):
         print('matches: {}'.format(num_matches))
         print('checked: {}'.format(num_checked))
         print('false negatives: {}'.format(num_false_negatives))
+        print('#Phys. Rev.: {}'.format(num_phys_rev))
         print('false positives: {}'.format(num_false_positives))
         print('DOI rebounds: {}'.format(num_doi_rebounds))
+        print('by arXiv ID: {}'.format(num_by_aid))
+        print('by arXiv ID fail: {}'.format(num_by_aid_fail))
     session.commit()
 
 

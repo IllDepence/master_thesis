@@ -487,6 +487,19 @@ sqlite> select count(*) from bibitemarxividmap;
     user    37m37.951s
     sys     3m37.655s
     ```
+* +name list filtering, +arXiv URL usage (snapshot)
+    ```
+    - - - - - - - - - - - - - - - - -
+    279356/312536
+    matches: 160146
+    checked: 32057
+    false negatives: 14863
+    #Phys. Rev.: 32427
+    false positives: 745
+    DOI rebounds: 148
+    by arXiv ID: 32055
+    by arXiv ID fail: 0
+    ```
 * TODO
     * check DOI rebounds
     * name pattern? `S. Reed, Z. Akata, S. Mohan, S. Tenka, B. Schiele, and H. Lee`, also just (`x and y`), also double initials (`x. y. foo`) etc.
@@ -722,7 +735,7 @@ ndcg@5: 0.5218584144074571
 map@5: 0.46789872365042323
 ```
 
-may per doc *with* per doc splitting:  
+many per doc *with* per doc splitting:  
 ```
 $ python3 recommend.py items_1712_100w_4mincont_2mindoc_not_stemmed.csv
 - - - - - 7787/7787 - - - - -
@@ -745,6 +758,17 @@ in top 5: 2995
 in top 10: 4081
 ndcg@5: 0.23297871616321733   <-- slightly worse, because IDCG in nDCG Formula > 1 and apparently not many co citations in top 5
 map@5: 0.21056675656007817
+```
+
+using MAG ID mapped larger dataset (↑41359 vs. ↓74074):  
+```
+$ python3 recommend.py items_1712_100w_4mincont_2mindoc_not_stemmed_mag.csv
+- - - - - 14301/14301 - - - - -
+#1: 1488
+in top 5: 4778
+in top 10: 6480
+ndcg@5: 0.1968435487531205
+map@5: 0.18446961750926533
 ```
 
 ##### notes on evaluation

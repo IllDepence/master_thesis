@@ -840,6 +840,21 @@ map@5: 0.18446961750926533
         $ ls arxiv_test_2017_12_all_181110/all_text/ | grep json | wc -l
         8821
         ```
+* MAG entity test
+    * 8808 citation contexts (100w)
+        ```
+        $ ls citcontxs | wc -l
+        8808
+        $ du -hs citcontxs
+        35M     citcontxs
+        $ time java -jar linking_file_tarek.jar citcontxs citcontxs_out/
+        [...]
+        [22:00:08] [INFO ] [MentionDetectorLSH  ]       Collisions: 1366140
+        
+        real    143m10.872s
+        user    367m38.134s
+        sys     5m17.375s
+        ```
 
 **simply feeding annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
 ```

@@ -617,6 +617,18 @@ false negatives: 10110
 false positives: 188
 ```
 
+##### 1991-2017 dump sample (per month per field ~1%) (25.971 docs)
+
+* on shetland
+* w/ sqlite DB (probably not the most performant) 
+* **w/o matching**
+```
+$ time python3 prepare.py /home/saiert/arxiv_sample/ /home/saiert/arxiv_test_1991-2017_sample
+real    91m13.989s
+user    68m19.553s
+sys     14m26.658s
+```
+
 ### citation recommendation baseline
 
 * idea: only syntax (mby +metadata) based

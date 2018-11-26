@@ -622,12 +622,29 @@ false positives: 188
 * on shetland
 * w/ sqlite DB (probably not the most performant) 
 * **w/o matching**
-```
-$ time python3 prepare.py /home/saiert/arxiv_sample/ /home/saiert/arxiv_test_1991-2017_sample
-real    91m13.989s
-user    68m19.553s
-sys     14m26.658s
-```
+    ```
+    $ time python3 prepare.py /home/saiert/arxiv_sample/ /home/saiert/arxiv_test_1991-2017_sample
+    real    91m13.989s
+    user    68m19.553s
+    sys     14m26.658s
+    ```
+* cancelled matching run w/ arXiv/MAG ID use *but* w/o parscit
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample/non_neural_test/
+    - - - - - - - - - - - - - - - - -
+    254138/733361
+    matches: 94807          ← 37.3%
+    checked: 7467
+    #Phys. Rev.: 41687
+    false positives: 447    ← 5.9% (!!!)
+    by arXiv ID: 24462
+    by arXiv ID fail: 0
+    by doi: 8917
+    
+    real    1067m24.145s    ← 0.25s/bibitem
+    user    30m38.129s
+    sys     3m23.336s
+    ```
 
 ### citation recommendation baseline
 

@@ -5,7 +5,8 @@ import tarfile
 import tempfile
 from normalize_arxiv_dump import normalize
 from parse_latex_tralics import parse
-from match_bibitems import match
+# from match_bibitems import match
+from match_bibitems_mag import match
 
 
 def prepare(in_dir, out_dir_dir, db_uri=None):

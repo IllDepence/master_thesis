@@ -1,14 +1,11 @@
 """ Match bibitem strings to MAG IDs
 
     TODO:
-        - strip "(in) Proceedings)" etc. (Proceedings themselves
-          are in MAG)
-        - if there's a DOI, get MAG ID by DOI
-        - if false positives too high (after stipping Proceedings
-          etc.), check authors
+        - if false positives too high, check authors
 """
 
 import datetime
+import json
 import os
 import re
 import requests
@@ -66,6 +63,22 @@ def send_query(query, debug=False):
         for doc in docs[:10]:
             print('        - {}'.format(doc.get('original_title', '')))
     return docs
+
+
+def parscit_get_title(text):
+    url = 'http://localhost:8000/parscit/parse'
+    ret = requests.post(url, json={'string':text})
+    if ret.status_code != 200:
+        return False
+    response = json.loads(ret.text)
+    parsed_terms = response['data']
+    title_terms = []
+    for parsed_term in parsed_terms:
+        if parsed_term['entity'] == 'title':
+            title_terms.append(parsed_term['term'])
+    if len(title_terms) == 0:
+        return False
+    return ' '.join(title_terms)
 
 
 def clean(s):
@@ -159,6 +172,12 @@ def check_result(bibitem_string, result_doc, debug=False, strict=True):
     return found_ratio > 0.67 and order_ratio > 0.8
 
 
+def title_query_words_simple(text):
+    words = [w for w in text.split()]
+    query_string = '%2B'.join(words)
+    return 'original_title:{0}'.format(query_string)
+
+
 def title_query_words(text):
     with open('stopwords.txt') as f:
         stop_lines = f.readlines()
@@ -187,17 +206,19 @@ def match(db_uri=None, in_dir=None):
     arxiv_base_url = 'http://export.arxiv.org/api/query?search_query=id:'
     arxiv_ns = {'atom': 'http://www.w3.org/2005/Atom',
                 'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
+    doi_base_url = 'https://data.crossref.org/'
+    doi_headers = {'Accept': 'application/citeproc+json'}
 
     bibitems_db = session.query(Bibitem).all()
     shuffle(bibitems_db)
     num_matches = 0
     num_checked = 0
     num_false_positives = 0
-    num_false_negatives = 0
-    num_doi_rebounds = 0
     num_phys_rev = 0
     num_by_aid = 0
     num_by_aid_fail = 0
+    num_by_doi = 0
+    num_no_title = 0
     bi_total = len(bibitems_db)
     for bi_idx, bibitem_db in enumerate(bibitems_db):
         t1 = datetime.datetime.now()
@@ -208,7 +229,7 @@ def match(db_uri=None, in_dir=None):
         if aid:
             try:
                 resp = requests.get(
-                        '{}{}&start=0&max_results=1'.format(arxiv_base_url, aid))
+                    '{}{}&start=0&max_results=1'.format(arxiv_base_url, aid))
                 xml_root = etree.fromstring(resp.text.encode('utf-8'))
                 result_elems = xml_root.xpath('/atom:feed/atom:entry',
                                               namespaces=arxiv_ns)
@@ -219,21 +240,48 @@ def match(db_uri=None, in_dir=None):
                 arxiv_api_success = True
             except:
                 pass
-        if not arxiv_api_success:
+        doi_success = False
+        bibitemlink_db = session.query(BibitemLinkMap).filter_by(
+                                  uuid=bibitem_db.uuid).first()
+        given_doi = False
+        if bibitemlink_db:
+            if 'doi' in bibitemlink_db.link:
+                m = DOI_PATT.search(bibitemlink_db.link)
+                if m:
+                    given_doi = m.group(0)
+        if not arxiv_api_success and given_doi:
+            try:
+                resp = requests.get(
+                        '{}{}'.format(doi_base_url, given_doi),
+                        headers=doi_headers)
+                doi_metadata = json.loads(resp.text)
+                title = doi_metadata.get('title', False)
+                if title and len(title) > 0:
+                    text = title
+                    text_orig = text
+                    num_by_doi += 1
+                    doi_success = True
+            except:
+                pass
+        if not (arxiv_api_success or doi_success):
             text_orig = text.replace('¦', '')
             if 'Phys. Rev.' in text_orig:
                 num_phys_rev += 1
-            text = clean_by_segments(text)
-            text = remove_name_list(text)
-            text = remove_containing_work(text)
+            # text = clean_by_segments(text)
+            # text = remove_name_list(text)
+            # text = remove_containing_work(text)
+            text = parscit_get_title(text_orig)
+            if not text:
+                num_no_title += 1
+                continue
 
-        q = title_query_words(text)
+        q = title_query_words_simple(text)
         if not q:
             continue
         # print('- - - - - - - - - - - - - - - - -')
         # print(text)
         solr_resps = send_query(q)
-        
+
         if solr_resps:
             for resp_idx in range(len(solr_resps)):
                 candidate = solr_resps[resp_idx]
@@ -263,37 +311,6 @@ def match(db_uri=None, in_dir=None):
         # print('.')
         # continue
 
-        given_link_db = session.query(BibitemLinkMap).filter_by(
-                                      uuid=bibitem_db.uuid).first()
-        given_doi = False
-        if given_link_db:
-            if 'doi' in given_link_db.link:
-                m = DOI_PATT.search(given_link_db.link)
-                if m:
-                    given_doi = m.group(0)
-
-        if given_doi:
-            num_checked += 1
-        if not solr_match:
-            if given_doi:
-                num_false_negatives += 1
-                # -- retry w/ DOI --
-                solr_re_resp = False
-                solr_re_resps = send_query('doi:{0}'.format(given_doi))
-                if solr_re_resps:
-                    for resp_re_idx in range(len(solr_re_resps)):
-                        candidate_re = solr_re_resps[resp_re_idx]
-                        solr_re_match = check_result(text_orig, candidate_re)
-                        if solr_re_match:
-                            solr_re_resp = candidate_re
-                            break
-                if solr_re_resp:
-                    num_doi_rebounds += 1
-                    solr_match = solr_re_match
-                    solr_resp = solr_re_resp
-                else:
-                    continue
-                # -- /retry w/ DOI --
         if solr_match:
             num_matches += 1
             mag_id = solr_resp.get('paper_id', False)
@@ -312,11 +329,13 @@ def match(db_uri=None, in_dir=None):
                     session.rollback()
                 session.commit()
             result_doi = solr_resp.get('doi', False)
-            if given_doi and result_doi and not given_doi == result_doi:
-                num_false_positives += 1
-                # print('identified {}'.format(result_doi))
-                # print('but should\'ve been {}'.format(given_doi))
-                # input()
+            if given_doi and result_doi:
+                num_checked += 1
+                if not given_doi == result_doi:
+                    num_false_positives += 1
+                    # print('identified {}'.format(result_doi))
+                    # print('but should\'ve been {}'.format(given_doi))
+                    # input()
         t2 = datetime.datetime.now()
         d = t2 - t1
         # print('- - - [{}.{} s] - - -'.format(d.seconds, d.microseconds))
@@ -326,12 +345,12 @@ def match(db_uri=None, in_dir=None):
         print('{}/{}'.format(bi_idx+1, bi_total))
         print('matches: {}'.format(num_matches))
         print('checked: {}'.format(num_checked))
-        print('false negatives: {}'.format(num_false_negatives))
-        print('#Phys. Rev.: {}'.format(num_phys_rev))
+        print('Phys. Rev.: {}'.format(num_phys_rev))
+        print('no title: {}'.format(num_no_title))
         print('false positives: {}'.format(num_false_positives))
-        print('DOI rebounds: {}'.format(num_doi_rebounds))
         print('by arXiv ID: {}'.format(num_by_aid))
         print('by arXiv ID fail: {}'.format(num_by_aid_fail))
+        print('by doi: {}'.format(num_by_doi))
     session.commit()
 
 

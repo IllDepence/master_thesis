@@ -1,58 +1,56 @@
-import os
+import gzip
 import json
-from lxml import etree
-from random import shuffle
+import os
+import sys
+import tarfile
 
-FRACTION = 100
 
-ns = {'oai':'http://www.openarchives.org/OAI/2.0/',
-      'dc':'http://purl.org/dc/elements/1.1/',
-      'oai_dc':'http://www.openarchives.org/OAI/2.0/oai_dc/',
-      'xsi':'http://www.w3.org/2001/XMLSchema-instance'}
+def id_from_tar_member(member):
+    """ 1701/1701.05327.gz -> 1701.05327
+    """
 
-parser = etree.XMLParser()
-dump_dir = '/vol1/arxiv/metadata/newArxivMetaHarvesting201712'
+    fn = os.path.split(member.name)[-1]
+    aid = os.path.splitext(fn)[0]
+    return aid
 
-month_field_docs = {}
-for fn in os.listdir(dump_dir):
-    if os.path.splitext(fn)[1] != '.xml':
-        continue
-    path = os.path.join(dump_dir, fn)
-    with open(path) as f:
-        tree = etree.parse(f, parser)
-    for rec in tree.xpath('/oai:OAI-PMH/oai:ListRecords/oai:record',
-                          namespaces=ns):
-        header = rec.find('oai:header', namespaces=ns)
-        field = header.find('oai:setSpec', namespaces=ns).text
-        field = field.split(':')[0]
-        id_text = header.find('oai:identifier', namespaces=ns).text
-        aid = id_text.split(':')[-1]
-        # aid_fn = aid.replace('/', '')
-        meta = rec.find('oai:metadata', namespaces=ns)
-        try:
-            first_date = meta.getchildren()[0].find('dc:date', namespaces=ns).text
-        except AttributeError:
-            continue
-        month = first_date[2:4] + first_date[5:7]
-        if month not in month_field_docs:
-            month_field_docs[month] = {}
-        if field not in month_field_docs[month]:
-            month_field_docs[month][field] = []
-        month_field_docs[month][field].append(aid)
 
-sample = {}
-for month, field_docs in month_field_docs.items():
-    # print(month)
-    if month not in sample:
-        sample[month] = []
-    for field, docs in field_docs.items():
-        # print(field)
-        total = len(docs)
-        sample_size = round(total/FRACTION)
-        shuffle(docs)
-        # print('{} -> {}'.format(total, sample_size))
-        sample[month].extend(docs[:sample_size])
-        # input()
+def sample(dump_dir, sample_dir, sample_file):
+    if not (os.path.isdir(dump_dir) and os.path.isfile(sample_file)):
+        print('Either dump_dir or sample_file doesn\'t exist.')
+        return False
+    if not os.path.isdir(sample_dir):
+        os.makedirs(sample_dir)
+    archive_fns = os.listdir(dump_dir)
+    with open(sample_file) as f:
+        sample_map = json.load(f)
+    # for each month
+    sample_fns = []
+    for month, id_list in sample_map.items():
+        sample_fns.extend([i.replace('/', '') for i in id_list])
+    for month, id_list in sample_map.items():
+        print(month)
+        archive_prefix = 'arXiv_src_{}'.format(month)
+        month_fns = [afn for afn in archive_fns if archive_prefix in afn]
+        # for each dump archive in that month
+        for archive_fn in month_fns:
+            tar = tarfile.open(os.path.join(dump_dir, archive_fn))
+            # extract all that are part of the sample
+            sample_members = []
+            for member in tar.getmembers():
+                if id_from_tar_member(member) not in sample_fns:
+                    continue
+                member.name = os.path.basename(member.name)
+                sample_members.append(member)
+            tar.extractall(path=sample_dir, members=sample_members)
 
-with open('sample.json', 'w') as f:
-    json.dump(sample, f)
+if __name__ == '__main__':
+    if len(sys.argv) != 4:
+        print(('usage: python3 sample.py </path/to/dump/dir> </path/to/sample/'
+               'dir> <path/to/sample/file>'))
+        sys.exit()
+    dump_dir = sys.argv[1]
+    sample_dir = sys.argv[2]
+    sample_file = sys.argv[3]
+    ret = sample(dump_dir, sample_dir, sample_file)
+    if not ret:
+        sys.exit()

@@ -76,6 +76,8 @@ def read_gzipped_file(path):
         cntnt = blob.decode(encoding)
     except (UnicodeDecodeError, LookupError) as e:
         encoding = chardet.detect(blob)['encoding']
+        if not encoding:
+            return False
         cntnt = blob.decode(encoding, errors='replace')
     return cntnt
 
@@ -182,6 +184,8 @@ def normalize(IN_DIR, OUT_DIR):
             else:
                 # extraxt gzipped tex file
                 cntnt = read_gzipped_file(path)
+                if not cntnt:
+                    continue
                 if re.search(MAIN_TEX_PATT, cntnt) is None:
                     log('unexpected content in dump archive {}'.format(fn))
                     continue

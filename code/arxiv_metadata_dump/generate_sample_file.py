@@ -42,22 +42,30 @@ for fn in os.listdir(dump_dir):
         if month not in month_field_docs:
             month_field_docs[month] = {}
         if field not in month_field_docs[month]:
-            month_field_docs[month][field] = []
-        month_field_docs[month][field].append(aid)
+            month_field_docs[month][field] = set()
+        month_field_docs[month][field].add(aid)
 
 sample = {}
+num_total = 0
+num_sample = 0
 for month, field_docs in month_field_docs.items():
     # print(month)
     if month not in sample:
         sample[month] = []
     for field, docs in field_docs.items():
         # print(field)
+        docs = list(docs)
         total = len(docs)
         sample_size = round(total/FRACTION)
+        num_total += total
+        num_sample += sample_size
         shuffle(docs)
         # print('{} -> {}'.format(total, sample_size))
         sample[month].extend(docs[:sample_size])
         # input()
+
+print('total size: {}'.format(num_total))
+print('sample size: {}'.format(num_sample))
 
 with open('sample.json', 'w') as f:
     json.dump(sample, f)

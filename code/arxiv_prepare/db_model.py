@@ -13,8 +13,8 @@ class Bibitem(Base):
 
 class BibitemLinkMap(Base):
     __tablename__ = 'bibitemlinkmap'
-    __table_args__ = (UniqueConstraint(
-                      'uuid', 'link', name='uid_link_uniq'),)
+    # __table_args__ = (UniqueConstraint(
+    #                   'uuid', 'link', name='uid_link_uniq'),)
     id = Column(Integer(), autoincrement=True, primary_key=True)
     uuid = Column(String(36), ForeignKey('bibitem.uuid'))
     link = Column(UnicodeText())
@@ -22,8 +22,8 @@ class BibitemLinkMap(Base):
 
 class BibitemArxivIDMap(Base):
     __tablename__ = 'bibitemarxividmap'
-    __table_args__ = (UniqueConstraint(
-                      'uuid', 'arxiv_id', name='uid_aid_uniq'),)
+    # __table_args__ = (UniqueConstraint(
+    #                   'uuid', 'arxiv_id', name='uid_aid_uniq'),)
     id = Column(Integer(), autoincrement=True, primary_key=True)
     uuid = Column(String(36), ForeignKey('bibitem.uuid'))
     arxiv_id = Column(String(36))
@@ -31,8 +31,8 @@ class BibitemArxivIDMap(Base):
 
 class BibitemMAGIDMap(Base):
     __tablename__ = 'bibitemmagidmap'
-    __table_args__ = (UniqueConstraint(
-                      'uuid', 'mag_id', name='uid_mid_uniq'),)
+    # __table_args__ = (UniqueConstraint(
+    #                   'uuid', 'mag_id', name='uid_mid_uniq'),)
     id = Column(Integer(), autoincrement=True, primary_key=True)
     uuid = Column(String(36), ForeignKey('bibitem.uuid'))
     mag_id = Column(String(36))

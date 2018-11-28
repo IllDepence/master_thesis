@@ -7,10 +7,12 @@
 import datetime
 import json
 import os
+import pysolr
 import re
 import requests
 import sys
 from lxml import etree
+from fuzzywuzzy import fuzz
 from random import shuffle
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -39,6 +41,7 @@ ARXIV_ID_PATT = re.compile(
 NAME_LIST_PATT = re.compile(
    r'^(([A-ZÀ-ÖØ-öø-ÿ].\s+){1,3}[A-ZÀ-ÖØ-öø-ÿ][a-zÀ-ÖØ-öø-ÿ\'-]+(,?\sand|,)\s+)+',
    re.I)
+solr = pysolr.Solr('http://localhost:8983/solr/mag_papers/', timeout=600)
 
 
 def send_query(query, debug=False):
@@ -63,6 +66,23 @@ def send_query(query, debug=False):
         for doc in docs[:10]:
             print('        - {}'.format(doc.get('original_title', '')))
     return docs
+
+
+def send_query_pysolr(title):
+    title = re.sub('[^\w\s\d_]+', ' ', title)
+    title = re.sub('\s+', ' ', title)
+    resp = solr.search('normalized_title:"{}"'.format(title))
+    if len(resp) < 1:
+        cut_resp = []
+        for cutoff in range(1, 6):
+            cut = ' '.join(title.split(' ')[cutoff:])
+            r = solr.search('normalized_title:"{}"'.format(cut))
+            cut_resp.extend(list(r))
+        for cutoff in range(1, 6):
+            cut = ' '.join(title.split(' ')[:-cutoff])
+            r = solr.search('normalized_title:"{}"'.format(cut))
+            cut_resp.extend(list(r))
+    return list(resp)
 
 
 def parscit_get_title(text):
@@ -124,52 +144,33 @@ def clean_by_segments(text_with_delim):
     return clean_title
 
 
-def check_result(bibitem_string, result_doc, debug=False, strict=True):
+def check_result(bibitem_string, result_doc):
     """ For a result doc to pass as fitting require that:
 
-            - the original title is contained in the bibitem string
-                OR
-            - the bibitem string contains most of the original title's words in
-              correct order
+            - the original title is (with some leeway) contained in the bibitem
+              string
     """
 
-    clean_orig = clean(bibitem_string)
-    clean_result_title = clean(result_doc.get('original_title', ''))
+    clean_bibitem_title = clean(bibitem_string)
+    clean_result_title = clean(result_doc.get('original_title', False))
+    if not clean_result_title:
+        return False
     # check for exact title match
-    exact_title = clean_result_title in clean_orig
-    if debug:
-        print('{}\nin\n{}\n→{}'.format(clean_result_title, clean_orig,
-                                       exact_title))
+    exact_title = clean_result_title in clean_bibitem_title
     if exact_title:
         return True
-    if strict:
-        return False
-    needles = clean_result_title.split(' ')
-    haystack = clean_orig.split(' ')
-    found_count = 0
-    correct_order_count = 0
-    last_index = -1
-    for needle in needles:
-        try:
-            index = haystack.index(needle)
-            found_count += 1
-            if index > last_index:
-                correct_order_count += 1
-                last_index = index
-        except ValueError:
-            continue
-    try:
-        found_ratio = found_count / len(needles)
-    except ZeroDivisionError:
-        found_ratio = 0
-    try:
-        order_ratio = correct_order_count / found_count
-    except ZeroDivisionError:
-        order_ratio = 0
-    if debug:
-        print('found ratio: {}\norder ratio: {}'.format(found_ratio,
-                                                        order_ratio))
-    return found_ratio > 0.67 and order_ratio > 0.8
+    sim = 0
+    if len(clean_bibitem_title) < len(clean_result_title):
+        # just match
+        sim = fuzz.ratio(clean_bibitem_title, clean_result_title)
+    else:
+        # sliding window
+        steps = len(clean_bibitem_title) - len(clean_result_title) + 1
+        for shift in range(steps):
+            window = clean_bibitem_title[shift:shift+len(clean_result_title)]
+            window_sim = fuzz.ratio(window, clean_result_title)
+            sim = max(window_sim, sim)
+    return sim > 94
 
 
 def title_query_words_simple(text):
@@ -220,14 +221,30 @@ def match(db_uri=None, in_dir=None):
     num_by_doi = 0
     num_no_title = 0
     bi_total = len(bibitems_db)
+    by_aid_total_time = 0
+    by_aid_total_acc = 0
+    by_doi_total_time = 0
+    by_doi_total_acc = 0
+    by_parscit_total_time = 0
+    by_parscit_total_acc = 0
+    solr_total_time = 0
+    solr_total_acc = 0
+    check_total_time = 0
+    check_total_acc = 0
+    db_total_time = 0
+    db_total_acc = 0
+    db_w_total_time = 0
+    db_w_total_acc = 0
     for bi_idx, bibitem_db in enumerate(bibitems_db):
-        t1 = datetime.datetime.now()
+        if bi_idx%1000 == 0:
+            session.commit()
         text = bibitem_db.bibitem_string
         in_doc = bibitem_db.in_doc
         aid = ARXIV_ID_PATT.search(text)
         arxiv_api_success = False
         if aid:
             try:
+                t1 = datetime.datetime.now()
                 resp = requests.get(
                     '{}{}&start=0&max_results=1'.format(arxiv_base_url, aid))
                 xml_root = etree.fromstring(resp.text.encode('utf-8'))
@@ -238,11 +255,20 @@ def match(db_uri=None, in_dir=None):
                 text_orig = text
                 num_by_aid += 1
                 arxiv_api_success = True
+                t2 = datetime.datetime.now()
+                d = t2 - t1
+                by_aid_total_time += d.total_seconds()
+                by_aid_total_acc += 1
             except:
                 pass
         doi_success = False
+        t1 = datetime.datetime.now()
         bibitemlink_db = session.query(BibitemLinkMap).filter_by(
                                   uuid=bibitem_db.uuid).first()
+        t2 = datetime.datetime.now()
+        d = t2 - t1
+        db_total_time += d.total_seconds()
+        db_total_acc += 1
         given_doi = False
         if bibitemlink_db:
             if 'doi' in bibitemlink_db.link:
@@ -251,6 +277,7 @@ def match(db_uri=None, in_dir=None):
                     given_doi = m.group(0)
         if not arxiv_api_success and given_doi:
             try:
+                t1 = datetime.datetime.now()
                 resp = requests.get(
                         '{}{}'.format(doi_base_url, given_doi),
                         headers=doi_headers)
@@ -261,9 +288,15 @@ def match(db_uri=None, in_dir=None):
                     text_orig = text
                     num_by_doi += 1
                     doi_success = True
+                t2 = datetime.datetime.now()
+                d = t2 - t1
+                by_doi_total_time += d.total_seconds()
+                by_doi_total_acc += 1
+            # except json.decoder.JSONDecodeError:
             except:
                 pass
         if not (arxiv_api_success or doi_success):
+            t1 = datetime.datetime.now()
             text_orig = text.replace('¦', '')
             if 'Phys. Rev.' in text_orig:
                 num_phys_rev += 1
@@ -271,21 +304,34 @@ def match(db_uri=None, in_dir=None):
             # text = remove_name_list(text)
             # text = remove_containing_work(text)
             text = parscit_get_title(text_orig)
+            t2 = datetime.datetime.now()
+            d = t2 - t1
+            by_parscit_total_time += d.total_seconds()
+            by_parscit_total_acc += 1
             if not text:
                 num_no_title += 1
                 continue
 
-        q = title_query_words_simple(text)
-        if not q:
-            continue
-        # print('- - - - - - - - - - - - - - - - -')
-        # print(text)
-        solr_resps = send_query(q)
+        t1 = datetime.datetime.now()
+        # q = title_query_words_simple(text)
+        # if not q:
+        #     continue
+        # solr_resps = send_query(q)
+        solr_resps = send_query_pysolr(text)
+        t2 = datetime.datetime.now()
+        d = t2 - t1
+        solr_total_time += d.total_seconds()
+        solr_total_acc += 1
 
         if solr_resps:
             for resp_idx in range(len(solr_resps)):
+                t1 = datetime.datetime.now()
                 candidate = solr_resps[resp_idx]
                 solr_match = check_result(text_orig, candidate)
+                t2 = datetime.datetime.now()
+                d = t2 - t1
+                check_total_time += d.total_seconds()
+                check_total_acc += 1
                 if solr_match:
                     # print('-> matched at result pos. #{}'.format(resp_idx+1))
                     solr_resp = candidate
@@ -294,7 +340,7 @@ def match(db_uri=None, in_dir=None):
             solr_match = False
             if arxiv_api_success:
                 num_by_aid_fail += 1
-        if not solr_match:
+        if not solr_match and solr_resps and not 'Phys. Rev.' in text_orig:
             solr_resp = False
             # # check fails
             # print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
@@ -315,19 +361,18 @@ def match(db_uri=None, in_dir=None):
             num_matches += 1
             mag_id = solr_resp.get('paper_id', False)
             if mag_id:
+                t1 = datetime.datetime.now()
                 mag_id_db = BibitemMAGIDMap(
                     uuid=bibitem_db.uuid,
                     mag_id=mag_id
                     )
-                # try to add to DB
-                session.begin_nested()
-                try:
-                    session.add(mag_id_db)
-                    session.flush()
-                except IntegrityError:
-                    # duplicate link
-                    session.rollback()
-                session.commit()
+                # add to DB
+                session.add(mag_id_db)
+                session.flush()
+                t2 = datetime.datetime.now()
+                d = t2 - t1
+                db_w_total_time += d.total_seconds()
+                db_w_total_acc += 1
             result_doi = solr_resp.get('doi', False)
             if given_doi and result_doi:
                 num_checked += 1
@@ -336,9 +381,7 @@ def match(db_uri=None, in_dir=None):
                     # print('identified {}'.format(result_doi))
                     # print('but should\'ve been {}'.format(given_doi))
                     # input()
-        t2 = datetime.datetime.now()
-        d = t2 - t1
-        # print('- - - [{}.{} s] - - -'.format(d.seconds, d.microseconds))
+        # print('- - - [{}.{} s] - - -'.format(d.total_seconds(), d.microseconds))
         # print('enter to continue')
         # input()
         print('- - - - - - - - - - - - - - - - -')
@@ -351,7 +394,21 @@ def match(db_uri=None, in_dir=None):
         print('by arXiv ID: {}'.format(num_by_aid))
         print('by arXiv ID fail: {}'.format(num_by_aid_fail))
         print('by doi: {}'.format(num_by_doi))
+        print('>>> avg time aID: {:.2f}'.format(by_aid_total_time/max(by_aid_total_acc, 1)))
+        print('>>> avg time DOI: {:.2f}'.format(by_doi_total_time/max(by_doi_total_acc, 1)))
+        print('>>> avg time ParsCit: {:.2f}'.format(by_parscit_total_time/max(by_parscit_total_acc, 1)))
+        print('>>> avg time Solr: {:.2f}'.format(solr_total_time/max(solr_total_acc, 1)))
+        print('>>> avg time check: {:.2f}'.format(check_total_time/max(check_total_acc, 1)))
+        print('>>> avg time DB r: {:.2f}'.format(db_total_time/max(db_total_acc, 1)))
+        print('>>> avg time DB w: {:.2f}'.format(db_w_total_time/max(db_w_total_acc, 1)))
     session.commit()
+    print('>>> time aID: {:.2f}'.format(by_aid_total_time))
+    print('>>> time DOI: {:.2f}'.format(by_doi_total_time))
+    print('>>> time ParsCit: {:.2f}'.format(by_parscit_total_time))
+    print('>>> time Solr: {:.2f}'.format(solr_total_time))
+    print('>>> time check: {:.2f}'.format(check_total_time))
+    print('>>> time DB r: {:.2f}'.format(db_total_time))
+    print('>>> time DB w: {:.2f}'.format(db_w_total_time))
 
 
 if __name__ == '__main__':

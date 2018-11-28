@@ -43,12 +43,12 @@ def sent_pos(in_dir):
             continue
         with open(path) as f:
             text = f.read()
-        annot_fn = '{}_annot.json'.format(aid)
-        annot_path = os.path.join(in_dir, annot_fn)
-        if not os.path.isfile(annot_path):
-            continue
-        with open(annot_path) as f:
-            annots = json.load(f)
+        # annot_fn = '{}_annot.json'.format(aid)
+        # annot_path = os.path.join(in_dir, annot_fn)
+        # if not os.path.isfile(annot_path):
+        #     continue
+        # with open(annot_path) as f:
+        #     annots = json.load(f)
 
         marker = ' \u241F '
         doc_len = len(text)
@@ -58,16 +58,16 @@ def sent_pos(in_dir):
             sentence = re.sub(CITE_MULTI_PATT, marker, sentence_orig)
             sentence = re.sub(QUOTE_PATT, ' {}.'.format(marker), sentence)
             # determine contained annotations
-            annotated_words = []
-            for annot in annots:
-                start = annot[0]
-                end = annot[1]
-                dbp_id = annot[2]
-                annot_len = end - start
-                in_sent_idx = start - sent_idx
-                if start >= sent_idx and end <= sent_edx:
-                    disp = sentence_orig[in_sent_idx:in_sent_idx+annot_len]
-                    annotated_words.append(disp)
+            # annotated_words = []
+            # for annot in annots:
+            #     start = annot[0]
+            #     end = annot[1]
+            #     dbp_id = annot[2]
+            #     annot_len = end - start
+            #     in_sent_idx = start - sent_idx
+            #     if start >= sent_idx and end <= sent_edx:
+            #         disp = sentence_orig[in_sent_idx:in_sent_idx+annot_len]
+            #         annotated_words.append(disp)
             if marker in sentence:
                 doc_pos = 1 - (sent_idx/doc_len)
                 buck_y_idx = math.floor(doc_pos*10)
@@ -96,15 +96,15 @@ def sent_pos(in_dir):
                     #       words[word_idx-2][1] in ['NNP', 'NNPS'])):
 
                     # if word == marker.strip() and \
+                    #     (word_idx > 0 and \
+                    #      words[word_idx-1][0] in annotated_words and \
+                    #      words[word_idx-1][1] in ['NNP', 'NNPS']):
+
+                    # if word == marker.strip() and \
                     #     word_idx+1 < len(words) and \
                     #     'VB' in words[word_idx+1][1]:
 
-                    # if word == marker.strip():
-
-                    if word == marker.strip() and \
-                        (word_idx > 0 and \
-                         words[word_idx-1][0] in annotated_words and \
-                         words[word_idx-1][1] in ['NNP', 'NNPS']):
+                    if word == marker.strip():
                         # print(words)
                         # print('doc pos:  {}'.format((sent_idx/doc_len)))
                         # print('sent pos: {}/{}'.format((word_idx+1),sent_len))
@@ -146,6 +146,18 @@ def sent_pos(in_dir):
     print('normalized row distributions:')
     for line in buckets:
         print(' '.join(['{:.2f}'.format(x/sum(line)) for x in line]))
+
+    plt.xlabel('citation marker position in sentence')
+    plt.ylabel('sentence position in document')
+
+    heatmap, xedges, yedges = np.histogram2d(x, y, bins=(50))
+    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+    plt.imshow(heatmap.T, extent=extent, origin='lower', norm=LogNorm())
+    # plt.imshow(heatmap.T, extent=extent, origin='lower')
+    plt.colorbar()
+    plt.show()
+
+    plt.clf()
 
     plt.xlabel('citation marker position in sentence')
     plt.ylabel('sentence position in document')

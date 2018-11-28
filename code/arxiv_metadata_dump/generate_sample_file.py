@@ -9,6 +9,7 @@ from lxml import etree
 from random import shuffle
 
 FRACTION = 100
+# TODO: add research field switch
 
 ns = {'oai':'http://www.openarchives.org/OAI/2.0/',
       'dc':'http://purl.org/dc/elements/1.1/',

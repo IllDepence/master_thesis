@@ -1,0 +1,191 @@
+manually checked: 25
+  tot  perc  | of 5%
+O: 19   76%  |  3.8%
+△:  4   16%  |  0.8%
+Σ  23   92%  |
+             |
+X:  2    8%  |  0.4%
+
+notes
+- quite some falsely marked b/c evaluated case sensitive
+- some DOIs linking to an identical URL
+- few identical in different context or close derivative content by same auth.
+- very few actually wrong
+
+O- - - - - - - - - - - - - -
+orig (10.1126/science.1187949): J. A. Fan, C. Wu, K. Bao, J. Bao, R. Bardhan, N. J. Halas, V. N. Manoharan, P. Nordlander, G. Shvets, and F. Capasso, ¦Science ¦328, 1135 (2010).
+matched (10.1364/QELS.2010.QFC3): Self-assembled plasmonic nanoparticle clusters
+O- - - - - - - - - - - - - -
+orig (10.1017/S0022112094002867): S. Oughton, E. R. Priest, and W. H. Matthaeus, ¦J. Fluid Mech. ¦280, 95 (1994).
+matched (10.1017/s0022112094002867): The influence of a mean magnetic field on three- dimensional magnetohydrodynamic turbulence
+O- - - - - - - - - - - - - -
+orig (10.1103/physreva.52.1394): I. H. Deutsch, R. J. C. Spreeuw, S. L. Rolston, and W. D. Phillips, ¦Phys. Rev. A ¦52, 1394 (1995).
+matched (10.1103/PhysRevA.52.1394): Photonic band gaps in optical lattices
+O- - - - - - - - - - - - - -
+orig (10.1088/1674-1137/38/9/090001): K. A. Olive ¦et al.¦ (Particle Data Group), ¦Chin. Phys. ¦C38, 090001 ((2014) and 2015 update).
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+O- - - - - - - - - - - - - -
+orig (10.1016/0921-5093(89)90083-X): R. Birringer, ¦Mater. Sci. Eng. A ¦117, 33 (1989).
+matched (10.1016/B978-0-08-034724-0.50077-9): N – Nanocrystalline Materials
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRev.139.A1163): Y. B. Kim, C. F. Hempstead, and A. R. Strnad, Phys. Rev. ¦139¦, A1163 (1965), URL ¦http://¦link.aps.org/doi/10.1103/PhysRev.139.A1163.
+matched (10.1016/0038-1098(88)90916-7): Flux-flow resistance in type-II superconductors
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevLett.104.133601): W. Wasilewski, K. Jensen, H. Krauter, J. J. Renema, M. V. Balabas, and E. S. Polzik, ¦Phys. Rev. Lett. ¦104, 133601 (2010).
+matched (10.1364/QELS.2010.QThN6): Quantum noise limited and entanglement-assisted magnetometry
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.74.063806): I. S. Grudinin, V. S. Ilchenko, and L. Maleki, ¦Phys. Rev. A ¦74, 063806 (2006).
+matched (10.1103/PHYSREVA.74.063806): Ultrahigh optical Q factors of crystalline resonators in the linear regime
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevD.86.010001): Beringer, J. ¦et al.¦ Review of Particle Physics. ¦Physical Review D¦ ¦86¦ (2012). URL ¦http://¦dx.doi.org/10.1103/PhysRevD.86.010001.
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevC.75.041001): H. R. Amir-Ahmadi ¦et al.¦, ¦Phys. Rev. C ¦75, 041001 (2007).
+matched (10.1103/Phys-RevC.75.041001): Three nucleon force effects in cross section and spin observables of elastic deuteron proton scattering at 90 MeV / nucleon
+O- - - - - - - - - - - - - -
+orig (10.1007/978-3-540-24688-6_110): Z. Yuan, W. Cai, M. Low, S. Turner, Federate Migration in HLA-based Simulation, in: M. Bubak, G. Albada, P. Sloot, J. Dongarra (Eds.), Computational Science - ICCS 2004, Vol. 3038 of Lecture Notes in Computer Science, Springer Berlin Heidelberg, 2004, pp. 856–864. ¦doi:10.1007/978-3-540-24688-6110¦.
+matched (10.1016/j.future.2004.09.019): Federate migration in HLA-based simulation
+O- - - - - - - - - - - - - -
+orig (10.1023/A:1026654312961): J. M. Maldacena, “The Large N limit of superconformal field theories and supergravity,” ¦Int. J. Theor. Phys. ¦38, 1113 (1999) [Adv. Theor. Math. Phys. ¦2¦, 231 (1998)] [¦hep-th/9711200¦].
+matched (10.1063/1.59653): The large N limit of superconformal field theories and supergravity
+O- - - - - - - - - - - - - -
+orig (10.1146/annurev.ns.10.120160.000431): K. Greisen, Cosmic Ray Showers, Annual Review of Nuclear Science 10 (1) (1960) 63–108. ¦doi:10.1146/annurev.ns.10.120160.000431¦.
+matched (10.1007/978-3-540-85148-6_8): Cosmic ray showers
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevLett.111.193602): authorLiscidini, M. & authorSipe, J.~E. titleStimulated Emission Tomography. ¦journalPhysical Review Letters¦ ¦volume111¦, pages193602 (year2013). ¦http://¦link.aps.org/doi/10.1103/PhysRevLett.111.193602.
+matched (10.1364/CLEO_QELS.2014.FTh4A.8): Stimulated Emission Tomography
+△(same paper, different containing work)- - - - - - - - - - - - - -
+orig (10.1002/j.1538-7305.1948.tb01338.x): C. E. Shannon, ¦Bell Syst. Tech. J. ¦27, 379 (1948).
+matched (10.1109/9780470544242.ch1): A Mathematical Theory of Communication
+O- - - - - - - - - - - - - -
+orig (10.1090/s0025-5718-1970-0274029-x): D. F. Shanno, ¦Math. Comp. ¦24, 647–647 (1970).
+matched (10.1090/S0025-5718-1970-0274029-X): Conditioning of Quasi-Newton Methods for Function Minimization
+O- - - - - - - - - - - - - -
+orig (10.1128/JB.165.3.978-986.1986): R. Benz, A. Schmid, T. Nakae, and G. H. Vos-Scheperkeuter, ¦Journal of bacteriology ¦165, 978 (1986).
+matched (10.1128/jb.165.3.978-986.1986): Pore formation by LamB of Escherichia coli in lipid bilayer membranes.
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.83.062512): A. Makmal, S. Kümmel, and L. Kronik, ¦Phys. Rev. A ¦83, 062512 (2011).
+matched (10.1103/PHYSREVA.83.062512): Dissociation of diatomic molecules and the exact-exchange Kohn-Sham potential: The case of LiF
+X(identical title, almost identical abstract, overlapping author but different year)- - - - - - - - - - - - - -
+orig (10.1088/0954-3899/37/7A/075021): K. Nakamura ¦et al.¦ (Particle Data Group), ¦J.Phys.G¦ ¦G37¦, 075021 (2010)
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+O- - - - - - - - - - - - - -
+orig (10.1143/PTP.37.831): K. Tomita, Prog. of Theoret. Phys. 37, 831 (1967) .
+matched (10.1143/PTP.47.416): Non-Linear Theory of Gravitational Instability in the Expanding Universe. III
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.84.013818): E.-M. Graefe and H. F. Jones, ¦Phys. Rev. A ¦84, 013818 (2011).
+matched (10.1103/PHYSREVA.84.013818): PT-Symmetric Sinusoidal Optical Lattices at the Symmetry-Breaking Threshold
+X(identical title, different paper)- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.47.5138): M. Kitagawa and M. Ueda, ¦Phys. Rev. A ¦47, 5138 (1993).
+matched (10.1063/1.449838): Squeezed spin states
+△(same paper, different containing work)- - - - - - - - - - - - - -
+orig (10.1007/978-3-642-12032-9_21): T. Altenkirch, J. Chapman & T. Uustalu (2010): ¦Monads need not be endofunctors¦. In L. Ong, ed.: ¦Proc. of 13th Int. Conf. on Foundations of Software Science and Computation Structures, FoSSaCS 2010 (Paphos, March 2010)¦, ¦Lect. Notes in Comput. Sci.¦ 6014, Springer, 2010, pp. 297–311, ¦doi: 10.1007/978-3-642-12032-9_21¦.
+matched (10.2168/LMCS-11(1:3)2015): Monads need not be endofunctors
+- - - - - - - - - - - - - -
+△(summary of actual publication)orig (10.1146/annurev.astro.46.060407.145222): Asplund M., Grevesse N., Sauval A. J., Scott P., 2009, ¦ARA&A¦,
+matched (10.1007/s10509-010-0288-z): The chemical composition of the Sun
+- - - - - - - - - - - - - -
+△(identical title, overlapping author, similar content)orig (10.1063/1.2126792): D. Stucki, N. Brunner, N. Gisin, V. Scarani, and H. Zbinden, ¦Appl. Phys. Lett. ¦87, 194108 (2005).
+matched (10.1049/ic:20050583): Fast and simple one-way quantum key distribution
+O- - - - - - - - - - - - - -
+orig (10.1103/PhysRevC.67.054903): T. Lappi, ¦Phys. Rev. ¦C67, 054903 (2003).
+matched (10.1103/physrevc.67.054903): Production of gluons in the classical field model for heavy ion collisions
+- - - - - - - - - - - - - -
+orig (10.1088/0954-3899/37/7A/075021): K. Nakamura ¦et al.¦ (Particle Data Group), ¦J. Phys. G ¦37, 075021 (2010) and 2011 partial update for the 2012 edition.
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevD.86.010001): J. Beringer ¦et al.¦ (Particle Data Group), ¦Phys.Rev. ¦D86, 010001 (2012).
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+- - - - - - - - - - - - - -
+orig (10.3386/w21868): A. B. Jaffe and G. de Rassenfosse, Patent Citation Data in Social Science Research: Overview and Best Practices, Working Paper 21868 (National Bureau of Economic Research, 2016).
+matched (10.1002/asi.23731): Patent Citation Data in Social Science Research: Overview and Best Practices
+- - - - - - - - - - - - - -
+orig (10.1086/147083): R. W. Michie, ¦Astrophys. J. ¦133, 781 (1961).
+matched (10.1086/108494): Structure and Evolution of Globular Clusters.
+- - - - - - - - - - - - - -
+orig (10.1109/LICS.1991.151646): Dexter Kozen (1991): ¦A Completeness Theorem for Kleene Algebras and the Algebra of Regular Events¦. In: ¦LICS¦, IEEE Computer Society, pp. 214–225, doi:¦10.1109/LICS.1991.151646¦.
+matched (10.1006/inco.1994.1037): A completeness theorem for Kleene algebras and the algebra of regular events
+- - - - - - - - - - - - - -
+orig (10.2307/1997003): D. Niebur, “Construction of automorphic forms and integrals,” Trans. Am. Math. Soc. 191 (1974) 373–385.
+matched (10.1090/S0002-9947-1974-0344196-8): Construction of automorphic forms and integrals
+- - - - - - - - - - - - - -
+orig (10.1016/S0550-3213(97)00157-0): A. Hanany and E. Witten, “Type IIB superstrings, BPS monopoles, and three-dimensional gauge dynamics,” Nucl.Phys. B492 (1997) 152–190, hep-th/9611230.
+matched (10.1016/S0550-3213(97)80030-2): Type IIB superstrings, BPS monopoles, and three-dimensional gauge dynamics
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.82.033605): D. Baillie and P. B. Blakie, ¦Phys. Rev. A ¦82, 033605 (2010).
+matched (10.1103/PHYSREVA.82.033605): Thermodynamics and coherence of a trapped dipolar Fermi gas
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevLett.66.2697): F. W. Stecker, C. Done, M. H. Salamon, and P. Sommers, ¦Phys. Rev. Lett. ¦66, 2697 (1991), [Erratum: Phys. Rev. Lett.69,2738(1992)].
+matched (10.1016/0920-5632(94)00770-V): High energy neutrinos from active galactic nuclei
+- - - - - - - - - - - - - -
+orig (10.1023/A:1026171312755): W. van der Hoek, M. Wooldridge, Cooperation, knowledge, and time: Alternating-time temporal epistemic logic and its applications, Studia Logica 75 (1) (2003) 125–157. ¦doi:10.1023/A:1026171312755¦.
+matched (10.1023/A:1026185103185): Cooperation, knowledge, and time: Alternating-time temporal epistemic logic and its applications
+- - - - - - - - - - - - - -
+orig (10.1016/S0378-4371(98)00501-9): D. Frenkel, ¦Physica A: Statistical Mechanics and its Applications ¦263, 26 (1999).
+matched (10.1063/1.168596): Entropy-driven phase transitions
+- - - - - - - - - - - - - -
+orig (10.1103/physrevb.59.1758): G. Kresse, ¦Phys. Rev. B ¦59, 1758–1775 (1999).
+matched (10.1103/PhysRevB.59.1758): From ultrasoft pseudopotentials to the projector augmented-wave method
+- - - - - - - - - - - - - -
+orig (10.1103/physreva.84.051801): C. Genes, H. Ritsch, M. Drewsen, and A. Dantan, ¦Phys. Rev. A ¦84, 051801 (2011).
+matched (10.1103/PhysRevA.84.051801): Atom-membrane cooling and entanglement using cavity electromagnetically induced transparency
+- - - - - - - - - - - - - -
+orig (10.1061/(asce)1090-0241(2001)127:1(67)): C. H. Benson and B. A. Albrecht, ¦Journal of Geotechnical and Geoenvironmental Engineering ¦127, 67 (2001).
+matched (10.1061/(ASCE)1090-0241(2001)127:1(67): Effect of Desiccation on Compacted Natural Clays
+- - - - - - - - - - - - - -
+orig (10.1103/physreva.70.022501): S. Liu and P. W. Ayers, “Functional derivative of noninteracting kinetic energy density functional,” ¦Phys. Rev. A ¦70 (2004), 10.1103/physreva.70.022501.
+matched (10.1103/PhysRevA.70.022501): Functional derivative of noninteracting kinetic energy density functional
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevD.86.010001): J. Beringer et al., ¦Review of Particle Physics¦, Phys. Rev. D 86 (2012) 010001.
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+- - - - - - - - - - - - - -
+orig (10.1016/j.crhy.2011.02.005): J. Restrepo, J. Gabelli, C. Ciuti, and I. Favero, ¦C.R. Phys. ¦12, 860 (2011).
+matched (10.1109/CLEOE.2011.5943690): Classical and quantum theory of photothermal cavity cooling of a mechanical oscillator
+- - - - - - - - - - - - - -
+orig (10.1201/9781420035315.pt2): ¦M. Henk, J. Richter-Gebert, and G. M. Ziegler¦, ¦Basic properties of convex polytopes¦, in Handbook of discrete and computational geometry, Discrete Mathematics and its Applications, Chapman & Hall/CRC, second ed., 2004, pp. 355–382, ¦doi:10.1201/9781420035315.pt2¦.
+matched (10.1201/9781420035315.ch16): Basic properties of convex polytopes
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRev.127.1391): G. Baym, ¦Phys. Rev. ¦127, 1391 (1962).
+matched (10.1063/1.1704293): Self‐Consistent Approximations in Many‐Body Systems
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevX.5.021026): C. Senko, P. Richerme, J. Smith, A. Lee, I. Cohen, A. Retzker, and C. Monroe, ¦Phys. Rev. X ¦5, 021026 (2015).
+matched (10.13016/M2PN8XF89): Realization of a Quantum Integer-Spin Chain with Controllable Interactions
+- - - - - - - - - - - - - -
+orig (10.1103/physrevlett.75.2823): G. Birkl, M. Gatzke, I. H. Deutsch, S. L. Rolston, and W. D. Phillips, ¦Phys. Rev. Lett. ¦75, 2823 (1995).
+matched (10.1103/PhysRevLett.75.2823): Bragg scattering from atoms in optical lattices.
+- - - - - - - - - - - - - -
+orig (10.1086/143324): S. Chandrasekhar, ¦Astrophys. J. ¦74, 81 (1931).
+matched (10.1007/BF03012171): The maximum mass of ideal white dwarfs
+- - - - - - - - - - - - - -
+orig (10.1088/0954-3899/37/7A/075021): K. Nakamura ¦et al.¦ (Particle Data Group), ¦J. Phys.¦ ¦G37¦, 075021 (2010), ¦http://¦pdg.lbl.gov
+matched (10.1016/j.physletb.2008.07.018): Review of particle physics
+- - - - - - - - - - - - - -
+orig (10.1007/bf01589116): D. C. Liu and J. Nocedal, ¦Math. Prog. ¦45, 503–528 (1989).
+matched (10.1007/BF01589116): On the limited memory BFGS method for large scale optimization
+- - - - - - - - - - - - - -
+orig (10.2307/1999405): P. Erdös and A. Rényi, ¦Publicationes Mathematicae ¦6, 290 (1959).
+matched (10.1090/S0002-9947-1984-0756039-5): The evolution of random graphs
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevLett.63.903): D. H. Lee and M. P. A. Fisher, “Anyon superconductivity and the fractional quantum Hall effect,” Phys. Rev. Lett. 63 (1989) 903–906.
+matched (10.1142/S0217979291001607): Anyon Superconductivity and the Fractional Quantum-Hall Effect
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.82.043429): K. Pandey, K. D. Rathod, A. K. Singh, and V. Natarajan, Phys. Rev. A ¦82¦, 043429 (2010a), URL ¦http://¦link.aps.org/doi/10.1103/PhysRevA.82.043429.
+matched (10.1103/PHYSREVA.82.043429): Atomic fountain of laser-cooled Yb atoms for precision measurements
+- - - - - - - - - - - - - -
+orig (10.1103/physrevb.80.245120): V. V. Karasiev, R. S. Jones, S. B. Trickey, and F. E. Harris, “Properties of constraint-based single-point approximate kinetic energy functionals,” ¦Phys. Rev. B ¦80 (2009), 10.1103/physrevb.80.245120.
+matched (10.1103/PhysRevB.80.245120): Properties of constraint-based single-point approximate kinetic energy functionals
+- - - - - - - - - - - - - -
+orig (10.1103/RevModPhys.81.865): R. Horodecki, P. Horodecki, M. Horodecki, and K. Horodecki, ¦Rev. Mod. Phys. ¦81, 865 (2009).
+matched (10.1016/S0262-4079(16)30765-5): 4. Quantum entanglement
+- - - - - - - - - - - - - -
+orig (10.1103/physreva.82.061602): M.-K. Zhou, Z.-K. Hu, X.-C. Duan, B.-L. Sun, J.-B. Zhao, and J. Luo, ¦Phys. Rev. A ¦82, 061602 (2010).
+matched (10.1103/PHYSREVA.82.061602): Precisely mapping the magnetic field gradient in vacuum with an atom interferometer
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevA.7.1195): G. S. Agarwal, ¦Physical Review A ¦7, 1195 (1973).
+matched (10.1103/PhysRevA.4.1778): ROTATING-WAVE APPROXIMATION AND SPONTANEOUS EMISSION.
+- - - - - - - - - - - - - -
+orig (10.1109/WSC.1999.816898): W. J. Davis, G. L. Moeller, The High Level Architecture: is There a Better Way?, in: Proceedings of the 31st Conference on Winter Simulation: Simulation—a Bridge to the Future - Volume 2, WSC '99, ACM, New York, NY, USA, 1999, pp. 1595–1601. ¦doi:10.1109/WSC.1999.816898¦.
+matched (10.1145/324898.325337): The high level architecture: is there a better way?
+- - - - - - - - - - - - - -
+orig (10.1103/PhysRevLett.52.997): E. Runge and E. K. U. Gross, ¦Phys. Rev. Lett. ¦52, 997 (1984).
+matched (10.1007/978-1-4757-9975-0_7): Density-Functional Theory for Time-Dependent Systems

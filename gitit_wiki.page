@@ -11,6 +11,17 @@
     * [k4nn](https://arxiv.org/abs/1802.08301), "
 
 ### recent notes
+* marker surroundings more like patterns (find top 10 (-3, 3)) e.g. NN V NN [] <EOS> <EOS> <EOS>
+* NEL precision (also recall) manual check (any concepts missing in FoS?)
+    * also manually look into position of MAG FoS annotations in relation to citations markers
+    * how should the FoS representation look like? (!!!) -> answer: how will MAG FoS annotations be incorporated in approach?
+* false positive recheck?
+* how frequent are cases like "ImageNet []"?
+* also: MAG postgresql DB set up: try to use
+* also, for all above, look into using MAG citation contexts
+
+---
+
 * heatmap 引き続き
     * commonness/frequency of pos tags/pos pattern (e.g. is "proper noun [] verb" common)
     * heatmap per discipline

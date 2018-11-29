@@ -470,13 +470,13 @@ sqlite> select count(*) from bibitemarxividmap;
 * e.g. `$ curl 'localhost:8983/solr/mag_papers/select?q=original_title:Buda%2BMaki%2Band%2BMazurowski%2Bsystematic%2Bstudy%2Bthe%2Bclass%2Bimbalance%2B...'`
     * fields of interest: `paper_id`, `normalized_title`, `original_title`, `publication_year`, `citation_count`, `estimated_citation_count`, (`doi`)
     * for authors: `mag_paper_author_affiliations/select?q=paper_id:` → `author_id`, `mag_authors/select?q=author_id:` → `display_name` / `normalized_name`
-* strict title matching
+* strict title matching **50.9%**
     ```
     $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/all_text/
     - - - - - - - - - - - - - - - - -
     312534/312536
     matches: 159201
-    checked: 35876
+    checked: 35876          ← wrong, actually 22092 (or even fewer, check +ParsCit result)
     false negatives: 22141
     false positives: 1102
     
@@ -484,13 +484,13 @@ sqlite> select count(*) from bibitemarxividmap;
     user    42m41.461s
     sys     3m40.510s
     ```
-* +filtering Proceedings/Transactions/etc. *segments*
+* +filtering Proceedings/Transactions/etc. *segments* **51.3%**
     ```
     $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/all_text/
     - - - - - - - - - - - - - - - - -
     312535/312536
     matches: 160350
-    checked: 35875
+    checked: 35875          ← wrong, actually 22092 (or even fewer, check +ParsCit result)
     false negatives: 22183
     false positives: 1043
     DOI rebounds: 259
@@ -499,13 +499,13 @@ sqlite> select count(*) from bibitemarxividmap;
     user    37m37.951s
     sys     3m37.655s
     ```
-* +name list filtering, +arXiv URL usage
+* +name list filtering, +arXiv ID usage **57.3%**
     ```
     $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/all_text/
     - - - - - - - - - - - - - - - - -
     312536/312536
     matches: 179107
-    checked: 35876
+    checked: 35876          ← wrong, actually 22092 (or even fewer, check +ParsCit result)
     false negatives: 16616
     #Phys. Rev.: 36382
     false positives: 843
@@ -517,14 +517,102 @@ sqlite> select count(*) from bibitemarxividmap;
     user    35m8.912s
     sys     4m7.753s
     ```
-* **summary so far**:
-    * arxiv: 19% (0.009% fp)
-    * mag: 50.9% (3% fp), 18h
-    * mag+: 51.3% (2.9% fp), 23h
-    * mag++: 57.3% (2.3% fp), 25h
-* TODO
-    * check DOI rebounds
-    * name pattern? `S. Reed, Z. Akata, S. Mohan, S. Tenka, B. Schiele, and H. Lee`, also just (`x and y`), also double initials (`x. y. foo`) etc.
+* +DOI ID usage **61.5%**
+    ```
+    $ python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/all_text/
+    - - - - - - - - - - - - - - - - -
+    312536/312536
+    matches: 192056
+    checked: 22092
+    #Phys. Rev.: 26867
+    false positives: 1344
+    by arXiv ID: 35799
+    by arXiv ID fail: 0
+    by doi: 26230
+    ```
+* +ParsCit (cancelled b/c time) **52%**
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/parscit_test/
+    - - - - - - - - - - - - - - - - -
+    123166/312536
+    matches: 64123
+    checked: 7496
+    Phys. Rev.: 10467
+    no title: 29034
+    false positives: 422
+    by arXiv ID: 13939
+    by arXiv ID fail: 0
+    by doi: 10348
+    
+    real    2985m14.393s
+    user    21m10.869s
+    sys     2m21.369s
+    ```
+* +sliding window fuzzy matching (cancelled b/c time) **54.8%**
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/parscit_and_fuzzy_window_test/
+    - - - - - - - - - - - - - - - - -
+    113486/312536
+    matches: 62246
+    checked: 7557
+    Phys. Rev.: 9768
+    no title: 26604
+    false positives: 421
+    by arXiv ID: 13103
+    by arXiv ID fail: 0
+    by doi: 9600
+    
+    real    2774m1.938s
+    user    20m48.099s
+    sys     2m15.738s
+    ```
+* full phrase queries etc. for speedup **53.7%**
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_2017_12_all_181116/solr_phrase_query_test/
+    312536/312536
+    matches: 168063
+    checked: 22434
+    Phys. Rev.: 26867
+    no title: 73304         <- (!!!) if all resolvable 77%
+    false positives: 1158
+    by arXiv ID: 35798
+    by arXiv ID fail: 0
+    by doi: 26230
+    >>> avg time aID: 0.44
+    >>> avg time DOI: 0.52
+    >>> avg time ParsCit: 0.05
+    >>> avg time Solr: 0.06
+    >>> avg time check: 0.00
+    >>> avg time DB r: 0.00
+    >>> avg time DB w: 0.00
+    >>> time aID: 15899.40         4.5h
+    >>> time DOI: 13764.04         3.5h
+    >>> time ParsCit: 11630.38     3.2h
+    >>> time Solr: 14447.63        4.0h
+    >>> time check: 48.72
+    >>> time DB r: 500.97
+    >>> time DB w: 210.44
+    
+    real    963m6.286s            16h    (→ full arXiv in ~48d)
+    user    95m50.464s
+    sys     6m36.414s
+    ```
+    * ↑ manual check of 5% false positives
+        ```
+        manually checked: 25
+          tot  perc  | of 5%
+        O: 19   76%  |  3.8%
+        △:  4   16%  |  8.8%
+        Σ  23   92%  |
+                     |
+        X:  2    8%  |  0.4%
+        
+        notes
+        - quite some falsely marked b/c evaluated case sensitive
+        - some DOIs linking to an identical URL
+        - few identical in different context or close derivative content by same auth.
+        - very few actually wrong
+        ```
 * problems:
     * phys rev's
     * bibitems without title
@@ -542,7 +630,8 @@ sqlite> select count(*) from bibitemarxividmap;
         * MAG: "Robust determination of maximally-localized Wannier functions"
     * MAG noise:
         * *Pascual Jordan: Schwerkraft und Weltall, Vieweg and Sohn, Braunschweig(1952), VII+207p. 1,680円*
-
+    * non citations
+        * *According to the numerous discussions with my colleagues D. Fischer and P. Mokler an experimental verification of our theoretical predictions is feasible.* (in 1305.0417)
 
 ##### experiments
 
@@ -617,7 +706,7 @@ false negatives: 10110
 false positives: 188
 ```
 
-##### 1991-2017 dump sample (per month per field ~1%) (25.971 docs)
+##### 1991-2017 dump sample (per month per field ~1%) (14.262 docs)
 
 * on shetland
 * w/ sqlite DB (probably not the most performant) 
@@ -628,22 +717,9 @@ false positives: 188
     user    68m19.553s
     sys     14m26.658s
     ```
-* cancelled matching run w/ arXiv/MAG ID use *but* w/o parscit
+* matching
     ```
-    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample/non_neural_test/
-    - - - - - - - - - - - - - - - - -
-    254138/733361
-    matches: 94807          ← 37.3%
-    checked: 7467
-    #Phys. Rev.: 41687
-    false positives: 447    ← 5.9% (!!!)
-    by arXiv ID: 24462
-    by arXiv ID fail: 0
-    by doi: 8917
-    
-    real    1067m24.145s    ← 0.25s/bibitem
-    user    30m38.129s
-    sys     3m23.336s
+    TODO
     ```
 
 ### citation recommendation baseline

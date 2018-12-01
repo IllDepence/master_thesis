@@ -14,9 +14,10 @@ import sys
 from lxml import etree
 from fuzzywuzzy import fuzz
 from random import shuffle
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, Column, Integer, String, UnicodeText
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.declarative import declarative_base
 from db_model import (Base, Bibitem, BibitemArxivIDMap, BibitemMAGIDMap,
                       BibitemLinkMap)
 
@@ -34,10 +35,10 @@ ARXIV_URL_PATT_END = re.compile(
     r'arxiv\.org\/[a-z0-9-]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?$)',
     re.I)
 ARXIV_URL_PATT = re.compile(
-    r'arxiv\.org\/[a-z0-9-]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?)',
+    r'arxiv\.org\/[a-z0-9-]{1,10}\/(([a-z0-9-]{1,15}\/)?[\d\.]{4,9}\d)',
     re.I)
 ARXIV_ID_PATT = re.compile(
-    r'arXiv:(([a-z0-9-]{1,15}\/)?[\d\.]{5,10}(v\d)?)', re.I)
+    r'arXiv:(([a-z0-9-]{1,15}\/)?[\d\.]{4,9}\d)', re.I)
 NAME_LIST_PATT = re.compile(
    r'^(([A-ZÀ-ÖØ-öø-ÿ].\s+){1,3}[A-ZÀ-ÖØ-öø-ÿ][a-zÀ-ÖØ-öø-ÿ\'-]+(,?\sand|,)\s+)+',
    re.I)
@@ -85,20 +86,29 @@ def send_query_pysolr(title):
     return list(resp)
 
 
-def parscit_get_title(text):
+def parscit_parse(text):
     url = 'http://localhost:8000/parscit/parse'
     ret = requests.post(url, json={'string':text})
     if ret.status_code != 200:
-        return False
+        return False, False
     response = json.loads(ret.text)
     parsed_terms = response['data']
     title_terms = []
+    journal_terms = []
     for parsed_term in parsed_terms:
         if parsed_term['entity'] == 'title':
             title_terms.append(parsed_term['term'])
+        elif parsed_term['entity'] == 'journal':
+            journal_terms.append(parsed_term['term'])
     if len(title_terms) == 0:
-        return False
-    return ' '.join(title_terms)
+        title = False
+    else:
+        title = ' '.join(title_terms)
+    if len(journal_terms) == 0:
+        journal = False
+    else:
+        journal = ' '.join(journal_terms)
+    return title, journal
 
 
 def clean(s):
@@ -204,6 +214,23 @@ def match(db_uri=None, in_dir=None):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    # set up arXiv ID DB
+    AIDBase = declarative_base()
+
+    class Paper(AIDBase):
+        __tablename__ = 'paper'
+        id = Column(Integer(), autoincrement=True, primary_key=True)
+        aid = Column(String(36))
+        title = Column(UnicodeText())
+
+    aid_db_uri = 'sqlite:///aid_title.db'
+    aid_engine = create_engine(aid_db_uri)
+    AIDBase.metadata.create_all(aid_engine)
+    AIDBase.metadata.bind = aid_engine
+    AIDDBSession = sessionmaker(bind=aid_engine)
+    aid_session = AIDDBSession()
+    # /set up arXiv ID DB
+
     arxiv_base_url = 'http://export.arxiv.org/api/query?search_query=id:'
     arxiv_ns = {'atom': 'http://www.w3.org/2005/Atom',
                 'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
@@ -219,6 +246,7 @@ def match(db_uri=None, in_dir=None):
     num_by_aid = 0
     num_by_aid_fail = 0
     num_by_doi = 0
+    num_by_doi_fail = 0
     num_no_title = 0
     bi_total = len(bibitems_db)
     by_aid_total_time = 0
@@ -240,28 +268,31 @@ def match(db_uri=None, in_dir=None):
             session.commit()
         text = bibitem_db.bibitem_string
         in_doc = bibitem_db.in_doc
-        aid = ARXIV_ID_PATT.search(text)
-        arxiv_api_success = False
+        aid = find_arxiv_id(text)
+        arxiv_id_success = False
         if aid:
-            try:
-                t1 = datetime.datetime.now()
-                resp = requests.get(
-                    '{}{}&start=0&max_results=1'.format(arxiv_base_url, aid))
-                xml_root = etree.fromstring(resp.text.encode('utf-8'))
-                result_elems = xml_root.xpath('/atom:feed/atom:entry',
-                                              namespaces=arxiv_ns)
-                result = result_elems[0]
-                text = result.find('{http://www.w3.org/2005/Atom}title').text
+            t1 = datetime.datetime.now()
+            apaper_db = aid_session.query(Paper).filter_by(aid=aid).first()
+            if not apaper_db:
+                # catch cases like quant-ph/0802.3625 (acutally 0802.3625)
+                guess = aid.split('/')[-1]
+                apaper_db = aid_session.query(Paper).filter_by(aid=guess).first()
+            if not apaper_db and re.match(r'^\d+$', aid):
+                # catch cases like 14025167 (acutally 1402.5167)
+                guess = '{}.{}'.format(aid[:4], aid[4:])
+                apaper_db = aid_session.query(Paper).filter_by(aid=guess).first()
+            # cases not handled:
+            # - arXiv:9409089v2[hep-th] -> hep-th/9409089
+            if apaper_db:
+                text = apaper_db.title.replace('\n', ' ')
+                text = re.sub('\s+', ' ', text)
                 text_orig = text
                 num_by_aid += 1
-                arxiv_api_success = True
+                arxiv_id_success = True
                 t2 = datetime.datetime.now()
                 d = t2 - t1
                 by_aid_total_time += d.total_seconds()
                 by_aid_total_acc += 1
-            except:
-                pass
-        doi_success = False
         t1 = datetime.datetime.now()
         bibitemlink_db = session.query(BibitemLinkMap).filter_by(
                                   uuid=bibitem_db.uuid).first()
@@ -275,7 +306,8 @@ def match(db_uri=None, in_dir=None):
                 m = DOI_PATT.search(bibitemlink_db.link)
                 if m:
                     given_doi = m.group(0)
-        if not arxiv_api_success and given_doi:
+        doi_success = False
+        if not arxiv_id_success and given_doi:
             try:
                 t1 = datetime.datetime.now()
                 resp = requests.get(
@@ -295,7 +327,7 @@ def match(db_uri=None, in_dir=None):
             # except json.decoder.JSONDecodeError:
             except:
                 pass
-        if not (arxiv_api_success or doi_success):
+        if not (arxiv_id_success or doi_success):
             t1 = datetime.datetime.now()
             text_orig = text.replace('¦', '')
             if 'Phys. Rev.' in text_orig:
@@ -303,13 +335,20 @@ def match(db_uri=None, in_dir=None):
             # text = clean_by_segments(text)
             # text = remove_name_list(text)
             # text = remove_containing_work(text)
-            text = parscit_get_title(text_orig)
+            text, journal = parscit_parse(text_orig)
             t2 = datetime.datetime.now()
             d = t2 - t1
             by_parscit_total_time += d.total_seconds()
             by_parscit_total_acc += 1
             if not text:
                 num_no_title += 1
+                # if journal:
+                #     with open('no_title_journals', 'a') as f:
+                #         line = '{}\t{}\n'.format(
+                #             journal,
+                #             text_orig
+                #             )
+                #         f.write(line)
                 continue
 
         t1 = datetime.datetime.now()
@@ -338,10 +377,12 @@ def match(db_uri=None, in_dir=None):
                     break
         else:
             solr_match = False
-            if arxiv_api_success:
+            if arxiv_id_success:
                 num_by_aid_fail += 1
+            if doi_success:
+                num_by_doi_fail += 1
         if not solr_match and solr_resps and not 'Phys. Rev.' in text_orig:
-            solr_resp = False
+            continue
             # # check fails
             # print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
             # print('in doc: {}'.format(in_doc))
@@ -376,7 +417,7 @@ def match(db_uri=None, in_dir=None):
             result_doi = solr_resp.get('doi', False)
             if given_doi and result_doi:
                 num_checked += 1
-                if not given_doi == result_doi:
+                if not given_doi.lower() == result_doi.lower():
                     num_false_positives += 1
                     # print('identified {}'.format(result_doi))
                     # print('but should\'ve been {}'.format(given_doi))
@@ -390,10 +431,11 @@ def match(db_uri=None, in_dir=None):
         print('checked: {}'.format(num_checked))
         print('Phys. Rev.: {}'.format(num_phys_rev))
         print('no title: {}'.format(num_no_title))
-        print('false positives: {}'.format(num_false_positives))
+        print('maybe (!) false positives: {}'.format(num_false_positives))
         print('by arXiv ID: {}'.format(num_by_aid))
         print('by arXiv ID fail: {}'.format(num_by_aid_fail))
         print('by doi: {}'.format(num_by_doi))
+        print('by doi fail: {}'.format(num_by_doi_fail))
         print('>>> avg time aID: {:.2f}'.format(by_aid_total_time/max(by_aid_total_acc, 1)))
         print('>>> avg time DOI: {:.2f}'.format(by_doi_total_time/max(by_doi_total_acc, 1)))
         print('>>> avg time ParsCit: {:.2f}'.format(by_parscit_total_time/max(by_parscit_total_acc, 1)))

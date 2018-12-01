@@ -1,0 +1,269 @@
+
+rm
+Fun with Fonts: Algorithmic Typographyt1
+[t1]A preliminary version of this paper appeared in
+Proceedings of the 7th International Conference on Fun with Algorithms
+(FUN 2014).
+[MIT]Erik D. Demaine
+edemaine@mit.edu
+[MIT]Martin L. Demaine
+mdemaine@mit.edu
+[MIT]MIT CSAIL, 32 Vassar St., Cambridge, MA 02139
+pdftitle=
+Over the past decade, we have designed six typefaces
+based on mathematical theorems and open problems,
+specifically computational geometry.
+These typefaces expose the general public in a unique way to intriguing
+results and hard problems in hinged dissections, geometric tours,
+origami design, computer-aided glass design, physical simulation,
+and protein folding.
+In particular, most of these typefaces include puzzle fonts,
+where reading the intended message requires solving a series of puzzles
+which illustrate the challenge of the underlying algorithmic problem.
+puzzles, typefaces, art, design
+Introduction
+Scientists use fonts every day to express their research
+through the written word. But what if the font itself communicated
+(the spirit of) the research? What if the way text is written,
+and not just the text itself, engages the reader in the science?
+We have been designing a series of typefaces (font families) based on our
+computational geometry research.
+They are mathematical typefaces and algorithmic typefaces
+in the sense that they illustrate mathematical and algorithmic structures,
+theorems, and/or open problems.
+In all but one family, we include puzzle typefaces
+where reading the text itself requires engaging with those
+same mathematical structures. With a careful combination of puzzle
+and nonpuzzle variants, these typefaces enable the general public
+to explore the underlying mathematical structures and appreciate their
+inherent beauty, challenge, and fun.
+This survey reviews the six typefaces we have designed so far,
+in roughly chronological order. We describe each specific typeface design
+along with the underlying algorithmic field.
+Figure REF  shows the example of “FUN” written in all six typefaces.
+Anyone can experiment with writing text (and puzzles)
+in these typefaces using our free web applications.
+http://erikdemaine.org/fonts/
+FIGURE 
+
+Hinged Dissections
+A hinged dissection is a hinged chain of blocks that can fold into
+multiple shapes. Although hinged dissections date back over 100 years
+{{cite:a8dff7e8-e359-4ca3-939a-c26196a0d353}}, it was only very recently that we proved that
+hinged dissections exist, for any set of polygons of equal area
+.
+That result was the culmination of many years of exploring the problem,
+starting with a theorem that any polyform—FORMULA  identical shapes
+joined together at corresponding edges—can be folded from one universal
+chain of blocks (for each FORMULA )
+{{cite:671256d7-5608-4b72-b315-520f2da01bc9}}, .
+Our first mathematical/algorithmic typeface, designed in 2003
+{{cite:a3cc6151-e4f3-43d1-994e-c42400a66b6d}},
+http://erikdemaine.org/fonts/hinged/
+illustrates
+both this surprising way to hinge-dissect exponentially many polyform shapes,
+and the general challenge of the then-open hinged-dissection problem.
+As shown in Figure REF , we designed a series of glyphs
+for each letter and numeral as 32-abolos, that is, edge-to-edge gluings
+of 32 identical right isosceles triangles (half unit squares).
+In particular, every glyph has the same area. Applying our theorem about
+hinged dissections of polyforms {{cite:671256d7-5608-4b72-b315-520f2da01bc9}}, 
+produces the 128-piece hinged dissection shown in Figure REF .
+This universal chain of blocks can fold into any letter in
+Figure REF , as well as a FORMULA  square
+as shown in Figure REF .
+FIGURE 
+FIGURE 
+An interesting open problem about this font is whether the chain of
+128 blocks can be folded continuously without self-intersection
+into each of the glyphs.
+In general, hinged chains of triangles can lock
+.
+But if the simple structure of this hinged dissection enables continuous
+motions, we could make a nice animated font, where each letter folds back
+and forth between the informationless open chain (or square)
+and its folded state as the glyph.
+Given a physical instantiation of the chain (probably too large to be
+practical), each glyph is effectively a puzzle to see whether it can be
+folded continuously without self-intersection.
+It would also be interesting to make a puzzle font within this typeface.
+Unfolded into a chain, each letter looks the same, as the hinged dissection
+is universal. We could, however, annotate the chain to indicate which parts
+touch which parts in the folded state, to uniquely identify each glyph
+(after some puzzling).
+
+Conveyer Belts
+A seemingly simple yet still open problem posed by
+Manual Abellanas in 2001 {{cite:7cbd8a6a-b7bb-419f-9147-b94675663830}} asks whether every disjoint
+set of unit disks (gears or wheels) in the plane can be visited by a single taut
+non-self-intersecting conveyer belt. Our research with Belén Palop
+first attempted to solve this problem, and then transformed into a new
+typeface design {{cite:78b375a3-8d63-4ce1-8511-0cdc965ab251}}
+and then puzzle design {{cite:0c97751d-9796-4190-a6cc-821afb7745be}}.
+The conveyer-belt typeface, shown in Figure REF ,
+consists of all letters and numerals in two main fonts.
+http://erikdemaine.org/fonts/conveyer/
+With both disks and a valid conveyer belt (Figure REF (a)),
+the font is easily readable.
+But with just the disks (Figure REF (b)),
+we obtain a puzzle font where reading each glyph requires solving an instance
+of the open problem. (In fact, each distinct glyph needs to be solved only
+once, by recognizing repeated disk configurations.)
+Each disk configuration has been designed to have only one solution
+conveyer belt that looks like a letter or numeral,
+which implies a unique decoding.
+FIGURE 
+The puzzle font makes it easy to generate many puzzles with embedded secret
+messages {{cite:0c97751d-9796-4190-a6cc-821afb7745be}}.
+By combining glyphs from both the puzzle and solved (belt) font,
+we have also designed a series of puzzle/art prints.
+Figure REF  shows a self-referential puzzle/art print
+which describes the very open problem on which it is based.
+FIGURE 
+
+Origami Mazes
+In computational origami design, the typical goal is to develop algorithms
+that fold a desired 3D shape from the smallest possible rectangle of paper
+of a desired aspect ratio (typically a square).
+One result which achieves a particularly efficient use of paper is
+maze folding {{cite:4c9efecf-ee7b-42f3-a549-43a414caf6c1}}:
+any 2D grid graph of horizontal and vertical integer-length segments,
+extruded perpendicularly from a rectangle of paper, can be folded from a
+rectangle of paper that is a constant factor larger than the target shape.
+A striking feature is that the scale factor between the unfolded piece of
+paper and the folded shape is independent of the complexity of the maze,
+depending only on the ratio of the extrusion height to the maze tunnel width.
+(For example, a extrusion/tunnel ratio of FORMULA  induces a
+scale factor of FORMULA  for each side of the rectangle.)
+The origami-maze typeface, shown in Figure REF ,
+consists of all letters in three main fonts
+{{cite:082dfda4-383d-4764-bf03-176b261b9920}}.
+http://erikdemaine.org/fonts/maze/
+In the 2D font (Figure REF (a)),
+each glyph is written as a 2D grid graph before extrusion.
+In the 3D font (Figure REF (b)),
+each glyph is drawn as a 3D extrusion out of a rectangular piece of paper.
+In the crease-pattern font (Figure REF (c)),
+each glyph is represented by a crease pattern produced by the maze-folding
+algorithm, which folds into the 3D font.
+By properties of the algorithm, the crease-pattern font has the feature
+that glyphs can be attached together on their boundary to form a larger crease
+pattern that folds into all of the letters as once.
+For example, the entire crease pattern of Figure REF (c)
+folds into the 3D shape given by Figure REF (b).
+FIGURE 
+The crease-pattern font is another puzzle font: each glyph can be read
+by folding, either physically or in your head. With practice, it is possible
+to recognize the extruded ridges from the crease pattern alone, and devise
+the letters in the hidden message. We have designed several puzzles along
+these lines {{cite:082dfda4-383d-4764-bf03-176b261b9920}}.
+It is also possible to overlay a second puzzle within the crease-pattern font,
+by placing a message or image in the ground plane of the 3D folded shape,
+dividing up by the grid lines, and unfolding those grid cells to where they
+belong in the crease pattern. Figure REF  shows one print design
+along these lines, with the crease pattern defining the 3D extrusion of
+“SCIENCE” while the gray pattern comes together to spell “ART”.
+In this way, we use our typeface design to inspire new print designs.
+FIGURE 
+
+Glass Cane
+Glass blowing is an ancient art form, and today it uses most of the same
+physical tools as centuries ago. In computer-aided glass blowing, our goal is
+to harness geometric and computational modeling to enable design of glass
+sculpture and prediction of how it will look ahead of time on a computer.
+This approach enables extensive experimentation with many variations of a
+design before committing the time, effort, and expense required to physically
+blow the piece.
+Our free software Virtual Glass {{cite:341dd47d-0400-407b-b0b5-df9bb5239879}}
+currently focuses on computer-aided design of the highly geometric aspects of
+glass blowing, particularly glass cane. Glass cane is a process for making
+long thin cylinders of glass containing elaborate twisty patterns of color.
+In Virtual Glass, the user designs the cross-section of a cane by combining
+canes and/or colors, and then controls the helical twist of the resulting
+form.
+Our glass cane typeface, shown in Figure REF , consists of two
+main fonts.
+http://erikdemaine.org/fonts/cane/
+The easy-to-read font is the top (cross-section) view of each
+cane. The puzzle font is the resulting twisted cane from the side view.
+We have designed the canes to be distinguishable from each other, though
+some letters require some careful analysis to reverse-engineer.
+The letters I and O are classic cane designs.
+Another artist and friend, Helen Lee, made her own glass cane font using
+Virtual Glass {{cite:0f6f2770-feff-4e5a-8ea0-b5be280f6389}}.
+FIGURE 
+
+Glass Squishing
+One aspect of glass blowing not currently captured by our Virtual Glass
+software is the ability to “squish” components of glass together.
+This action is a common technique for combining multiple glass structures,
+in particular when designing elaborate glass cane. To model this phenomenon,
+we need a physics engine to simulate the idealized behavior of glass under
+“squishing”. But how exactly does glass behave when squished together?
+To better understand this physical behavior, we designed a glass-squishing
+typeface during a 2014 residency at Penland School of Crafts.
+As shown in Figure REF , we designed arrangements of simple
+glass components—clear disks and opaque thin lines/cylinders—that,
+when heated to around FORMULA F and squished between two vertical steel
+bars, produce any desired letter. The typeface consists of five
+main fonts: photographs of the arrangements before and after squishing,
+line drawings of these arrangements before and after squishing, and
+video of the squishing process.
+The “before” fonts are puzzle fonts,
+while the “after” fonts are clearly visible.
+The squishing-process font is a rare example of a video font,
+where each glyph is a looping video.
+Figure REF  shows stills from the video for the letters F-U-N.
+See the web app for the full experience.
+http://erikdemaine.org/fonts/squish/
+FIGURE 
+FIGURE 
+Designing the before-squishing glass arrangements required extensive trial and
+error before the squished result looked like the intended glyph. This
+experimentation has helped us define a physical model for the primary forces
+and constraints for glass squishing in 2D, which can model the cross-section
+of 3D hot glass. We plan to implement this physical model to both create
+another video font of line art simulating the squishing process, and
+to enable a new category of computer-aided design of blown glass
+in our Virtual Glass software.
+In this way, we use typeface design to experiment with and inform our
+computer science research.
+
+Fixed-Angle Linkages
+Molecules are made up of atoms connected together by bonds, with
+bonds held at relatively fixed lengths, and incident bonds held at
+relatively fixed angles. In mathematics, we can model these structures as
+fixed-angle linkages, consisting of rigid bars (segments)
+connected at their endpoints, with specified fixed lengths for the bars
+and specified fixed angles between incident bars.
+A special case of particular interest is a fixed-angle chain
+where the bars are connected together in a path, which models the
+backbone of a protein. There is extensive algorithmic research on
+fixed-angle chains and linkages, motivated by mathematical models of
+protein folding; see, e.g., {{cite:6c5632f8-6953-443a-8034-ba68b3d8f90c}}.
+In particular, the literature has studied flat states of fixed-angle
+chains, where all bars lie in a 2D plane.
+FIGURE 
+Our linkage typeface, shown in Figure REF , consists of
+a fixed-angle chain for each letter and numeral. Every fixed-angle
+chain consists of exactly six bars, each of unit length. Hence,
+each chain is defined just by a sequence of five measured (convex) angles.
+Each chain, however, has many flat states, depending on whether the
+convex side of each angle is on the left or the right side of the chain.
+Thus, each chain has FORMULA  glyphs depending on the choice
+for each of the five angles. (In the special cases of zero and FORMULA 
+angles, the choice has no effect so the number of distinct glyphs is smaller.)
+Thus each letter and numeral has several possible glyphs, only a few of which
+are easily recognizable; the rest are puzzle glyphs.
+Figure REF  shows some example glyphs for F-U-N.
+FIGURE 
+We have designed the fixed-angle chains to be uniquely
+decodable into a letter
+or numeral; the incorrect foldings do not look like another letter or numeral.
+The result is a random puzzle font.
+http://erikdemaine.org/fonts/linkage/
+Again we have used this font to design several puzzles
+{{cite:15fb9dac-bb39-49e0-b498-f8f4808b51b7}}.
+In addition, there is a rather cryptic puzzle font given just by the
+sequence of angles for each letter. For example, F-U-N can be written as
+90-0-90-90-0 0-180-90-90-180 180-30-180-30-180.

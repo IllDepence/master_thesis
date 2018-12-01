@@ -1,0 +1,663 @@
+
+
+Era of Big Data Processing: A New Approach via Tensor Networks and Tensor Decompositions
+Andrzej CICHOCKI
+RIKEN Brain Science Institute, Japan
+and Systems Research Institute of the Polish Academy of Science, Poland
+a.cichocki@riken.jp
+Part of this work was presented on the International Workshop on Smart Info-Media Systems in Asia,
+(invited talk - SISA-2013) Sept.30–Oct.2, 2013, Nagoya, Japan
+Many problems in computational neuroscience, neuroinformatics, pattern/image recognition, signal processing and machine learning generate massive amounts of multidimensional data with multiple aspects and high dimensionality. Tensors (i.e., multi-way arrays) provide often a natural and compact representation for such massive multidimensional data via suitable low-rank approximations.
+Big data analytics require novel technologies to efficiently process huge datasets within tolerable elapsed times. Such a new emerging technology for multidimensional big data is a multiway analysis via tensor networks (TNs) and tensor decompositions (TDs) which represent tensors by sets of factor (component) matrices and lower-order (core) tensors. Dynamic tensor analysis allows us to discover meaningful hidden structures of complex data and to perform generalizations by capturing multi-linear and multi-aspect relationships. We will discuss some fundamental TN models, their mathematical and graphical descriptions and associated learning algorithms for large-scale TDs and TNs, with many potential applications including: Anomaly detection, feature extraction, classification, cluster analysis, data fusion and integration, pattern recognition, predictive modeling, regression, time series analysis and multiway component analysis.
+Keywords: Large-scale HOSVD, Tensor decompositions, CPD, Tucker models, Hierarchical Tucker (HT) decomposition, low-rank tensor approximations (LRA), Tensorization/Quantization, tensor train (TT/QTT) - Matrix Product States (MPS), Matrix Product Operator (MPO), DMRG, Strong Kronecker Product (SKP).
+Introduction and Motivations
+Big Data consists of multidimensional, multi-modal data-sets that are so huge and complex that they cannot be easily stored or processed by using standard computers. Big data are characterized not only by big Volume but also another specific “V” features (see Fig. REF ). High Volume implies the need for algorithms that are scalable; High Velocity address the challenges related to process data in near real-time, or virtually real-time; High Veracity demands robust and predictive algorithms for noisy, incomplete or inconsistent data, and finally, high Variety may require integration across different kind of data, e.g., neuroimages, time series, spiking trains, genetic and behavior data.
+FIGURE 
+Many challenging problems for big data are related to capture, manage, search, visualize, cluster, classify, assimilate, merge, and process
+the data within a tolerable elapsed time, hence demanding new innovative solutions and technologies. Such emerging technology is Tensor Decompositions (TDs) and Tensor Networks (TNs) via low-rank matrix/tensor approximations.
+The challenge is how to analyze large-scale, multiway data sets. Data explosion creates deep research challenges that require new scalable, TD and TN algorithms.
+FIGURE 
+FIGURE 
+Tensors are adopted in diverse branches of science such as a data analysis, signal and image processing {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:ea15291f-b169-4abb-a498-788e8dd00505}}, {{cite:1411dc71-0a8a-4972-8e13-06ab64980e1f}}, {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}}, Psychometric, Chemometrics, Biometric, Quantum Physics/Information, and Quantum Chemistry {{cite:19e4920f-915a-476f-b38e-3060e095d931}}, {{cite:06964b8d-f538-4bae-947d-238d6897539e}}, {{cite:d7df85e9-1208-41f6-996a-476dcf10ad31}}.
+Modern scientific areas such as bioinformatics or computational neuroscience generate massive amounts of data collected in various forms of large-scale, sparse tabular, graphs or networks with multiple aspects and high dimensionality.
+Tensors, which are multi-dimensional generalizations of matrices (see Fig. REF  and Fig. REF ), provide often a useful representation for such data. Tensor decompositions (TDs) decompose data tensors in factor matrices, while tensor networks (TNs) represent higher-order tensors by interconnected lower-order tensors.
+We show that TDs and TNs provide natural extensions of blind source separation (BSS) and 2-way (matrix) Component Analysis (2-way CA) to multi-way component analysis (MWCA) methods.
+In addition, TD and TN algorithms are suitable for dimensionality reduction and they can handle missing values, and noisy data.
+Moreover, they are potentially useful
+for analysis of linked (coupled) block of tensors with millions and even billions of non-zero entries, using the map-reduce paradigm, as well as divide-and-conquer approaches {{cite:adecadee-1178-4087-abb6-1ef53be99274}}, {{cite:326dd796-578e-45bf-816d-428254a04c17}}, {{cite:602a1bf9-8712-46cd-adec-3201a448efd8}}.
+This all suggest that multidimensional data can be represented by linked
+multi-block tensors which can be decomposed into common (or correlated) and distinctive (uncorrelated, indpendent) components {{cite:1411dc71-0a8a-4972-8e13-06ab64980e1f}}, {{cite:db089a16-ca9f-44c5-ab02-ce6e7a6b1192}}, {{cite:43d3e0d1-2c1c-4525-807a-aa1f828a701e}}.
+Effective analysis of coupled tensors requires the development of new models and associated
+algorithms that can identify the core relations that exist
+among the different tensor modes, and the same tome scale to extremely large datasets.
+Our objective is to develop suitable models and algorithms for linked low-rank
+tensor approximations (TAs), and associated scalable software to
+make such analysis possible.
+Review and tutorial papers {{cite:ea15291f-b169-4abb-a498-788e8dd00505}}, {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}}, {{cite:08c36e6e-7c3e-4b68-9c5a-05520116e53b}}, {{cite:f75f4fc7-c3ae-4c50-adbf-ee60eac118db}}, {{cite:84f14bc5-0119-44b2-afad-8f37f3f8e2e2}} and books {{cite:06964b8d-f538-4bae-947d-238d6897539e}}, {{cite:19e4920f-915a-476f-b38e-3060e095d931}}, {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}} dealing with TDs already exist,
+however, they typically focus on standard TDs and/or do not provide explicit links
+to big data processing topics and do not explore natural connections with emerging
+areas including multi-block coupled tensor analysis and tensor networks.
+This paper extends beyond the standard TD models
+and aims to elucidate the power and flexibility of TNs in the analysis of multi-dimensional, multi-modal, and multi-block data, together with their role as a mathematical backbone for the discovery of hidden structures in large-scale data {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:ea15291f-b169-4abb-a498-788e8dd00505}}, {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}}.
+Motivations - Why low-rank tensor approximations? A wealth of literature on (2-way) component analysis (CA) and BSS exists, especially on Principal Component Analysis (PCA), Independent Component Analysis (ICA), Sparse Component Analysis (SCA), Nonnegative Matrix Factorizations (NMF), and Morphological Component Analysis (MCA) {{cite:6a597691-c926-466b-9eb2-e3e582bfb8d1}}, {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:38bb4aae-2ad5-4b38-80b4-a1a60a1ff18e}}.
+These techniques are maturing, and are promising tools for
+blind source separation (BSS), dimensionality reduction, feature extraction, clustering, classification, and visualization {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:38bb4aae-2ad5-4b38-80b4-a1a60a1ff18e}}.
+The “flattened view” provided by 2-way CA and matrix factorizations (PCA/SVD, NMF, SCA, MCA) may be inappropriate for large classes of real-world data which exhibit multiple couplings and cross-correlations. In this context, higher-order tensor networks give us the opportunity to develop more sophisticated models performing distributed computing and capturing multiple interactions and couplings, instead of standard pairwise interactions.
+In other words, to discover hidden components within multiway data the analysis tools should account for intrinsic multi-dimensional distributed patterns present in the data.
+FIGURE 
+
+Basic Tensor Operations
+2ex
+TABLE 
+0ex
+FIGURE 
+FIGURE 
+FIGURE 
+2ex
+TABLE 
+0ex
+A higher-order tensor can be interpreted as a multiway array, as illustrated graphically in Figs. REF , REF  and REF .
+Our adopted convenience is that tensors are denoted by bold underlined capital letters, e.g., FORMULA , and that all data are real-valued.
+The order of a tensor is the number of its “modes”, “ways” or “dimensions”, which can include space, time, frequency, trials, classes, and dictionaries.
+Matrices (2nd-order tensors) are denoted by boldface capital letters, e.g., FORMULA , and vectors (1st-order tensors) by boldface lowercase letters; for instance the columns of the matrix FORMULA  are denoted by FORMULA  and elements of a matrix (scalars) are denoted by lowercase letters, e.g., FORMULA  (see Table REF ).
+The most common types of tensor multiplications are denoted by: FORMULA  for the Kronecker, FORMULA  for the Khatri-Rao, FORMULA  for the Hadamard (componentwise), FORMULA  for the outer and FORMULA  for the mode-FORMULA  products (see Table REF ).
+TNs and TDs can be represented by tensor network diagrams, in which tensors are represented
+graphically by nodes or any shapes (e.g., circles, spheres, triangular, squares, ellipses) and each outgoing edge (line) emerging from a shape represents a mode (a way, dimension, indices)
+(see Fig. REF )
+Tensor network diagrams are very useful not only in visualizing tensor
+decompositions, but also in their different transformations/reshapings and graphical illustrations of mathematical (multilinear) operations.
+It should also be noted that block matrices and hierarchical block matrices can be represented by tensors.
+For example, 3rd-order and 4th-order tensors that can be represented by block matrices as illustrated in Fig. REF  and all algebraic operations can be performed on block matrices.
+Analogously, higher-order tensors can be represented as illustrated in Fig. REF  and Fig. REF .
+Subtensors are formed when a subset of indices is fixed. Of particular interest are fibers, defined by fixing every index but one, and
+matrix slices which are two-dimensional sections (matrices) of a tensor,
+obtained by fixing all the indices but two (see Fig. REF ).
+A matrix has two modes: rows and columns, while an FORMULA th-order tensor has FORMULA  modes.
+The process of unfolding (see Fig. REF ) flattens a tensor into a matrix. In the simplest scenario, mode-FORMULA  unfolding (matricization, flattening) of the tensor FORMULA  yields
+a matrix FORMULA , with entries FORMULA  such that remaining indices FORMULA  are arranged in a specific order, e.g., in the lexicographical order {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}}. In tensor networks we use, typically a generalized mode-FORMULA  unfolding as illustrated in Fig. REF  (b).
+By a multi-index FORMULA , we denote an index which takes all possible
+combinations of values of FORMULA , for FORMULA 
+in a specific and consistent orders. The entries of matrices or tensors in matricized and/or vectorized forms can be ordered in at least two different ways.
+Remark:
+The multi–index can be defined using two different conventions:
+1) The little–-endian convention
+FORMULA 
+2) The big–-endian
+FORMULA 
+The little–endian notation is consistent with the Fortran style of indexing,
+while the big–endian notation is similar to numbers written in the positional system and corresponds to reverse lexicographic order.
+The definition unfolding of tensors and the Kronecker (tensor) product FORMULA  should be also consistent with the chosen
+conventionThe standard and more popular
+definition in multilinear algebra assumes the big–endian convention, while for the development of the efficient program
+code for big data usually the little–endian convention seems to be more convenient (see for more detail papers of Dolgov and Savostyanov {{cite:d5ae6c24-923b-443b-b1d9-d9395a512230}}, {{cite:898ce815-e3af-4fbb-9775-7841e83fc056}})..
+In this paper we will use the big-endian notation, however it is enough to remember that FORMULA  means that FORMULA .
+The Kronecker product of two tensors: FORMULA  and FORMULA  yields FORMULA , with entries FORMULA , where FORMULA .
+The mode-FORMULA  product of a tensor
+FORMULA  by a vector FORMULA  is defined as a tensor
+FORMULA , with entries FORMULA , while a mode-FORMULA  product of the tensor
+FORMULA  by a matrix FORMULA  is the tensor FORMULA ,
+with entries FORMULA . This can also be expressed in a matrix form as FORMULA  (see Fig. REF ), which allows us to employ fast matrix by vector and matrix by matrix multiplications for very large scale problems.
+FIGURE 
+If we take all the modes, then we have a full multilinear product
+of a tensor and a set of matrices, which is compactly written as {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}} (see Fig. REF  (a))):
+FORMULA 
+FIGURE 
+In a similar way to mode-FORMULA  multilinear product, we can define the mode-FORMULA  product of two tensors (tensor contraction) FORMULA  and FORMULA , with common modes FORMULA  that yields an FORMULA -order tensor FORMULA :
+FORMULA 
+with entries FORMULA  (see Fig. REF  (a)).
+This operation can be considered as a contraction of two tensors in single common mode. Tensors can be contracted in several modes or even in all modes as illustrated in Fig. REF .
+If not confusing a super- or sub-index FORMULA  can be neglected. For example, the multilinear product of the tensors FORMULA  and FORMULA , with a common modes FORMULA  can be written as
+FORMULA 
+with entries:
+FORMULA .
+Furthermore, note that for multiplications of matrices and vectors this notation implies that FORMULA , FORMULA , FORMULA , and FORMULA .
+Remark: If we use contraction for more than two tensors the order has to be specified (defined) as follows:
+FORMULA  for FORMULA .
+FIGURE 
+The outer or tensor product FORMULA  of the tensors FORMULA  and FORMULA  is the tensor FORMULA , with entries FORMULA .
+Specifically, the outer product of two nonzero vectors
+FORMULA  produces a rank-1 matrix
+FORMULA 
+and the outer product of three nonzero vectors: FORMULA  and FORMULA  produces a 3rd-order rank-1 tensor:
+FORMULA ,
+whose entries are FORMULA .
+A tensor FORMULA  is said to be rank-1 if it can be expressed exactly as FORMULA , with entries FORMULA , where FORMULA  are nonzero vectors.
+We refer to {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}} for more detail regarding the basic notations and tensor operations.
+
+Tensor Networks
+A tensor network aims to represent or decompose a higher-order tensor into a set of lower-order tensors (typically, 2nd (matrices) and 3rd-order tensors called cores or components) which are sparsely interconnected.
+In other words, in contrast to TDs, TNs represent decompositions of the data tensors into a set of sparsely (weakly) interconnected lower-order tensors.
+Recently, the curse of dimensionality for higher-order tensors has been considerably alleviated or even completely avoided through the concept of tensor networks (TN) {{cite:dae3a184-ba28-4ac5-a674-566709b9be3e}}, {{cite:0ee90ae2-ff95-49a8-8f4d-ecefe5444c68}}.
+A TN can be represented by a set of nodes interconnected by lines. The lines (leads, branches, edges) connecting tensors between each
+other correspond to contracted modes, whereas lines that do not go from one tensor to another
+correspond to open (physical) modes in the TN (see Fig. REF ).
+An edge connecting two nodes indicates a
+contraction of the respective tensors in the associated pair of modes as illustrated in Fig. REF .
+Each free (dangling) edge corresponds to a mode, that is not contracted and, hence, the order of the entire tensor network is given by the
+number of free edges (called often physical indices).
+A tensor network may not contain any loops,
+i.e., any edges connecting a node with itself. Some examples of tensor network diagrams
+are given in Fig. REF .
+FIGURE 
+If a tensor network is a tree, i.e., it does not contain any cycle, each of its edges
+splits the modes of the data tensor into two groups, which is related to the
+suitable matricization of the tensor.
+If, in such a tree tensor network, all nodes have degree 3 or less, it corresponds
+to an Hierarchical Tucker (HT) decomposition shown in Fig. REF  (a). The HT decomposition has been first introduced in scientific computing by Hackbusch and Kühn and further developed by Grasedyck, Kressner, Tobler and others {{cite:36f4180c-bc77-4b70-bb6c-fc2f5925a35f}}, {{cite:d7df85e9-1208-41f6-996a-476dcf10ad31}}, {{cite:b31b7e78-5667-495a-b4ab-1221ebb655c2}}, {{cite:98b14663-97a1-41f9-b9ba-f7dba32d82d2}}, {{cite:20fd9af2-d300-48c0-9926-f6bef5110eb7}}, {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}}.
+Note that for 6th-order tensor, there are two such tensor networks (see Fig. REF  (b)), and for 10th-order there are 11 possible HT decompositions {{cite:98b14663-97a1-41f9-b9ba-f7dba32d82d2}}, {{cite:20fd9af2-d300-48c0-9926-f6bef5110eb7}}.
+FIGURE 
+A simple approach to reduce the size of core tensors is to apply distributed tensor networks (DTNs), which consists in
+two kinds of cores (nodes): Internal cores (nodes) which have no free edges and external cores which have free edges representing physical indices of a data tensor as illustrated in Figs. REF  and REF .
+The idea in the case of the Tucker model, is that a core tensor is replaced by distributed sparsely interconnected cores of lower-order, resulting in a Hierarchical Tucker (HT) network in which only some cores are connected (associated) directly with factor matrices
+{{cite:d7df85e9-1208-41f6-996a-476dcf10ad31}}, {{cite:b31b7e78-5667-495a-b4ab-1221ebb655c2}}, {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}}, {{cite:36f4180c-bc77-4b70-bb6c-fc2f5925a35f}}.
+For some very high-order data tensors it has been observed
+that the ranks FORMULA  (internal dimensions of cores) increase rapidly with the order of the tensor and/or with an increasing accuracy of approximation for any choice of tensor network, that is, a tree (including TT and HT decompositions) {{cite:20fd9af2-d300-48c0-9926-f6bef5110eb7}}.
+For such cases, the Projected Entangled-Pair State (PEPS) or the Multi-scale Entanglement Renormalization Ansatz (MERA) tensor networks can be used. These contain
+cycles, but have hierarchical structures (see Fig. REF ). For the PEPS and MERA TNs the ranks
+can be kept considerably smaller, at the cost of employing 5th and 4th-order cores and consequently a higher computational complexity w.r.t. tensor contractions.
+The main advantage of PEPS and MERA is that the size of
+each core tensor in the internal tensor network structure is usually much smaller than the cores in TT/HT decompositions, so consequently the total number of parameters can be reduced.
+However, it should be noted that the contraction of the resulting tensor network becomes more difficult
+when compared to the basic tree structures represented by TT and HT models.
+This is due to the fact that the PEPS and MERA tensor networks contain loops.
+FIGURE 
+
+Basic Tensor Decompositions and their Representation via Tensor Networks Diagrams
+The main objective of a standard tensor decomposition is to factorize a data tensor into physically interpretable or meaningful factor matrices and a single core tensor which indicates the links between components (vectors of factor matrices) in different modes.
+Constrained Matrix Factorizations and Decompositions – Two-Way Component Analysis
+Two-way Component Analysis (2-way CA) exploits a priori knowledge about different characteristics, features or morphology of components (or source signals) {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:8f5435c0-a5b0-4032-a53f-5412912ed355}} to find the hidden components thorough constrained matrix factorizations of the form
+FORMULA 
+where the constraints imposed on factor matrices FORMULA  and/or FORMULA  include orthogonality, sparsity, statistical independence, nonnegativity or smoothness.
+The CA can be considered as a bilinear (2-way) factorization, where FORMULA  is a known matrix of observed data, FORMULA  represents residuals or noise, FORMULA  is the unknown (usually, full column rank FORMULA ) mixing matrix with FORMULA  basis vectors FORMULA ,
+and FORMULA  FORMULA  FORMULA 
+is the matrix of unknown components (factors, latent variables, sources).
+Two-way component analysis (CA) refers to a class of signal processing techniques that decompose or encode superimposed or mixed signals into components with certain constraints or properties.
+The CA methods exploit a priori knowledge about the true
+nature or diversities of latent variables.
+By diversity, we refer to different characteristics, features or morphology of sources or hidden latent variables {{cite:8f5435c0-a5b0-4032-a53f-5412912ed355}}.
+For example, the columns of the matrix FORMULA  that represent different data sources should be: as statistically
+independent as possible for ICA; as sparse as possible for SCA; take only nonnegative values for
+(NMF) {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:8f5435c0-a5b0-4032-a53f-5412912ed355}}, {{cite:6a597691-c926-466b-9eb2-e3e582bfb8d1}}.
+Remark: Note that matrix factorizations have an inherent symmetry, Eq. (REF ) could be written as FORMULA , thus interchanging the roles of sources and mixing process.
+Singular value decomposition (SVD) of the data matrix FORMULA  is a special case of the factorization in Eq. (REF ). It is exact and provides an explicit notion of the range and null space of the matrix FORMULA  (key issues in low-rank approximation), and is given by
+FORMULA 
+where FORMULA  and FORMULA  are column-wise orthonormal
+matrices and FORMULA  is a diagonal matrix containing only nonnegative singular values FORMULA .
+Another virtue of component analysis comes from a representation of multiple-subject, multiple-task datasets
+by a set of data matrices FORMULA , allowing us
+to perform simultaneous matrix factorizations:
+FORMULA 
+subject to various constraints.
+In the case of statistical independence constraints, the problem can be related to models of group ICA through suitable pre-processing, dimensionality reduction and post-processing procedures {{cite:55f9c490-9c0e-4ecc-bba6-ce957a6098ee}}.
+The field of CA is maturing and has generated efficient algorithms for 2-way component analysis (especially, for sparse/functional PCA/SVD, ICA, NMF and SCA) {{cite:6a597691-c926-466b-9eb2-e3e582bfb8d1}}, {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:6ef61357-fafa-4636-bef9-bcd357c24462}}. The rapidly emerging field of tensor decompositions is the next important step that naturally generalizes 2-way CA/BSS algorithms and paradigms.
+We proceed to show how constrained matrix factorizations and
+component analysis (CA) models can be naturally generalized to multilinear
+models using constrained tensor decompositions, such as the Canonical Polyadic Decomposition (CPD) and Tucker models, as
+illustrated in Figs. REF  and REF .
+
+The Canonical Polyadic Decomposition (CPD)
+The CPD (called also PARAFAC or CANDECOMP) factorizes an FORMULA th-order tensor FORMULA  into a linear combination of terms FORMULA , which are rank-1 tensors, and is given by {{cite:e0f8c142-84a8-436a-b115-79952f616b27}}, {{cite:5b8717e3-f8da-4fef-8536-d2bb5ad636b5}}, {{cite:d6639ddb-c134-4708-a036-9858c954c3f3}}
+FORMULA 
+where the only non-zero entries FORMULA  of the diagonal core tensor FORMULA  are located on the main diagonal (see Fig. REF  for a 3rd-order and 4th-order tensors).
+Via the Khatri-Rao products the CPD can also be expressed in a matrix/vector form as:
+FORMULA 
+FORMULA 
+where FORMULA , FORMULA  and FORMULA  is a diagonal matrix.
+FIGURE 
+The rank of tensor FORMULA  is defined as the smallest FORMULA  for which CPD (REF ) holds exactly.
+Algorithms to compute CPD. In the presence of noise in real world applications the CPD is rarely exact and has to be estimated by minimizing a suitable cost function, typically of the Least-Squares (LS) type in the form of the Frobenius norm FORMULA , or using Least Absolute Error (LAE) criteria {{cite:2cad7efb-e846-4e82-8947-18542fba8e3b}}.
+The Alternating Least Squares (ALS) algorithms {{cite:08c36e6e-7c3e-4b68-9c5a-05520116e53b}}, {{cite:5b8717e3-f8da-4fef-8536-d2bb5ad636b5}}, {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}, {{cite:09083226-b3a8-4dd2-90d1-be227c340ef1}} minimize the LS cost function by optimizing individually each component matrix, while keeping the other component matrices fixed.
+For instance, assume that the diagonal matrix FORMULA  has been absorbed in one of the component matrices; then, by taking advantage of the Khatri-Rao structure the component matrices FORMULA  can be updated sequentially as {{cite:0fe9df56-84dc-4aa5-afe9-4a5af1e3b614}}
+FORMULA 
+which requires the computation of the pseudo-inverse of small FORMULA  matrices.
+The ALS is attractive for its simplicity and for well defined problems (not too many, well separated, not collinear components) and high SNR, the performance of ALS algorithms is often satisfactory.
+For ill-conditioned problems, more advanced algorithms exist, which typically exploit the rank-1 structure of the terms within CPD to perform efficient computation and storage of the Jacobian and Hessian of the cost function {{cite:7903dca0-83a6-4d4d-9e86-900dda5b0328}}, {{cite:5ed21cd0-55fe-40d5-9ac5-39b867c498dd}}.
+Constraints. The CPD is usually unique by itself, and does not require constraints to impose uniqueness {{cite:d7840d7b-da2a-4ca0-b79f-ce2ebe0ac2b0}}. However, if components in one or more modes are known to be e.g., nonnegative, orthogonal, statistically independent or sparse, these constraints should be incorporated to relax uniqueness conditions. More importantly, constraints may increase the accuracy and stability of the CPD algorithms and facilitate better physical interpretability of components {{cite:e3c09bfe-7094-47d8-a320-28640f7aeece}}, {{cite:6f8e589a-68be-41ce-8898-43c1d741a32b}}.
+
+The Tucker Decomposition
+The Tucker decomposition can be expressed as follows {{cite:52e335e4-0ade-42e5-a3ee-542ba7dd3bd1}}:
+FORMULA 
+where FORMULA  is the given data tensor, FORMULA  is the core tensor and FORMULA  are the mode-FORMULA  component matrices, FORMULA  (see Fig. REF ).
+FIGURE 
+Using Kronecker products the decomposition in (REF ) can be expressed in a matrix and vector form as follows:
+FORMULA 
+FORMULA 
+FIGURE 
+The core tensor (typically, FORMULA ) models a potentially complex pattern of mutual interaction between the vectors (components) in different modes.
+Multilinear rank. The FORMULA -tuple FORMULA  is called the multilinear-rank of FORMULA , if the Tucker decomposition holds exactly.
+Note that the CPD can be considered as a special case of the Tucker decomposition, in which the core tensor has nonzero elements only on main diagonal. In contrast to the CPD the Tucker decomposition, in general, is non unique. However, constraints imposed on all factor matrices and/or core tensor can reduce the indeterminacies to only column-wise permutation and scaling {{cite:853347ea-4b03-4416-ad07-27d8b1aba67c}}.
+In Tucker model some selected factor matrices can be identity matrices, this leads to Tucker-FORMULA  model, which is graphically illustrated in Fig. REF  (a). In a such model FORMULA  factor matrices are equal to identity matrices. In the simplest scenario for 3rd-order tensor FORMULA  the Tucker-(2,3) model, called simply Tucker-2, can be described as
+FORMULA 
+Similarly, we can define PARALIND/CONFAC-FORMULA  modelsPARALIND is abbreviation of PARAllel with LINear Dependencies, while CONFAC means CONstrained FACtor model (for more detail see {{cite:9cc15fb6-90aa-4841-8ae7-ebd6cd3e1341}} and references therein.)described as {{cite:9cc15fb6-90aa-4841-8ae7-ebd6cd3e1341}}
+FORMULA 
+where the core tensor, called constrained tensor or interaction tensor, is expressed as
+FORMULA 
+with FORMULA . The factor matrices FORMULA , with FORMULA  are constrained matrices, called often interaction matrices (see Fig. REF  (b).
+Another important, more complex constrained CPD model, which can be represented
+graphically as nested Tucker-FORMULA  model is the PARATUCK-FORMULA  model (see review paper of Favier and de Almeida {{cite:9cc15fb6-90aa-4841-8ae7-ebd6cd3e1341}} and references therein).
+
+Multiway Component Analysis Using Constrained Tucker Decompositions
+A great success of 2-way component analysis (PCA, ICA, NMF, SCA) is
+largely due to the various constraints we can impose.
+Without constraints matrix factorization loses its most
+sense as the components are rather arbitrary and they do not have any physical meaning. There are various
+constraints that lead to all kinds of component analysis
+methods which are able give unique components with
+some desired physical meaning and properties and hence
+serve for different application purposes. Just similar to matrix
+factorization, unconstrained Tucker decompositions
+generally can only be served as multiway data compression
+as their results lack physical meaning. In the most
+practical applications we need to consider constrained
+Tucker decompositions which can provide multiple sets
+of essential unique components with desired physical
+interpretation and meaning. This is direct extension
+of 2-way component analysis and is referred to as
+multiway component analysis (MWCA) {{cite:ea15291f-b169-4abb-a498-788e8dd00505}}.
+The MWCA based on Tucker-FORMULA  model can be considered as a natural and simple extension of multilinear SVD and/or multilinear ICA, in which we apply any efficient CA/BSS algorithms to each mode, which provides essential uniqueness {{cite:853347ea-4b03-4416-ad07-27d8b1aba67c}}.
+There are two different models to interpret and implement constrained Tucker decompositions for MWCA. (1) the columns of the component matrices FORMULA  represent the desired latent variables, the core tensor FORMULA  has a role of “mixing process”, modeling the links among the components from different modes, while the data tensor FORMULA  represents a collection of 1-D or 2-D mixing signals; (2) the core tensor represents the desired (but hidden) FORMULA -dimensional signal (e.g., 3D MRI image or 4D video), while the component matrices represent mixing or filtering processes through e.g., time-frequency transformations or wavelet dictionaries {{cite:1411dc71-0a8a-4972-8e13-06ab64980e1f}}.
+The MWCA based on the Tucker-FORMULA  model can be computed directly
+in two steps:
+(1) for FORMULA  perform model reduction and unfolding of data tensors sequentially
+and apply a suitable set of CA/BSS algorithms to reduced unfolding matrices FORMULA , - in each mode we can apply different constraints and algorithms;
+(2) compute the core tensor using e.g., the inversion formula:
+FORMULA  {{cite:853347ea-4b03-4416-ad07-27d8b1aba67c}}. This step is quite important because core tensors illuminate complex links among the multiple components
+in different modes {{cite:cb1f472e-a1fe-4423-83e8-072bb07dc2e1}}.
+FIGURE 
+
+Block-wise Tensor Decompositions for Very Large-Scale Data
+Large-scale tensors cannot be processed by commonly used computers,
+since not only their size exceeds available working memory but also processing of huge data is very slow.
+The basic idea is to perform partition of a big data tensor into smaller blocks and then perform tensor related operations block-wise using a suitable tensor format (see Fig. REF ).
+A data management system that divides the data tensor into blocks is important approach to both process and to save large datasets.
+The method is based on a decomposition of the original tensor dataset into small block tensors, which are approximated via TDs.
+Each block is approximated using low-rank reduced
+tensor decomposition, e.g., CPD or a Tucker decomposition.
+There are three important steps for such approach before we would be able to generate an
+output: First, an effective tensor representation
+should be chosen for the input dataset; second,
+the resulting tensor needs to be partitioned into sufficiently small
+blocks stored on a distributed memory system, so that each block can fit into the
+main memory of a single machine; third, a suitable algorithm for TD needs to be
+adapted so that it can take the blocks of the original tensor, and still
+output the correct approximation as if the tensor for the original
+dataset had not been partitioned {{cite:326dd796-578e-45bf-816d-428254a04c17}}, {{cite:602a1bf9-8712-46cd-adec-3201a448efd8}}, {{cite:adecadee-1178-4087-abb6-1ef53be99274}}.
+Converting the input data tensors from its original
+format into this block-structured tensor format is straightforward,
+and needs to be performed as a preprocessing step. The resulting
+blocks should be saved into separate files on hard disks to allow
+efficient random or sequential access to all of blocks, which is required by most TD and TN algorithms.
+We have successfully applied such
+techniques to CPD {{cite:602a1bf9-8712-46cd-adec-3201a448efd8}}. Experimental results indicate that our
+algorithms cannot only process out-of-core data, but also achieve
+high computation speed and good performance.
+FIGURE 
+
+Multilinear SVD (MLSVD) for Large Scale Problems
+MultiLinear Singular Value Decomposition (MLSVD),
+called also higher-order SVD (HOSVD) can be considered as a
+special form of the Tucker decomposition {{cite:8e831ffb-81b2-4b5c-982c-694c6a238a5d}}, {{cite:780ed700-a845-4da5-a910-0d6e79408778}},
+in which all factor matrices FORMULA  are orthogonal and the
+core tensor
+FORMULA  is all-orthogonal (see Fig. REF ).
+We say that the core tensor is all-orthogonal if it satisfies the following conditions:
+(1) All orthogonality: Slices in each mode are mutually orthogonal, e.g., for a 3rd-order tensor
+FORMULA 
+(2) Pseudo-diagonality: Frobenius norms of slices in each mode are decreasing with the increase of
+the running index
+FORMULA 
+These norms play a role similar to that of the singular values in the matrix SVD.
+The orthogonal matrices FORMULA  can be in practice computed by the standard SVD or truncated SVD of unfolded mode-FORMULA  matrices FORMULA .
+After obtaining the orthogonal matrices FORMULA  of left singular vectors of FORMULA , for each FORMULA , we can compute the core tensor FORMULA  as
+FORMULA 
+such that
+FORMULA 
+Due to orthogonality of the core tensor FORMULA  its slices are mutually orthogonal,
+this reduces to the diagonality in the matrix case.
+In some applications we may use a modified HOSVD in which the SVD can be performed not on the unfolding mode-FORMULA  matrices FORMULA  but on their transposes, i.e., FORMULA . This leads to the modified HOSVD corresponding to Grassmann manifolds {{cite:616b7e94-6877-43b2-bf56-b6e59516d74d}}, that requires the computation of very large (tall-and-skinny) factor orthogonal matrices FORMULA , where FORMULA , and the core tensor FORMULA  based on the following model:
+FORMULA 
+FIGURE 
+FIGURE 
+In practical applications the dimensions of unfolding matrices FORMULA  may be prohibitively large (with FORMULA ), easily exceeding memory of standard computers.
+A truncated SVD of a large-scale unfolding matrix FORMULA  is performed by partitioning it into FORMULA 
+slices, as FORMULA . Next, the orthogonal matrices FORMULA  and the diagonal matrices FORMULA  are obtained from eigenvalue decompositions FORMULA , allowing for the terms FORMULA  to be computed separately. This allows us to optimize the size of the FORMULA -th slice FORMULA  so as to match the available computer memory. Such a simple approach to compute matrices FORMULA  and/or FORMULA  does not require loading the entire unfolding matrices at once into computer memory, instead the access to the dataset is sequential. Depending on the size of computer memory, the dimension FORMULA  is typically less than 10,000, while there is no limit on the dimension FORMULA .
+More sophisticated approaches which also exploit partition of matrices or tensors into blocks for QR/SVD, PCA, NMF/NTF and ICA can be found in {{cite:4dc19c37-f8d5-4f5a-912f-91e444cda42b}}, {{cite:20a6f947-bbd6-4924-ba17-fd5d360bd036}}, {{cite:3134622c-09ab-44e2-9527-aba9efa41bda}}, {{cite:602a1bf9-8712-46cd-adec-3201a448efd8}}, {{cite:6ef61357-fafa-4636-bef9-bcd357c24462}}.
+When a data tensor FORMULA  is very large and cannot be stored in computer memory, then
+another challenge is to compute a core tensor FORMULA  by directly using the formula:
+FORMULA 
+which is generally performed sequentially as illustrated in Fig. REF  (a) and (b) {{cite:adecadee-1178-4087-abb6-1ef53be99274}}, {{cite:326dd796-578e-45bf-816d-428254a04c17}}.
+For very large tensors it is useful to divide the data tensor FORMULA  into small blocks FORMULA  and in order to store them on hard disks or distributed memory. In similar way, we can divide the orthogonal factor matrices FORMULA  into corresponding blocks of matrices FORMULA  as illustrated in Fig. REF  (c) for 3rd-order tensors {{cite:326dd796-578e-45bf-816d-428254a04c17}}. In a general case, we can compute blocks within the resulting tensor FORMULA  sequentially or in parallel way as follows:
+FORMULA 
+If a data tensor has low-multilinear rank,
+so that its multilinear rank FORMULA  with FORMULA ,
+we can further alleviate the problem of dimensionality by first identifying a subtensor FORMULA  for which FORMULA , using efficient CUR tensor decompositions {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}}. Then the HOSVD can be computed from subtensors as illustrated in Fig. REF  for a 3rd-order tensor.
+This feature can be formulated in more general form as the following Proposition.
+Proposition 1: If a tensor FORMULA  has low multilinear rank FORMULA , with FORMULA , then it can be fully reconstructed via the HOSVD using only FORMULA  subtensors FORMULA , under the condition that subtensor FORMULA , with FORMULA  has the multilinear rank FORMULA .
+In practice, we can compute the HOSVD for low-rank, large-scale data tensors in several steps. In the first step, we can apply the CUR FSTD decomposition {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}} to identify close to optimal a subtensor FORMULA  (see the next Section),
+In the next step, we can use the standard SVD for unfolding matrices FORMULA  of subtensors FORMULA  to compute the left orthogonal matrices FORMULA . Hence,
+we compute an auxiliary core tensor FORMULA , where FORMULA  are inverses of the sub-matrices consisting the first FORMULA  rows of the matrices FORMULA . In the last step, we perform HOSVD decomposition of
+the relatively small core tensor as FORMULA , with FORMULA  and then desired orthogonal matrices are computed as FORMULA .
+
+CUR Tucker Decomposition for Dimensionality Reduction and Compression of Tensor Data
+Note that instead of using the full tensor, we may compute an approximative tensor decomposition model from a limited number of entries (e.g., selected fibers, slices or subtensors). Such completion-type strategies have been developed for low-rank and low-multilinear-rank {{cite:d3625a38-7f29-4fa7-85a5-ea07974a2d98}}, {{cite:81f74145-bc21-4953-b2f1-fdc89de4a78b}}.
+A simple approach would be to apply CUR decomposition or Cross-Approximation by sampled fibers for the columns of factor matrices in a Tucker approximation {{cite:10c1ece3-82c7-4d99-86a5-b96971913a08}}, {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}}.
+Another approach is to apply tensor networks to represent big data by high-order tensors not explicitly but in compressed tensor formats (see next sections).
+Dimensionality reduction methods are based on the fundamental assumption that large datasets are highly redundant and can be approximated by low-rank matrices and cores, allowing for a significant reduction in computational complexity and to discover meaningful components while exhibiting marginal loss of information.
+For very large-scale matrices, the so called CUR matrix decompositions can be employed for dimensionality reduction {{cite:caf0c74b-4759-49d3-b1e5-6ab9793a7547}}, {{cite:d1c355a0-8f98-4d34-8d63-7341a12e448f}}, {{cite:10c1ece3-82c7-4d99-86a5-b96971913a08}}, {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}}, {{cite:3f801434-b0d9-4215-b895-c30829331ca4}}. Assuming a sufficiently
+precise low-rank approximation, which implies that data has some internal structure or smoothness, the idea is to provide data representation through a linear combination of a few “meaningful” components, which are exact replicas of columns and rows of the original data matrix {{cite:5b7c9811-aec9-40f2-90a5-e4478d888ab0}}.
+FIGURE 
+FIGURE 
+The CUR model, also called skeleton Cross-Approximation, decomposes a data matrix FORMULA  as {{cite:caf0c74b-4759-49d3-b1e5-6ab9793a7547}}, {{cite:d1c355a0-8f98-4d34-8d63-7341a12e448f}} (see Fig. REF ):
+FORMULA 
+where FORMULA  is a matrix
+constructed from FORMULA  suitably selected columns of the data matrix FORMULA , FORMULA  consists of FORMULA  rows of FORMULA , and the matrix FORMULA  is chosen to minimize the norm of the error FORMULA .
+Since typically, FORMULA  and FORMULA ,
+these columns and rows are chosen so as to exhibit high “statistical
+leverage” and provide the best low-rank fit to the data matrix, at the same time the error cost function FORMULA  is minimized.
+For a given set of columns (FORMULA ) and rows (FORMULA ), the optimal choice for the core matrix is FORMULA . This requires access to all the entries of FORMULA  and is not practical or feasible for large-scale data. A pragmatic choice for the core matrix would be FORMULA , where the matrix FORMULA  is defined from the intersections of the selected rows and columns. It should be noted that, if rankFORMULA , then the CUR approximation is exact. For the general case, it has been proven that, when the intersection sub-matrix FORMULA  is of maximum volume (the volume of a sub-matrix FORMULA  is defined as FORMULA ), this approximation is close to the optimal SVD solution {{cite:d1c355a0-8f98-4d34-8d63-7341a12e448f}}.
+The concept of CUR decomposition has been successfully generalized to tensors. In {{cite:10c1ece3-82c7-4d99-86a5-b96971913a08}} the matrix CUR decomposition was applied to one unfolded version of the tensor data, while in {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}} a reconstruction formula of a tensor having a low rank Tucker approximation was proposed, termed the Fiber Sampling Tucker Decomposition (FSTD), which is a practical and fast technique. The FSTD takes into account the linear structure in all the modes of the tensor simultaneously.
+Since real-life data often have good low multilinear rank approximations, the FSTD provides such a low-rank Tucker decomposition that is directly expressed in terms of a relatively small number of fibers of the data tensor (see Fig. REF ).
+For a given 3rd-order tensor FORMULA  for which an exact rank-FORMULA  Tucker representation exists, FSTD selects FORMULA  (FORMULA ) indices in each mode, which determine an intersection sub-tensor FORMULA  so that the following exact Tucker representation can be obtained:
+FORMULA 
+in which the core tensor is computed as FORMULA , and the factor matrices FORMULA  contain the fibers (columns, rows and tubes, respectively). This can also be written as a Tucker representation:
+FORMULA 
+Observe that for FORMULA  this model simplifies into the CUR matrix case, FORMULA ,
+and the core matrix is FORMULA .
+In a more general case for an FORMULA th-order tensor, we can formulate the following Proposition {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}}.
+Proposition 2: If tensor FORMULA  has low multilinear rank FORMULA , with FORMULA , then it can be fully reconstructed via the CUR FSTD FORMULA , using only FORMULA  factor matrices FORMULA , built up from fibers of the data tensor, and a core tensor FORMULA , under the condition that subtensor FORMULA  with FORMULA  has multilinear rank FORMULA ).
+An efficient strategy for the selection of suitable
+fibers, only requiring access to a partial (small) subset of entries of a data tensor through identifying the entries with maximum modulus within single fibers is given in {{cite:5d0c2f77-2ef0-402d-80d1-942e238465dd}}. The indices are selected sequentially using a deflation approach making the FSTD algorithm suitable for very large-scale but relatively low-order tensors (including tensors with missing fibers or entries).
+
+Analysis of Coupled Multi-Block Tensor Data – Linked Multiway Component Analysis (LMWCA)
+Group analysis or multi-block data analysis aims to identify links between hidden components in data making it possible
+to analyze the correlation, variability and consistency of the components across multi-block data sets. This equips us with enhanced flexibility: Some components do not necessarily need to be orthogonal or statistically independent, and can be instead sparse, smooth or non-negative (e.g., for spectral components).
+Additional constraints can be used to reflect the
+spatial distributions, spectral, or temporal patterns {{cite:1411dc71-0a8a-4972-8e13-06ab64980e1f}}.
+Consider the analysis of multi-modal high-dimensional data collected under the same or very similar conditions, for example, a set of EEG and MEG or fMRI signals recorded for different subjects over many trials and under the same experiment configuration and mental tasks. Such data share some common latent (hidden) components but can also have their own independent features.
+Therefore, it is quite important and necessary that they will be analyzed in a linked way instead of independently.
+FIGURE 
+The linked multiway component analysis (LMWCA) for multi-block tensors data
+is formulated as a set of approximate joint Tucker-FORMULA  decompositions of a set of data tensors FORMULA , with FORMULA  FORMULA  (see Fig. REF ):
+FORMULA 
+where each factor (component) matrix FORMULA  has two sets of components: (1) Components FORMULA  (with FORMULA ),
+which are common for all available blocks and correspond to identical or maximally correlated components, and (2) components FORMULA , which are different independent processes, for example, latent variables independent of excitations or stimuli/tasks. The objective is to estimate the common components FORMULA  and independent (distinctive) components FORMULA 
+(see Fig. REF ) {{cite:1411dc71-0a8a-4972-8e13-06ab64980e1f}}.
+If FORMULA  for a specific mode FORMULA  (in our case FORMULA ), under additional assumption that tensors are of the same dimension. Then the problem simplifies into generalized Common Component Analysis or tensor Population Value Decomposition (PVD) {{cite:a48818de-21b5-4e81-9a84-4c6befec0b9f}} and can be solved by concatenating all data tensors along one mode, and perform constrained Tucker or CP tensor decompositions (see {{cite:a48818de-21b5-4e81-9a84-4c6befec0b9f}}).
+FIGURE 
+In a more general case, when FORMULA , we can unfold each data tensor FORMULA  in common mode, and perform a set of linked and constrained matrix factorizations: FORMULA  through solving constrained optimization problems:
+FORMULA 
+where FORMULA  are the penalty terms which impose additional constraints on common components FORMULA , in order to extract as many as possible unique and desired components. In a special case, when we impose orthogonality constraints, the problem can be
+transformed to a generalized eigenvalue problem and solved by the power method {{cite:db089a16-ca9f-44c5-ab02-ce6e7a6b1192}}. The key point is to assume that common factor sub-matrices FORMULA  are present in all multiple data blocks and hence reflect structurally complex (hidden) latent and intrinsic links between them. In practice, the number of common components FORMULA  in each mode is unknown and should be estimated (see {{cite:db089a16-ca9f-44c5-ab02-ce6e7a6b1192}} for detail).
+The linked multiway component analysis model
+provides a quite flexible and general framework and thus
+supplements currently available techniques for group ICA
+and feature extraction for multi-block data.
+The LWCA models are designed for blocks of FORMULA  tensors,
+where dimensions naturally split into several different modalities
+(e.g., time, space and frequency). In this sense,
+a multi-block multiway CA attempts to estimate both common and independent or uncorrelated components, and is a natural extension of group ICA, PVD, and CCA/PLS methods
+(see {{cite:1df09396-2d2d-4815-8ba5-b840d02c0bd6}}, {{cite:1411dc71-0a8a-4972-8e13-06ab64980e1f}}, {{cite:db089a16-ca9f-44c5-ab02-ce6e7a6b1192}}, {{cite:43d3e0d1-2c1c-4525-807a-aa1f828a701e}} and references therein).
+The concept of LMWCA can be generalized to tensor networks as illustrated in Fig. REF .
+
+Mathematical and Graphical Description of Tensor Trains (TT) Decompositions
+In this section we discuss in more detail the Tensor Train (TT) decompositions which are
+the simplest tensor networks.
+Tensor train decomposition was introduced by Oseledets and Tyrtyshnikov {{cite:0ee90ae2-ff95-49a8-8f4d-ecefe5444c68}}, {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}} and can take
+various forms depending on the order of input data as illustrated in Fig. REF .
+FIGURE 
+FIGURE 
+The basic Tensor Train {{cite:0ee90ae2-ff95-49a8-8f4d-ecefe5444c68}}, {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}}, {{cite:62b08f48-4245-4ac2-aa4b-fad91d405664}}, called also Matrix Product State (MPS), in quantum physics {{cite:017f5e20-08a1-4168-8c7a-baf6f9c6863a}}, {{cite:36a0fe95-2c02-4b98-b6a1-f3c1d60fb08e}}, {{cite:ca8e4bd5-4900-42eb-a145-ca2dc1cb4dec}}, {{cite:d98ce2aa-65d0-4981-97e5-58e35b4cef8b}} decomposes the higher-order tensor into set of 3rd-order core tensors and factor matrices as illustrated in Figs. REF  – REF .
+Note that the TT model is equivalent to the MPS only if the MPS has the open boundary conditions (OBC) {{cite:ea80811a-c3ff-4535-8af4-dc96e7b4338c}}, {{cite:25ad1ded-0dfd-45d6-aaa7-695117c6e47d}}.
+FIGURE 
+The tensor train (TT/MPS) for an FORMULA th-order data tensor FORMULA  can be described in the various equivalent mathematical forms as follows.
+
+In a compact tensor form using multilinear products:
+FORMULA 
+where 3rd-order cores are defined as FORMULA  for FORMULA  (see Fig. REF  (a)).
+
+By unfolding of cores FORMULA  and suitable reshaping of matrices, we can obtain other very useful mathematical and graphical descriptions of the MPS, for example, as summation of rank-1 tensors using outer (tensor) product (similar to CPD, Tucker and PARATREE formats):
+FORMULA 
+where
+FORMULA  are column vectors of matrices FORMULA  (FORMULA ), with FORMULA . Note that FORMULA  are columns of the matrix FORMULA , while FORMULA  are vector of the transposed factor matrix FORMULA  (see Fig. REF  (a)).
+The minimal FORMULA  tuple FORMULA  is called TT-rank (strictly speaking for the exact TT decomposition).
+
+Alternatively, we can use the standard scalar form:
+FORMULA 
+or equivalently using slice representations (see Fig. REF ):
+FORMULA 
+where slice matrices FORMULA  FORMULA  (with FORMULA  and FORMULA ) are lateral slices of the cores FORMULA  for FORMULA  with FORMULA .
+
+By representing the cores FORMULA  by unfolding matrices FORMULA  for FORMULA  with FORMULA  and considering them as block matrices with blocks FORMULA , we can express the TT/MPS in the matrix form via strong Kronecker products {{cite:7e45c1fa-8074-4e78-808f-4f5db0499c35}}, {{cite:8a77645e-67e2-4ff6-bcc4-3f8d4eed0f34}}, {{cite:9d1516f1-306d-44f5-9792-b91bbded65e3}} (see Fig. REF  (c) and Fig. REF ):
+FORMULA 
+where the vector FORMULA  denotes vectorization of the tensor FORMULA  in
+lexicographical order of indices and FORMULA  denotes strong Kronecker product.
+
+The strong Kronecker product of two block matrices (e.g., unfolding cores):
+FORMULA 
+and
+FORMULA 
+is defined as a block matrix
+FORMULA 
+with blocks FORMULA , where FORMULA  and FORMULA  are block matrices of FORMULA  and FORMULA , respectively (see also Fig. REF  for graphical illustration).
+FIGURE 
+The matrix strong Kronecker product can be generalized to block tensors as follows:
+Let
+FORMULA  and
+FORMULA  are
+FORMULA  and FORMULA  block tensors, where
+blocks FORMULA  and
+FORMULA 
+are 3rd order tensors,
+then the strong Kronecker product of FORMULA  and FORMULA  is
+defined by the FORMULA  block tensor
+FORMULA 
+where
+FORMULA 
+for FORMULA  and FORMULA .
+FIGURE 
+Another important TT model, called matrix TT or MPO (Matrix Product Operator with Open Boundary Conditions), consists of a chain (train) of 3rd-order and 4th-order cores, as illustrated in Fig. REF . Note that a 3rd-order tensor can be represented equivalently as a block (column or row) vector in which each element (block) is a matrix (lateral slice) of the tensor, while a 4th-order tensor can represented equivalently as a block matrix. The TT/MPO model for
+FORMULA th-order tensor FORMULA  can be described mathematically in the following general forms (see also Table REF ).
+
+A) In the tensor compact form using multilinear products
+FORMULA 
+where the cores are defined as FORMULA , with FORMULA , (FORMULA ).
+
+B) Using the standard (rather long and tedious)
+scalar form:
+FORMULA 
+
+C) By matrix representations of cores, the TT/MPO decomposition can be expressed by strong Kronecker products (see Fig. REF ):
+FORMULA 
+where
+FORMULA  is unfolding matrix of FORMULA  in lexicographical order of indices and FORMULA  are block matrices with blocks FORMULA  and the number of blocks FORMULA .
+In the special case when ranks of the TT/MPO FORMULA  the strong Kronecker products simplify to the standard Kronecker products.
+
+TABLE 
+The Tensor Train (TT) format {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}}, can be interpreted as
+a special case of the HT {{cite:d7df85e9-1208-41f6-996a-476dcf10ad31}}, where all nodes of the underlying tensor
+network are aligned
+and where, moreover, the leaf matrices are assumed to be identities (and thus need not
+be stored). An advantage of the TT format is its simpler practical implementation using SVD or alternative low-rank matrix approximations, as no binary tree need be involved {{cite:26f29658-0589-4ca9-abfd-303645e3036f}}, {{cite:0ee90ae2-ff95-49a8-8f4d-ecefe5444c68}} (see Figs. REF  and REF ).
+Two different types of approaches to perform tensor approximation via TT exist {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}}.
+The first class of methods is based on combining standard iterative algorithms,
+with a low-rank decompositions, such as SVD/QR or CUR or Cross-Approximations.
+Similar to the Tucker decomposition, the TT and HT decompositions are usually
+based on low rank approximation of generalized unfolding matrices FORMULA , and a good approximation in a decomposition for a given TT/HT-rank can be obtained using the truncated SVDs of the unfolding matrices {{cite:26f29658-0589-4ca9-abfd-303645e3036f}}, {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}}.
+FIGURE 
+FIGURE 
+FIGURE 
+FIGURE 
+In {{cite:3f801434-b0d9-4215-b895-c30829331ca4}} Oseledets and Tyrtyshnikov
+proposed for TT decomposition a new approximative formula in
+which a FORMULA th-order data tensor is interpolated using special form of Cross-Approximation, which is a modification of CUR algorithm. The total number of entries and
+the complexity of the interpolation algorithm depend linearly on the order of data tensor FORMULA , so the developed algorithm does not suffer from the curse of dimensionality. The TT-Cross-Approximation is
+analog to the SVD/HOSVD like algorithms for TT/MPS, but uses adaptive
+cross-approximation instead of the computationally more expensive SVD.
+The second class of algorithms based on optimization of suitable designed cost functions, often with additional penalty or regularization terms.
+Optimization techniques include gradient descent, conjugate gradient, and Newton-like methods (see {{cite:7e92962e-cd7b-4363-90fe-07c5dd16079c}}, {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}} and references therein).
+Gradient descent methods leads often to the Alternating Least Squares (ALS) type of algorithms,
+which can be improved in various ways {{cite:7e92962e-cd7b-4363-90fe-07c5dd16079c}}, {{cite:a7dd5078-27d7-47ae-a76e-9a5da68f3f97}} (see Fig. REF ).
+A quite successful improvement in TNs (TT, HT) is called the DMRG method. It
+joins two neighboring factors (cores), optimize the resulting “supernode”, and
+splits the result into separate factors by a low-rank matrix factorization {{cite:7e92962e-cd7b-4363-90fe-07c5dd16079c}}, {{cite:53d68426-2b6b-423a-81b2-e13f8ec6ac66}}, {{cite:ea80811a-c3ff-4535-8af4-dc96e7b4338c}}, {{cite:25ad1ded-0dfd-45d6-aaa7-695117c6e47d}}
+(see Fig. REF ).
+Remark: In most optimization problems it is very convenient to present TT in a canonical form,
+in which all cores are left or right orthogonal {{cite:7e92962e-cd7b-4363-90fe-07c5dd16079c}}, {{cite:692e3466-b7cb-4ad0-b167-316a73799d61}} (see also Fig. REF  and Fig. REF ).
+The FORMULA -order core tensor is called right-orthogonal if
+FORMULA 
+Analogously the FORMULA -order core tensor is called left orthogonal if
+FORMULA 
+In contrast, for the all-orthogonal core tensor we have FORMULA .
+TT-Rounding  TT–rounding (also called truncation or recompression) {{cite:3f801434-b0d9-4215-b895-c30829331ca4}} is post-processing procedure to
+reduce the TT ranks which in the first stage after applying low-rank matrix factorizations are usually not optimal with respect of desired approximation errors.
+The optimal computation of TT-tensor is generally impossible without TT-rounding.
+The tensor expressed already in TT format is approximated by another TT-tensor
+with smaller TT-ranks but with prescribed accuracy of approximation FORMULA .
+The most popular TT-rounding algorithm is based on the QR/SVD
+algorithm, which requires FORMULA  operations {{cite:0ee90ae2-ff95-49a8-8f4d-ecefe5444c68}}, {{cite:ecbb2c04-047f-4c31-bde2-e30caa0b556b}}.
+In practice, we avoid explicit construction of these matrices and the SVDs when truncating a tensor in TT decomposition to lower TT-rank. Such truncation algorithms for TT are described by Oseledets in {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}}. In fact, the method exploits micro-iterations algorithm where the SVD is performed only on a relatively small core at each iteration. A similar approach has been developed by Grasedyck for the HT {{cite:4b8abc2e-6ae5-4efe-adb7-34e9d9e5aff8}}.
+HT/TT algorithms that avoid the explicit computation of
+these SVDs when truncating a tensor that is already in tensor network format are discussed in {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}}, {{cite:53d68426-2b6b-423a-81b2-e13f8ec6ac66}}, {{cite:b131b3c8-9ac2-4691-81be-708cdefbc206}}.
+TT Toolbox developed by Oseledets (http://spring.inm.ras.ru/osel/?page_id=24) is focussed on TT structures, and deals with the curse of dimensionality {{cite:ecbb2c04-047f-4c31-bde2-e30caa0b556b}}.
+The Hierarchical Tucker (HT) toolbox by Kressner and Tobler (http://www.sam.math.ethz.ch/NLAgroup/htucker_toolbox.html) and Calculus library by Hackbusch, Waehnert and Espig, focuss mostly on HT and TT tensor networks {{cite:ecbb2c04-047f-4c31-bde2-e30caa0b556b}}, {{cite:20fd9af2-d300-48c0-9926-f6bef5110eb7}}, {{cite:b131b3c8-9ac2-4691-81be-708cdefbc206}}.
+See also recently developed TDALAB (http://bsp.brain.riken.jp/TDALAB and TENSORBOX http://www.bsp.brain.riken.jp/~phan that provide user-friendly interface and advanced algorithms for selected TD (Tucker, CPD) models {{cite:634fed63-3d66-42ed-8513-86ff8909e3bf}}, {{cite:a828871b-a37a-4e6a-a1b3-a39f549f6876}}. The <http://www.esat.kuleuven.be/sista/tensorlab/>Tensorlab toolbox builds upon the complex optimization framework and offers efficient numerical algorithms for computing the TDs
+with various constraints (e.g. nonnegativity, orthogonality) and the possibility to combine and jointly factorize dense, sparse and incomplete tensors {{cite:d66f7f6e-d5ca-4617-a809-d2b93584af35}}.
+The problems related to optimization of
+existing TN/TD algorithms are active area of research {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}}, {{cite:7e92962e-cd7b-4363-90fe-07c5dd16079c}}, {{cite:a7dd5078-27d7-47ae-a76e-9a5da68f3f97}}, {{cite:2b9378b3-1fb5-4cb9-bd61-04f27b1773ba}}, {{cite:870784d6-c615-47a2-ab06-216a5ba8b98e}}.
+
+Hierarchical Outer Product Tensor Approximation (HOPTA) and Kronecker Tensor Decompositions
+Recent advances in TDs/TNs include, TT/HT {{cite:62b08f48-4245-4ac2-aa4b-fad91d405664}}, {{cite:7e92962e-cd7b-4363-90fe-07c5dd16079c}}, {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}}, PARATREE {{cite:2274eb73-80ba-4b98-9691-a6a911b7ad92}},
+Block Term Decomposition (BTD) {{cite:9ce5ca36-67ed-408e-ae38-de6f6883e081}},
+Hierarchical Outer Product Tensor Approximation (HOPTA) and Kronecker Tensor Decomposition (KTD) {{cite:c7d33579-0802-4c0e-807a-67021a5c8505}}, {{cite:c057c78f-745f-4932-a575-acf4cd7daa08}}, {{cite:482282dc-3e2b-4ef3-86db-c5922d95c4f4}}.
+HOPTA and KTD models can be expressed mathematically in simple nested (hierarchical) forms, respectively
+(see Fig. REF  and Fig. REF ):
+FORMULA 
+where each factor tensor can be represented recursively as
+FORMULA  or FORMULA , etc.
+The Kronecker product of two tensors: FORMULA  and FORMULA  yields FORMULA , with entries FORMULA , where the operator FORMULA  for indices FORMULA  and FORMULA  is defined as follows FORMULA  (see Fig. REF ).
+Note that the FORMULA th-order sub-tensors FORMULA  and FORMULA  actually have the same elements, arranged differently. For example, if FORMULA  and FORMULA , where FORMULA  and FORMULA , then FORMULA .
+FIGURE 
+FIGURE 
+FIGURE 
+It is interesting to note that the KTD and HOPTA
+can be considered in special cases as a flexible form of Block Term Decomposition (BTD) introduced first by De Lathauwer {{cite:9ce5ca36-67ed-408e-ae38-de6f6883e081}}, {{cite:dddb3ddb-70fa-4203-9bc7-b7c8ce34db26}}, {{cite:789aa514-e0e5-4686-9ce0-625dbcf7529f}}, {{cite:5ed21cd0-55fe-40d5-9ac5-39b867c498dd}}.
+The definition of the tensor Kronecker product assumes that both core tensors FORMULA 
+and FORMULA  have the same order.
+It should be noted that vectors and matrices can be treated as tensors, e.g, matrix of dimension FORMULA  can be treated formally as 3rd-order tensor of dimension FORMULA .
+In fact, from the KTD model, we can generate many existing and emerging TDs by
+changing structures and orders of factor tensors: FORMULA  and FORMULA , for example:
+
+If FORMULA  are rank-1 tensors of size FORMULA , and
+FORMULA  are scalars, FORMULA , then () expresses the rank-FORMULA  CPD.
+
+If FORMULA  are rank-FORMULA  tensors in the Kruskal (CP) format, of size FORMULA , and
+FORMULA  are rank-1 CP tensor of size FORMULA , FORMULA , then () expresses the rank-(FORMULA ) BTD {{cite:9ce5ca36-67ed-408e-ae38-de6f6883e081}}.
+
+If FORMULA  and FORMULA  are expressed by KTDs, we have Nested Kronecker Tensor Decomposition (NKTD), where Tensor Train (TT) decomposition is a particular case {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}}, {{cite:d7409d27-9ead-4942-9cc5-e1ee5d6f598e}}, {{cite:62b08f48-4245-4ac2-aa4b-fad91d405664}}. In fact, the model () can be used for) the recursive TT-decompositions {{cite:63bd55a2-56f1-4d29-975c-685082f67a27}}.
+
+In this way, a large variety of tensor decomposition models can be generated. However, only some of them yield unique decompositions and to date only a few have found concrete applications is scientific computing.
+The advantage of HOPTA models over BTD and KTD is that they are more flexible and can approximate very high order tensors with a relative small number of cores, and they allow us to model more complex data structures.
+
+Tensorization and Quantization – Blessing of Dimensionality
+Curse of Dimensionality
+The term curse of dimensionality, in the context of tensors, refers to the fact that the number of elements of an FORMULA th-order FORMULA  tensor, FORMULA , grows exponentially with the tensor order FORMULA .
+Tensors can easily become really big for very high order tensors since the size is exponentially growing with the number of dimensions (‘ways’, or ‘modes’).
+For example, for the Tucker decomposition the number of entries of a original data tensor but also a core tensor scales exponentially in the tensor order, for instance, the number of entries of an FORMULA th-order FORMULA  core tensor is FORMULA .
+If all computations are performed on a CP tensor format and not on the raw data tensor itself, then instead of the original FORMULA  raw data entries, the number of parameters in a CP representation reduces to FORMULA , which scales linearly in FORMULA  and FORMULA  (see Table REF ). This effectively bypasses the curse of dimensionality, however the CP approximation may involve numerical problems, since existing algorithms are not stable for high-order tensors. At the same time, existing algorithms for tensor networks, especially TT/HT ensure very good numerical properties (in contrast to CPD algorithms), making it possible to control an error of approximation i.e., to achieve a desired accuracy of approximation {{cite:62b08f48-4245-4ac2-aa4b-fad91d405664}}.
+
+Quantized Tensor Networks
+The curse of dimensionality can be overcome through quantized tensor networks, which represents a tensor of possibly very
+high-order as a set of sparsely interconnected low-order and very low dimensions cores {{cite:62b08f48-4245-4ac2-aa4b-fad91d405664}}, {{cite:a71e62ca-3e81-4ee9-85ab-a42b2fcf7411}}.
+The concept of quantized tensor networks was first proposed by Khoromskij {{cite:700e8ed6-0f97-442b-8740-f04e7f0a2494}} and Oseledets {{cite:a71e62ca-3e81-4ee9-85ab-a42b2fcf7411}}.
+The very low-dimensional cores are interconnected via tensor contractions to provide an efficient, highly compressed low-rank representation of a data tensor.
+FIGURE 
+The procedure of creating a data tensor from lower-order original data is referred to as tensorization. In other words, lower-order data tensors can be reshaped (reformatted) into high-order tensors. The purpose of a such tensorization is to achieve super compression {{cite:700e8ed6-0f97-442b-8740-f04e7f0a2494}}.
+In general, very large-scale vectors or matrices can be easily tensorized to higher-order tensors, then efficiently compressed by applying a suitable TT decomposition; this is the underlying principle for big data analysis {{cite:a71e62ca-3e81-4ee9-85ab-a42b2fcf7411}}, {{cite:700e8ed6-0f97-442b-8740-f04e7f0a2494}}. For example,
+the quantization and tensorization of a huge vector FORMULA , FORMULA  can be achieved through reshaping to give an
+FORMULA  tensor FORMULA  of order FORMULA , as illustrated in Figure REF  (a). Such a quantized tensor FORMULA  often admits low-rank approximations, so that a good compression of a huge vector FORMULA  can be achieved by enforcing a maximum possible low-rank structure on the tensor network.
+Even more generally, an FORMULA th-order tensor FORMULA , with FORMULA , can be quantized in all modes simultaneously to yield a
+FORMULA  quantized tensor FORMULA  of higher-order, with small FORMULA , (see Fig. REF  (c) and Fig. REF ).
+In the example shown in Fig. REF  the Tensor Train of a huge 3rd-order tensor cab be represented by the strong Kronecker products of block tensors with relatively small 3rd-order blocks.
+FIGURE 
+Recall that the strong Kronecker product of two block cores:
+FORMULA 
+and
+FORMULA 
+is defined as a block tensor
+FORMULA 
+with blocks FORMULA , where FORMULA  and FORMULA  are block tensors of FORMULA  and FORMULA , respectively.
+In practice, a fine (FORMULA  ) quantization is desirable to create as many virtual modes as possible, thus allowing us to implement efficient low-rank tensor approximations.
+For example, the binary encoding (FORMULA ) reshapes an FORMULA th-order tensor with FORMULA  elements into a tensor of order FORMULA , with the same number of elements.
+In other words, the idea of the quantized tensor is quantization of each FORMULA -th “physical” mode
+(dimension) by replacing it with FORMULA  “virtual” modes, provided that the corresponding mode size FORMULA  are factorized as FORMULA . This corresponds to reshaping the FORMULA -th mode of size FORMULA  into FORMULA  modes of sizes FORMULA .
+The TT decomposition applied to quantized tensors is
+referred to as the QTT;
+it was first introduced as a compression scheme for large-scale matrices {{cite:a71e62ca-3e81-4ee9-85ab-a42b2fcf7411}}, and also independently for more general settings {{cite:700e8ed6-0f97-442b-8740-f04e7f0a2494}}, {{cite:692e3466-b7cb-4ad0-b167-316a73799d61}}, {{cite:63533830-83f6-4c26-96ca-d8480d43c7ba}}, {{cite:01f0c82d-fbb9-437c-a632-849c5d7d1f30}}, {{cite:9d1516f1-306d-44f5-9792-b91bbded65e3}}.
+The attractive property of QTT is that not only
+its rank is typically small (below 10) but it is almost independent or at least uniformly bounded by data size (even for FORMULA ), providing a logarithmic (sub-linear) reduction of storage requirements: FORMULA  – so-called super-compression {{cite:700e8ed6-0f97-442b-8740-f04e7f0a2494}}.
+2ex
+TABLE 
+0ex
+Compared to the TT decomposition (without quantization), the QTT format often represents more deep structure in the data by introducing some “virtual” dimensions. The high compressibility of the QTT-approximation is a consequence of the noticeable separability properties in the quantized tensor for suitably structured data.
+The fact that the TT/QTT ranks are often moderate or even low, e.g., constant or
+growing linearly with respect to FORMULA  and constant or growing logarithmically with respect to FORMULA , is an important issue in the context of big data analytic and has been addressed so far mostly experimentally (see {{cite:62b08f48-4245-4ac2-aa4b-fad91d405664}}, {{cite:700e8ed6-0f97-442b-8740-f04e7f0a2494}}, {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}} and references therein).
+On the other hand, the high efficiency
+of multilinear algebra in the TT/QTT algorithms based on the well-posedness of
+the TT low-rank approximation problems and the fact that such problems are solved quite efficiently with the use of SVD/QR, CUR and other cross-approximation techniques.
+In general, tensor networks can be considered as distributed high-dimensional tensors built
+up from many core tensors of low dimension through specific tensor contractions. Indeed, tensor networks (TT, MPS, MPO, PEPS and HT) have already been successfully used
+to solve intractable problems in computational quantum chemistry and in scientific computing {{cite:ca8e4bd5-4900-42eb-a145-ca2dc1cb4dec}}, {{cite:4adfb6d6-0b0e-46b5-9249-106feabebe76}}, {{cite:01f0c82d-fbb9-437c-a632-849c5d7d1f30}}, {{cite:9d1516f1-306d-44f5-9792-b91bbded65e3}}, {{cite:8a77645e-67e2-4ff6-bcc4-3f8d4eed0f34}}, {{cite:05ae8693-3813-4fb9-aec4-da5c0207a67d}}.
+However, in some cases, the ranks of the TT or QTT formats
+grow quite significantly with the linearly increasing of approximation accuracy. To overcome this
+problem, new tensor models of tensor approximation were developed, e.g., Dolgov and Khoromskij, proposed the QTT-Tucker format
+{{cite:692e3466-b7cb-4ad0-b167-316a73799d61}} (see Fig. REF ), which
+exploits the TT approximation not only for the Tucker core tensor, but also QTT for the factor matrices.
+This model allows distributed computing, often with bounded ranks and to avoid
+the curse of dimensionality.
+For very large scale tensors we can apply a more advanced approach in which factor matrices are tensorized to
+higher-order tensors and then represented by TTs as illustrated in Fig. REF .
+FIGURE 
+Modern methods of tensor approximations combine many TNs and TDs formats including the CPD, BTD, Tucker, TT, HT decompositions and HOPTA (see Fig. REF ) low-parametric tensor format.
+The concept tensorization and by representation of a very high-order tensor in tensor network formats
+(TT/QTT, HT, QTT-Tucker) allows us to treat efficiently a very large-scale structured data that admit low rank tensor network approximations.
+TT/QTT/HT tensor networks have already found promising applications in very large-scale problems in scientific computing, such as eigenanalysis, super-fast Fourier transforms, and solving huge systems of large linear equations (see {{cite:63533830-83f6-4c26-96ca-d8480d43c7ba}}, {{cite:081c66cc-e0d5-4240-a4ad-4f024851ef45}}, {{cite:692e3466-b7cb-4ad0-b167-316a73799d61}}, {{cite:25ad1ded-0dfd-45d6-aaa7-695117c6e47d}}, {{cite:e4e31a26-77bf-4be7-ab95-9fb6ca468e5d}} and references therein).
+In summary, the main concept or approach is to apply
+a suitable tensorization and quantization of tensor data and then perform approximative decomposition of this data into a
+tensor network and finally perform all computations (tensors/matrix/vectors operations, optimizations) in tensor network formats.
+
+Conclusions and Future Directions
+Tensor networks can be considered as a generalization and extension of TDs and are promising tools for the analysis of big data due to their extremely good compression abilities and distributed and parallel processing.
+TDs have already found application in generalized multivariate regression, multi-way blind source separation, sparse representation and coding, feature extraction, classification, clustering and data assimilation. Unique
+advantages of tensor networks include potential ability of tera- or even peta-byte scaling and distributed fault-tolerant computations.
+Overall, the benefits of multiway (tensor) analysis methods can be summarized as follows:
+
+“Super” compression of huge multidimensional, structured data which admits a low-rank approximation via TNs of high-order tensors by extracting factor matrices and/or core tensors of low-rank and low-order and perform all mathematical manipulations in tensor formats (especially, TT and HT formats).
+
+A compact and very flexible approximate representation of structurally rich data by accounting for their spatio-temporal and spectral dependencies.
+
+Opportunity to establish statistical links between cores, factors, components or hidden latent variables for blocks of data.
+
+Possibility to operate with noisy, incomplete, missing data by using powerful low-rank tensor/matrix approximation techniques.
+
+A framework to incorporate various diversities or constraints in different modes and thus naturally extend the standard (2-way) CA methods to large-scale multidimensional data.
+
+Many challenging problems related to low-rank tensor approximations remain to be addressed.
+
+A whole new area emerges when several TNs which operate on different datasets are coupled or linked.
+
+As the complexity of big data increases, this requires more efficient iterative algorithms for their computation, extending beyond the ALS, MALS/DMRG, SVD/QR and CUR/Cross-Approximation class of algorithms.
+
+Methodological approaches are needed to
+determine the kind of constraints that should be imposed on cores to extract desired hidden (latent) variables with meaningful physical interpretation.
+
+We need methods to reliably estimate the ranks of TNs,
+especially for structured data corrupted by noise and outliers.
+
+The uniqueness of various TN models under different constraints needs to be investigated.
+
+Special techniques are needed for distributed computing and to save and process huge ultra large-scale tensors.
+
+Better visualization tools need to be developed to address large-scale tensor network representations.
+
+In summary, TNs and TDs is a fascinating and perspective area of research with many potential applications in multi-modal analysis of massive big data sets.
+Acknowledgments: The author wish to express his appreciation and gratitude to his colleagues, especially: Drs. Namgill LEE, Danilo MANDIC, Qibin ZHAO, Cesar CAIAFA, Anh Huy PHAN, André ALMEIDA, Qiang WU, Guoxu ZHOU and Chao LI for reading the manuscript and giving him comments and suggestions.

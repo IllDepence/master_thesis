@@ -1,0 +1,851 @@
+data	Data	13	17	http://ma-graph.org/entity/163439950	5.0
+big data	Big Data	2054	2062	http://ma-graph.org/entity/75684735	7.656092047691345
+processing	Processing	-1	9	http://ma-graph.org/entity/194241460	5.0
+data processing	Data Processing	13	28	http://ma-graph.org/entity/138827492	5.0
+tensor	Tensor	49	55	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	69	75	http://ma-graph.org/entity/107180903	14.108511209487915
+polish	Polish	183	189	http://ma-graph.org/entity/96627749	5.3125
+neuroscience	neuroscience	429	441	http://ma-graph.org/entity/169760540	398.39717864990234
+computational neuroscience	computational neuroscience	3873	3899	http://ma-graph.org/entity/15286952	5.0
+neuroinformatics	neuroinformatics	-1	15	http://ma-graph.org/entity/205427263	5.562499761581421
+signal	signal	488	494	http://ma-graph.org/entity/113841659	5.516761541366577
+processing	processing	495	505	http://ma-graph.org/entity/194241460	5.0
+signal processing	signal processing	20631	20648	http://ma-graph.org/entity/104267543	8.133869767189026
+machine	machine	32363	32370	http://ma-graph.org/entity/130705442	5.0
+machine learning	machine learning	-1	15	http://ma-graph.org/entity/119857082	185.92023849487305
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+multiple	multiple	582	590	http://ma-graph.org/entity/164680029	5.0
+data	data	742	746	http://ma-graph.org/entity/163439950	5.0
+data	data	789	793	http://ma-graph.org/entity/163439950	5.0
+big data	Big data	2220	2228	http://ma-graph.org/entity/75684735	7.656092047691345
+analytics	analytics	-1	8	http://ma-graph.org/entity/79158427	6.720328330993652
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+big data	big data	952	960	http://ma-graph.org/entity/75684735	7.656092047691345
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1014	1020	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1058	1064	http://ma-graph.org/entity/107180903	14.108511209487915
+structures	structures	1201	1211	http://ma-graph.org/entity/76728937	5.0
+data	data	1223	1227	http://ma-graph.org/entity/163439950	5.0
+anomaly detection	Anomaly detection	1515	1532	http://ma-graph.org/entity/739882	5.822916626930237
+feature extraction	feature extraction	1534	1552	http://ma-graph.org/entity/52622490	13.083188533782959
+cluster analysis	cluster analysis	1570	1586	http://ma-graph.org/entity/73555534	12.573946714401245
+data	data	1588	1592	http://ma-graph.org/entity/163439950	5.0
+fusion	fusion	1593	1599	http://ma-graph.org/entity/158525013	6.032828092575073
+pattern recognition	pattern recognition	1617	1636	http://ma-graph.org/entity/178980831	62.25867748260498
+predictive modelling	predictive modeling	1638	1657	http://ma-graph.org/entity/45804977	5.0
+regression	regression	1659	1669	http://ma-graph.org/entity/83546350	5.590277910232544
+time series	time series	1671	1682	http://ma-graph.org/entity/151406439	7.240803837776184
+component analysis	component analysis	1705	1723	http://ma-graph.org/entity/2780692498	5.477272868156433
+tensor	Tensor	1754	1760	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	1761	1774	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	1846	1852	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1903	1909	http://ma-graph.org/entity/107180903	14.108511209487915
+train	train	1910	1915	http://ma-graph.org/entity/190839683	8.166666626930237
+kronecker product	Kronecker Product	2000	2017	http://ma-graph.org/entity/46030957	6.320987939834595
+data	Data	2058	2062	http://ma-graph.org/entity/163439950	5.0
+big data	Big Data	-1	7	http://ma-graph.org/entity/75684735	7.656092047691345
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+big data	Big data	785	793	http://ma-graph.org/entity/75684735	7.656092047691345
+velocity	Velocity	2394	2402	http://ma-graph.org/entity/108821247	5.0
+data	data	2445	2449	http://ma-graph.org/entity/163439950	5.0
+data	data	2586	2590	http://ma-graph.org/entity/163439950	5.0
+data	data	2667	2671	http://ma-graph.org/entity/163439950	5.0
+time series	time series	2692	2703	http://ma-graph.org/entity/151406439	7.240803837776184
+data	data	2742	2746	http://ma-graph.org/entity/163439950	5.0
+data	data	2790	2794	http://ma-graph.org/entity/163439950	5.0
+big data	big data	6320	6328	http://ma-graph.org/entity/75684735	7.656092047691345
+data	data	6644	6648	http://ma-graph.org/entity/163439950	5.0
+tensor	Tensor	8280	8286	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	9632	9638	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	11998	12002	http://ma-graph.org/entity/163439950	5.0
+data	Data	31271	31275	http://ma-graph.org/entity/163439950	5.0
+data	data	31431	31435	http://ma-graph.org/entity/163439950	5.0
+data analysis	data analysis	44607	44620	http://ma-graph.org/entity/175801342	5.0
+signal	signal	45318	45324	http://ma-graph.org/entity/113841659	5.516761541366577
+processing	processing	57225	57235	http://ma-graph.org/entity/194241460	5.0
+image processing	image processing	-1	15	http://ma-graph.org/entity/9417928	16.779345273971558
+chemometrics	Chemometrics	3606	3618	http://ma-graph.org/entity/151304367	5.0
+quantum	Quantum	3631	3638	http://ma-graph.org/entity/84114770	18.191041946411133
+quantum	Quantum	3664	3671	http://ma-graph.org/entity/84114770	18.191041946411133
+chemistry	Chemistry	3672	3681	http://ma-graph.org/entity/185592680	292.7522087097168
+quantum chemistry	Quantum Chemistry	-1	16	http://ma-graph.org/entity/22994065	5.0
+bioinformatics	bioinformatics	3855	3869	http://ma-graph.org/entity/60644358	119.75738525390625
+neuroscience	neuroscience	3887	3899	http://ma-graph.org/entity/169760540	398.39717864990234
+computational neuroscience	computational neuroscience	-1	25	http://ma-graph.org/entity/15286952	5.0
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+multiple	multiple	582	590	http://ma-graph.org/entity/164680029	5.0
+data	data	742	746	http://ma-graph.org/entity/163439950	5.0
+tensor	Tensor	1754	1760	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	2105	2109	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	3099	3105	http://ma-graph.org/entity/107180903	14.108511209487915
+source separation	source separation	4437	4454	http://ma-graph.org/entity/2776864781	5.0
+component analysis	Component Analysis	4480	4498	http://ma-graph.org/entity/2780692498	5.477272868156433
+component analysis	component analysis	4523	4541	http://ma-graph.org/entity/2780692498	5.477272868156433
+dimensionality reduction	dimensionality reduction	4609	4633	http://ma-graph.org/entity/70518039	7.272218465805054
+handle	handle	4647	4653	http://ma-graph.org/entity/72824718	5.0
+values	values	4662	4668	http://ma-graph.org/entity/194229684	5.0
+data	data	4680	4684	http://ma-graph.org/entity/163439950	5.0
+noisy data	noisy data	-1	9	http://ma-graph.org/entity/2781170535	5.0
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+uncorrelated	uncorrelated	5202	5214	http://ma-graph.org/entity/169345407	5.0
+tensor	tensor	5410	5416	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	5558	5563	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	5697	5703	http://ma-graph.org/entity/107180903	14.108511209487915
+software	software	5750	5758	http://ma-graph.org/entity/2777904410	64.82359886169434
+data	data	6324	6328	http://ma-graph.org/entity/163439950	5.0
+big data	big data	11994	12002	http://ma-graph.org/entity/75684735	7.656092047691345
+processing	processing	20638	20648	http://ma-graph.org/entity/194241460	5.0
+data processing	data processing	-1	14	http://ma-graph.org/entity/138827492	5.0
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1014	1020	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	1223	1227	http://ma-graph.org/entity/163439950	5.0
+structures	structures	6730	6740	http://ma-graph.org/entity/76728937	5.0
+data	data	6756	6760	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	6929	6935	http://ma-graph.org/entity/107180903	14.108511209487915
+literature	literature	6964	6974	http://ma-graph.org/entity/124952713	321.37950897216797
+component analysis	component analysis	6986	7004	http://ma-graph.org/entity/2780692498	5.477272868156433
+component analysis	Component Analysis	7050	7068	http://ma-graph.org/entity/2780692498	5.477272868156433
+principal component analysis	Principal Component Analysis	-1	27	http://ma-graph.org/entity/27438332	7.74491012096405
+component analysis	Component Analysis	4480	4498	http://ma-graph.org/entity/2780692498	5.477272868156433
+independent component analysis	Independent Component Analysis	7076	7106	http://ma-graph.org/entity/51432778	6.895833611488342
+component analysis	Component Analysis	7121	7139	http://ma-graph.org/entity/2780692498	5.477272868156433
+nonnegative matrix	Nonnegative Matrix	7147	7165	http://ma-graph.org/entity/139018669	6.513888835906982
+component analysis	Component Analysis	7206	7224	http://ma-graph.org/entity/2780692498	5.477272868156433
+source separation	source separation	7437	7454	http://ma-graph.org/entity/2776864781	5.0
+dimensionality reduction	dimensionality reduction	7462	7486	http://ma-graph.org/entity/70518039	7.272218465805054
+feature extraction	feature extraction	7488	7506	http://ma-graph.org/entity/52622490	13.083188533782959
+visualization	visualization	7540	7553	http://ma-graph.org/entity/36464697	13.404645919799805
+data	data	7794	7798	http://ma-graph.org/entity/163439950	5.0
+multiple	multiple	7813	7821	http://ma-graph.org/entity/164680029	5.0
+tensor	tensor	7886	7892	http://ma-graph.org/entity/107180903	14.108511209487915
+distributed computing	distributed computing	7974	7995	http://ma-graph.org/entity/120314980	101.02734565734863
+multiple	multiple	8010	8018	http://ma-graph.org/entity/164680029	5.0
+data	data	8152	8156	http://ma-graph.org/entity/163439950	5.0
+data	data	8259	8263	http://ma-graph.org/entity/163439950	5.0
+tensor	Tensor	8280	8286	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	8367	8373	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	8588	8592	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	8625	8631	http://ma-graph.org/entity/107180903	14.108511209487915
+space time	space time	-1	9	http://ma-graph.org/entity/96402334	5.277777910232544
+frequency	frequency	8717	8726	http://ma-graph.org/entity/199075045	5.0
+tensor	tensor	8783	8789	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	8872	8878	http://ma-graph.org/entity/107180903	14.108511209487915
+spheres	spheres	9478	9485	http://ma-graph.org/entity/72422203	5.0
+tensor	Tensor	9632	9638	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	9696	9702	http://ma-graph.org/entity/107180903	14.108511209487915
+interest	interest	10298	10306	http://ma-graph.org/entity/146198305	5.0
+tensor	tensor	10427	10433	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	10512	10517	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	10563	10569	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	10583	10588	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	10642	10648	http://ma-graph.org/entity/107180903	14.108511209487915
+scenario	scenario	10680	10688	http://ma-graph.org/entity/135342440	5.0
+matricization	matricization	10715	10728	http://ma-graph.org/entity/2777725721	5.0
+flattening	flattening	10730	10740	http://ma-graph.org/entity/19444555	5.277777910232544
+tensor	tensor	10749	10755	http://ma-graph.org/entity/107180903	14.108511209487915
+lexicographical order	lexicographical order	10897	10918	http://ma-graph.org/entity/159254197	6.652777791023254
+tensor	tensor	10969	10975	http://ma-graph.org/entity/107180903	14.108511209487915
+values	values	11161	11167	http://ma-graph.org/entity/194229684	5.0
+convention	convention	11410	11420	http://ma-graph.org/entity/2780608745	18.327651023864746
+notation	notation	11511	11519	http://ma-graph.org/entity/45357846	7.808545231819153
+fortran	Fortran	11543	11550	http://ma-graph.org/entity/2778241615	7.83143937587738
+notation	notation	11591	11599	http://ma-graph.org/entity/45357846	7.808545231819153
+system	system	11648	11654	http://ma-graph.org/entity/16359219	5.0
+tensor	tensor	11731	11737	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor product	tensor product	14083	14097	http://ma-graph.org/entity/51255310	5.0
+algebra	algebra	69794	69801	http://ma-graph.org/entity/125565743	619.8704528808594
+multilinear algebra	multilinear algebra	-1	18	http://ma-graph.org/entity/60321788	5.0
+convention	convention	11410	11420	http://ma-graph.org/entity/2780608745	18.327651023864746
+data	data	11998	12002	http://ma-graph.org/entity/163439950	5.0
+big data	big data	31494	31502	http://ma-graph.org/entity/75684735	7.656092047691345
+convention	convention	-1	9	http://ma-graph.org/entity/2780608745	18.327651023864746
+notation	notation	11511	11519	http://ma-graph.org/entity/45357846	7.808545231819153
+kronecker product	Kronecker product	12341	12358	http://ma-graph.org/entity/46030957	6.320987939834595
+tensor	tensor	12366	12372	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	12484	12490	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	12537	12543	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	12614	12620	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	12914	12919	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	12966	12972	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	13213	13219	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor contraction	tensor contraction	13222	13240	http://ma-graph.org/entity/124007464	7.73659348487854
+modes	modes	13277	13282	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	13322	13328	http://ma-graph.org/entity/107180903	14.108511209487915
+operation	operation	13396	13405	http://ma-graph.org/entity/19942306	5.0
+modes	modes	13516	13521	http://ma-graph.org/entity/103435781	5.0
+modes	modes	13537	13542	http://ma-graph.org/entity/103435781	5.0
+modes	modes	13727	13732	http://ma-graph.org/entity/103435781	5.0
+notation	notation	13865	13873	http://ma-graph.org/entity/45357846	7.808545231819153
+tensor	tensor	13979	13985	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor product	tensor product	14083	14097	http://ma-graph.org/entity/51255310	5.0
+tensor	tensor	14114	14120	http://ma-graph.org/entity/107180903	14.108511209487915
+outer product	outer product	14209	14222	http://ma-graph.org/entity/180623205	5.0
+outer product	outer product	14297	14310	http://ma-graph.org/entity/180623205	5.0
+tensor	tensor	14387	14393	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	14435	14441	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	14730	14736	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	14750	14756	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	14768	14774	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	14829	14835	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	15054	15058	http://ma-graph.org/entity/163439950	5.0
+curse	curse	15149	15154	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	55378	55401	http://ma-graph.org/entity/111030470	5.277777910232544
+tensor	tensor	56911	56917	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	64001	64006	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	64093	64099	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	66856	66861	http://ma-graph.org/entity/103435781	5.0
+modes	modes	67504	67509	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	67572	67578	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	67668	67674	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	67705	67711	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	67807	67813	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	67918	67923	http://ma-graph.org/entity/103435781	5.0
+data	data	68741	68745	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	69234	69240	http://ma-graph.org/entity/107180903	14.108511209487915
+matricization	matricization	-1	12	http://ma-graph.org/entity/2777725721	5.0
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1014	1020	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	1021	1034	http://ma-graph.org/entity/124681953	6.118055582046509
+decomposition	decomposition	1761	1774	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	1846	1852	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1903	1909	http://ma-graph.org/entity/107180903	14.108511209487915
+size	size	17257	17261	http://ma-graph.org/entity/140356686	5.0
+tensor	tensor	17270	17276	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	17496	17500	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	17501	17507	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	17604	17610	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	18027	18031	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	18032	18038	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	18155	18161	http://ma-graph.org/entity/107180903	14.108511209487915
+renormalization	Renormalization	18438	18453	http://ma-graph.org/entity/166124518	6.952967047691345
+ansatz	Ansatz	18454	18460	http://ma-graph.org/entity/130979935	5.0
+tensor	tensor	18468	18474	http://ma-graph.org/entity/107180903	14.108511209487915
+structures	structures	18541	18551	http://ma-graph.org/entity/76728937	5.0
+tensor	tensor	18746	18752	http://ma-graph.org/entity/107180903	14.108511209487915
+advantage	advantage	18776	18785	http://ma-graph.org/entity/16885038	5.0
+size	size	18815	18819	http://ma-graph.org/entity/140356686	5.0
+tensor	tensor	18833	18839	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	18856	18862	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	19074	19080	http://ma-graph.org/entity/107180903	14.108511209487915
+structures	structures	19144	19154	http://ma-graph.org/entity/76728937	5.0
+tensor	tensor	19235	19241	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	19281	19287	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	19332	19338	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	19390	19396	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	19397	19410	http://ma-graph.org/entity/124681953	6.118055582046509
+data	data	19429	19433	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	19434	19440	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	19519	19525	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	19613	19618	http://ma-graph.org/entity/103435781	5.0
+component analysis	Component Analysis	19683	19701	http://ma-graph.org/entity/2780692498	5.477272868156433
+component analysis	Component Analysis	19710	19728	http://ma-graph.org/entity/2780692498	5.477272868156433
+of the form	of the form	20024	20035	http://ma-graph.org/entity/2778975207	5.0
+orthogonality	orthogonality	20127	20140	http://ma-graph.org/entity/17137986	5.249999761581421
+smoothness	smoothness	20195	20205	http://ma-graph.org/entity/102634674	5.0
+factorization	factorization	20254	20267	http://ma-graph.org/entity/187834632	6.754395961761475
+data	data	20314	20318	http://ma-graph.org/entity/163439950	5.0
+noise	noise	20353	20358	http://ma-graph.org/entity/151405878	5.0
+variables	variables	20557	20566	http://ma-graph.org/entity/27574286	5.562499761581421
+component analysis	component analysis	20586	20604	http://ma-graph.org/entity/2780692498	5.477272868156433
+signal	signal	20631	20637	http://ma-graph.org/entity/113841659	5.516761541366577
+processing	processing	20638	20648	http://ma-graph.org/entity/194241460	5.0
+signal processing	signal processing	-1	16	http://ma-graph.org/entity/104267543	8.133869767189026
+encode	encode	20678	20684	http://ma-graph.org/entity/66746571	5.458333492279053
+exploit	exploit	20786	20793	http://ma-graph.org/entity/165696696	7.220328450202942
+nature	nature	20828	20834	http://ma-graph.org/entity/85522863	5.0
+variables	variables	20860	20869	http://ma-graph.org/entity/27574286	5.562499761581421
+variables	variables	20975	20984	http://ma-graph.org/entity/27574286	5.562499761581421
+data	data	21105	21109	http://ma-graph.org/entity/163439950	5.0
+values	values	21232	21238	http://ma-graph.org/entity/194229684	5.0
+singular value	Singular value	21558	21572	http://ma-graph.org/entity/109282560	5.527777671813965
+decomposition	decomposition	21573	21586	http://ma-graph.org/entity/124681953	6.118055582046509
+singular value decomposition	Singular value decomposition	-1	27	http://ma-graph.org/entity/22789450	6.465277671813965
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+data matrix	data matrix	21600	21611	http://ma-graph.org/entity/2780985081	5.0
+special case	special case	21626	21638	http://ma-graph.org/entity/106514582	5.208333134651184
+factorization	factorization	21646	21659	http://ma-graph.org/entity/187834632	6.754395961761475
+diagonal	diagonal	21918	21926	http://ma-graph.org/entity/130367717	5.840277671813965
+diagonal matrix	diagonal matrix	23892	23907	http://ma-graph.org/entity/113313756	5.208333134651184
+values	values	34133	34139	http://ma-graph.org/entity/194229684	5.0
+virtue	virtue	-1	5	http://ma-graph.org/entity/2777239683	6.328125
+component analysis	component analysis	1705	1723	http://ma-graph.org/entity/2780692498	5.477272868156433
+data	data	2105	2109	http://ma-graph.org/entity/163439950	5.0
+dimensionality reduction	dimensionality reduction	4609	4633	http://ma-graph.org/entity/70518039	7.272218465805054
+component analysis	component analysis	6986	7004	http://ma-graph.org/entity/2780692498	5.477272868156433
+tensor	tensor	7886	7892	http://ma-graph.org/entity/107180903	14.108511209487915
+component analysis	component analysis	20586	20604	http://ma-graph.org/entity/2780692498	5.477272868156433
+tensor	tensor	22801	22807	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	Decomposition	23131	23144	http://ma-graph.org/entity/124681953	6.118055582046509
+decomposition	Decomposition	23233	23246	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	23327	23333	http://ma-graph.org/entity/107180903	14.108511209487915
+linear combination	linear combination	23350	23368	http://ma-graph.org/entity/9260844	5.0
+diagonal	diagonal	23627	23635	http://ma-graph.org/entity/130367717	5.840277671813965
+tensor	tensor	23641	23647	http://ma-graph.org/entity/107180903	14.108511209487915
+diagonal	diagonal	23681	23689	http://ma-graph.org/entity/130367717	5.840277671813965
+main diagonal	main diagonal	27052	27065	http://ma-graph.org/entity/60761296	5.0
+diagonal	diagonal	33962	33970	http://ma-graph.org/entity/130367717	5.840277671813965
+diagonal matrix	diagonal matrix	-1	14	http://ma-graph.org/entity/113313756	5.208333134651184
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+noise	noise	20353	20358	http://ma-graph.org/entity/151405878	5.0
+least squares	Least Squares	24377	24390	http://ma-graph.org/entity/176012381	8.377426862716675
+diagonal	diagonal	24755	24763	http://ma-graph.org/entity/130367717	5.840277671813965
+diagonal matrix	diagonal matrix	-1	14	http://ma-graph.org/entity/113313756	5.208333134651184
+advantage	advantage	18776	18785	http://ma-graph.org/entity/16885038	5.0
+computation	computation	25023	25034	http://ma-graph.org/entity/45374587	10.856173038482666
+exploit	exploit	25362	25369	http://ma-graph.org/entity/165696696	7.220328450202942
+computation	computation	25436	25447	http://ma-graph.org/entity/45374587	10.856173038482666
+uniqueness	uniqueness	25696	25706	http://ma-graph.org/entity/2777021972	5.0
+modes	modes	25792	25797	http://ma-graph.org/entity/103435781	5.0
+uniqueness	uniqueness	25932	25942	http://ma-graph.org/entity/2777021972	5.0
+interpretability	interpretability	26078	26094	http://ma-graph.org/entity/2781067378	5.277777910232544
+decomposition	Decomposition	26215	26228	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker Decomposition	28575	28595	http://ma-graph.org/entity/42704193	5.0
+decomposition	decomposition	29145	29158	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	29325	29345	http://ma-graph.org/entity/42704193	5.0
+data	data	30221	30225	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	30226	30232	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	30309	30315	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	31789	31802	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	31819	31825	http://ma-graph.org/entity/107180903	14.108511209487915
+interaction	interaction	-1	10	http://ma-graph.org/entity/855514	5.0
+modes	modes	5558	5563	http://ma-graph.org/entity/103435781	5.0
+tuple	tuple	26813	26818	http://ma-graph.org/entity/118930307	5.3125
+decomposition	decomposition	26886	26899	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	26976	26996	http://ma-graph.org/entity/42704193	5.0
+special case	special case	47338	47350	http://ma-graph.org/entity/106514582	5.208333134651184
+decomposition	decomposition	48899	48912	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	54520	54540	http://ma-graph.org/entity/42704193	5.0
+tensor	tensor	55086	55092	http://ma-graph.org/entity/107180903	14.108511209487915
+diagonal	diagonal	-1	7	http://ma-graph.org/entity/130367717	5.840277671813965
+main diagonal	main diagonal	23676	23689	http://ma-graph.org/entity/60761296	5.0
+decomposition	decomposition	26240	26253	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	26879	26899	http://ma-graph.org/entity/42704193	5.0
+tensor	tensor	27016	27022	http://ma-graph.org/entity/107180903	14.108511209487915
+permutation	permutation	27265	27276	http://ma-graph.org/entity/147849574	10.87165117263794
+scaling	scaling	27281	27288	http://ma-graph.org/entity/99844830	7.004340291023254
+scenario	scenario	27585	27593	http://ma-graph.org/entity/135342440	5.0
+tensor	tensor	27608	27614	http://ma-graph.org/entity/107180903	14.108511209487915
+parallel	PARAllel	27785	27793	http://ma-graph.org/entity/88740403	5.249999761581421
+tensor	tensor	28038	28044	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	28065	28071	http://ma-graph.org/entity/107180903	14.108511209487915
+interaction	interaction	28075	28086	http://ma-graph.org/entity/855514	5.0
+tensor	tensor	28087	28093	http://ma-graph.org/entity/107180903	14.108511209487915
+interaction	interaction	28218	28229	http://ma-graph.org/entity/855514	5.0
+component analysis	Component Analysis	28538	28556	http://ma-graph.org/entity/2780692498	5.477272868156433
+component analysis	component analysis	28622	28640	http://ma-graph.org/entity/2780692498	5.477272868156433
+factorization	factorization	28746	28759	http://ma-graph.org/entity/187834632	6.754395961761475
+component analysis	component analysis	28919	28937	http://ma-graph.org/entity/2780692498	5.477272868156433
+factorization	factorization	29109	29122	http://ma-graph.org/entity/187834632	6.754395961761475
+data	data	29201	29205	http://ma-graph.org/entity/163439950	5.0
+data compression	data compression	-1	15	http://ma-graph.org/entity/78548338	12.37192988395691
+multiple	multiple	582	590	http://ma-graph.org/entity/164680029	5.0
+component analysis	component analysis	1705	1723	http://ma-graph.org/entity/2780692498	5.477272868156433
+component analysis	component analysis	4523	4541	http://ma-graph.org/entity/2780692498	5.477272868156433
+simple extension	simple extension	29692	29708	http://ma-graph.org/entity/2781467147	5.0
+uniqueness	uniqueness	29841	29851	http://ma-graph.org/entity/2777021972	5.0
+variables	variables	30081	30090	http://ma-graph.org/entity/27574286	5.562499761581421
+tensor	tensor	30101	30107	http://ma-graph.org/entity/107180903	14.108511209487915
+process modeling	process” modeling	-1	16	http://ma-graph.org/entity/76956256	5.0
+modes	modes	5558	5563	http://ma-graph.org/entity/103435781	5.0
+data	data	5608	5612	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	5697	5703	http://ma-graph.org/entity/107180903	14.108511209487915
+collection	collection	30255	30265	http://ma-graph.org/entity/103252375	5.0
+tensor	tensor	30309	30315	http://ma-graph.org/entity/107180903	14.108511209487915
+signal	signal	30373	30379	http://ma-graph.org/entity/113841659	5.516761541366577
+wavelet	wavelet	30531	30538	http://ma-graph.org/entity/47432892	8.580657839775085
+data	data	30740	30744	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	30745	30751	http://ma-graph.org/entity/107180903	14.108511209487915
+multiple	multiple	31122	31130	http://ma-graph.org/entity/164680029	5.0
+modes	modes	31155	31160	http://ma-graph.org/entity/103435781	5.0
+tensor	Tensor	31228	31234	http://ma-graph.org/entity/107180903	14.108511209487915
+data	Data	31271	31275	http://ma-graph.org/entity/163439950	5.0
+size	size	31365	31369	http://ma-graph.org/entity/140356686	5.0
+working memory	working memory	31388	31402	http://ma-graph.org/entity/21963081	10.331794023513794
+processing	processing	31412	31422	http://ma-graph.org/entity/194241460	5.0
+data	data	31431	31435	http://ma-graph.org/entity/163439950	5.0
+data	data	31498	31502	http://ma-graph.org/entity/163439950	5.0
+big data	big data	39574	39582	http://ma-graph.org/entity/75684735	7.656092047691345
+tensor	tensor	39597	39603	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	46051	46057	http://ma-graph.org/entity/142688372	5.0
+tensor	tensor	46540	46546	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	46649	46655	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	46778	46782	http://ma-graph.org/entity/163439950	5.0
+management	management	-1	9	http://ma-graph.org/entity/187736073	198.4568214416504
+data management	data management	31634	31649	http://ma-graph.org/entity/1668388	7.867669463157654
+system	system	31650	31656	http://ma-graph.org/entity/16359219	5.0
+management system	management system	-1	16	http://ma-graph.org/entity/198783460	6.736111044883728
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	31523	31529	http://ma-graph.org/entity/142688372	5.0
+method	method	31768	31774	http://ma-graph.org/entity/512554520	7.600009441375732
+decomposition	decomposition	31789	31802	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	31819	31825	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	31851	31857	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	31949	31962	http://ma-graph.org/entity/124681953	6.118055582046509
+decomposition	decomposition	31986	31999	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	33525	33545	http://ma-graph.org/entity/42704193	5.0
+tensor	tensor	33706	33712	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	33778	33784	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	36137	36143	http://ma-graph.org/entity/142688372	5.0
+distributed memory	distributed memory	36929	36947	http://ma-graph.org/entity/91481028	5.0
+system	system	72046	72052	http://ma-graph.org/entity/16359219	5.0
+machine	machine	-1	6	http://ma-graph.org/entity/130705442	5.0
+algorithm	algorithm	1431	1440	http://ma-graph.org/entity/11413529	168.60078811645508
+blocks	blocks	31523	31529	http://ma-graph.org/entity/142688372	5.0
+tensor	tensor	31547	31553	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	31601	31607	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	31634	31638	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	31679	31685	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	31691	31697	http://ma-graph.org/entity/142688372	5.0
+sequential access	sequential access	33004	33021	http://ma-graph.org/entity/133197967	5.0
+blocks	blocks	33032	33038	http://ma-graph.org/entity/142688372	5.0
+data	data	33269	33273	http://ma-graph.org/entity/163439950	5.0
+computation	computation	33297	33308	http://ma-graph.org/entity/45374587	10.856173038482666
+singular value	Singular Value	33407	33421	http://ma-graph.org/entity/109282560	5.527777671813965
+decomposition	Decomposition	33422	33435	http://ma-graph.org/entity/124681953	6.118055582046509
+singular value decomposition	Singular Value Decomposition	-1	27	http://ma-graph.org/entity/22789450	6.465277671813965
+decomposition	decomposition	1021	1034	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	26233	26253	http://ma-graph.org/entity/42704193	5.0
+tensor	tensor	26371	26377	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	26400	26406	http://ma-graph.org/entity/107180903	14.108511209487915
+orthogonality	orthogonality	33853	33866	http://ma-graph.org/entity/17137986	5.249999761581421
+tensor	tensor	33935	33941	http://ma-graph.org/entity/107180903	14.108511209487915
+values	values	34133	34139	http://ma-graph.org/entity/194229684	5.0
+tensor	tensor	34432	34438	http://ma-graph.org/entity/107180903	14.108511209487915
+orthogonality	orthogonality	34486	34499	http://ma-graph.org/entity/17137986	5.249999761581421
+tensor	tensor	34512	34518	http://ma-graph.org/entity/107180903	14.108511209487915
+computation	computation	34928	34939	http://ma-graph.org/entity/45374587	10.856173038482666
+tensor	tensor	35038	35044	http://ma-graph.org/entity/107180903	14.108511209487915
+diagonal	diagonal	35445	35453	http://ma-graph.org/entity/130367717	5.840277671813965
+size	size	35616	35620	http://ma-graph.org/entity/140356686	5.0
+computer memory	computer memory	35684	35699	http://ma-graph.org/entity/92855701	6.708622574806213
+computer memory	computer memory	35837	35852	http://ma-graph.org/entity/92855701	6.708622574806213
+size	size	35920	35924	http://ma-graph.org/entity/140356686	5.0
+computer memory	computer memory	35928	35943	http://ma-graph.org/entity/92855701	6.708622574806213
+exploit	exploit	36091	36098	http://ma-graph.org/entity/165696696	7.220328450202942
+blocks	blocks	36137	36143	http://ma-graph.org/entity/142688372	5.0
+data	data	36435	36439	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	36440	36446	http://ma-graph.org/entity/107180903	14.108511209487915
+computer memory	computer memory	36494	36509	http://ma-graph.org/entity/92855701	6.708622574806213
+tensor	tensor	36555	36561	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	36837	36841	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	36842	36848	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	36869	36875	http://ma-graph.org/entity/142688372	5.0
+distributed memory	distributed memory	36929	36947	http://ma-graph.org/entity/91481028	5.0
+blocks	blocks	37038	37044	http://ma-graph.org/entity/142688372	5.0
+blocks	blocks	37201	37207	http://ma-graph.org/entity/142688372	5.0
+tensor	tensor	37229	37235	http://ma-graph.org/entity/107180903	14.108511209487915
+parallel	parallel	37264	37272	http://ma-graph.org/entity/88740403	5.249999761581421
+data	data	37303	37307	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	37308	37314	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	37475	37481	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	37531	37537	http://ma-graph.org/entity/107180903	14.108511209487915
+proposition	Proposition	37768	37779	http://ma-graph.org/entity/2777152325	6.25
+proposition	Proposition	37781	37792	http://ma-graph.org/entity/2777152325	6.25
+tensor	tensor	37801	37807	http://ma-graph.org/entity/107180903	14.108511209487915
+low	low	37821	37824	http://ma-graph.org/entity/187898554	5.0
+data	data	38115	38119	http://ma-graph.org/entity/163439950	5.0
+decomposition	decomposition	38191	38204	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	38285	38291	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	38673	38686	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	38716	38722	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	Decomposition	38825	38838	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker Decomposition	42502	42522	http://ma-graph.org/entity/42704193	5.0
+dimensionality reduction	Dimensionality Reduction	-1	23	http://ma-graph.org/entity/70518039	7.272218465805054
+tensor	Tensor	49	55	http://ma-graph.org/entity/107180903	14.108511209487915
+data	Data	2058	2062	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	3099	3105	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	4250	4256	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	9703	9716	http://ma-graph.org/entity/124681953	6.118055582046509
+decomposition	decomposition	15032	15045	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	15059	15065	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	16294	16298	http://ma-graph.org/entity/163439950	5.0
+big data	big data	31494	31502	http://ma-graph.org/entity/75684735	7.656092047691345
+tensor	tensor	31503	31509	http://ma-graph.org/entity/107180903	14.108511209487915
+dimensionality reduction	Dimensionality reduction	39674	39698	http://ma-graph.org/entity/70518039	7.272218465805054
+dimensionality reduction	dimensionality reduction	40085	40109	http://ma-graph.org/entity/70518039	7.272218465805054
+data	data	40420	40424	http://ma-graph.org/entity/163439950	5.0
+smoothness	smoothness	40456	40466	http://ma-graph.org/entity/102634674	5.0
+data	data	40491	40495	http://ma-graph.org/entity/163439950	5.0
+linear combination	linear combination	40521	40539	http://ma-graph.org/entity/9260844	5.0
+data	data	40635	40639	http://ma-graph.org/entity/163439950	5.0
+data matrix	data matrix	40780	40791	http://ma-graph.org/entity/2780985081	5.0
+data	data	41009	41013	http://ma-graph.org/entity/163439950	5.0
+data matrix	data matrix	41317	41328	http://ma-graph.org/entity/2780985081	5.0
+data	data	41606	41610	http://ma-graph.org/entity/163439950	5.0
+data matrix	data matrix	-1	10	http://ma-graph.org/entity/2780985081	5.0
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+data matrix	data matrix	21600	21611	http://ma-graph.org/entity/2780985081	5.0
+data	data	22088	22092	http://ma-graph.org/entity/163439950	5.0
+intersection	intersection	41716	41728	http://ma-graph.org/entity/20060776	5.249999761581421
+decomposition	decomposition	42137	42150	http://ma-graph.org/entity/124681953	6.118055582046509
+decomposition	decomposition	42261	42274	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	42318	42324	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	42325	42329	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	42416	42422	http://ma-graph.org/entity/107180903	14.108511209487915
+low	low	42432	42435	http://ma-graph.org/entity/187898554	5.0
+fiber	Fiber	42487	42492	http://ma-graph.org/entity/519885992	27.08796739578247
+decomposition	Decomposition	42509	42522	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker Decomposition	-1	19	http://ma-graph.org/entity/42704193	5.0
+modes	modes	5558	5563	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	5697	5703	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	6324	6328	http://ma-graph.org/entity/163439950	5.0
+low	low	6920	6923	http://ma-graph.org/entity/187898554	5.0
+decomposition	decomposition	9703	9716	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	26233	26253	http://ma-graph.org/entity/42704193	5.0
+small number	small number	42849	42861	http://ma-graph.org/entity/107073345	5.277777910232544
+data	data	42879	42883	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	42884	42890	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	42930	42936	http://ma-graph.org/entity/107180903	14.108511209487915
+intersection	intersection	43083	43095	http://ma-graph.org/entity/20060776	5.249999761581421
+tensor	tensor	43100	43106	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	43210	43216	http://ma-graph.org/entity/107180903	14.108511209487915
+proposition	Proposition	43600	43611	http://ma-graph.org/entity/2777152325	6.25
+proposition	Proposition	43659	43670	http://ma-graph.org/entity/2777152325	6.25
+tensor	tensor	43677	43683	http://ma-graph.org/entity/107180903	14.108511209487915
+low	low	43697	43700	http://ma-graph.org/entity/187898554	5.0
+up	up	43857	43859	http://ma-graph.org/entity/93126310	5.0
+data	data	43879	43883	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	43884	43890	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	43903	43909	http://ma-graph.org/entity/107180903	14.108511209487915
+strategy	strategy	44023	44031	http://ma-graph.org/entity/88959737	5.0
+data	data	44136	44140	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	44141	44147	http://ma-graph.org/entity/107180903	14.108511209487915
+modulus	modulus	44193	44200	http://ma-graph.org/entity/193867417	5.0
+deflation	deflation	44327	44336	http://ma-graph.org/entity/8112001	5.0
+algorithm	algorithm	44362	44371	http://ma-graph.org/entity/11413529	168.60078811645508
+tensor	Tensor	44520	44526	http://ma-graph.org/entity/107180903	14.108511209487915
+data	Data	44527	44531	http://ma-graph.org/entity/163439950	5.0
+component analysis	Component Analysis	44550	44568	http://ma-graph.org/entity/2780692498	5.477272868156433
+group analysis	Group analysis	44577	44591	http://ma-graph.org/entity/2778666404	5.0
+data	data	44607	44611	http://ma-graph.org/entity/163439950	5.0
+data analysis	data analysis	66229	66242	http://ma-graph.org/entity/175801342	5.0
+data	data	68741	68745	http://ma-graph.org/entity/163439950	5.0
+correlation	correlation	-1	10	http://ma-graph.org/entity/117220453	6.81769073009491
+data	data	572	576	http://ma-graph.org/entity/163439950	5.0
+data	data	742	746	http://ma-graph.org/entity/163439950	5.0
+experiment	experiment	45394	45404	http://ma-graph.org/entity/94362350	5.0
+configuration	configuration	45405	45418	http://ma-graph.org/entity/69882025	5.0
+data	data	45442	45446	http://ma-graph.org/entity/163439950	5.0
+component analysis	component analysis	45686	45704	http://ma-graph.org/entity/2780692498	5.477272868156433
+data	data	45737	45741	http://ma-graph.org/entity/163439950	5.0
+data	data	45829	45833	http://ma-graph.org/entity/163439950	5.0
+blocks	blocks	46051	46057	http://ma-graph.org/entity/142688372	5.0
+variables	variables	46214	46223	http://ma-graph.org/entity/27574286	5.562499761581421
+component analysis	Component Analysis	46627	46645	http://ma-graph.org/entity/2780692498	5.477272868156433
+tensor	tensor	46649	46655	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	Decomposition	46673	46686	http://ma-graph.org/entity/124681953	6.118055582046509
+data	data	46778	46782	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	46783	46789	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	46985	46989	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	46990	46996	http://ma-graph.org/entity/107180903	14.108511209487915
+constrained optimization	constrained optimization	47114	47138	http://ma-graph.org/entity/55660270	5.249999761581421
+special case	special case	47338	47350	http://ma-graph.org/entity/106514582	5.208333134651184
+orthogonality	orthogonality	47367	47380	http://ma-graph.org/entity/17137986	5.249999761581421
+method	method	47485	47491	http://ma-graph.org/entity/512554520	7.600009441375732
+multiple	multiple	47626	47634	http://ma-graph.org/entity/164680029	5.0
+data	data	47635	47639	http://ma-graph.org/entity/163439950	5.0
+blocks	blocks	47640	47646	http://ma-graph.org/entity/142688372	5.0
+component analysis	component analysis	47922	47940	http://ma-graph.org/entity/2780692498	5.477272868156433
+feature extraction	feature extraction	48065	48083	http://ma-graph.org/entity/52622490	13.083188533782959
+data	data	48100	48104	http://ma-graph.org/entity/163439950	5.0
+blocks	blocks	48139	48145	http://ma-graph.org/entity/142688372	5.0
+split	split	48194	48199	http://ma-graph.org/entity/117026687	5.0
+modalities	modalities	48223	48233	http://ma-graph.org/entity/2779903281	5.0
+frequency	frequency	48257	48266	http://ma-graph.org/entity/199075045	5.0
+uncorrelated	uncorrelated	48362	48374	http://ma-graph.org/entity/169345407	5.0
+tensor	tensor	48713	48719	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	48801	48807	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	48881	48887	http://ma-graph.org/entity/107180903	14.108511209487915
+train	Train	48888	48893	http://ma-graph.org/entity/190839683	8.166666626930237
+tensor	tensor	48937	48943	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	48954	48960	http://ma-graph.org/entity/107180903	14.108511209487915
+train	train	48961	48966	http://ma-graph.org/entity/190839683	8.166666626930237
+decomposition	decomposition	48967	48980	http://ma-graph.org/entity/124681953	6.118055582046509
+data	data	49178	49182	http://ma-graph.org/entity/163439950	5.0
+tensor	Tensor	49238	49244	http://ma-graph.org/entity/107180903	14.108511209487915
+train	Train	49245	49250	http://ma-graph.org/entity/190839683	8.166666626930237
+matrix product state	Matrix Product State	49404	49424	http://ma-graph.org/entity/2778351468	5.0
+quantum	quantum	49435	49442	http://ma-graph.org/entity/84114770	18.191041946411133
+physics	physics	49443	49450	http://ma-graph.org/entity/121332964	220.82216262817383
+tensor	tensor	49666	49672	http://ma-graph.org/entity/107180903	14.108511209487915
+equivalent	equivalent	49791	49801	http://ma-graph.org/entity/131857375	5.0
+tensor	tensor	49974	49980	http://ma-graph.org/entity/107180903	14.108511209487915
+train	train	49981	49986	http://ma-graph.org/entity/190839683	8.166666626930237
+data	data	50020	50024	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	50025	50031	http://ma-graph.org/entity/107180903	14.108511209487915
+equivalent	equivalent	50073	50083	http://ma-graph.org/entity/131857375	5.0
+tensor	tensor	50129	50135	http://ma-graph.org/entity/107180903	14.108511209487915
+summation	summation	50426	50435	http://ma-graph.org/entity/63405582	5.0
+tensor	tensor	50446	50452	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor product	tensor product	-1	13	http://ma-graph.org/entity/51255310	5.0
+tuple	tuple	26813	26818	http://ma-graph.org/entity/118930307	5.3125
+decomposition	decomposition	26886	26899	http://ma-graph.org/entity/124681953	6.118055582046509
+blocks	blocks	31523	31529	http://ma-graph.org/entity/142688372	5.0
+tensor	tensor	31547	31553	http://ma-graph.org/entity/107180903	14.108511209487915
+lexicographical order	lexicographical order	51627	51648	http://ma-graph.org/entity/159254197	6.652777791023254
+kronecker product	Kronecker product	51688	51705	http://ma-graph.org/entity/46030957	6.320987939834595
+kronecker product	Kronecker product 	51719	51737	http://ma-graph.org/entity/46030957	6.320987939834595
+kronecker product	Kronecker product	52027	52044	http://ma-graph.org/entity/46030957	6.320987939834595
+block matrix	block matrix	52803	52815	http://ma-graph.org/entity/85817219	5.0
+blocks	blocks	53420	53426	http://ma-graph.org/entity/142688372	5.0
+kronecker product	Kronecker product	53536	53553	http://ma-graph.org/entity/46030957	6.320987939834595
+blocks	blocks	67175	67181	http://ma-graph.org/entity/142688372	5.0
+kronecker product	Kronecker product	67214	67231	http://ma-graph.org/entity/46030957	6.320987939834595
+tensor	tensor	67296	67302	http://ma-graph.org/entity/107180903	14.108511209487915
+train	train	74109	74114	http://ma-graph.org/entity/190839683	8.166666626930237
+tensor	tensor	74279	74285	http://ma-graph.org/entity/107180903	14.108511209487915
+row	row	-1	2	http://ma-graph.org/entity/135598885	5.527777671813965
+row vector	row vector	-1	9	http://ma-graph.org/entity/134281284	5.0
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1014	1020	http://ma-graph.org/entity/107180903	14.108511209487915
+block matrix	block matrix	51822	51834	http://ma-graph.org/entity/85817219	5.0
+tensor	tensor	52073	52079	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	52151	52157	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	53214	53227	http://ma-graph.org/entity/124681953	6.118055582046509
+lexicographical order	lexicographical order	53350	53371	http://ma-graph.org/entity/159254197	6.652777791023254
+blocks	blocks	53420	53426	http://ma-graph.org/entity/142688372	5.0
+blocks	blocks	53454	53460	http://ma-graph.org/entity/142688372	5.0
+special case	special case	53478	53490	http://ma-graph.org/entity/106514582	5.208333134651184
+tensor	Tensor	53612	53618	http://ma-graph.org/entity/107180903	14.108511209487915
+train	Train	53619	53624	http://ma-graph.org/entity/190839683	8.166666626930237
+special case	special case	53708	53720	http://ma-graph.org/entity/106514582	5.208333134651184
+tensor	tensor	53812	53818	http://ma-graph.org/entity/107180903	14.108511209487915
+advantage	advantage	53941	53950	http://ma-graph.org/entity/16885038	5.0
+implementation	implementation	53993	54007	http://ma-graph.org/entity/26713055	5.0
+binary tree	binary tree	54071	54082	http://ma-graph.org/entity/197855036	5.678548216819763
+tensor	tensor	54265	54271	http://ma-graph.org/entity/107180903	14.108511209487915
+first class	first class	54350	54361	http://ma-graph.org/entity/2779849256	5.0
+decomposition	decomposition	54442	54455	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	54520	54540	http://ma-graph.org/entity/42704193	5.0
+low	low	54592	54595	http://ma-graph.org/entity/187898554	5.0
+decomposition	decomposition	54689	54702	http://ma-graph.org/entity/124681953	6.118055582046509
+decomposition	decomposition	55011	55024	http://ma-graph.org/entity/124681953	6.118055582046509
+data	data	55081	55085	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	55086	55092	http://ma-graph.org/entity/107180903	14.108511209487915
+algorithm	algorithm	55183	55192	http://ma-graph.org/entity/11413529	168.60078811645508
+interpolation	interpolation	55248	55261	http://ma-graph.org/entity/17378031	12.57378101348877
+algorithm	algorithm	55262	55271	http://ma-graph.org/entity/11413529	168.60078811645508
+data	data	55304	55308	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	55309	55315	http://ma-graph.org/entity/107180903	14.108511209487915
+algorithm	algorithm	55343	55352	http://ma-graph.org/entity/11413529	168.60078811645508
+curse	curse	55378	55383	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	58761	58784	http://ma-graph.org/entity/111030470	5.277777910232544
+gradient descent	gradient descent	-1	15	http://ma-graph.org/entity/153258448	6.467578411102295
+conjugate	conjugate	55769	55778	http://ma-graph.org/entity/197336794	5.625
+gradient descent	Gradient descent	55936	55952	http://ma-graph.org/entity/153258448	6.467578411102295
+least squares	Least Squares	55992	56005	http://ma-graph.org/entity/176012381	8.377426862716675
+method	method	56246	56252	http://ma-graph.org/entity/512554520	7.600009441375732
+joins	joins	56257	56262	http://ma-graph.org/entity/2778692605	5.350236296653748
+factorization	factorization	56397	56410	http://ma-graph.org/entity/187834632	6.754395961761475
+canonical form	canonical form	56694	56708	http://ma-graph.org/entity/204707403	5.0
+tensor	tensor	56911	56917	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	56993	56999	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	57079	57085	http://ma-graph.org/entity/107180903	14.108511209487915
+truncation	truncation	57142	57152	http://ma-graph.org/entity/37814816	5.277777910232544
+procedure	procedure	57236	57245	http://ma-graph.org/entity/4363049	5.0
+computation	computation	57422	57433	http://ma-graph.org/entity/45374587	10.856173038482666
+tensor	tensor	57440	57446	http://ma-graph.org/entity/107180903	14.108511209487915
+algorithm	algorithm	57678	57687	http://ma-graph.org/entity/11413529	168.60078811645508
+algorithm	algorithm	57711	57720	http://ma-graph.org/entity/11413529	168.60078811645508
+tensor	tensor	57944	57950	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	57957	57970	http://ma-graph.org/entity/124681953	6.118055582046509
+truncation	truncation	57994	58004	http://ma-graph.org/entity/37814816	5.277777910232544
+method	method	58113	58119	http://ma-graph.org/entity/512554520	7.600009441375732
+algorithm	algorithm	58146	58155	http://ma-graph.org/entity/11413529	168.60078811645508
+computation	computation	58384	58395	http://ma-graph.org/entity/45374587	10.856173038482666
+tensor	tensor	58428	58434	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	58454	58460	http://ma-graph.org/entity/107180903	14.108511209487915
+toolbox	Toolbox	58637	58644	http://ma-graph.org/entity/2777655017	5.3125
+structures	structures	58730	58740	http://ma-graph.org/entity/76728937	5.0
+curse	curse	58761	58766	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	63652	63675	http://ma-graph.org/entity/111030470	5.277777910232544
+toolbox	toolbox	-1	6	http://ma-graph.org/entity/2777655017	5.3125
+calculus	Calculus	58956	58964	http://ma-graph.org/entity/33577790	50.026631355285645
+library	library	58965	58972	http://ma-graph.org/entity/1436000	5.0
+tensor	tensor	59034	59040	http://ma-graph.org/entity/107180903	14.108511209487915
+toolbox	toolbox	59562	59569	http://ma-graph.org/entity/2777655017	5.3125
+orthogonality	orthogonality	59727	59740	http://ma-graph.org/entity/17137986	5.249999761581421
+outer product	Outer Product	60222	60235	http://ma-graph.org/entity/180623205	5.0
+tensor	Tensor	60236	60242	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	60279	60285	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	Decomposition	60286	60299	http://ma-graph.org/entity/124681953	6.118055582046509
+outer product	Outer Product	60631	60644	http://ma-graph.org/entity/180623205	5.0
+tensor	Tensor	60645	60651	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	60688	60694	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	Decomposition	60695	60708	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	61019	61025	http://ma-graph.org/entity/107180903	14.108511209487915
+kronecker product	Kronecker product	61091	61108	http://ma-graph.org/entity/46030957	6.320987939834595
+decomposition	Decomposition	61641	61654	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	61904	61910	http://ma-graph.org/entity/107180903	14.108511209487915
+kronecker product	Kronecker product	61911	61928	http://ma-graph.org/entity/46030957	6.320987939834595
+tensor	tensor	61952	61958	http://ma-graph.org/entity/107180903	14.108511209487915
+structures	structures	62264	62274	http://ma-graph.org/entity/76728937	5.0
+size	size	62376	62380	http://ma-graph.org/entity/140356686	5.0
+size	size	62538	62542	http://ma-graph.org/entity/140356686	5.0
+tensor	tensor	62580	62586	http://ma-graph.org/entity/107180903	14.108511209487915
+size	size	62590	62594	http://ma-graph.org/entity/140356686	5.0
+tensor	Tensor	62778	62784	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	Decomposition	62785	62798	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	Tensor	62813	62819	http://ma-graph.org/entity/107180903	14.108511209487915
+train	Train	62820	62825	http://ma-graph.org/entity/190839683	8.166666626930237
+decomposition	decomposition	62831	62844	http://ma-graph.org/entity/124681953	6.118055582046509
+tensor	tensor	63158	63164	http://ma-graph.org/entity/107180903	14.108511209487915
+decomposition	decomposition	63165	63178	http://ma-graph.org/entity/124681953	6.118055582046509
+advantage	advantage	63344	63353	http://ma-graph.org/entity/16885038	5.0
+small number	small number	63478	63490	http://ma-graph.org/entity/107073345	5.277777910232544
+data	data	63541	63545	http://ma-graph.org/entity/163439950	5.0
+structures	structures	63546	63556	http://ma-graph.org/entity/76728937	5.0
+blessing	Blessing	63592	63600	http://ma-graph.org/entity/2776195157	5.0
+curse	Curse	63619	63624	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	Curse of Dimensionality	-1	22	http://ma-graph.org/entity/111030470	5.277777910232544
+curse	curse	15149	15154	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	55378	55401	http://ma-graph.org/entity/111030470	5.277777910232544
+tensor	tensor	56911	56917	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	56993	56999	http://ma-graph.org/entity/107180903	14.108511209487915
+size	size	62376	62380	http://ma-graph.org/entity/140356686	5.0
+decomposition	decomposition	62831	62844	http://ma-graph.org/entity/124681953	6.118055582046509
+tucker decomposition	Tucker decomposition	64031	64051	http://ma-graph.org/entity/42704193	5.0
+data	data	64088	64092	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	64093	64099	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	64116	64122	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	64151	64157	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	64238	64244	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	64300	64306	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	64333	64337	http://ma-graph.org/entity/163439950	5.0
+raw data	raw data	64391	64399	http://ma-graph.org/entity/132964779	5.0
+tensor	tensor	64715	64721	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	65684	65688	http://ma-graph.org/entity/163439950	5.0
+raw data	raw data	-1	7	http://ma-graph.org/entity/132964779	5.0
+curse	curse	15149	15154	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	55378	55401	http://ma-graph.org/entity/111030470	5.277777910232544
+tensor	tensor	56911	56917	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	59552	59558	http://ma-graph.org/entity/107180903	14.108511209487915
+curse	curse	63652	63657	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	64573	64596	http://ma-graph.org/entity/111030470	5.277777910232544
+tensor	tensor	64715	64721	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	64766	64772	http://ma-graph.org/entity/107180903	14.108511209487915
+low	low	65223	65226	http://ma-graph.org/entity/187898554	5.0
+tensor	tensor	65382	65388	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	65592	65598	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	65684	65688	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	65689	65695	http://ma-graph.org/entity/107180903	14.108511209487915
+procedure	procedure	65709	65718	http://ma-graph.org/entity/4363049	5.0
+data	data	65733	65737	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	65738	65744	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	65771	65775	http://ma-graph.org/entity/163439950	5.0
+data	data	65837	65841	http://ma-graph.org/entity/163439950	5.0
+decomposition	decomposition	66173	66186	http://ma-graph.org/entity/124681953	6.118055582046509
+principle	principle	66211	66220	http://ma-graph.org/entity/44722547	5.0
+data	data	66229	66233	http://ma-graph.org/entity/163439950	5.0
+big data	big data	69500	69508	http://ma-graph.org/entity/75684735	7.656092047691345
+data analysis	data analysis	-1	12	http://ma-graph.org/entity/175801342	5.0
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1014	1020	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1058	1064	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1128	1134	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	5558	5563	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	5697	5703	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	8280	8286	http://ma-graph.org/entity/107180903	14.108511209487915
+train	Train	48808	48813	http://ma-graph.org/entity/190839683	8.166666626930237
+tensor	tensor	48937	48943	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	51277	51283	http://ma-graph.org/entity/142688372	5.0
+recall	Recall	67191	67197	http://ma-graph.org/entity/100660578	12.611736059188843
+kronecker product	Kronecker product	67214	67231	http://ma-graph.org/entity/46030957	6.320987939834595
+tensor	tensor	67296	67302	http://ma-graph.org/entity/107180903	14.108511209487915
+blocks	blocks	67317	67323	http://ma-graph.org/entity/142688372	5.0
+modes	modes	67504	67509	http://ma-graph.org/entity/103435781	5.0
+tensor	tensor	67572	67578	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	67668	67674	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	67705	67711	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	67807	67813	http://ma-graph.org/entity/107180903	14.108511209487915
+modes	modes	67918	67923	http://ma-graph.org/entity/103435781	5.0
+size	size	67962	67966	http://ma-graph.org/entity/140356686	5.0
+size	size	68058	68062	http://ma-graph.org/entity/140356686	5.0
+modes	modes	68086	68091	http://ma-graph.org/entity/103435781	5.0
+decomposition	decomposition	68118	68131	http://ma-graph.org/entity/124681953	6.118055582046509
+data	data	68741	68745	http://ma-graph.org/entity/163439950	5.0
+size	size	68746	68750	http://ma-graph.org/entity/140356686	5.0
+decomposition	decomposition	68964	68977	http://ma-graph.org/entity/124681953	6.118055582046509
+deep structure	deep structure	69039	69053	http://ma-graph.org/entity/12693837	5.0
+data	data	69061	69065	http://ma-graph.org/entity/163439950	5.0
+compressibility	compressibility	69117	69132	http://ma-graph.org/entity/84655787	6.361111402511597
+tensor	tensor	69234	69240	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	69265	69269	http://ma-graph.org/entity/163439950	5.0
+low	low	69329	69332	http://ma-graph.org/entity/187898554	5.0
+data	data	69504	69508	http://ma-graph.org/entity/163439950	5.0
+big data	big data	72803	72811	http://ma-graph.org/entity/75684735	7.656092047691345
+efficiency	efficiency	-1	9	http://ma-graph.org/entity/17648541	5.29321014881134
+algebra	algebra	10074	10081	http://ma-graph.org/entity/125565743	619.8704528808594
+multilinear algebra	multilinear algebra	11879	11898	http://ma-graph.org/entity/60321788	5.0
+tensor	tensor	12366	12372	http://ma-graph.org/entity/107180903	14.108511209487915
+up	up	13592	13594	http://ma-graph.org/entity/93126310	5.0
+low	low	14033	14036	http://ma-graph.org/entity/187898554	5.0
+tensor	tensor	14083	14089	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	14114	14120	http://ma-graph.org/entity/107180903	14.108511209487915
+quantum	quantum	49435	49442	http://ma-graph.org/entity/84114770	18.191041946411133
+chemistry	chemistry	70344	70353	http://ma-graph.org/entity/185592680	292.7522087097168
+quantum chemistry	quantum chemistry	-1	16	http://ma-graph.org/entity/22994065	5.0
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1014	1020	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	1058	1064	http://ma-graph.org/entity/107180903	14.108511209487915
+distributed computing	distributed computing	7974	7995	http://ma-graph.org/entity/120314980	101.02734565734863
+curse	curse	15149	15154	http://ma-graph.org/entity/2780273121	5.249999761581421
+curse of dimensionality	curse of dimensionality	55378	55401	http://ma-graph.org/entity/111030470	5.277777910232544
+tensor	tensor	56911	56917	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	56993	56999	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	57079	57085	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	57440	57446	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	63541	63545	http://ma-graph.org/entity/163439950	5.0
+low	low	65223	65226	http://ma-graph.org/entity/187898554	5.0
+tensor	tensor	65382	65388	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	65592	65598	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	65689	65695	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	65733	65737	http://ma-graph.org/entity/163439950	5.0
+decomposition	decomposition	66173	66186	http://ma-graph.org/entity/124681953	6.118055582046509
+data	data	66229	66233	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	66371	66377	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	tensor	66475	66481	http://ma-graph.org/entity/107180903	14.108511209487915
+tensor	Tensor	67034	67040	http://ma-graph.org/entity/107180903	14.108511209487915
+generalization	generalization	72723	72737	http://ma-graph.org/entity/177148314	5.0
+data	data	72807	72811	http://ma-graph.org/entity/163439950	5.0
+big data	big data	74449	74457	http://ma-graph.org/entity/75684735	7.656092047691345
+parallel	parallel	-1	7	http://ma-graph.org/entity/88740403	5.249999761581421
+processing	processing	495	505	http://ma-graph.org/entity/194241460	5.0
+parallel processing	parallel processing	72882	72901	http://ma-graph.org/entity/106515295	5.0
+regression	regression	72966	72976	http://ma-graph.org/entity/83546350	5.590277910232544
+source separation	source separation	72994	73011	http://ma-graph.org/entity/2776864781	5.0
+feature extraction	feature extraction	73047	73065	http://ma-graph.org/entity/52622490	13.083188533782959
+data	data	73098	73102	http://ma-graph.org/entity/163439950	5.0
+data assimilation	data assimilation	-1	16	http://ma-graph.org/entity/24552861	5.8522725105285645
+tensor	tensor	988	994	http://ma-graph.org/entity/107180903	14.108511209487915
+petabyte	petabyte	-1	7	http://ma-graph.org/entity/13600138	5.0
+scaling	scaling	27281	27288	http://ma-graph.org/entity/99844830	7.004340291023254
+tensor	tensor	27608	27614	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	29201	29205	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	30101	30107	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	30221	30225	http://ma-graph.org/entity/163439950	5.0
+accounting	accounting	73736	73746	http://ma-graph.org/entity/121955636	55.382046699523926
+variables	variables	73896	73905	http://ma-graph.org/entity/27574286	5.562499761581421
+blocks	blocks	73910	73916	http://ma-graph.org/entity/142688372	5.0
+data	data	73920	73924	http://ma-graph.org/entity/163439950	5.0
+data	data	73982	73986	http://ma-graph.org/entity/163439950	5.0
+missing data	missing data	-1	11	http://ma-graph.org/entity/9357733	5.907118320465088
+modes	modes	5558	5563	http://ma-graph.org/entity/103435781	5.0
+data	data	5608	5612	http://ma-graph.org/entity/163439950	5.0
+tensor	tensor	5697	5703	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	6324	6328	http://ma-graph.org/entity/163439950	5.0
+big data	big data	11994	12002	http://ma-graph.org/entity/75684735	7.656092047691345
+computation	computation	18714	18725	http://ma-graph.org/entity/45374587	10.856173038482666
+variables	variables	20557	20566	http://ma-graph.org/entity/27574286	5.562499761581421
+data	data	21105	21109	http://ma-graph.org/entity/163439950	5.0
+noise	noise	24063	24068	http://ma-graph.org/entity/151405878	5.0
+uniqueness	uniqueness	25696	25706	http://ma-graph.org/entity/2777021972	5.0
+distributed computing	distributed computing	71140	71161	http://ma-graph.org/entity/120314980	101.02734565734863
+visualization	visualization	75160	75173	http://ma-graph.org/entity/36464697	13.404645919799805
+tensor	tensor	75224	75230	http://ma-graph.org/entity/107180903	14.108511209487915
+data	data	75403	75407	http://ma-graph.org/entity/163439950	5.0
+big data	big data	-1	7	http://ma-graph.org/entity/75684735	7.656092047691345
+wish	wish	75442	75446	http://ma-graph.org/entity/2781298115	5.0
+gratitude	gratitude	75479	75488	http://ma-graph.org/entity/2779930795	5.458333492279053
+li	LI	75638	75640	http://ma-graph.org/entity/3390462	5.0

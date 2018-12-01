@@ -728,9 +728,70 @@ false positives: 188
     user    68m19.553s
     sys     14m26.658s
     ```
-* matching
+* matching (same approach as 1712 *full phrase queries etc. for speedup 53.7%*, but only 34.1%)
     ```
-    TODO
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample_one_percent/arxiv_sample_one_percent_text/
+    - - - - - - - - - - - - - - - - -
+    375309/375312
+    matches: 128178
+    checked: 8709
+    Phys. Rev.: 52157
+    no title: 151838
+    false positives: 422
+    by arXiv ID: 30200
+    by arXiv ID fail: 0
+    by doi: 10124
+    >>> avg time aID: 0.45
+    >>> avg time DOI: 0.51
+    >>> avg time ParsCit: 0.02
+    >>> avg time Solr: 0.06
+    >>> avg time check: 0.00
+    >>> avg time DB r: 0.00
+    >>> avg time DB w: 0.00
+    >>> time aID: 13483.77
+    >>> time DOI: 5151.65
+    >>> time ParsCit: 5402.39
+    >>> time Solr: 12391.17
+    >>> time check: 57.81
+    >>> time DB r: 390.43
+    >>> time DB w: 110.25
+    
+    real    632m8.252s
+    user    81m40.911s
+    sys     5m11.341s
+    ```
+* querying arXiv title from a DB instead of arXiv's web API
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample_one_percent/181130_test/
+    - - - - - - - - - - - - - - - - -
+    375312/375312
+    matches: 122667
+    checked: 11117
+    Phys. Rev.: 52179
+    no title: 151919
+    maybe (!) false positives: 404
+    by arXiv ID: 30580
+    by arXiv ID fail: 5167
+    by doi: 10129
+    by doi fail: 929
+    >>> avg time aID: 0.10
+    >>> avg time DOI: 0.54
+    >>> avg time ParsCit: 0.02
+    >>> avg time Solr: 0.06
+    >>> avg time check: 0.00
+    >>> avg time DB r: 0.00
+    >>> avg time DB w: 0.00
+    >>> time aID: 2980.74
+    >>> time DOI: 5506.91
+    >>> time ParsCit: 5271.82
+    >>> time Solr: 13172.52
+    >>> time check: 57.20
+    >>> time DB r: 362.16
+    >>> time DB w: 98.81
+    
+    real    475m3.166s
+    user    114m13.424s
+    sys     22m4.537s
     ```
 
 ### citation recommendation baseline

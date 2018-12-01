@@ -1,0 +1,589 @@
+vision	Vision	13	19	http://ma-graph.org/entity/133979268	5.0
+computer vision	Computer Vision	-1	14	http://ma-graph.org/entity/31972630	194.58623886108398
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	97	100	http://ma-graph.org/entity/93139939	5.625
+eye tracking	eye tracking	1230	1242	http://ma-graph.org/entity/56461940	6.005050539970398
+s	S	5051	5052	http://ma-graph.org/entity/81883719	5.0
+pupil	pupil	5155	5160	http://ma-graph.org/entity/2777394604	8.444093465805054
+interaction	interaction	39813	39824	http://ma-graph.org/entity/855514	5.0
+pupil	pupil	41705	41710	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	Pupil	-1	4	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	927	933	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	938	943	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	1066	1072	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	1125	1130	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	1145	1151	http://ma-graph.org/entity/512554520	7.600009441375732
+eye	eye	1230	1233	http://ma-graph.org/entity/93139939	5.625
+eye tracking	eye tracking	22984	22996	http://ma-graph.org/entity/56461940	6.005050539970398
+pupil	pupil	24150	24155	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	24357	24361	http://ma-graph.org/entity/196938896	5.0
+data	data	24398	24402	http://ma-graph.org/entity/163439950	5.0
+data	data	24479	24483	http://ma-graph.org/entity/163439950	5.0
+pupil	pupil	25806	25811	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	25983	25988	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	26232	26235	http://ma-graph.org/entity/93139939	5.625
+eye	eye	27707	27710	http://ma-graph.org/entity/93139939	5.625
+pupil	Pupil	27840	27845	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	28554	28557	http://ma-graph.org/entity/93139939	5.625
+becoming	becoming	-1	7	http://ma-graph.org/entity/93491739	5.0
+eye	eye	97	100	http://ma-graph.org/entity/93139939	5.625
+oculus	Oculus	2247	2253	http://ma-graph.org/entity/10343214	5.0
+eye	eye	2418	2421	http://ma-graph.org/entity/93139939	5.625
+perception	perception	2704	2714	http://ma-graph.org/entity/26760741	46.64634704589844
+pupil	Pupil	3073	3078	http://ma-graph.org/entity/2777394604	8.444093465805054
+layers	layers	3157	3163	http://ma-graph.org/entity/162462649	5.0
+signal	signal	3176	3182	http://ma-graph.org/entity/113841659	5.516761541366577
+gaze	gaze	3219	3223	http://ma-graph.org/entity/2779916870	6.414772868156433
+eye	eye	3314	3317	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	3395	3400	http://ma-graph.org/entity/2777394604	8.444093465805054
+layers	layers	3436	3442	http://ma-graph.org/entity/162462649	5.0
+pupil	pupil	3527	3532	http://ma-graph.org/entity/2777394604	8.444093465805054
+low	low	3671	3674	http://ma-graph.org/entity/187898554	5.0
+pupil	pupil	3675	3680	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	4318	4323	http://ma-graph.org/entity/2777394604	8.444093465805054
+multiple	multiple	4345	4353	http://ma-graph.org/entity/164680029	5.0
+pupil	Pupil	4734	4739	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	4764	4770	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	4775	4780	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	4912	4918	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	4982	4987	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	5019	5024	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	5078	5084	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	5155	5160	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	5212	5216	http://ma-graph.org/entity/196938896	5.0
+method	method	5254	5260	http://ma-graph.org/entity/512554520	7.600009441375732
+metrics	metrics	5348	5355	http://ma-graph.org/entity/195780805	5.0
+pupil	pupil	5407	5412	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	5463	5469	http://ma-graph.org/entity/113841659	5.516761541366577
+pupil	pupil	5669	5674	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	5793	5798	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	5968	5971	http://ma-graph.org/entity/93139939	5.625
+eye	eye	6050	6053	http://ma-graph.org/entity/93139939	5.625
+detector	detector	6421	6429	http://ma-graph.org/entity/94915269	33.94339323043823
+canny edge detector	Canny edge detector	7749	7768	http://ma-graph.org/entity/14705441	6.305555701255798
+heuristics	heuristics	13321	13331	http://ma-graph.org/entity/127705205	6.435605883598328
+ellipse	ellipse	13510	13517	http://ma-graph.org/entity/74261601	5.527777671813965
+pupil	pupil	14050	14055	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	15101	15107	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	16010	16015	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	16434	16439	http://ma-graph.org/entity/2777394604	8.444093465805054
+parameter	parameter	20696	20705	http://ma-graph.org/entity/163001010	5.0
+mass	mass	-1	3	http://ma-graph.org/entity/115139119	5.0
+center of mass	center of mass	7180	7194	http://ma-graph.org/entity/31733177	5.277777910232544
+pupil	pupil	7240	7245	http://ma-graph.org/entity/2777394604	8.444093465805054
+excuse	ExCuSe	7309	7315	http://ma-graph.org/entity/2777998198	5.0
+histogram	histogram	7399	7408	http://ma-graph.org/entity/53533937	5.892361402511597
+parameter	parameter	7502	7511	http://ma-graph.org/entity/163001010	5.0
+pupil	pupil	7526	7531	http://ma-graph.org/entity/2777394604	8.444093465805054
+integral	integral	7573	7581	http://ma-graph.org/entity/179171824	5.0
+values	values	7710	7716	http://ma-graph.org/entity/194229684	5.0
+detector	detector	7760	7768	http://ma-graph.org/entity/94915269	33.94339323043823
+canny edge detector	Canny edge detector	-1	18	http://ma-graph.org/entity/14705441	6.305555701255798
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+ellipse	ellipse	6743	6750	http://ma-graph.org/entity/74261601	5.527777671813965
+histogram	histogram	7399	7408	http://ma-graph.org/entity/53533937	5.892361402511597
+ellipse	ellipse	7849	7856	http://ma-graph.org/entity/74261601	5.527777671813965
+multiple	multiple	8361	8369	http://ma-graph.org/entity/164680029	5.0
+data	data	8370	8374	http://ma-graph.org/entity/163439950	5.0
+multiple	multiple	8487	8495	http://ma-graph.org/entity/164680029	5.0
+vision	vision	8794	8800	http://ma-graph.org/entity/133979268	5.0
+computer vision	computer vision	-1	14	http://ma-graph.org/entity/31972630	194.58623886108398
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	463	468	http://ma-graph.org/entity/2777394604	8.444093465805054
+data	data	1392	1396	http://ma-graph.org/entity/163439950	5.0
+data	data	1416	1420	http://ma-graph.org/entity/163439950	5.0
+data	data	8370	8374	http://ma-graph.org/entity/163439950	5.0
+labeled data	labeled data	9062	9074	http://ma-graph.org/entity/2776145971	5.0
+data availability	data availability	-1	16	http://ma-graph.org/entity/2780562280	5.0
+unsupervised learning	unsupervised learning	9136	9157	http://ma-graph.org/entity/8038995	6.4897847175598145
+computation	computation	9280	9291	http://ma-graph.org/entity/45374587	10.856173038482666
+vision	Vision	9459	9465	http://ma-graph.org/entity/133979268	5.0
+engineering	engineering	9682	9693	http://ma-graph.org/entity/127413603	201.22879028320312
+view	view	9703	9707	http://ma-graph.org/entity/54239708	6.118207573890686
+black box	black box	9722	9731	http://ma-graph.org/entity/94966114	5.0
+pupil	pupil	9822	9827	http://ma-graph.org/entity/2777394604	8.444093465805054
+support	support	9979	9986	http://ma-graph.org/entity/48168201	5.0
+estimation	estimation	10101	10111	http://ma-graph.org/entity/96250715	5.0
+convolution	convolution	10127	10138	http://ma-graph.org/entity/152003226	9.279631972312927
+layers	layers	10158	10164	http://ma-graph.org/entity/162462649	5.0
+convolution	convolution	10185	10196	http://ma-graph.org/entity/152003226	9.279631972312927
+deconvolution	deconvolution	10204	10217	http://ma-graph.org/entity/174576160	5.333251953125
+layers	layers	10218	10224	http://ma-graph.org/entity/162462649	5.0
+estimation	estimation	10251	10261	http://ma-graph.org/entity/96250715	5.0
+convolution	convolution	10277	10288	http://ma-graph.org/entity/152003226	9.279631972312927
+layers	layers	10308	10314	http://ma-graph.org/entity/162462649	5.0
+convolution	convolution	10334	10345	http://ma-graph.org/entity/152003226	9.279631972312927
+deconvolution	deconvolution	10353	10366	http://ma-graph.org/entity/174576160	5.333251953125
+layers	layers	10367	10373	http://ma-graph.org/entity/162462649	5.0
+pupil	Pupil	10387	10392	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	10447	10453	http://ma-graph.org/entity/512554520	7.600009441375732
+eye	eye	10535	10538	http://ma-graph.org/entity/93139939	5.625
+grayscale	grayscale	10586	10595	http://ma-graph.org/entity/78201319	5.0
+eye	eye	10603	10606	http://ma-graph.org/entity/93139939	5.625
+eye	eye	10639	10642	http://ma-graph.org/entity/93139939	5.625
+method	method	10657	10663	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	10728	10733	http://ma-graph.org/entity/2777394604	8.444093465805054
+values	values	10788	10794	http://ma-graph.org/entity/194229684	5.0
+eye	eye	10803	10806	http://ma-graph.org/entity/93139939	5.625
+eye	eye	10847	10850	http://ma-graph.org/entity/93139939	5.625
+diagonal	diagonal	10897	10905	http://ma-graph.org/entity/130367717	5.840277671813965
+method	method	10981	10987	http://ma-graph.org/entity/512554520	7.600009441375732
+eye	eye	11159	11162	http://ma-graph.org/entity/93139939	5.625
+placement	placement	11171	11180	http://ma-graph.org/entity/117690923	5.0
+eye	eye	11204	11207	http://ma-graph.org/entity/93139939	5.625
+eye	eye	11265	11268	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	11400	11405	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	11538	11543	http://ma-graph.org/entity/2777394604	8.444093465805054
+ellipse	ellipse	11556	11563	http://ma-graph.org/entity/74261601	5.527777671813965
+ellipse	ellipse	11634	11641	http://ma-graph.org/entity/74261601	5.527777671813965
+aspect ratio	aspect ratio	11642	11654	http://ma-graph.org/entity/161137894	5.0
+ellipse	ellipse	11704	11711	http://ma-graph.org/entity/74261601	5.527777671813965
+ellipse	ellipse	11730	11737	http://ma-graph.org/entity/74261601	5.527777671813965
+support	support	11758	11765	http://ma-graph.org/entity/48168201	5.0
+hypothesis	hypothesis	11770	11780	http://ma-graph.org/entity/71675047	5.0
+pupil	pupil	11795	11800	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	11875	11880	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	11956	11961	http://ma-graph.org/entity/2777394604	8.444093465805054
+remainder	remainder	11967	11976	http://ma-graph.org/entity/39613435	5.295138955116272
+method	method	12016	12022	http://ma-graph.org/entity/512554520	7.600009441375732
+processing	processing	12037	12047	http://ma-graph.org/entity/194241460	5.0
+size	size	12127	12131	http://ma-graph.org/entity/140356686	5.0
+interpolation	interpolation	12158	12171	http://ma-graph.org/entity/17378031	12.57378101348877
+bilinear interpolation	bilinear interpolation	-1	21	http://ma-graph.org/entity/205203396	7.736545205116272
+aspect ratio	aspect ratio	11642	11654	http://ma-graph.org/entity/161137894	5.0
+downscaling	downscaling	12295	12306	http://ma-graph.org/entity/41156917	5.625
+edge detection	Edge Detection	12390	12404	http://ma-graph.org/entity/193536780	6.934027671813965
+edge detection	edge detection	12468	12482	http://ma-graph.org/entity/193536780	6.934027671813965
+up	up	12682	12684	http://ma-graph.org/entity/93126310	5.0
+procedure	procedure	12722	12731	http://ma-graph.org/entity/4363049	5.0
+dominant	dominant	12948	12956	http://ma-graph.org/entity/41004117	5.0
+method	method	13016	13022	http://ma-graph.org/entity/512554520	7.600009441375732
+ellipse	ellipse	13192	13199	http://ma-graph.org/entity/74261601	5.527777671813965
+pupil	pupil	13221	13226	http://ma-graph.org/entity/2777394604	8.444093465805054
+multiple	multiple	13312	13320	http://ma-graph.org/entity/164680029	5.0
+heuristics	heuristics	13321	13331	http://ma-graph.org/entity/127705205	6.435605883598328
+pupil	pupil	13407	13412	http://ma-graph.org/entity/2777394604	8.444093465805054
+ellipse	ellipse	13510	13517	http://ma-graph.org/entity/74261601	5.527777671813965
+s	s	13526	13527	http://ma-graph.org/entity/81883719	5.0
+cardinality	cardinality	13595	13606	http://ma-graph.org/entity/39673530	6.395833492279053
+heuristic	heuristic	13634	13643	http://ma-graph.org/entity/173801870	8.789158463478088
+discards	discards	13644	13652	http://ma-graph.org/entity/2776428065	5.0
+distance	distance	13847	13855	http://ma-graph.org/entity/54385418	5.249999761581421
+eye	eye	13887	13890	http://ma-graph.org/entity/93139939	5.625
+canthus	canthus	13891	13898	http://ma-graph.org/entity/60172819	5.249999761581421
+values	values	13991	13997	http://ma-graph.org/entity/194229684	5.0
+pupil	pupil	14050	14055	http://ma-graph.org/entity/2777394604	8.444093465805054
+diameter	diameter	14056	14064	http://ma-graph.org/entity/203957795	5.0
+physiology	physiology	14115	14125	http://ma-graph.org/entity/42407357	54.42862510681152
+eye	eye	14146	14149	http://ma-graph.org/entity/93139939	5.625
+distance	distance	14157	14165	http://ma-graph.org/entity/54385418	5.249999761581421
+fissure	fissure	14188	14195	http://ma-graph.org/entity/2780749890	5.8125001192092896
+palpebral fissure	palpebral fissure	-1	16	http://ma-graph.org/entity/42558546	5.249999761581421
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+diameter	diameter	14056	14064	http://ma-graph.org/entity/203957795	5.0
+values	values	14442	14448	http://ma-graph.org/entity/194229684	5.0
+rotation	rotation	14476	14484	http://ma-graph.org/entity/80192629	5.0
+eye	eye	14512	14515	http://ma-graph.org/entity/93139939	5.625
+values	values	14525	14531	http://ma-graph.org/entity/194229684	5.0
+diagonal	diagonal	14693	14701	http://ma-graph.org/entity/130367717	5.840277671813965
+reference	reference	14749	14758	http://ma-graph.org/entity/46954877	5.0
+diameter	diameter	14824	14832	http://ma-graph.org/entity/203957795	5.0
+diameter	diameter	14897	14905	http://ma-graph.org/entity/203957795	5.0
+curvature	curvature	15000	15009	http://ma-graph.org/entity/195065555	10.110896825790405
+rectangle	rectangle	15029	15038	http://ma-graph.org/entity/2781302577	5.609809160232544
+calipers	calipers	15092	15100	http://ma-graph.org/entity/186738849	5.0
+rotating calipers	rotating calipers	-1	16	http://ma-graph.org/entity/143832811	5.0
+curvature	curvature	15000	15009	http://ma-graph.org/entity/195065555	10.110896825790405
+cutoff	cutoff	-1	5	http://ma-graph.org/entity/2778217198	5.0
+heuristic	heuristic	6832	6841	http://ma-graph.org/entity/173801870	8.789158463478088
+ellipse	ellipse	6852	6859	http://ma-graph.org/entity/74261601	5.527777671813965
+method	method	6942	6948	http://ma-graph.org/entity/512554520	7.600009441375732
+s	s	6953	6954	http://ma-graph.org/entity/81883719	5.0
+s	s	6977	6978	http://ma-graph.org/entity/81883719	5.0
+pose	pose	10441	10445	http://ma-graph.org/entity/52102323	5.33203125
+eye	eye	10535	10538	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	10728	10733	http://ma-graph.org/entity/2777394604	8.444093465805054
+ellipse	ellipse	11556	11563	http://ma-graph.org/entity/74261601	5.527777671813965
+polygon	polygon	16214	16221	http://ma-graph.org/entity/198513863	11.983014345169067
+s	s	16247	16248	http://ma-graph.org/entity/81883719	5.0
+metrics	metrics	16359	16366	http://ma-graph.org/entity/195780805	5.0
+pupil	pupil	16434	16439	http://ma-graph.org/entity/2777394604	8.444093465805054
+ellipse	Ellipse	16441	16448	http://ma-graph.org/entity/74261601	5.527777671813965
+aspect ratio	Aspect Ratio	16449	16461	http://ma-graph.org/entity/161137894	5.0
+eye	eye	16580	16583	http://ma-graph.org/entity/93139939	5.625
+placement	placement	16591	16600	http://ma-graph.org/entity/117690923	5.0
+eye	eye	16612	16615	http://ma-graph.org/entity/93139939	5.625
+s	s	16622	16623	http://ma-graph.org/entity/81883719	5.0
+ellipse	Ellipse	17077	17084	http://ma-graph.org/entity/74261601	5.527777671813965
+s	s	17099	17100	http://ma-graph.org/entity/81883719	5.0
+hypothesis	hypothesis	17177	17187	http://ma-graph.org/entity/71675047	5.0
+s	s	17207	17208	http://ma-graph.org/entity/81883719	5.0
+stride	stride	17343	17349	http://ma-graph.org/entity/18007350	5.277777910232544
+linear equation	linear equation	17386	17401	http://ma-graph.org/entity/77346573	5.0
+s	s	17404	17405	http://ma-graph.org/entity/81883719	5.0
+line segment	line segment	17495	17507	http://ma-graph.org/entity/182124507	5.607638955116272
+s	s	17545	17546	http://ma-graph.org/entity/81883719	5.0
+pupil	pupil	17710	17715	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	17755	17758	http://ma-graph.org/entity/93139939	5.625
+inverse	inverse	17780	17787	http://ma-graph.org/entity/207467116	5.8125001192092896
+ellipse	ellipse	17815	17822	http://ma-graph.org/entity/74261601	5.527777671813965
+size	size	17866	17870	http://ma-graph.org/entity/140356686	5.0
+metrics	metrics	18027	18034	http://ma-graph.org/entity/195780805	5.0
+metrics	metrics	18165	18172	http://ma-graph.org/entity/195780805	5.0
+procedure	procedure	18345	18354	http://ma-graph.org/entity/4363049	5.0
+pupil	pupil	18383	18388	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	18437	18442	http://ma-graph.org/entity/2777394604	8.444093465805054
+up	up	18467	18469	http://ma-graph.org/entity/93126310	5.0
+eye	eye	18522	18525	http://ma-graph.org/entity/93139939	5.625
+dominant	dominant	18574	18582	http://ma-graph.org/entity/41004117	5.0
+procedure	procedure	19005	19014	http://ma-graph.org/entity/4363049	5.0
+aspect ratio	aspect ratio	19057	19069	http://ma-graph.org/entity/161137894	5.0
+values	values	19107	19113	http://ma-graph.org/entity/194229684	5.0
+list	list	19164	19168	http://ma-graph.org/entity/1458821	5.0
+pupil	pupil	19360	19365	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	19453	19458	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	19547	19552	http://ma-graph.org/entity/2777394604	8.444093465805054
+size	size	19598	19602	http://ma-graph.org/entity/140356686	5.0
+reason	reason	19619	19625	http://ma-graph.org/entity/134724905	5.0
+pupil	pupil	19653	19658	http://ma-graph.org/entity/2777394604	8.444093465805054
+size	size	19720	19724	http://ma-graph.org/entity/140356686	5.0
+pupil	pupil	19852	19857	http://ma-graph.org/entity/2777394604	8.444093465805054
+radius	radius	19863	19869	http://ma-graph.org/entity/178635117	5.0
+lying	lying	19959	19964	http://ma-graph.org/entity/119421448	5.0
+radius	radius	20026	20032	http://ma-graph.org/entity/178635117	5.0
+pupil	pupil	20194	20199	http://ma-graph.org/entity/2777394604	8.444093465805054
+procedure	procedure	20247	20256	http://ma-graph.org/entity/4363049	5.0
+pupil	pupil	20270	20275	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	20291	20296	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	20342	20347	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	20506	20511	http://ma-graph.org/entity/2777394604	8.444093465805054
+split	split	20561	20566	http://ma-graph.org/entity/117026687	5.0
+validity	validity	20571	20579	http://ma-graph.org/entity/70364389	5.249999761581421
+excuse	ExCuSe	20592	20598	http://ma-graph.org/entity/2777998198	5.0
+default	default	20688	20695	http://ma-graph.org/entity/69637215	6.105709671974182
+excuse	ExCuSe	20753	20759	http://ma-graph.org/entity/2777998198	5.0
+size	size	20894	20898	http://ma-graph.org/entity/140356686	5.0
+size	size	20989	20993	http://ma-graph.org/entity/140356686	5.0
+eye	eye	21115	21118	http://ma-graph.org/entity/93139939	5.625
+downscaling	downscaling	21174	21185	http://ma-graph.org/entity/41156917	5.625
+cropping	cropping	21197	21205	http://ma-graph.org/entity/13558536	5.0
+notice	Notice	21293	21299	http://ma-graph.org/entity/2779913896	6.152777671813965
+ground	ground	21400	21406	http://ma-graph.org/entity/168993435	7.4059343338012695
+ground truth	ground truth	23430	23442	http://ma-graph.org/entity/146849305	5.0
+downscaling	downscaling	-1	10	http://ma-graph.org/entity/41156917	5.625
+use case	use case	21801	21809	http://ma-graph.org/entity/39424602	5.3125
+eye	eye	21838	21841	http://ma-graph.org/entity/93139939	5.625
+data	data	21871	21875	http://ma-graph.org/entity/163439950	5.0
+data set	data set	22882	22890	http://ma-graph.org/entity/58489278	5.0
+rate	rate	23550	23554	http://ma-graph.org/entity/196938896	5.0
+excuse	ExCuSe	24464	24470	http://ma-graph.org/entity/2777998198	5.0
+pupil	Pupil	25067	25072	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	Rate	27856	27860	http://ma-graph.org/entity/196938896	5.0
+pupil	pupil	27982	27987	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	28034	28039	http://ma-graph.org/entity/2777394604	8.444093465805054
+radius	radius	-1	5	http://ma-graph.org/entity/178635117	5.0
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+up	up	464	466	http://ma-graph.org/entity/93126310	5.0
+data	data	1392	1396	http://ma-graph.org/entity/163439950	5.0
+eye	eye	1573	1576	http://ma-graph.org/entity/93139939	5.625
+eye tracking	eye tracking	22984	22996	http://ma-graph.org/entity/56461940	6.005050539970398
+excuse	ExCuSe	23073	23079	http://ma-graph.org/entity/2777998198	5.0
+data	data	23289	23293	http://ma-graph.org/entity/163439950	5.0
+data	data	23316	23320	http://ma-graph.org/entity/163439950	5.0
+ground	ground	23430	23436	http://ma-graph.org/entity/168993435	7.4059343338012695
+ground truth	ground truth	29214	29226	http://ma-graph.org/entity/146849305	5.0
+data	data	30773	30777	http://ma-graph.org/entity/163439950	5.0
+data set	data set	30883	30891	http://ma-graph.org/entity/58489278	5.0
+data	data	31926	31930	http://ma-graph.org/entity/163439950	5.0
+data set	data set	32018	32026	http://ma-graph.org/entity/58489278	5.0
+rate	rate	32382	32386	http://ma-graph.org/entity/196938896	5.0
+rate	rate	32885	32889	http://ma-graph.org/entity/196938896	5.0
+pixel	pixel	-1	4	http://ma-graph.org/entity/160633673	23.536248207092285
+rate	rate	446	450	http://ma-graph.org/entity/196938896	5.0
+use case	use case	21801	21809	http://ma-graph.org/entity/39424602	5.3125
+pixel	pixel	22404	22409	http://ma-graph.org/entity/160633673	23.536248207092285
+rate	rate	22824	22828	http://ma-graph.org/entity/196938896	5.0
+pixel	pixel	23657	23662	http://ma-graph.org/entity/160633673	23.536248207092285
+rate	rate	23756	23760	http://ma-graph.org/entity/196938896	5.0
+method	method	24129	24135	http://ma-graph.org/entity/512554520	7.600009441375732
+pupil	pupil	24150	24155	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	24357	24361	http://ma-graph.org/entity/196938896	5.0
+data	data	24398	24402	http://ma-graph.org/entity/163439950	5.0
+data set	data set	24552	24560	http://ma-graph.org/entity/58489278	5.0
+excuse	ExCuSe	25553	25559	http://ma-graph.org/entity/2777998198	5.0
+data	data	25560	25564	http://ma-graph.org/entity/163439950	5.0
+data	data	25773	25777	http://ma-graph.org/entity/163439950	5.0
+data	data	26626	26630	http://ma-graph.org/entity/163439950	5.0
+data set	data set	26877	26885	http://ma-graph.org/entity/58489278	5.0
+data	data	26918	26922	http://ma-graph.org/entity/163439950	5.0
+rate	rate	27136	27140	http://ma-graph.org/entity/196938896	5.0
+data	data	27253	27257	http://ma-graph.org/entity/163439950	5.0
+rate	rate	28016	28020	http://ma-graph.org/entity/196938896	5.0
+use case	use case	30907	30915	http://ma-graph.org/entity/39424602	5.3125
+data	data	31926	31930	http://ma-graph.org/entity/163439950	5.0
+pupil	pupil	32203	32208	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	33759	33762	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	33874	33879	http://ma-graph.org/entity/2777394604	8.444093465805054
+size	size	40964	40968	http://ma-graph.org/entity/140356686	5.0
+rate	rate	41942	41946	http://ma-graph.org/entity/196938896	5.0
+pupil	pupil	42136	42141	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	43149	43152	http://ma-graph.org/entity/93139939	5.625
+reason	reason	-1	5	http://ma-graph.org/entity/134724905	5.0
+data	data	1392	1396	http://ma-graph.org/entity/163439950	5.0
+rate	rate	1831	1835	http://ma-graph.org/entity/196938896	5.0
+rate	rate	2174	2178	http://ma-graph.org/entity/196938896	5.0
+pixel	pixel	7198	7203	http://ma-graph.org/entity/160633673	23.536248207092285
+data	data	8370	8374	http://ma-graph.org/entity/163439950	5.0
+excuse	ExCuSe	20592	20598	http://ma-graph.org/entity/2777998198	5.0
+data	data	21871	21875	http://ma-graph.org/entity/163439950	5.0
+data	data	22882	22886	http://ma-graph.org/entity/163439950	5.0
+data	data	23289	23293	http://ma-graph.org/entity/163439950	5.0
+rate	rate	23550	23554	http://ma-graph.org/entity/196938896	5.0
+pixel	pixel	23657	23662	http://ma-graph.org/entity/160633673	23.536248207092285
+excuse	ExCuSe	24464	24470	http://ma-graph.org/entity/2777998198	5.0
+data	data	24479	24483	http://ma-graph.org/entity/163439950	5.0
+data	data	24530	24534	http://ma-graph.org/entity/163439950	5.0
+data	data	24552	24556	http://ma-graph.org/entity/163439950	5.0
+data	data	24809	24813	http://ma-graph.org/entity/163439950	5.0
+eye	eye	25869	25872	http://ma-graph.org/entity/93139939	5.625
+pupil	Pupil	26617	26622	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	Rate	27856	27860	http://ma-graph.org/entity/196938896	5.0
+pupil	pupil	27982	27987	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	28016	28020	http://ma-graph.org/entity/196938896	5.0
+pupil	pupil	28034	28039	http://ma-graph.org/entity/2777394604	8.444093465805054
+algorithm	algorithm	28066	28075	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	28147	28152	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	28240	28245	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	28303	28307	http://ma-graph.org/entity/196938896	5.0
+pupil	pupil	28359	28364	http://ma-graph.org/entity/2777394604	8.444093465805054
+noise	noise	28433	28438	http://ma-graph.org/entity/151405878	5.0
+eye	eye	28554	28557	http://ma-graph.org/entity/93139939	5.625
+eye movement	eye movement	31279	31291	http://ma-graph.org/entity/153050134	10.211446285247803
+eye	eye	31313	31316	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	31864	31869	http://ma-graph.org/entity/2777394604	8.444093465805054
+metrics	metrics	33490	33497	http://ma-graph.org/entity/195780805	5.0
+algorithm	algorithm	33890	33899	http://ma-graph.org/entity/11413529	168.60078811645508
+ground	ground	-1	5	http://ma-graph.org/entity/168993435	7.4059343338012695
+ground truth	ground truth	21400	21412	http://ma-graph.org/entity/146849305	5.0
+pupil	pupil	22301	22306	http://ma-graph.org/entity/2777394604	8.444093465805054
+algorithm	algorithm	22337	22346	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	22349	22354	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	22433	22438	http://ma-graph.org/entity/2777394604	8.444093465805054
+ground	ground	22551	22557	http://ma-graph.org/entity/168993435	7.4059343338012695
+ground truth	ground truth	23430	23442	http://ma-graph.org/entity/146849305	5.0
+negative	Negative	29562	29570	http://ma-graph.org/entity/113619468	5.0
+algorithm	algorithm	29612	29621	http://ma-graph.org/entity/11413529	168.60078811645508
+ground	ground	29626	29632	http://ma-graph.org/entity/168993435	7.4059343338012695
+ground truth	ground truth	29779	29791	http://ma-graph.org/entity/146849305	5.0
+pupil	pupil	30062	30067	http://ma-graph.org/entity/2777394604	8.444093465805054
+negative	Negative	-1	7	http://ma-graph.org/entity/113619468	5.0
+algorithm	algorithm	1353	1362	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	1461	1466	http://ma-graph.org/entity/2777394604	8.444093465805054
+ground	ground	21400	21406	http://ma-graph.org/entity/168993435	7.4059343338012695
+ground truth	ground truth	23430	23442	http://ma-graph.org/entity/146849305	5.0
+binary classification	binary classification	29825	29846	http://ma-graph.org/entity/66905080	5.0
+pupil	pupil	30062	30067	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	30078	30082	http://ma-graph.org/entity/196938896	5.0
+rate	rate	30101	30105	http://ma-graph.org/entity/196938896	5.0
+algorithm	algorithm	30125	30134	http://ma-graph.org/entity/11413529	168.60078811645508
+metrics	metrics	30171	30178	http://ma-graph.org/entity/195780805	5.0
+eye	eye	30344	30347	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	30382	30387	http://ma-graph.org/entity/2777394604	8.444093465805054
+negative	negative	30437	30445	http://ma-graph.org/entity/113619468	5.0
+eye	eye	30462	30465	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	30484	30489	http://ma-graph.org/entity/2777394604	8.444093465805054
+capability	capability	30545	30555	http://ma-graph.org/entity/28339431	5.0
+algorithm	algorithm	30563	30572	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	30602	30607	http://ma-graph.org/entity/2777394604	8.444093465805054
+negative	negative	30689	30697	http://ma-graph.org/entity/113619468	5.0
+data	data	30773	30777	http://ma-graph.org/entity/163439950	5.0
+data set	data set	30883	30891	http://ma-graph.org/entity/58489278	5.0
+negative	negative	-1	7	http://ma-graph.org/entity/113619468	5.0
+data	data	1392	1396	http://ma-graph.org/entity/163439950	5.0
+data set	data set	1416	1424	http://ma-graph.org/entity/58489278	5.0
+eye	eye	1573	1576	http://ma-graph.org/entity/93139939	5.625
+eye	eye	1861	1864	http://ma-graph.org/entity/93139939	5.625
+eye movement	eye movement	11265	11277	http://ma-graph.org/entity/153050134	10.211446285247803
+eye	eye	13887	13890	http://ma-graph.org/entity/93139939	5.625
+eye	eye	14146	14149	http://ma-graph.org/entity/93139939	5.625
+globe	globe	31357	31362	http://ma-graph.org/entity/2775899829	5.0
+skin	skin	31433	31437	http://ma-graph.org/entity/10552289	5.0
+skin	skin	31593	31597	http://ma-graph.org/entity/10552289	5.0
+eyewear	eyewear	31710	31717	http://ma-graph.org/entity/2780527195	5.3125
+eye	eye	31736	31739	http://ma-graph.org/entity/93139939	5.625
+skin	skin	31760	31764	http://ma-graph.org/entity/10552289	5.0
+pupil	pupil	31864	31869	http://ma-graph.org/entity/2777394604	8.444093465805054
+data	data	31926	31930	http://ma-graph.org/entity/163439950	5.0
+data set	data set	32018	32026	http://ma-graph.org/entity/58489278	5.0
+data	data	32066	32070	http://ma-graph.org/entity/163439950	5.0
+data	data	34341	34345	http://ma-graph.org/entity/163439950	5.0
+data set	data set	35347	35355	http://ma-graph.org/entity/58489278	5.0
+pupil	pupil	35367	35372	http://ma-graph.org/entity/2777394604	8.444093465805054
+validity	validity	-1	7	http://ma-graph.org/entity/70364389	5.249999761581421
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+excuse	ExCuSe	6255	6261	http://ma-graph.org/entity/2777998198	5.0
+pupil	pupil	6875	6880	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	6968	6973	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	7060	7065	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	10997	11001	http://ma-graph.org/entity/196938896	5.0
+score	score	33027	33032	http://ma-graph.org/entity/65660741	5.0
+gain	gain	33318	33322	http://ma-graph.org/entity/166566249	5.0
+metrics	metrics	33490	33497	http://ma-graph.org/entity/195780805	5.0
+pupil	Pupil	33678	33683	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	Signal	33684	33690	http://ma-graph.org/entity/113841659	5.516761541366577
+view	view	33717	33721	http://ma-graph.org/entity/54239708	6.118207573890686
+processing	processing	33735	33745	http://ma-graph.org/entity/194241460	5.0
+image processing	image processing	-1	15	http://ma-graph.org/entity/9417928	16.779345273971558
+pupil	pupil	57	62	http://ma-graph.org/entity/2777394604	8.444093465805054
+layers	layers	3157	3163	http://ma-graph.org/entity/162462649	5.0
+gaze	gaze	3219	3223	http://ma-graph.org/entity/2779916870	6.414772868156433
+estimation	estimation	3224	3234	http://ma-graph.org/entity/96250715	5.0
+eye	eye	3314	3317	http://ma-graph.org/entity/93139939	5.625
+eye movement	eye movement	11265	11277	http://ma-graph.org/entity/153050134	10.211446285247803
+pupil	pupil	11400	11405	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	34040	34046	http://ma-graph.org/entity/113841659	5.516761541366577
+pupil	pupil	34168	34173	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	34224	34229	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	34290	34295	http://ma-graph.org/entity/2777394604	8.444093465805054
+data	data	34341	34345	http://ma-graph.org/entity/163439950	5.0
+pupil	pupil	34367	34372	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	34383	34387	http://ma-graph.org/entity/196938896	5.0
+algorithm	algorithm	34415	34424	http://ma-graph.org/entity/11413529	168.60078811645508
+values	values	34502	34508	http://ma-graph.org/entity/194229684	5.0
+pupil	pupil	34560	34565	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	34634	34639	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	34640	34646	http://ma-graph.org/entity/113841659	5.516761541366577
+eye	eye	34661	34664	http://ma-graph.org/entity/93139939	5.625
+eye tracking	eye tracking	45419	45431	http://ma-graph.org/entity/56461940	6.005050539970398
+data	data	-1	3	http://ma-graph.org/entity/163439950	5.0
+eye	eye	97	100	http://ma-graph.org/entity/93139939	5.625
+eye tracking	eye tracking	1230	1242	http://ma-graph.org/entity/56461940	6.005050539970398
+data	data	1392	1396	http://ma-graph.org/entity/163439950	5.0
+algorithm	algorithm	1542	1551	http://ma-graph.org/entity/11413529	168.60078811645508
+method	method	4764	4770	http://ma-graph.org/entity/512554520	7.600009441375732
+metrics	metrics	5348	5355	http://ma-graph.org/entity/195780805	5.0
+metrics	metrics	16359	16366	http://ma-graph.org/entity/195780805	5.0
+metrics	metrics	18027	18034	http://ma-graph.org/entity/195780805	5.0
+pupil	pupil	18383	18388	http://ma-graph.org/entity/2777394604	8.444093465805054
+data	data	21871	21875	http://ma-graph.org/entity/163439950	5.0
+pupil	pupil	22301	22306	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	22824	22828	http://ma-graph.org/entity/196938896	5.0
+rate	rate	23550	23554	http://ma-graph.org/entity/196938896	5.0
+failure rate	failure rate	35567	35579	http://ma-graph.org/entity/163164238	5.833333134651184
+engineering	engineering	35623	35634	http://ma-graph.org/entity/127413603	201.22879028320312
+view	view	35644	35648	http://ma-graph.org/entity/54239708	6.118207573890686
+system	system	35665	35671	http://ma-graph.org/entity/16359219	5.0
+pupil	pupil	35746	35751	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	35752	35758	http://ma-graph.org/entity/113841659	5.516761541366577
+rate	rate	35944	35948	http://ma-graph.org/entity/196938896	5.0
+failure rate	failure rate	-1	11	http://ma-graph.org/entity/163164238	5.833333134651184
+accounting	accounting	36013	36023	http://ma-graph.org/entity/121955636	55.382046699523926
+pupil	pupil	36072	36077	http://ma-graph.org/entity/2777394604	8.444093465805054
+algorithm	algorithm	36191	36200	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	36225	36230	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	36382	36387	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	36388	36394	http://ma-graph.org/entity/113841659	5.516761541366577
+algorithm	algorithm	36481	36490	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	36509	36514	http://ma-graph.org/entity/2777394604	8.444093465805054
+metrics	metrics	36935	36942	http://ma-graph.org/entity/195780805	5.0
+sequence	sequence	37139	37147	http://ma-graph.org/entity/37724570	5.0
+data	data	37496	37500	http://ma-graph.org/entity/163439950	5.0
+data	data	37541	37545	http://ma-graph.org/entity/163439950	5.0
+data set	data set	37787	37795	http://ma-graph.org/entity/58489278	5.0
+use case	use case	37915	37923	http://ma-graph.org/entity/39424602	5.3125
+excuse	ExCuSe	38291	38297	http://ma-graph.org/entity/2777998198	5.0
+data	data	39979	39983	http://ma-graph.org/entity/163439950	5.0
+pupil	pupil	41705	41710	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	42034	42037	http://ma-graph.org/entity/93139939	5.625
+low	low	42672	42675	http://ma-graph.org/entity/187898554	5.0
+rate	rate	43266	43270	http://ma-graph.org/entity/196938896	5.0
+algorithm	algorithm	-1	8	http://ma-graph.org/entity/11413529	168.60078811645508
+algorithm	algorithm	1353	1362	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	1461	1466	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	3176	3182	http://ma-graph.org/entity/113841659	5.516761541366577
+excuse	ExCuSe	6255	6261	http://ma-graph.org/entity/2777998198	5.0
+rate	rate	10997	11001	http://ma-graph.org/entity/196938896	5.0
+rate	rate	11085	11089	http://ma-graph.org/entity/196938896	5.0
+excuse	ExCuSe	20592	20598	http://ma-graph.org/entity/2777998198	5.0
+use case	use case	21801	21809	http://ma-graph.org/entity/39424602	5.3125
+scenario	scenario	24287	24295	http://ma-graph.org/entity/135342440	5.0
+algorithm	algorithm	24642	24651	http://ma-graph.org/entity/11413529	168.60078811645508
+excuse	ExCuSe	25553	25559	http://ma-graph.org/entity/2777998198	5.0
+pupil	pupil	25806	25811	http://ma-graph.org/entity/2777394604	8.444093465805054
+sequence	sequence	37139	37147	http://ma-graph.org/entity/37724570	5.0
+excuse	ExCuSe	37760	37766	http://ma-graph.org/entity/2777998198	5.0
+excuse	ExCuSe	38291	38297	http://ma-graph.org/entity/2777998198	5.0
+advantage	advantage	39467	39476	http://ma-graph.org/entity/16885038	5.0
+pupil	pupil	39518	39523	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	39571	39576	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	39711	39716	http://ma-graph.org/entity/2777394604	8.444093465805054
+interaction	interaction	39813	39824	http://ma-graph.org/entity/855514	5.0
+excuse	ExCuSe	39934	39940	http://ma-graph.org/entity/2777998198	5.0
+data	data	39979	39983	http://ma-graph.org/entity/163439950	5.0
+eye	eye	40128	40131	http://ma-graph.org/entity/93139939	5.625
+operation	operation	40291	40300	http://ma-graph.org/entity/19942306	5.0
+eye	eye	40336	40339	http://ma-graph.org/entity/93139939	5.625
+eye	eye	40414	40417	http://ma-graph.org/entity/93139939	5.625
+notation	notation	40509	40517	http://ma-graph.org/entity/45357846	7.808545231819153
+deviation	deviation	40576	40585	http://ma-graph.org/entity/191358224	5.0
+standard deviation	standard deviation	-1	17	http://ma-graph.org/entity/22679943	7.144531011581421
+excuse	ExCuSe	6255	6261	http://ma-graph.org/entity/2777998198	5.0
+excuse	ExCuSe	7309	7315	http://ma-graph.org/entity/2777998198	5.0
+implementation	implementation	20671	20685	http://ma-graph.org/entity/26713055	5.0
+building	Building	41029	41037	http://ma-graph.org/entity/128570904	5.0
+eye	eye	41493	41496	http://ma-graph.org/entity/93139939	5.625
+order of magnitude	order of magnitude	41521	41539	http://ma-graph.org/entity/140551693	5.0
+algorithm	algorithm	41556	41565	http://ma-graph.org/entity/11413529	168.60078811645508
+pupil	pupil	41705	41710	http://ma-graph.org/entity/2777394604	8.444093465805054
+data	data	41921	41925	http://ma-graph.org/entity/163439950	5.0
+rate	rate	41942	41946	http://ma-graph.org/entity/196938896	5.0
+eye	eye	42034	42037	http://ma-graph.org/entity/93139939	5.625
+metrics	metrics	42116	42123	http://ma-graph.org/entity/195780805	5.0
+pupil	pupil	42136	42141	http://ma-graph.org/entity/2777394604	8.444093465805054
+excuse	ExCuSe	42289	42295	http://ma-graph.org/entity/2777998198	5.0
+pupil	pupil	42507	42512	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	42610	42615	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	42811	42816	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	42833	42838	http://ma-graph.org/entity/2777394604	8.444093465805054
+method	method	42849	42855	http://ma-graph.org/entity/512554520	7.600009441375732
+compromise	compromise	42946	42956	http://ma-graph.org/entity/46355384	5.5397725105285645
+pupil	pupil	43038	43043	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	43113	43118	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	43149	43152	http://ma-graph.org/entity/93139939	5.625
+placement	placement	43161	43170	http://ma-graph.org/entity/117690923	5.0
+eye	eye	43187	43190	http://ma-graph.org/entity/93139939	5.625
+excuse	ExCuSe	43297	43303	http://ma-graph.org/entity/2777998198	5.0
+eye	eye	43469	43472	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	43537	43542	http://ma-graph.org/entity/2777394604	8.444093465805054
+pupil	pupil	43571	43576	http://ma-graph.org/entity/2777394604	8.444093465805054
+eyelid	eyelid	43603	43609	http://ma-graph.org/entity/2781302119	11.16068720817566
+eye	eye	43614	43617	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	43740	43745	http://ma-graph.org/entity/2777394604	8.444093465805054
+use case	use case	44050	44058	http://ma-graph.org/entity/39424602	5.3125
+pupil	pupil	44124	44129	http://ma-graph.org/entity/2777394604	8.444093465805054
+eye	eye	44268	44271	http://ma-graph.org/entity/93139939	5.625
+data	data	44450	44454	http://ma-graph.org/entity/163439950	5.0
+processing	processing	44492	44502	http://ma-graph.org/entity/194241460	5.0
+annotation	annotation	44519	44529	http://ma-graph.org/entity/2776321320	8.294788002967834
+eye	eye	44578	44581	http://ma-graph.org/entity/93139939	5.625
+use case	use case	44634	44642	http://ma-graph.org/entity/39424602	5.3125
+rate	rate	44751	44755	http://ma-graph.org/entity/196938896	5.0
+use case	use case	44765	44773	http://ma-graph.org/entity/39424602	5.3125
+support	support	44809	44816	http://ma-graph.org/entity/48168201	5.0
+correlation	correlation	44845	44856	http://ma-graph.org/entity/117220453	6.81769073009491
+pupil	pupil	44908	44913	http://ma-graph.org/entity/2777394604	8.444093465805054
+rate	rate	44924	44928	http://ma-graph.org/entity/196938896	5.0
+correlation	correlation	44950	44961	http://ma-graph.org/entity/117220453	6.81769073009491
+correlation coefficient	correlation coefficient	-1	22	http://ma-graph.org/entity/2780092901	5.784862637519836
+system	system	3444	3450	http://ma-graph.org/entity/16359219	5.0
+eye	eye	3469	3472	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	3527	3532	http://ma-graph.org/entity/2777394604	8.444093465805054
+signal	signal	5463	5469	http://ma-graph.org/entity/113841659	5.516761541366577
+eye	eye	5968	5971	http://ma-graph.org/entity/93139939	5.625
+eye tracking	eye tracking	22984	22996	http://ma-graph.org/entity/56461940	6.005050539970398
+pupil	pupil	24150	24155	http://ma-graph.org/entity/2777394604	8.444093465805054
+occlusion	occlusion	25851	25860	http://ma-graph.org/entity/2776268601	8.339962363243103
+amplitude	amplitude	45535	45544	http://ma-graph.org/entity/180205008	9.558396339416504
+velocity	velocity	45549	45557	http://ma-graph.org/entity/108821247	5.0
+eye	eye	45570	45573	http://ma-graph.org/entity/93139939	5.625
+pupil	pupil	46037	46042	http://ma-graph.org/entity/2777394604	8.444093465805054

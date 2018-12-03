@@ -11,10 +11,12 @@ import pysolr
 import re
 import requests
 import sys
+import unidecode
 from lxml import etree
 from fuzzywuzzy import fuzz
 from random import shuffle
-from sqlalchemy import create_engine, Column, Integer, String, UnicodeText
+from sqlalchemy import (create_engine, Column, Integer, String, UnicodeText,
+                        Table)
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
@@ -90,7 +92,7 @@ def parscit_parse(text):
     url = 'http://localhost:8000/parscit/parse'
     ret = requests.post(url, json={'string':text})
     if ret.status_code != 200:
-        return False, False
+        return False, False, False
     response = json.loads(ret.text)
     parsed_terms = response['data']
     title_terms = []
@@ -108,13 +110,87 @@ def parscit_parse(text):
         journal = False
     else:
         journal = ' '.join(journal_terms)
-    return title, journal
+    return title, journal, parsed_terms
 
 
 def clean(s):
     s = re.sub('[^\w\s]+', '', s)
     s = re.sub('\s+', ' ', s)
     return s.strip().lower()
+
+
+def mag_normalize(s):
+    """ Normalize a string the same way paper titles are normalized in the MAG.
+
+        - replace everything that is not a \w word character (letters, numbers
+          and _, strangely) with a space
+        - turn modified alphabet characters like Umlauts or accented characters
+          into their "origin" (e.g. ä→a or ó→o)
+        - replace multiple spaces with single ones
+    """
+
+    s = re.sub('[^\w]', ' ', s)
+    s = re.sub('\s+', ' ', s)
+    s = unidecode.unidecode(s)
+    return s.strip().lower()
+
+
+def title_by_doi(given_doi):
+    doi_base_url = 'https://data.crossref.org/'
+    doi_headers = {'Accept': 'application/citeproc+json'}
+    try:
+        resp = requests.get(
+                '{}{}'.format(doi_base_url, given_doi),
+                headers=doi_headers)
+        doi_metadata = json.loads(resp.text)
+        title = doi_metadata.get('title', False)
+        if title and len(title) > 0:
+            return title
+    except (json.decoder.JSONDecodeError, requests.RequestException):
+        return False
+
+
+def guess_aps_journal_paper_doi(parscit_terms):
+    """ American Physical Society Journals have predictable DOIs
+
+        E.g.: Phys. Rev. B 84, 245128
+           -> 10.1103/physrevb.84.245128
+    """
+
+    normalized_terms = []
+    for term in parscit_terms:
+        clean = re.sub(r'[^\w]', ' ', term['term'])
+        cleaner = re.sub('\s+', ' ', clean)
+        parts = [p.lower() for p in cleaner.split() if len(p) > 0]
+        normalized_terms.extend(parts)
+    normalized_text_orig = ' '.join(normalized_terms)
+    # heuristic to guess DOI of APS journal papers
+    if 'phys rev' in normalized_text_orig or \
+       'rev mod phys' in normalized_text_orig:
+        if 'phys rev' in normalized_text_orig:
+            doi_start_idx = normalized_terms.index('phys')
+            journal_terms = normalized_terms[doi_start_idx:doi_start_idx+3]
+            try:
+                vol = normalized_terms[doi_start_idx+3]
+                aps_id = normalized_terms[doi_start_idx+4]
+            except IndexError:
+                return False
+        elif 'rev mod phys' in normalized_text_orig:
+            doi_start_idx = normalized_terms.index('rev')
+            journal_terms = normalized_terms[doi_start_idx:doi_start_idx+4]
+            try:
+                vol = normalized_terms[doi_start_idx+4]
+                aps_id = normalized_terms[doi_start_idx+5]
+            except IndexError:
+                return False
+        if re.match(r'^\d+$', vol) and re.match(r'^\d+$', aps_id):
+            doi_guess = '10.1103/{}.{}.{}'.format(
+                ''.join(journal_terms),
+                vol,
+                aps_id
+                )
+            return doi_guess
+    return False
 
 
 def remove_name_list(text):
@@ -231,11 +307,23 @@ def match(db_uri=None, in_dir=None):
     aid_session = AIDDBSession()
     # /set up arXiv ID DB
 
+    # set up MAG DB
+    MAGBase = declarative_base()
+
+    mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG'
+    mag_engine = create_engine(mag_db_uri)
+    MAGBase.metadata.create_all(mag_engine)
+    MAGBase.metadata.bind = mag_engine
+    MAGDBSession = sessionmaker(bind=mag_engine)
+    mag_session = MAGDBSession()
+
+    MAGPaper = Table('papers', MAGBase.metadata,
+                     autoload=True, autoload_with=mag_engine)
+    # /set up MAG DB
+
     arxiv_base_url = 'http://export.arxiv.org/api/query?search_query=id:'
     arxiv_ns = {'atom': 'http://www.w3.org/2005/Atom',
                 'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
-    doi_base_url = 'https://data.crossref.org/'
-    doi_headers = {'Accept': 'application/citeproc+json'}
 
     bibitems_db = session.query(Bibitem).all()
     shuffle(bibitems_db)
@@ -248,6 +336,7 @@ def match(db_uri=None, in_dir=None):
     num_by_doi = 0
     num_by_doi_fail = 0
     num_no_title = 0
+    num_aps_doi_rebound = 0
     bi_total = len(bibitems_db)
     by_aid_total_time = 0
     by_aid_total_acc = 0
@@ -255,8 +344,8 @@ def match(db_uri=None, in_dir=None):
     by_doi_total_acc = 0
     by_parscit_total_time = 0
     by_parscit_total_acc = 0
-    solr_total_time = 0
-    solr_total_acc = 0
+    magdb_total_time = 0
+    magdb_total_acc = 0
     check_total_time = 0
     check_total_acc = 0
     db_total_time = 0
@@ -308,99 +397,110 @@ def match(db_uri=None, in_dir=None):
                     given_doi = m.group(0)
         doi_success = False
         if not arxiv_id_success and given_doi:
-            try:
-                t1 = datetime.datetime.now()
-                resp = requests.get(
-                        '{}{}'.format(doi_base_url, given_doi),
-                        headers=doi_headers)
-                doi_metadata = json.loads(resp.text)
-                title = doi_metadata.get('title', False)
-                if title and len(title) > 0:
-                    text = title
-                    text_orig = text
-                    num_by_doi += 1
-                    doi_success = True
-                t2 = datetime.datetime.now()
-                d = t2 - t1
-                by_doi_total_time += d.total_seconds()
-                by_doi_total_acc += 1
-            # except json.decoder.JSONDecodeError:
-            except:
-                pass
+            t1 = datetime.datetime.now()
+            doi_resp = title_by_doi(given_doi)
+            if doi_resp:
+                text = doi_resp
+                text_orig = text
+                num_by_doi += 1
+                doi_success = True
+            t2 = datetime.datetime.now()
+            d = t2 - t1
+            by_doi_total_time += d.total_seconds()
+            by_doi_total_acc += 1
+        parscit_title = False
         if not (arxiv_id_success or doi_success):
             t1 = datetime.datetime.now()
             text_orig = text.replace('¦', '')
             if 'Phys. Rev.' in text_orig:
                 num_phys_rev += 1
-            # text = clean_by_segments(text)
-            # text = remove_name_list(text)
-            # text = remove_containing_work(text)
-            text, journal = parscit_parse(text_orig)
+            text, journal, parscit_terms = parscit_parse(text_orig)
             t2 = datetime.datetime.now()
             d = t2 - t1
             by_parscit_total_time += d.total_seconds()
             by_parscit_total_acc += 1
+            parscit_title = True
+        if not text and parscit_terms:
+            doi_guess = guess_aps_journal_paper_doi(parscit_terms)
+            if doi_guess:
+                doi_resp = title_by_doi(doi_guess)
+                if doi_resp:
+                    text = doi_resp
+                    text_orig = text
+                    num_aps_doi_rebound += 1
+        if not (arxiv_id_success or doi_success):
             if not text:
                 num_no_title += 1
-                # if journal:
-                #     with open('no_title_journals', 'a') as f:
-                #         line = '{}\t{}\n'.format(
-                #             journal,
-                #             text_orig
-                #             )
-                #         f.write(line)
                 continue
 
         t1 = datetime.datetime.now()
-        # q = title_query_words_simple(text)
-        # if not q:
-        #     continue
-        # solr_resps = send_query(q)
-        solr_resps = send_query_pysolr(text)
-        t2 = datetime.datetime.now()
-        d = t2 - t1
-        solr_total_time += d.total_seconds()
-        solr_total_acc += 1
-
-        if solr_resps:
-            for resp_idx in range(len(solr_resps)):
-                t1 = datetime.datetime.now()
-                candidate = solr_resps[resp_idx]
-                solr_match = check_result(text_orig, candidate)
-                t2 = datetime.datetime.now()
-                d = t2 - t1
-                check_total_time += d.total_seconds()
-                check_total_acc += 1
-                if solr_match:
-                    # print('-> matched at result pos. #{}'.format(resp_idx+1))
-                    solr_resp = candidate
+        if parscit_title:
+            title_guesses = []
+            normalized_title = mag_normalize(text)
+            for lshift in range(3):
+                for rshift in range(3):
+                    words = normalized_title.split()
+                    pick = words[lshift:(len(words)-rshift)]
+                    if len(pick) >= 3:
+                        title_guesses.append(' '.join(pick))
+            for title_guess in title_guesses:
+                mag_paper_db = mag_session.query(MAGPaper).\
+                        filter_by(papertitle=normalized_title).first()
+                if mag_paper_db:
                     break
         else:
-            solr_match = False
+            normalized_title = mag_normalize(text)
+            mag_paper_db = mag_session.query(MAGPaper).\
+                    filter_by(papertitle=normalized_title).first()
+        t2 = datetime.datetime.now()
+        d = t2 - t1
+        magdb_total_time += d.total_seconds()
+        magdb_total_acc += 1
+
+        # if solr_resps:
+        #     for resp_idx in range(len(solr_resps)):
+        #         t1 = datetime.datetime.now()
+        #         candidate = solr_resps[resp_idx]
+        #         solr_match = check_result(text_orig, candidate)
+        #         t2 = datetime.datetime.now()
+        #         d = t2 - t1
+        #         check_total_time += d.total_seconds()
+        #         check_total_acc += 1
+        #         if solr_match:
+        #             # print('-> matched at result pos. #{}'.format(resp_idx+1))
+        #             solr_resp = candidate
+        #             break
+        if mag_paper_db:
+            magdb_match = True
+            magdb_resp = {'paper_id': mag_paper_db.paperid}
+            if 'doi' in mag_paper_db.keys() and mag_paper_db.doi:
+                magdb_resp['doi'] = mag_paper_db.doi
+        else:
+            magdb_match = False
             if arxiv_id_success:
                 num_by_aid_fail += 1
             if doi_success:
                 num_by_doi_fail += 1
-        if not solr_match and solr_resps and not 'Phys. Rev.' in text_orig:
-            continue
-            # # check fails
-            # print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
-            # print('in doc: {}'.format(in_doc))
-            # print('original text: {}'.format(text_orig))
-            # print('query text:    {}'.format(text))
-            # print('cleaned:       {}'.format(clean(text)))
-            # print('found in non of:')
-            # for resp_idx in range(len(solr_resps)):
-            #     rtext = solr_resps[resp_idx].get('original_title', '')
-            #     print('    {}'.format(rtext))
-            #     print('    ({})\n'.format(clean(rtext)))
-            # input()
+        # if not solr_match and solr_resps and not 'Phys. Rev.' in text_orig:
+        #     continue
+        #     # check fails
+        #     print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
+        #     print('in doc: {}'.format(in_doc))
+        #     print('original text: {}'.format(text_orig))
+        #     print('query text:    {}'.format(text))
+        #     print('cleaned:       {}'.format(clean(text)))
+        #     print('found in non of:')
+        #     for resp_idx in range(len(solr_resps)):
+        #         rtext = solr_resps[resp_idx].get('original_title', '')
+        #         print('    {}'.format(rtext))
+        #        print('    ({})\n'.format(clean(rtext)))
+        #     input()
         # print('.')
         # continue
 
-        if solr_match:
+        if magdb_match:
             num_matches += 1
-            mag_id = solr_resp.get('paper_id', False)
+            mag_id = magdb_resp.get('paper_id', False)
             if mag_id:
                 t1 = datetime.datetime.now()
                 mag_id_db = BibitemMAGIDMap(
@@ -414,7 +514,7 @@ def match(db_uri=None, in_dir=None):
                 d = t2 - t1
                 db_w_total_time += d.total_seconds()
                 db_w_total_acc += 1
-            result_doi = solr_resp.get('doi', False)
+            result_doi = magdb_resp.get('doi', False)
             if given_doi and result_doi:
                 num_checked += 1
                 if not given_doi.lower() == result_doi.lower():
@@ -436,19 +536,18 @@ def match(db_uri=None, in_dir=None):
         print('by arXiv ID fail: {}'.format(num_by_aid_fail))
         print('by doi: {}'.format(num_by_doi))
         print('by doi fail: {}'.format(num_by_doi_fail))
+        print('APS doi rebound: {}'.format(num_aps_doi_rebound))
         print('>>> avg time aID: {:.2f}'.format(by_aid_total_time/max(by_aid_total_acc, 1)))
         print('>>> avg time DOI: {:.2f}'.format(by_doi_total_time/max(by_doi_total_acc, 1)))
         print('>>> avg time ParsCit: {:.2f}'.format(by_parscit_total_time/max(by_parscit_total_acc, 1)))
-        print('>>> avg time Solr: {:.2f}'.format(solr_total_time/max(solr_total_acc, 1)))
-        print('>>> avg time check: {:.2f}'.format(check_total_time/max(check_total_acc, 1)))
+        print('>>> avg time MAGDB: {:.2f}'.format(magdb_total_time/max(magdb_total_acc, 1)))
         print('>>> avg time DB r: {:.2f}'.format(db_total_time/max(db_total_acc, 1)))
         print('>>> avg time DB w: {:.2f}'.format(db_w_total_time/max(db_w_total_acc, 1)))
     session.commit()
     print('>>> time aID: {:.2f}'.format(by_aid_total_time))
     print('>>> time DOI: {:.2f}'.format(by_doi_total_time))
     print('>>> time ParsCit: {:.2f}'.format(by_parscit_total_time))
-    print('>>> time Solr: {:.2f}'.format(solr_total_time))
-    print('>>> time check: {:.2f}'.format(check_total_time))
+    print('>>> time MAGDB: {:.2f}'.format(magdb_total_time))
     print('>>> time DB r: {:.2f}'.format(db_total_time))
     print('>>> time DB w: {:.2f}'.format(db_w_total_time))
 

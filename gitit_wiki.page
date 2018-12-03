@@ -793,6 +793,92 @@ false positives: 188
     user    114m13.424s
     sys     22m4.537s
     ```
+* MAG DB notes: existence of index = *55.000 times faster*
+    ```
+    MAG=> explain analyze select paperid from papers where originaltitle = 'Fun with Fonts: Algorithmic Typography';
+                                                           QUERY PLAN                                                       
+    ------------------------------------------------------------------------------------------------------------------------
+     Index Scan using idx_paperstitle on papers  (cost=0.82..8.84 rows=1 width=8) (actual time=0.098..0.100 rows=1 loops=1)
+       Index Cond: (originaltitle = 'Fun with Fonts: Algorithmic Typography'::text)
+     Planning time: 0.166 ms
+     Execution time: 0.135 ms
+    (4 rows)
+    
+    MAG=> explain analyze select paperid from papers where papertitle = 'fun with fonts algorithmic typography';
+                                                             QUERY PLAN                                                          
+    -----------------------------------------------------------------------------------------------------------------------------
+     Gather  (cost=1000.00..9391587.60 rows=1 width=8) (actual time=16615.889..16619.206 rows=1 loops=1)
+       Workers Planned: 2
+       Workers Launched: 2
+       ->  Parallel Seq Scan on papers  (cost=0.00..9390587.50 rows=1 width=8) (actual time=14324.340..16610.937 rows=0 loops=3)
+             Filter: (papertitle = 'fun with fonts algorithmic typography'::text)
+             Rows Removed by Filter: 69930913
+     Planning time: 0.232 ms
+     Execution time: 16619.256 ms
+    (8 rows)
+    ```
+* switching from Solr to PostgreSQL (querying normalized paper titles)
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample_one_percent/181202_test/
+    - - - - - - - - - - - - - - - - -
+    375311/375312
+    matches: 121147
+    checked: 11077
+    Phys. Rev.: 52178
+    no title: 151918
+    maybe (!) false positives: 383
+    by arXiv ID: 30580
+    by arXiv ID fail: 5661
+    by doi: 10129
+    by doi fail: 1147
+    >>> avg time aID: 0.10
+    >>> avg time DOI: 0.50
+    >>> avg time ParsCit: 0.01
+    >>> avg time MAGDB: 0.01
+    >>> avg time DB r: 0.00
+    >>> avg time DB w: 0.00
+    >>> time aID: 2948.98
+    >>> time DOI: 5109.72
+    >>> time ParsCit: 4883.21
+    >>> time MAGDB: 1237.15
+    >>> time DB r: 322.05
+    >>> time DB w: 84.23
+    
+    real    258m50.437s
+    user    81m58.758s
+    sys     16m20.550s
+    ```
+* speculatively cutting off ParsCit identified titles
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample_one_percent/181202_test/
+    - - - - - - - - - - - - - - - - -
+    375311/375312
+    matches: 130895
+    checked: 11078
+    Phys. Rev.: 52179
+    no title: 151918
+    maybe (!) false positives: 384
+    by arXiv ID: 30580
+    by arXiv ID fail: 5661
+    by doi: 10129
+    by doi fail: 1147
+    >>> avg time aID: 0.09
+    >>> avg time DOI: 0.51
+    >>> avg time ParsCit: 0.01
+    >>> avg time MAGDB: 0.01
+    >>> avg time DB r: 0.00
+    >>> avg time DB w: 0.00
+    >>> time aID: 2690.60
+    >>> time DOI: 5160.01
+    >>> time ParsCit: 4401.49
+    >>> time MAGDB: 1979.58
+    >>> time DB r: 292.79
+    >>> time DB w: 80.83
+    
+    real    257m43.921s
+    user    87m58.216s
+    sys     13m30.044s
+    ```
 
 ### citation recommendation baseline
 

@@ -17,13 +17,16 @@ for l in fosc_lines:
     fosc_map[child].append(parent)
 
 id_name_map = {}
+name_id_map = {}
 for l in fos_lines:
     fields = l.split('\t')
     fid = fields[0].strip()
     disp_name = fields[3].strip()
     id_name_map[fid] = disp_name
+    name_id_map[disp_name] = fid
 
 def top_foss(child):
+    # print(id_name_map[child])
     if child not in fosc_map:
         return [child]
     else:
@@ -34,6 +37,16 @@ def top_foss(child):
 
 with open('mag_fos_map.json') as f:
     paper_map = json.load(f)
+
+# while True:
+#     child_name = input()
+#     if child_name not in name_id_map:
+#         print('N/A')
+#         continue
+#     child_id = name_id_map[child_name]
+#     print([id_name_map[tid] for tid in top_foss(child_id)])
+#
+# sys.exit()
 
 paper_map_e = {}
 for mid, foss in paper_map.items():

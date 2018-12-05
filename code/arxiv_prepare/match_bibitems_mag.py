@@ -137,16 +137,33 @@ def mag_normalize(s):
 
 def title_by_doi(given_doi):
     doi_base_url = 'https://data.crossref.org/'
-    doi_headers = {'Accept': 'application/citeproc+json'}
+    doi_headers = {'Accept': 'application/citeproc+json',
+                   'User-Agent': ('DoiToTitleScript (working on a master thesi'
+                                  's; mailto:tarek.saier@uranus.uni-freiburg.d'
+                                  'e)')}
     try:
         resp = requests.get(
                 '{}{}'.format(doi_base_url, given_doi),
                 headers=doi_headers)
+        rate_lim_lim = resp.headers.get('X-Rate-Limit-Limit', '9001')
+        rate_lim_int = resp.headers.get(
+            'X-Rate-Limit-Interval', '1s'
+            ).replace('s', '')
+    except requests.RequestException:
+        return False
+    try:
+        wait = float(rate_lim_int)/float(rate_lim_lim)
+        if resp.elapsed.total_seconds() < wait:
+            delta = wait - resp.elapsed.total_seconds()
+            time.sleep(delta)
+    except ValueError:
+        pass
+    try:
         doi_metadata = json.loads(resp.text)
         title = doi_metadata.get('title', False)
         if title and len(title) > 0:
             return title
-    except (json.decoder.JSONDecodeError, requests.RequestException):
+    except json.decoder.JSONDecodeError:
         return False
 
 
@@ -165,9 +182,9 @@ def guess_aps_journal_paper_doi(parscit_terms):
         normalized_terms.extend(parts)
     normalized_text_orig = ' '.join(normalized_terms)
     # heuristic to guess DOI of APS journal papers
-    if 'phys rev' in normalized_text_orig or \
-       'rev mod phys' in normalized_text_orig:
-        if 'phys rev' in normalized_text_orig:
+    if ' phys rev ' in normalized_text_orig or \
+       ' rev mod phys ' in normalized_text_orig:
+        if ' phys rev ' in normalized_text_orig:
             doi_start_idx = normalized_terms.index('phys')
             journal_terms = normalized_terms[doi_start_idx:doi_start_idx+3]
             try:
@@ -175,7 +192,7 @@ def guess_aps_journal_paper_doi(parscit_terms):
                 aps_id = normalized_terms[doi_start_idx+4]
             except IndexError:
                 return False
-        elif 'rev mod phys' in normalized_text_orig:
+        elif ' rev mod phys ' in normalized_text_orig:
             doi_start_idx = normalized_terms.index('rev')
             journal_terms = normalized_terms[doi_start_idx:doi_start_idx+4]
             try:

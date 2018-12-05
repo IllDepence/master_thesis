@@ -879,6 +879,38 @@ false positives: 188
     user    87m58.216s
     sys     13m30.044s
     ```
+* guess APS journal paper DOIs (41%)
+    ```
+    $ time python3 match_bibitems_mag.py path /home/saiert/arxiv_test_1991-2017_sample_one_percent/181202_test/
+    - - - - - - - - - - - - - - - - -
+    375312/375312
+    matches: 154379
+    checked: 11079
+    Phys. Rev.: 52179
+    no title: 123439
+    maybe (!) false positives: 385
+    by arXiv ID: 30580
+    by arXiv ID fail: 5661
+    by doi: 10129
+    by doi fail: 1147
+    APS doi rebound: 28480
+    >>> avg time aID: 0.09
+    >>> avg time DOI: 0.53
+    >>> avg time ParsCit: 0.01
+    >>> avg time MAGDB: 0.01
+    >>> avg time DB r: 0.00
+    >>> avg time DB w: 0.00
+    >>> time aID: 2800.11
+    >>> time DOI: 5423.30
+    >>> time ParsCit: 4630.38
+    >>> time MAGDB: 2169.40
+    >>> time DB r: 309.20
+    >>> time DB w: 103.15
+    
+    real    595m7.421s
+    user    102m17.161s
+    sys     17m5.209s
+    ```
 
 ### citation recommendation baseline
 

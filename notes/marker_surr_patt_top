@@ -4,7 +4,7 @@ citation marker surroundings                            all sentence ends
 ('OTHER¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 9921)     0        ('OTHER¦JJ¦NN¦<EOS>', 183202)
 ('IN¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 7201)       +5        ('IN¦OTHER¦NN¦<EOS>', 138848)
 ('JJ¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 6730)       +2        ('NN¦IN¦NNP¦<EOS>', 131749)
-('V¦V¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 5932)       ++21        ('OTHER¦NN¦NN¦<EOS>', 126854)
+('V¦V¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 5932)       ++21 [1]    ('OTHER¦NN¦NN¦<EOS>', 126854)
 ('NN¦IN¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 4668)      -2        ('JJ¦NN¦NN¦<EOS>', 121863)
 ('IN¦OTHER¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 4642)    -4        ('NNP¦OTHER¦NNP¦<EOS>', 85471)
 ('OTHER¦NNP¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 4593)   +1        ('IN¦JJ¦NN¦<EOS>', 78655)
@@ -28,21 +28,21 @@ citation marker surroundings                            all sentence ends
 ('IN¦NNP¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 1633)    -15        ('NNP¦NN¦NN¦<EOS>', 33452)
 - - - O R I G - - -                                     - - - O R I G - - -
 ('DT¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 6224)        0        ('DT¦JJ¦NN¦<EOS>', 150279)
-('IN¦JJ¦NNS¦[]¦<EOS>¦<EOS>¦<EOS>', 4657)    ++23        ('IN¦DT¦NN¦<EOS>', 120094)
+('IN¦JJ¦NNS¦[]¦<EOS>¦<EOS>¦<EOS>', 4657)    ++23 [2]    ('IN¦DT¦NN¦<EOS>', 120094)
 ('JJ¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 3932)        0        ('JJ¦NN¦NN¦<EOS>', 112849)
 ('NNP¦CC¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 3805)     +2        ('DT¦NN¦NN¦<EOS>', 103330)
-('VBN¦IN¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 3701)    +11        ('NN¦IN¦NNP¦<EOS>', 96686)
-('DT¦NNP¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 3380)      +5        ('NNP¦CC¦NNP¦<EOS>', 75873)
-('NN¦IN¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 3348)      -2        ('IN¦JJ¦NN¦<EOS>', 70660)
-('IN¦DT¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 3334)       -6        ('IN¦NNP¦NNP¦<EOS>', 68252)
-('DT¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 2825)       -5        ('NNP¦IN¦NNP¦<EOS>', 59351)
-('JJ¦NN¦NNS¦[]¦<EOS>¦<EOS>¦<EOS>', 2497)    ++15        ('NNP¦NNP¦NNP¦<EOS>', 55922)
-('IN¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 2356)       -4        ('DT¦NNP¦NN¦<EOS>', 51688)
-('JJ¦JJ¦NNS¦[]¦<EOS>¦<EOS>¦<EOS>', 2135)    ++13        ('NN¦IN¦NN¦<EOS>', 51342)
-('NNP¦NNP¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 2075)    -3        ('NN¦NN¦NN¦<EOS>', 47901)
-('JJ¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 2066)        0        ('JJ¦JJ¦NN¦<EOS>', 42072)
-('NN¦VBN¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 1855)    ++10        ('IN¦NN¦NN¦<EOS>', 38936)
-('VBD¦VBN¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 1822)    ++9        ('VBN¦IN¦NNP¦<EOS>', 37208)
+('VBN¦IN¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 3701)    +11--. [4] ('NN¦IN¦NNP¦<EOS>', 96686)
+('DT¦NNP¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 3380)      +5   `    ('NNP¦CC¦NNP¦<EOS>', 75873)
+('NN¦IN¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 3348)      -2    `   ('IN¦JJ¦NN¦<EOS>', 70660)
+('IN¦DT¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 3334)       -6     `  ('IN¦NNP¦NNP¦<EOS>', 68252)
+('DT¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 2825)       -5      | ('NNP¦IN¦NNP¦<EOS>', 59351)
+('JJ¦NN¦NNS¦[]¦<EOS>¦<EOS>¦<EOS>', 2497)    ++15 [3]  | ('NNP¦NNP¦NNP¦<EOS>', 55922)
+('IN¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 2356)       -4      | ('DT¦NNP¦NN¦<EOS>', 51688)
+('JJ¦JJ¦NNS¦[]¦<EOS>¦<EOS>¦<EOS>', 2135)    ++13      | ('NN¦IN¦NN¦<EOS>', 51342)
+('NNP¦NNP¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 2075)    -3      | ('NN¦NN¦NN¦<EOS>', 47901)
+('JJ¦JJ¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 2066)        0      | ('JJ¦JJ¦NN¦<EOS>', 42072)
+('NN¦VBN¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 1855)    ++10      \ ('IN¦NN¦NN¦<EOS>', 38936)
+('VBD¦VBN¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 1822)    ++9       `('VBN¦IN¦NNP¦<EOS>', 37208)--- +11 but only 10%
 ('NN¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 1788)       -4        ('NNP¦NNP¦NN¦<EOS>', 37091)
 ('DT¦NN¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 1684)      ++7        ('IN¦DT¦NNP¦<EOS>', 35403)
 ('IN¦NNP¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>', 1627)    -11        ('DT¦NN¦NNP¦<EOS>', 35325)
@@ -52,3 +52,57 @@ citation marker surroundings                            all sentence ends
 ('JJ¦NNP¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 1412)      +2        ('IN¦NNP¦NN¦<EOS>', 31201)
 ('VB¦VBN¦IN¦[]¦<EOS>¦<EOS>¦<EOS>', 1338)     ++1        ('NN¦NN¦NNP¦<EOS>', 28891)
 ('NNP¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 1330)      -3        ('JJ¦NNP¦NN¦<EOS>', 28385)
+
+
+[1] examples:
+are analysed in [].
+(has) been presented in [].
+are used in  [].
+are devised in  [].
+is straightforward by [].
+was discussed in [].
+(have) been studied in [].
+can be found in [].
+are elaborated in [].
+is summarized by [].
+
+[2] examples:
+for semisimple groups [].
+with appropriate charges [].
+in nonlinear systems [].
+from instanton calculations [].
+with inconsistent results [].
+in beam-test data [].
+by several groups [].
+in several experiments [].
+over traditional methods [].
+of catastrophic events [].
+of initial states [].
+by rational numbers [].
+several decades [].
+in theoretical activities [].
+by previous authors [].
+
+[3] examples:
+single field counterparts [].
+extra spectator fields [].
+dominant production modes [].
+functional theory simulations [].
+two-electron spin dynamics [].
+quasi-one-dimensional spin ladders [].
+long-range power-law correlations [].
+small length scales [].
+identical deposition conditions [].
+positive temperature gradients [].
+
+[4] examples:
+introduced by Starobinsky [].
+found in Robinson [].
+obtained by Luks [].
+measured in Ref. [].
+measured by ZEUS [].
+based on GALPROP [].
+reported by Labzowsky [].
+based on VGGNet [].
+introduced in Refs. [].
+investigated by Jacobson [].

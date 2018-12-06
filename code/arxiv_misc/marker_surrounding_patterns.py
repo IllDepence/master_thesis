@@ -105,6 +105,11 @@ def marker_surr_patt(in_dir):
                                 patt_comb[x_idx] = 'OTHER'
                         comb_id = '¦'.join(patt_comb)
                         orig_id = '¦'.join(patt_orig)
+                        # # look at examples
+                        # if orig_id == 'VBN¦IN¦NNP¦[]¦<EOS>¦<EOS>¦<EOS>':
+                        #     print(sentence)
+                        #     input()
+                        #     print('.')
                         if comb_id not in patt_comb_freq_map:
                             patt_comb_freq_map[comb_id] = 0
                         patt_comb_freq_map[comb_id] += 1

@@ -7,10 +7,19 @@
 * generate a complete dataset (instead of just one month)
 * pre-selection of candidate recommendations to speed up process
     * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
-    * clustering of comparison taregets, "
+    * clustering of comparison targets, "
     * [k4nn](https://arxiv.org/abs/1802.08301), "
 
 ### recent notes
+* check confidence values of MAG FoS annotation false positives
+* analyse MAG FoS annotations *in citation contexts* overall (number per context, from the right field, what level etc.)
+* arXiv complete plain text dump (on tuco)
+    * change pipeline to do parts and delete stuff inbetween
+    * debug mode switch for generation of log files
+* mby more conclusive/exact/detailed analysis on PoS pattern comparison between cit. and non cit. sentences 
+
+---
+
 * marker surroundings more like patterns (find top 10 (-3, 3)) e.g. NN V NN [] <EOS> <EOS> <EOS>
 * NEL precision (also recall) manual check (any concepts missing in FoS?)
     * also manually look into position of MAG FoS annotations in relation to citations markers
@@ -1150,6 +1159,20 @@ map@5: 0.18446961750926533
         user    367m38.134s
         sys     5m17.375s
         ```
+    * 22k plain text *papers*
+        ```
+        $ ls /home/saiert/arxiv_test_1991-2017_sample/arxiv_sample_text/ | wc -l
+        22840
+        $ time java -jar linking_file_tarek.jar /home/saiert/arxiv_test_1991-2017_sample/arxiv_sample_text/ /home/saiert/arxiv_test_1991-2017_sample/arxiv_sample_annot/
+        [...]
+        
+        real    10879m20.052s
+        user    55615m56.373s
+        sys     393m0.262s
+        ```
+        * manual evaluation of annotations on 3 example papers (`cs0110014`, `1404.1775`, `1712.08091`)
+            * precision: 75; 70; 61
+            * recall: 49 (/60); 51; 56
 
 **simply feeding annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
 ```

@@ -54,7 +54,7 @@ citation marker surroundings                            all sentence ends
 ('NNP¦NN¦NN¦[]¦<EOS>¦<EOS>¦<EOS>', 1330)      -3        ('JJ¦NNP¦NN¦<EOS>', 28385)
 
 
-[1] examples:
+[1] (V¦V¦IN¦[]) examples:
 are analysed in [].
 (has) been presented in [].
 are used in  [].
@@ -66,7 +66,7 @@ can be found in [].
 are elaborated in [].
 is summarized by [].
 
-[2] examples:
+[2] (IN¦JJ¦NNS¦[]) examples:
 for semisimple groups [].
 with appropriate charges [].
 in nonlinear systems [].
@@ -83,7 +83,7 @@ several decades [].
 in theoretical activities [].
 by previous authors [].
 
-[3] examples:
+[3] (JJ¦NN¦NNS¦[]) examples:
 single field counterparts [].
 extra spectator fields [].
 dominant production modes [].
@@ -95,7 +95,7 @@ small length scales [].
 identical deposition conditions [].
 positive temperature gradients [].
 
-[4] examples:
+[4] (VBN¦IN¦NNP¦[]) examples:
 introduced by Starobinsky [].
 found in Robinson [].
 obtained by Luks [].

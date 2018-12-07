@@ -2,7 +2,6 @@
 
 ### big TODOs
 
-* switch from arXiv IDs to MAG IDs
 * k-fold cross validation (somehow)
 * generate a complete dataset (instead of just one month)
 * pre-selection of candidate recommendations to speed up process
@@ -17,6 +16,8 @@
     * change pipeline to do parts and delete stuff inbetween
     * debug mode switch for generation of log files
 * mby more conclusive/exact/detailed analysis on PoS pattern comparison between cit. and non cit. sentences 
+* mby answer: distinction of integral vs. non-integral citations, relevant for analysis/representation of cit. contexts?
+    * given a sentence w/ a placeholder, is retroactive distinction of integral vs. non-integral possible?
 
 ---
 

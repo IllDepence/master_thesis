@@ -352,7 +352,9 @@
     - conceptual or operational use (i.e., use of theory vs. use of technical method)
     - evolutionary or juxtapositional (i.e., own work is based on the cited work vs. own work is analternative to it)
     - organic or perfunctory (i.e., work is crucially needed for understanding of citing article or just a general acknowledgement)
-    - conformative vs.negational (i.e., is the correctness of the findings disputed?)},
+    - conformative vs.negational (i.e., is the correctness of the findings disputed?)
+-> according to Petric2007 above categories are not all applicaple in all fields of research
+    "Swales (1986), for instance, found that the first two criteria were irrelevant in the case of texts in applied linguistics."},
   url       = {http://www.jstor.org/stable/284557},
 }
 
@@ -405,6 +407,9 @@
   abstract = {This study compares rhetorical citation functions in eight high- and eight low-graded master's theses in the field of gender studies, written in English as a second language. The following rhetorical functions of citations are identified: attribution, exemplification, further reference, statement of use, application, evaluation, establishing links between sources, and comparison of one's own work with that of other authors. It is shown that both sets of theses use citations predominantly for attribution, suggesting that one of the functions of citation in student writing is knowledge display. The use of citation for non-attribution functions is found to be considerably lower in the low-rated theses than in the high-rated theses, both in the whole theses and in individual chapters. The findings show that there is a relationship between citation use and thesis grade, thus pointing to the importance of effective citation strategies for students’ academic success. In conclusion, the paper argues that source use and citation skills should receive more attention in EAP instruction and suggests activities focusing on this area of academic writing.},
   doi      = {https://doi.org/10.1016/j.jeap.2007.09.002},
   keywords = {Citation, Master's thesis, Academic writing, High- and low-rated writing, English for academic purposes},
+  review   = {- types of citation typologies: content based vs. based on formal criteria
+- classifies Moravcsik1975 as a "content based citation typology"
+-},
   url      = {http://www.sciencedirect.com/science/article/pii/S1475158507000379},
 }
 
@@ -419,16 +424,85 @@
 }
 
 @Article{RAHUL2017,
-  author        = {JHA, RAHUL and JBARA, AMJAD-ABU and QAZVINIAN, VAHED and RADEV, DRAGOMIR R.},
-  title         = {NLP-driven citation analysis for scientometrics},
-  journal       = {Natural Language Engineering},
-  year          = {2017},
-  volume        = {23},
-  number        = {1},
-  pages         = {93–130},
+  author    = {JHA, RAHUL and JBARA, AMJAD-ABU and QAZVINIAN, VAHED and RADEV, DRAGOMIR R.},
+  title     = {NLP-driven citation analysis for scientometrics},
+  journal   = {Natural Language Engineering},
+  year      = {2017},
+  volume    = {23},
+  number    = {1},
+  pages     = {93–130},
+  doi       = {10.1017/S1351324915000443},
+  publisher = {Cambridge University Press},
+}
+
+@Article{Swales1986,
+  author  = {Swales, John},
+  title   = {Citation Analysis and Discourse Analysis},
+  journal = {Applied Linguistics},
+  year    = {1986},
+  volume  = {7},
+  number  = {1},
+  pages   = {39-56},
+  doi     = {10.1093/applin/7.1.39},
+  eprint  = {/oup/backfile/content_public/journal/applij/7/1/10.1093_applin_7.1.39/1/39.pdf},
+  review  = {- "frequently expressed concern about the adequacy and reliability of simple and straightforward citation counting."
+
+    - negative/critical citations != good (-> high count of citations not necessarily good)
+    - *important work can be absorbed into the background knowledge of a subject and is then no longer referenced (e.g. Einstein 1905 for the Theory  of Relativity)
+    - *morphological and syntactic evolutions:
+         - discoveries  become  'named'  (Lotka's  Law,  the  Mossbauer Effect)
+         - Proper Name adjectivization takes place (Widdowsonian dichotomies, a Sinclo-Coulthardian approach)
+    - citations vary in length
+    - are self-citations of the same value as citations by others?
+
+    *relevant in the same way as some citations become obsolete because of newer findings},
+  url     = {http://dx.doi.org/10.1093/applin/7.1.39},
+}
+
+@Book{Swales1990,
+  title     = {Genre analysis: English in academic and research settings},
+  publisher = {Cambridge University Press},
+  year      = {1990},
+  author    = {Swales, John},
+  review    = {- distinction between integral and non-integral citations
+    "An integral citation is one in which the name of the researcher occurs in the actual citing sentence as some sentence-element;
+     in a non-integral citation, the researcher occurs either in parenthesis or is referred to elsewehre by a superscript number or via some other device"
+    -> examples in following text; not on Google books but in UB
+    
+    - in Thompson2001's words: "His primary distinction is between citation forms that are non-integral and those that are integral:
+      the former are citations that are outside the sentence, usually placed within brackets, and that play no explicit grammatical role in the sentence,
+      while the latter are those that play an explicit grammatical role within a sentence."
+
+    - is, in contrast to citation function, about the "surface form" of the citation
+    -> relevant to cit. rec. when thinking of end user system where suggestions come in while typing (-> doesn't really work for integral citations)
+    -> relevant to cit. rec. in any other aspect? analysis/representation of cit. contexts?},
+}
+
+@PhdThesis{Thompson2001,
+  author = {Thompson, Paul},
+  title  = {A pedagogically-motivated corpus-based examination of PhD theses: Macrostructure, citation practices and uses of modal verbs},
+  school = {University of Reading},
+  year   = {2001},
+  review = {- Nice overview of integral vs. non-integral citation (Swales -> Hyland -> ...)},
+}
+
+@Article{Hyland1999,
+  author        = {Hyland, K},
+  title         = {Academic attribution: citation and the construction of disciplinary knowledge},
+  journal       = {Applied Linguistics},
+  year          = {1999},
+  volume        = {20},
+  number        = {3},
+  pages         = {341-367},
   __markedentry = {[tarek:]},
-  doi           = {10.1017/S1351324915000443},
-  publisher     = {Cambridge University Press},
+  doi           = {10.1093/applin/20.3.341},
+  eprint        = {/oup/backfile/content_public/journal/applij/20/3/10.1093/applin/20.3.341/2/200341.pdf},
+  review        = {- nice example sentences for integral vs. non-integral citations
+    + mentions [42] style citations ("In the physical sciences, of course, journal styles often require numerical-
+                                                      endnote forms, which reduces the prominence of cited authors considerably")
+- per field ratio of integral vs. non-integral for corpus of 80 research articles
+    - e.g.: bio 10/90, phys 17/83, philosophy 65/35},
+  url           = {http://dx.doi.org/10.1093/applin/20.3.341},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

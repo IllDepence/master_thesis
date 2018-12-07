@@ -14,6 +14,7 @@ from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 
 CITE_MULTI_PATT = re.compile(r'(\{\{cite:[0-9A-F-]+\}\}(, )?)+', re.I)
 QUOTE_PATT = re.compile(r'(\.|\?|!)("|\')?\s*\\x{241F}', re.I)
+E_G_PATT = re.compile(r'(?<=\W)e\.\sg\.(?=\W)', re.I)
 
 
 def sent_pos(in_dir):
@@ -21,7 +22,7 @@ def sent_pos(in_dir):
     """
 
     punkt_param = PunktParameters()
-    abbreviation = ['al', 'fig', 'e.g', 'i.e', 'eq', 'cf']
+    abbreviation = ['al', 'fig', 'e.g', 'i.e', 'eq', 'cf', 'ref', 'refs']
     punkt_param.abbrev_types = set(abbreviation)
     tokenizer = PunktSentenceTokenizer(punkt_param)
 
@@ -43,6 +44,7 @@ def sent_pos(in_dir):
             continue
         with open(path) as f:
             text = f.read()
+        text = re.sub(E_G_PATT, 'e.g.', text)
         # annot_fn = '{}_annot.json'.format(aid)
         # annot_path = os.path.join(in_dir, annot_fn)
         # if not os.path.isfile(annot_path):

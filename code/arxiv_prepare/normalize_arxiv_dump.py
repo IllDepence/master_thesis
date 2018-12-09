@@ -89,10 +89,11 @@ def remove_math(latex_str):
     return ''.join(parts)
 
 
-def normalize(IN_DIR, OUT_DIR):
+def normalize(IN_DIR, OUT_DIR, write_logs=True):
     def log(msg):
-        with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
-            f.write('{}\n'.format(msg))
+        if write_logs:
+            with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
+                f.write('{}\n'.format(msg))
 
     if not os.path.isdir(IN_DIR):
         print('dump directory does not exist')
@@ -162,7 +163,12 @@ def normalize(IN_DIR, OUT_DIR):
                     new_tex_fn = '{}.tex'.format(aid)
                     tmp_dest = os.path.join(tmp_dir_path, new_tex_fn)
                     out = open(tmp_dest, mode='w')
-                    err = open(os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a')
+                    if write_logs:
+                        err = open(
+                            os.path.join(OUT_DIR, 'log_latexpand.txt'), 'a'
+                            )
+                    else:
+                        err = open(os.devnull, 'w')
                     err.write('\n------------- {} -------------\n'.format(aid))
                     err.flush()
                     subprocess.run(latexpand_args, stdout=out, stderr=err,

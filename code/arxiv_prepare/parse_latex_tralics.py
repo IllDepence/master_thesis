@@ -22,10 +22,11 @@ ARXIV_URL_PATT = re.compile((r'arxiv\.org\/[a-z0-9]{1,10}\/(([a-z0-9-]{1,15}\/'
                               ')?[\d\.]{5,10}(v\d)?$)'), re.I)
 
 
-def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
+def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None, write_logs=True):
     def log(msg):
-        with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
-            f.write('{}\n'.format(msg))
+        if write_logs:
+            with open(os.path.join(OUT_DIR, 'log.txt'), 'a') as f:
+                f.write('{}\n'.format(msg))
 
     if not os.path.isdir(IN_DIR):
         print('input directory does not exist')
@@ -71,14 +72,17 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                             '-output_dir={}'.format(tmp_dir_path),
                             path]
 
-            out = open(os.path.join(OUT_DIR, 'log_tralics.txt'), 'a')
+            if write_logs:
+                out = open(os.path.join(OUT_DIR, 'log_tralics.txt'), 'a')
+            else:
+                out = open(os.devnull, 'w')
             err = open(os.path.join(tmp_dir_path, 'tralics_out.txt'), mode='w')
             out.write('\n------------- {} -------------\n'.format(aid))
             out.flush()
             try:
                 subprocess.run(tralics_args, stdout=out, stderr=err, timeout=5)
             except subprocess.TimeoutExpired as e:
-                print('FAILED {}. skipping'.format(aid))
+                # print('FAILED {}. skipping'.format(aid))
                 log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
                 continue
             out.close()
@@ -87,7 +91,7 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
             # get mathless plain text from latexml output
             parser = etree.XMLParser()
             if not os.path.isfile(tmp_xml_path):
-                print('FAILED {}. skipping'.format(aid))
+                # print('FAILED {}. skipping'.format(aid))
                 log(('\n--- {} ---\n{}\n----------\n'
                      '').format(aid, 'no tralics output'))
                 continue
@@ -95,7 +99,7 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None):
                 try:
                     tree = etree.parse(f, parser)
                 except (etree.XMLSyntaxError, UnicodeDecodeError) as e:
-                    print('FAILED {}. skipping'.format(aid))
+                    # print('FAILED {}. skipping'.format(aid))
                     log('\n--- {} ---\n{}\n----------\n'.format(aid, e))
                     continue
             # tags things that could be treatetd specially

@@ -9,61 +9,82 @@ from parse_latex_tralics import parse
 from match_bibitems_mag import match
 
 
-def prepare(in_dir, out_dir_dir, db_uri=None):
+def prepare(in_dir, out_dir, db_uri=None, write_logs=False):
     if not os.path.isdir(in_dir):
         print('input directory does not exist')
         return False
 
-    ext_sample = os.path.splitext((os.listdir(in_dir)[0]))[-1]
-    # heuristic to tell apart single uncompressed "sub dump" from a folder of
-    # many still compressed dumps
-    if ext_sample in ['.gz', '.pdf']:
-        in_folder_name = os.path.normpath(in_dir).split(os.sep)[-1]
-    elif ext_sample in ['.tar']:
-        # create dir for *all* .gz files, extract, move
-        in_folder_name = 'all'
-        out_dir_gz = os.path.join(out_dir_dir,
-                                  '{}_flattened'.format(in_folder_name))
-        os.makedirs(out_dir_gz)
-        for tar_fn in os.listdir(in_dir):
-            tar_path = os.path.join(in_dir, tar_fn)
-            try:
-                is_tar = tarfile.is_tarfile(tar_path)
-            except IsADirectoryError:
-                print(('unexpected folder in "{}" in {}. skipping'
-                       '').format(tar_fn, in_dir))
-                continue
-            if is_tar:
-                with tempfile.TemporaryDirectory() as tmp_dir_path:
-                    tar = tarfile.open(tar_path)
-                    tar.extractall(path=tmp_dir_path)
-                    containing_folder = os.listdir(tmp_dir_path)[0]
-                    containing_path = os.path.join(tmp_dir_path,
-                                                   containing_folder)
-                    for gz_fn in os.listdir(containing_path):
-                        gz_path_tmp = os.path.join(containing_path, gz_fn)
-                        gz_path_new = os.path.join(out_dir_gz, gz_fn)
-                        shutil.move(gz_path_tmp, gz_path_new)
-        # adjust in_dir
-        in_dir = out_dir_gz
-    else:
-        print('don\'t understand input directory')
+    ext_sample = [os.path.splitext(fn)[-1] for fn in os.listdir(in_dir)[:10]]
+    if '.tar' not in ext_sample:
+        print('input directory doesn\'t seem to contain TAR archives')
         return False
 
-    out_dir_norm = os.path.join(out_dir_dir,
-                                '{}_normalized'.format(in_folder_name))
-    out_dir_text = os.path.join(out_dir_dir,
-                                '{}_text'.format(in_folder_name))
-    for out_dir in [out_dir_dir, out_dir_norm, out_dir_text]:
-        if not os.path.isdir(out_dir):
-            os.makedirs(out_dir)
-    normalize(in_dir, out_dir_norm)
-    if db_uri:
-        parse(out_dir_norm, out_dir_text, INCREMENTAL=True, db_uri=db_uri)
-        match(db_uri=db_uri)
-    else:
-        parse(out_dir_norm, out_dir_text, INCREMENTAL=True)
-        match(in_dir=out_dir_text)
+    if not os.path.isdir(out_dir):
+        os.makedirs(out_dir)
+    done_log_path = os.path.join(out_dir, 'done.log')
+    done_tars = []
+    if os.path.isfile(done_log_path):
+        with open(done_log_path) as f:
+            lines = f.readlines()
+        done_tars = [l.strip() for l in lines]
+
+    tar_fns = os.listdir(in_dir)
+    tar_total = len(tar_fns)
+    num_pdf_total = 0
+    num_files_total = 0
+    for tar_idx, tar_fn in enumerate(tar_fns):
+        # for each tar archive
+        print('{}/{}'.format(tar_idx+1, tar_total))
+        if tar_fn in done_tars:
+            print('done in a previous run. skipping')
+            continue
+        tar_path = os.path.join(in_dir, tar_fn)
+        try:
+            is_tar = tarfile.is_tarfile(tar_path)
+        except IsADirectoryError:
+            print(('unexpected directory "{}" in {}. skipping'
+                   '').format(tar_fn, in_dir))
+            continue
+        if not is_tar:
+            print(('"{}" is not a TAR archive. skipping'
+                   '').format(tar_fn))
+            continue
+        with tempfile.TemporaryDirectory() as tmp_dir_path:
+            # prepare folders for intermediate results
+            tmp_dir_gz = os.path.join(tmp_dir_path, 'flattened')
+            os.mkdir(tmp_dir_gz)
+            tmp_dir_norm = os.path.join(tmp_dir_path, 'normalized')
+            os.mkdir(tmp_dir_norm)
+            # extraxt
+            tar = tarfile.open(tar_path)
+            tar.extractall(path=tmp_dir_gz)
+            containing_dir = os.listdir(tmp_dir_gz)[0]
+            containing_path = os.path.join(tmp_dir_gz,
+                                           containing_dir)
+            for gz_fn in os.listdir(containing_path):
+                num_files_total += 1
+                gz_path_tmp = os.path.join(containing_path, gz_fn)
+                if os.path.splitext(gz_fn)[-1] == '.pdf':
+                    num_pdf_total += 1
+                    os.remove(gz_path_tmp)
+                    continue
+                gz_path_new = os.path.join(tmp_dir_gz, gz_fn)
+                shutil.move(gz_path_tmp, gz_path_new)
+            os.rmdir(containing_path)
+            # adjust in_dir
+            normalize(tmp_dir_gz, tmp_dir_norm, write_logs=write_logs)
+            if db_uri:
+                parse(tmp_dir_norm, out_dir, INCREMENTAL=True, db_uri=db_uri,
+                      write_logs=write_logs)
+                # match(db_uri=db_uri)
+            else:
+                parse(tmp_dir_norm, out_dir, INCREMENTAL=True,
+                      write_logs=write_logs)
+                # match(in_dir=out_dir)
+        with open(done_log_path, 'a') as f:
+            f.write('{}\n'.format(tar_fn))
+    print('{} files'.format(num_files_total))
+    print('{} PDFs'.format(num_pdf_total))
 
 
 if __name__ == '__main__':

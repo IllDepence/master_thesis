@@ -420,6 +420,15 @@
   year      = {2018},
   pages     = {1114--1122},
   publisher = {Centre for Science and Technology Studies (CWTS)},
+  review    = {- detailed description for determining integral vs. non-integral citations:
+    "For each citation, we determined whether it is integral or non-integral by processing their accompanying  sentence.
+     First, the sentence was stripped of all citation labels. Subsequently, all characters between brackets were removed from
+     the remaining character strings, leaving only the primary text of the citing sentence. We then searched this text for the
+     last name of the first author of the cited paper. Citations were labelled integral if this author name was found, and
+     non-integral if it was not."
+    -> remove all "citation labels" (what ware citation labels? "[42]"?)
+    -> remove all text in brackets (I assume remove brackets aswell)
+    -> if remaining string contains last name of first author: integral},
   url       = {http://hdl.handle.net/1887/65235},
 }
 
@@ -433,6 +442,9 @@
   pages     = {93–130},
   doi       = {10.1017/S1351324915000443},
   publisher = {Cambridge University Press},
+  review    = {- define "Reference Scope" (part(s) of citation context that is relevant for specific (out of many) cited doc)
+    "We use the term Reference Scope to refer to the fragments of a sentence that are relevant to a specific target paper."
+- look into automatic reference scope identification},
 }
 
 @Article{Swales1986,
@@ -483,26 +495,59 @@
   title  = {A pedagogically-motivated corpus-based examination of PhD theses: Macrostructure, citation practices and uses of modal verbs},
   school = {University of Reading},
   year   = {2001},
-  review = {- Nice overview of integral vs. non-integral citation (Swales -> Hyland -> ...)},
+  review = {- Nice overview of integral vs. non-integral citation (Swales -> Hyland -> ...)
+
+- (!!!) "Citations can also take the form of a number (rather than name and year) reference but none of the writers in the corpus use this style, and thus it was not considered in this study."
+   -> integral vs. non-integral is more about having a grammatical role or not than about the authors name appearing or not
+        "Swales has argued that ... [42]."                      -> which is the citation? "Swales"-> int / "[42]"->non
+        "Swales (1990) has argued that ..."                   -> int
+        "It has been argued (Swales 1990) that ..."       -> non
+        "[42] argues that ..."                                         -> int},
 }
 
 @Article{Hyland1999,
-  author        = {Hyland, K},
-  title         = {Academic attribution: citation and the construction of disciplinary knowledge},
-  journal       = {Applied Linguistics},
-  year          = {1999},
-  volume        = {20},
-  number        = {3},
-  pages         = {341-367},
-  __markedentry = {[tarek:]},
-  doi           = {10.1093/applin/20.3.341},
-  eprint        = {/oup/backfile/content_public/journal/applij/20/3/10.1093/applin/20.3.341/2/200341.pdf},
-  review        = {- nice example sentences for integral vs. non-integral citations
+  author  = {Hyland, K},
+  title   = {Academic attribution: citation and the construction of disciplinary knowledge},
+  journal = {Applied Linguistics},
+  year    = {1999},
+  volume  = {20},
+  number  = {3},
+  pages   = {341-367},
+  doi     = {10.1093/applin/20.3.341},
+  eprint  = {/oup/backfile/content_public/journal/applij/20/3/10.1093/applin/20.3.341/2/200341.pdf},
+  review  = {- nice example sentences for integral vs. non-integral citations
     + mentions [42] style citations ("In the physical sciences, of course, journal styles often require numerical-
                                                       endnote forms, which reduces the prominence of cited authors considerably")
 - per field ratio of integral vs. non-integral for corpus of 80 research articles
     - e.g.: bio 10/90, phys 17/83, philosophy 65/35},
-  url           = {http://dx.doi.org/10.1093/applin/20.3.341},
+  url     = {http://dx.doi.org/10.1093/applin/20.3.341},
+}
+
+@Article{Ayala-Gomez2018,
+  author  = {Ayala-Gómez, Frederick and Daróczy, Bálint and Benczúr, András and Mathioudakis, Michael and Gionis, Aristides},
+  title   = {Global citation recommendation using knowledge graphs},
+  journal = {Journal of Intelligent \& Fuzzy Systems},
+  year    = {2018},
+  volume  = {34},
+  pages   = {3089-3100},
+  month   = {05},
+  doi     = {10.3233/JIFS-169493},
+}
+
+@Article{White2004,
+  author        = {White, Howard D.},
+  title         = {Citation Analysis and Discourse Analysis Revisited},
+  journal       = {Applied Linguistics},
+  year          = {2004},
+  volume        = {25},
+  number        = {1},
+  pages         = {89-116},
+  __markedentry = {[tarek:]},
+  doi           = {10.1093/applin/25.1.89},
+  eprint        = {/oup/backfile/content_public/journal/applij/25/1/10.1093/applin/25.1.89/2/250089.pdf},
+  review        = {- nice table showing "separate disciplines with traditions of citation analysis" (applied linguistics, history and sociology of science, information science)
+- according to RAHUL2017: "White (2004) provides a good survey of the different research directions that study or use citations."},
+  url           = {http://dx.doi.org/10.1093/applin/25.1.89},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

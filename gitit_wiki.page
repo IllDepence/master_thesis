@@ -1174,8 +1174,35 @@ map@5: 0.18446961750926533
         * manual evaluation of annotations on 3 example papers (`cs0110014`, `1404.1775`, `1712.08091`)
             * precision: 75; 70; 61
             * recall: 49 (/60); 51; 56
+        * annotations in 39.300 annotation context
+            * counting all:
+                ```
+                annot./context:
+                    avg.: 7.1
+                    min.: 0
+                    max.: 41
+                 0: 940 (2.4%)
+                 1: 1500 (3.8%)
+                 2: 2319 (5.9%)
+                 3: 3071 (7.9%)
+                 4: 3796 (9.7%)
+                >4: 27374 (70.2%)
+                ```
+            * counting only annot. w/ conf. > 5.0:
+                ```
+                annot./context:
+                    avg.: 4.3
+                    min.: 0
+                    max.: 37
+                 0: 3161 (8.1%)
+                 1: 4591 (11.8%)
+                 2: 5423 (13.9%)
+                 3: 5401 (13.8%)
+                 4: 4893 (12.5%)
+                >4: 15531 (39.8%)
+                ```
 
-**simply feeding annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
+**simply feeding (dbpedia) annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
 ```
 $ python3 recommend.py items.csv    (1712 100w 4mincont 2mindoc spotlight_annot)
 - - - - - 7787/7787 - - - - - simply feed | artificially let each DBpedia IDs appear unique in corpus (boost TFIDF)
@@ -1186,7 +1213,7 @@ ndcg@5: 0.232 | 0.227
 map@5: 0.209 | 0.205
 ```
 
-**only using annotations**  
+**only using (dbpedia) annotations**  
 ```
 $ python3 recommend.py items.csv    (1712 100w 4mincont 2mindoc spotlight_annot)
 - - - - - 7787/7787 - - - - -

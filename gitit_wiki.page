@@ -1187,6 +1187,14 @@ map@5: 0.18446961750926533
                  3: 3071 (7.9%)
                  4: 3796 (9.7%)
                 >4: 27374 (70.2%)
+
+                total #ann. @level
+                    0: 2640
+                    1: 11517
+                    2: 197266
+                    3: 37692
+                    4: 14907
+                    5: 12721
                 ```
             * counting only annot. w/ conf. > 5.0:
                 ```
@@ -1200,6 +1208,14 @@ map@5: 0.18446961750926533
                  3: 5401 (13.8%)
                  4: 4893 (12.5%)
                 >4: 15531 (39.8%)
+                
+                total #ann. @level
+                    0: 2640
+                    1: 11515
+                    2: 131902
+                    3: 17344
+                    4: 4580
+                    5: 0
                 ```
 
 **simply feeding (dbpedia) annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  

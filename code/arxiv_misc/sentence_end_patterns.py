@@ -33,6 +33,8 @@ def marker_surr_patt(in_dir):
     file_names = os.listdir(in_dir)
     patt_comb_freq_map = {}
     patt_orig_freq_map = {}
+    patt_comb_freq_map_cit = {}
+    patt_orig_freq_map_cit = {}
     for file_idx, fn in enumerate(file_names):
         if file_idx%100 == 0:
             print('{}/{}'.format(file_idx, len(file_names)))
@@ -49,14 +51,23 @@ def marker_surr_patt(in_dir):
             text = f.read()
         text = re.sub(E_G_PATT, 'e.g.', text)
 
+        if not re.search(CITE_MULTI_PATT, text):
+            continue
+
         marker = ' \u241F '
         doc_len = len(text)
         for sent_idx, sent_edx in tokenizer.span_tokenize(text):
+            cit_end = False
             sentence_orig = text[sent_idx:sent_edx]
             sentence = re.sub(CITE_MULTI_PATT, marker, sentence_orig)
             sentence = re.sub(QUOTE_PATT, ' {}.'.format(marker), sentence)
             words = pos_tag(sentence.split())
             words = [w for w in words if re.search(r'[\w|\u241F]', w[0])]
+            if len(words) < 3:
+                continue
+            if words[-1][0] == marker.strip():
+                cit_end = True
+                words = words[:-1]
             sent_len = len(words)
             patt_comb = [None, None, None, None]
             patt_orig = [None, None, None, None]
@@ -99,9 +110,18 @@ def marker_surr_patt(in_dir):
             if comb_id not in patt_comb_freq_map:
                 patt_comb_freq_map[comb_id] = 0
             patt_comb_freq_map[comb_id] += 1
+            if cit_end:
+                if comb_id not in patt_comb_freq_map_cit:
+                    patt_comb_freq_map_cit[comb_id] = 0
+                patt_comb_freq_map_cit[comb_id] += 1
+
             if orig_id not in patt_orig_freq_map:
                 patt_orig_freq_map[orig_id] = 0
             patt_orig_freq_map[orig_id] += 1
+            if cit_end:
+                if comb_id not in patt_orig_freq_map_cit:
+                    patt_orig_freq_map_cit[comb_id] = 0
+                patt_orig_freq_map_cit[comb_id] += 1
         # if file_idx > 200:
         #    break
 
@@ -109,12 +129,25 @@ def marker_surr_patt(in_dir):
                             key=operator.itemgetter(1), reverse=True)
     patt_orig_freq = sorted(patt_orig_freq_map.items(),
                             key=operator.itemgetter(1), reverse=True)
+    patt_comb_freq_cit = sorted(patt_comb_freq_map_cit.items(),
+                            key=operator.itemgetter(1), reverse=True)
+    patt_orig_freq_cit = sorted(patt_orig_freq_map_cit.items(),
+                            key=operator.itemgetter(1), reverse=True)
     print('- - - C O M B - - -')
     for pid in patt_comb_freq[:25]:
         print(pid)
     print('- - - O R I G - - -')
     for pid in patt_orig_freq[:25]:
         print(pid)
+
+    with open('sentence_comb.json', 'w') as f:
+        json.dump(patt_comb_freq, f)
+    with open('sentence_orig.json', 'w') as f:
+        json.dump(patt_orig_freq, f)
+    with open('marker_comb.json', 'w') as f:
+        json.dump(patt_comb_freq_cit, f)
+    with open('marker_orig.json', 'w') as f:
+        json.dump(patt_orig_freq_cit, f)
 
 if __name__ == '__main__':
     if len(sys.argv) not in [2, 3]:

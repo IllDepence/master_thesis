@@ -130,6 +130,27 @@ def marker_surr_patt(in_dir):
     for pid in patt_orig_freq[:25]:
         print(pid)
 
+    store_comb = []
+    for tup in patt_comb_freq:
+        pid = tup[0]
+        freq = tup[1]
+        if '[]¦<EOS>¦<EOS>¦<EOS>' in pid:
+            new_pid = pid.replace('[]¦<EOS>¦<EOS>¦<EOS>', '<EOS>')
+            store_comb.append((new_pid, freq))
+    with open('marker_comb.json', 'w') as f:
+        json.dump(store_comb, f)
+
+    store_orig = []
+    for tup in patt_orig_freq:
+        pid = tup[0]
+        freq = tup[1]
+        if '[]¦<EOS>¦<EOS>¦<EOS>' in pid:
+            new_pid = pid.replace('[]¦<EOS>¦<EOS>¦<EOS>', '<EOS>')
+            store_orig.append((new_pid, freq))
+    with open('marker_orig.json', 'w') as f:
+        json.dump(store_orig, f)
+
+
 if __name__ == '__main__':
     if len(sys.argv) not in [2, 3]:
         print('usage: python3 generate_dataset.py </path/to/in/dir>')

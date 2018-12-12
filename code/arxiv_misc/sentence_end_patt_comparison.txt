@@ -1,0 +1,144 @@
+### Side notes
+- 12.294 documents
+- 2.571.861 sentences in total
+- on avg. 209 sentences per document
+-> if a pattern was seen least 1.000 times, it appears in appears
+   ~once in every 12th document.
+   given that writing styles may differ and we identify several
+   patterns this seems like a reasonable threshold
+
+# Conditional probability of citation for patterns that appeared
+  at least at the end of at least 1000 sentences
+
+                            IN¦<EOS>  NNS¦<EOS>   neither
+
+NNP¦CD¦IN¦<EOS>     0.995      o
+VBD¦VBN¦IN¦<EOS>    0.990      o
+RB¦VBN¦IN¦<EOS>     0.987      o
+NN¦VBN¦IN¦<EOS>     0.956      o
+IN¦VBN¦IN¦<EOS>     0.947      o
+DT¦NN¦IN¦<EOS>      0.942      o
+VB¦VBN¦IN¦<EOS>     0.921      o
+CC¦JJ¦NNS¦<EOS>     0.916                 o
+JJ¦NN¦IN¦<EOS>      0.911      o
+NN¦IN¦NNS¦<EOS>     0.901                 o
+IN¦NN¦CC¦<EOS>      0.889                           o
+JJ¦JJ¦NNS¦<EOS>     0.871                 o
+JJ¦NN¦NNS¦<EOS>     0.857                 o
+VBZ¦VBN¦IN¦<EOS>    0.852      o
+DT¦JJ¦NNS¦<EOS>     0.823                 o
+IN¦NN¦NNS¦<EOS>     0.721                 o
+VBP¦VBN¦IN¦<EOS>    0.598      o
+IN¦JJ¦NNS¦<EOS>     0.578                 o
+IN¦DT¦JJ¦<EOS>      0.398                           o
+NN¦IN¦JJ¦<EOS>      0.385                           o
+RB¦JJ¦NNS¦<EOS>     0.354                 o
+
+### with examples
+
+NNP¦CD¦IN¦<EOS>     0.995       - The implication FORMULA is a particular case of
+                                  J. Hagler's Theorem 1 of [].
+                                - We follow the strategy of Lemma 6 in [].
+                                - ... with higher ranks (cf. Definition 3.1 in []).
+
+VBD¦VBN¦IN¦<EOS>    0.990       - The first one was discussed in [].
+                                - An alternative approach to social-aware search,
+                                  using personalized PageRank, was presented in [].
+                                - Some motivations for the first condition in (REF),
+                                  valid when gravity is dropped of (i.e. neglecting
+                                  the scalar curvature term FORMULA in the Jordan
+                                  frame action) were given in [].
+
+RB¦VBN¦IN¦<EOS>     0.987       - This method was also proposed by [].
+                                - Let us refresh some notation already used in [].
+                                - ... and only if FORMULA has the Lebesgue property
+                                  (the sufficiency is already obtained by []).
+
+NN¦VBN¦IN¦<EOS>     0.956       - We can now reconstruct the inflationary potential,
+                                  analogously to the procedure outlined in [].
+                                - In the single field limit, FORMULA, we see that,
+                                  to first order, FORMULA which agrees with the
+                                  approximation used in [].
+                                - spontaneous breaking of scale invariance from the
+                                  approach presented in [].
+
+IN¦VBN¦IN¦<EOS>     0.947       - ... for “groups with abelian Sylow towers” as
+                                  phrased in [].
+                                - ... fundamental property of the QCD vacuum, as
+                                  suggested in [].
+                                - ... was achieved at a level 40 to 100 times lower
+                                  than claimed by [].
+
+DT¦NN¦IN¦<EOS>      0.942       - ... we follow the method of [].
+                                - More details on the IACT method and instruments
+                                  are available in the review by [].
+                                - ... the crucial one compared to the proof in [].
+
+VB¦VBN¦IN¦<EOS>     0.921       - ... electronic orbitals FORMULA and FORMULA can
+                                  be found in [].
+                                - Therefore formula (REF) can alternatively be
+                                  obtained from [].
+                                - These results could be compared with [].
+
+CC¦JJ¦NNS¦<EOS>     0.916       - ... from the previous discussion it is clear that
+                                  the VWK and ETF methods exhibit small but
+                                  significant differences [].
+                                - We extend on the known results for the spectrum of
+                                  undirected graphs without self-loops or multiple
+                                  edges [].
+                                - ... through the use of convolutional, max-pooling,
+                                  and fully-connected layers [].
+
+JJ¦NN¦IN¦<EOS>      0.911       - ... beginning to resolve an open problem from [].
+                                - This is a special case of the module isomorphism
+                                  problem, which admits deterministic polynomial-time
+                                  algorithms by [].
+                                - We will also require the following lemma from [].
+
+NN¦IN¦NNS¦<EOS>     0.901       - In semiclassical method, it is common to use a wave
+                                  packet picture of electrons [].
+                                - However, we would like to recall that WK quantities
+                                  have to be understood in the sense of distributions
+                                  [].
+                                - In particular, several studies examined how special
+                                  the compact groups are for nuclear activity in
+                                  galaxies [].
+
+IN¦NN¦CC¦<EOS>      0.889       - They also support the Kazhdan-Lusztig dualities of
+                                  [] and [].
+                                - We recall the following result from [] and [].
+                                - Detailed accounts of the theory of double forms can
+                                  be found in [] and [].
+
+
+JJ¦JJ¦NNS¦<EOS>     0.871       - ... analogous to proton decay in grand unified
+                                  theories [].
+                                - ... the annihilation or decay of DM, and many other
+                                  processes [].
+                                - This recovers the convolution semi-group property
+                                  which can be found also in several recent papers [].
+
+JJ¦NN¦NNS¦<EOS>     0.857       - The properties of the multi field expansion are all
+                                  easily understood as generalizations of their
+                                  single field counterparts [].
+                                - However, this is at a much smaller level than the
+                                  dominant production modes [].
+                                - Gravity measurements are important for instance
+                                  for optical lattice clocks [].
+
+VBZ¦VBN¦IN¦<EOS>    0.852
+DT¦JJ¦NNS¦<EOS>     0.823
+IN¦NN¦NNS¦<EOS>     0.721
+VBP¦VBN¦IN¦<EOS>    0.598
+IN¦JJ¦NNS¦<EOS>     0.578
+
+IN¦DT¦JJ¦<EOS>      0.398       - ... one being a satellite of the other [].
+                                - ... near the center of the crystal [].
+                                - ... to determine both the diameter and albedo of an
+                                  asteroid [].
+
+NN¦IN¦JJ¦<EOS>      0.385       - ... and Poisson equations, see, for example, [].
+                                - ... in the case of nuclei [].
+                                - ... (considered in, for example, []).
+
+RB¦JJ¦NNS¦<EOS>     0.354

@@ -14,7 +14,6 @@ import uuid
 from lxml import etree
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import IntegrityError
 from db_model import Base, Bibitem, BibitemLinkMap, BibitemArxivIDMap
 
 PDF_EXT_PATT = re.compile(r'^\.pdf$', re.I)
@@ -145,10 +144,14 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None, write_logs=True):
                 local_key = bi.get('id')
                 bibkey_map[local_key] = uid
                 containing_p = bi.getparent()
-                while containing_p.tag != 'p':
-                    # sometimes the bibitem element is not the direct child of
-                    # the containing p item we want
-                    containing_p = containing_p.getparent()
+                try:
+                    while containing_p.tag != 'p':
+                        # sometimes the bibitem element is not the direct child of
+                        # the containing p item we want
+                            containing_p = containing_p.getparent()
+                except AttributeError:
+                    # getparent() might return None
+                    continue
                 for child in containing_p.getchildren():
                     if child.text:
                         child.text = '¦{}¦'.format(child.text)
@@ -167,15 +170,8 @@ def parse(IN_DIR, OUT_DIR, INCREMENTAL, db_uri=None, write_logs=True):
                         map_db = BibitemArxivIDMap(uuid=uid, arxiv_id=id_part)
                     else:
                         map_db = BibitemLinkMap(uuid=uid, link=link)
-                    # try to add link to DB
-                    session.begin_nested()
-                    try:
-                        session.add(map_db)
-                        session.flush()
-                    except IntegrityError:
-                        # duplicate link
-                        session.rollback()
-                    session.commit()
+                    session.add(map_db)
+                    session.flush()
 
             citations = tree.xpath('//cit')
             for cit in citations:

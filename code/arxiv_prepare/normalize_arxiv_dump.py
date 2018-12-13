@@ -64,7 +64,13 @@ def read_file(path):
             cntnt = blob.decode(encoding)
         except (UnicodeDecodeError, LookupError) as e:
             encoding = chardet.detect(blob)['encoding']
-            cntnt = blob.decode(encoding, errors='replace')
+            if encoding:
+                try:
+                    cntnt = blob.decode(encoding, errors='replace')
+                except:
+                    return ''
+            else:
+                return ''
     return cntnt
 
 
@@ -125,7 +131,12 @@ def normalize(IN_DIR, OUT_DIR, write_logs=True):
                             ignored_names.append(tfn)
                             continue
                         tmp_file_path = os.path.join(tmp_dir_path, tfn)
-                        cntnt = read_file(tmp_file_path)
+                        if os.path.isdir(tmp_file_path):
+                            continue
+                        try:
+                            cntnt = read_file(tmp_file_path)
+                        except:
+                            continue
                         if re.search(MAIN_TEX_PATT, cntnt) is not None:
                             main_tex_path = tmp_file_path
                     # try other files

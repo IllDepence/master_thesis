@@ -1,0 +1,2 @@
+#TODO: normalize for context length (b/c multi citations can stretch size and graphs are done on character level)
+#       -> new json files generated on shetland

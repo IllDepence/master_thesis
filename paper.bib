@@ -428,7 +428,10 @@
      non-integral if it was not."
     -> remove all "citation labels" (what ware citation labels? "[42]"?)
     -> remove all text in brackets (I assume remove brackets aswell)
-    -> if remaining string contains last name of first author: integral},
+    -> if remaining string contains last name of first author: integral
+
+- integral vs. non-integral distinction on _presence of author name with grammatical role_ (as opposed to Thompson2001)
+    - "[42] argues that ..." -> non-int},
   url       = {http://hdl.handle.net/1887/65235},
 }
 
@@ -504,7 +507,10 @@
         "Swales has argued that ... [42]."                      -> which is the citation? "Swales"-> int / "[42]"->non
         "Swales (1990) has argued that ..."                   -> int
         "It has been argued (Swales 1990) that ..."       -> non
-        "[42] argues that ..."                                         -> int},
+        "[42] argues that ..."                                         -> int
+
+- integral vs. non-integral distinction on _having a grammatical role or not_ (as opposed to Lamers2018)
+    - "[42] argues that ..." -> int},
 }
 
 @Article{Hyland1999,
@@ -534,6 +540,11 @@
   pages   = {3089-3100},
   month   = {05},
   doi     = {10.3233/JIFS-169493},
+  review  = {- global citation recommendation based on abstract
+- use LambdaMart (gradient boosted tree based list-wise learning to rank algo)
+
+- use similarity of words in abstract for recommendation candidate preselection (sensible?)
+- evalute only in settings "random split within one year" and "recommend from the previous year" (sensible? / realistic?)},
 }
 
 @Article{White2004,

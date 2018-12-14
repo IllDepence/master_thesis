@@ -922,6 +922,50 @@ false positives: 188
     sys     17m5.209s
     ```
 
+##### complete dump
+
+* on tuco
+* w/ sqlite DB 
+* **w/o matching**
+    ```
+    $ time python3 prepare.py /vol2/data/arxiv-src-data/ /home/saiert/arxiv-txt-data
+    397/1758
+    real    793m38.471s
+    user    580m4.249s
+    sys     101m8.986s (uncaught exception)
+    
+    527/1758
+    real    255m53.911s
+    user    187m32.075s
+    sys     30m34.096s (uncaught exception)
+    
+    1758/1758
+    947829 files
+    70863 PDFs
+    real    2496m46.268s
+    user    1766m47.943s
+    sys     358m11.095s
+    
+    -> 3546,28m / 59h / 2.5d
+    ```  
+    ```
+    $ ls arxiv-txt-data | grep .txt | wc -l
+    1151707
+    $ du -h arxiv-txt-data
+    50G     arxiv-txt-data
+    $ du -h arxiv-txt-data/metadata.db 
+    8,4G    arxiv-txt-data/metadata.db
+    ```  
+    ```
+    sqlite> select count(*) from bibitem;
+    35053329
+    ```
+    * 100% → 1.340.770
+    * extrapolated #PDFs: 100.240 → 1.240.530
+    * pipleline output: 1.151.707 (92.8%)
+    * with citations: 1.018.976 (82.1%) (76.0% incl. PDFs)
+    * 56.077.906 citation markers
+
 ### citation recommendation baseline
 
 * idea: only syntax (mby +metadata) based

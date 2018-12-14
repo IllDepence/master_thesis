@@ -1,4 +1,6 @@
-""" Positions of citation markers in sentences, relatve to where in doc
+""" Generate JSON files with the most common PoS tag triplets at the end of a
+    sentence, for sentences in general and separately for sentences ending in
+    a citation.
 """
 
 import json
@@ -22,7 +24,7 @@ E_G_PATT = re.compile(r'(?<=\W)e\.\sg\.(?=\W)', re.I)
 
 
 def marker_surr_patt(in_dir):
-    """ Find most frequent POS tag patterns surrounding citation marker
+    """ Find most frequent POS tag patterns at the end of sentences.
     """
 
     punkt_param = PunktParameters()
@@ -35,9 +37,11 @@ def marker_surr_patt(in_dir):
     patt_orig_freq_map = {}
     patt_comb_freq_map_cit = {}
     patt_orig_freq_map_cit = {}
+    # num_sentences_total = 0
     for file_idx, fn in enumerate(file_names):
         if file_idx%100 == 0:
             print('{}/{}'.format(file_idx, len(file_names)))
+            # print(num_sentences_total/(file_idx+1))
         path = os.path.join(in_dir, fn)
         aid, ext = os.path.splitext(fn)
         if ext != '.txt' or aid == 'log':
@@ -63,11 +67,14 @@ def marker_surr_patt(in_dir):
             sentence = re.sub(QUOTE_PATT, ' {}.'.format(marker), sentence)
             words = pos_tag(sentence.split())
             words = [w for w in words if re.search(r'[\w|\u241F]', w[0])]
-            if len(words) < 3:
+            if len(words) == 0:
                 continue
             if words[-1][0] == marker.strip():
                 cit_end = True
                 words = words[:-1]
+            if len(words) < 3:
+                continue
+            # num_sentences_total += 1
             sent_len = len(words)
             patt_comb = [None, None, None, None]
             patt_orig = [None, None, None, None]
@@ -119,9 +126,13 @@ def marker_surr_patt(in_dir):
                 patt_orig_freq_map[orig_id] = 0
             patt_orig_freq_map[orig_id] += 1
             if cit_end:
-                if comb_id not in patt_orig_freq_map_cit:
-                    patt_orig_freq_map_cit[comb_id] = 0
-                patt_orig_freq_map_cit[comb_id] += 1
+                if orig_id not in patt_orig_freq_map_cit:
+                    patt_orig_freq_map_cit[orig_id] = 0
+                patt_orig_freq_map_cit[orig_id] += 1
+                if orig_id == 'NN¦IN¦JJ¦<EOS>':
+                    print(words)
+                    print(sentence)
+                    input()
         # if file_idx > 200:
         #    break
 

@@ -10,6 +10,15 @@
     * [k4nn](https://arxiv.org/abs/1802.08301), "
 
 ### recent notes
+* compare in context FoS annotations w/ all annotations of cited paper (i.e. look at references to 22k set)
+    * also compare to FoS annotations of citing paper to see if it is an "outlier" context
+    * (MAG also has FoS for papers, mby also use, but their confidence values are not that telling)
+* ensure parallelisation of bibitem matching
+    * start
+* @preselection: _clustering as offline step_, online compare to centroids
+
+---
+
 * check confidence values of MAG FoS annotation false positives
 * analyse MAG FoS annotations *in citation contexts* overall (number per context, from the right field, what level etc.)
 * arXiv complete plain text dump (on tuco)

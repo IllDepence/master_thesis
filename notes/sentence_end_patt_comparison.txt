@@ -1,0 +1,257 @@
+### Side notes
+- 12.294 documents
+- 2.571.861 sentences in total
+- on avg. 209 sentences per document
+-> if a pattern was seen least 1.000 times, it appears in appears
+   ~once in every 12th document.
+   given that writing styles may differ and we identify several
+   patterns this seems like a reasonable threshold
+
+# Conditional probability of citation for patterns that appeared
+  at least at the end of at least 1000 sentences
+
+                            IN¦<EOS>  NNS¦<EOS>   neither
+
+NNP¦CD¦IN¦<EOS>     0.995      o
+VBD¦VBN¦IN¦<EOS>    0.990      o
+RB¦VBN¦IN¦<EOS>     0.987      o
+NN¦VBN¦IN¦<EOS>     0.956      o
+IN¦VBN¦IN¦<EOS>     0.947      o
+DT¦NN¦IN¦<EOS>      0.942      o
+VB¦VBN¦IN¦<EOS>     0.921      o
+CC¦JJ¦NNS¦<EOS>     0.916                 o
+JJ¦NN¦IN¦<EOS>      0.911      o
+NN¦IN¦NNS¦<EOS>     0.901                 o
+IN¦NN¦CC¦<EOS>      0.889                           o
+JJ¦JJ¦NNS¦<EOS>     0.871                 o
+JJ¦NN¦NNS¦<EOS>     0.857                 o
+VBZ¦VBN¦IN¦<EOS>    0.852      o
+DT¦JJ¦NNS¦<EOS>     0.823                 o
+IN¦NN¦NNS¦<EOS>     0.721                 o
+VBP¦VBN¦IN¦<EOS>    0.598      o
+IN¦JJ¦NNS¦<EOS>     0.578                 o
+IN¦DT¦JJ¦<EOS>      0.398                           o
+NN¦IN¦JJ¦<EOS>      0.385                           o
+RB¦JJ¦NNS¦<EOS>     0.354                 o
+
+### with examples
+
+NNP¦CD¦IN¦<EOS>     0.995       - The implication FORMULA is a particular case of
+                                  J. Hagler's Theorem 1 of [].
+                                  (1211.1719)
+                                - We follow the strategy of Lemma 6 in [].
+                                  (1708.09712)
+                                - ... with higher ranks (cf. Definition 3.1 in []).
+                                  (1204.6548)
+
+VBD¦VBN¦IN¦<EOS>    0.990       - The first one was discussed in [].
+                                  (1309.1776)
+                                - An alternative approach to social-aware search,
+                                  using personalized PageRank, was presented in [].
+                                  (1104.1605)
+                                - Some motivations for the first condition in (REF),
+                                  valid when gravity is dropped of (i.e. neglecting
+                                  the scalar curvature term FORMULA in the Jordan
+                                  frame action) were given in [].
+                                  (1104.1392)
+
+RB¦VBN¦IN¦<EOS>     0.987       - This method was also proposed by [].
+                                  (1506.05917)
+                                - Let us refresh some notation already used in [].
+                                  (1410.1293)
+                                - ... and only if FORMULA has the Lebesgue property
+                                  (the sufficiency is already obtained by []).
+                                  (1305.2271)
+
+NN¦VBN¦IN¦<EOS>     0.956       - We can now reconstruct the inflationary potential,
+                                  analogously to the procedure outlined in [].
+                                  (astro-ph0505033)
+                                - In the single field limit, FORMULA, we see that,
+                                  to first order, FORMULA which agrees with the
+                                  approximation used in [].
+                                  (astro-ph0505033)
+                                - ... spontaneous breaking of scale invariance from
+                                  the approach presented in [].
+                                  (1104.1392)
+
+IN¦VBN¦IN¦<EOS>     0.947       - ... for “groups with abelian Sylow towers” as
+                                  phrased in [].
+                                  (1309.1776)
+                                - ... fundamental property of the QCD vacuum, as
+                                  suggested in [].
+                                  (hep-ph9711512)
+                                - ... was achieved at a level 40 to 100 times lower
+                                  than claimed by [].
+                                  (1104.2836)
+
+DT¦NN¦IN¦<EOS>      0.942       - To produce multi field analogs of (REF) and (REF)
+                                  we follow the method of [].
+                                  (astro-ph0505033)
+                                - More details on the IACT method and instruments
+                                  are available in the review by [].
+                                  (1104.2836)
+                                - Let us shortly explain, which ingredient of our
+                                  proof is the crucial one compared to the proof
+                                  in [].
+                                  (1410.1293)
+
+VB¦VBN¦IN¦<EOS>     0.921       - An expression for the matrix elements of FORMULA
+                                  between the electronic orbitals FORMULA and FORMULA
+                                  can be found in [].
+                                  (physics9906045)
+                                - Therefore formula (REF) can alternatively be
+                                  obtained from [].
+                                  (1104.2299)
+                                - These results could be compared with [].
+                                  (1710.05450)
+
+CC¦JJ¦NNS¦<EOS>     0.916       - Summarizing, from the previous discussion it is clear
+                                  that the VWK and ETF methods exhibit small but
+                                  significant differences [].
+                                  (nucl-th0601092)
+                                - We extend on the known results for the spectrum of
+                                  undirected graphs without self-loops or multiple
+                                  edges [].
+                                  (1505.08133)
+                                - ... through the use of convolutional, max-pooling,
+                                  and fully-connected layers [].
+                                  (1604.07513)
+
+JJ¦NN¦IN¦<EOS>      0.911       - ... beginning to resolve an open problem from [].
+                                  (1309.1776)
+                                - This is a special case of the module isomorphism
+                                  problem, which admits deterministic polynomial-time
+                                  algorithms by [].
+                                  (1309.1776)
+                                - We will also require the following lemma from [].
+                                  (1208.3177)
+
+NN¦IN¦NNS¦<EOS>     0.901       - In semiclassical method, it is common to use a wave
+                                  packet picture of electrons [].
+                                  (1412.1459)
+                                - However, we would like to recall that WK quantities
+                                  have to be understood in the sense of distributions
+                                  [].
+                                  (nucl-th0601092)
+                                - In particular, several studies examined how special
+                                  the compact groups are for nuclear activity in
+                                  galaxies [].
+                                  (1305.4644)
+
+IN¦NN¦CC¦<EOS>      0.889       - They also support the Kazhdan-Lusztig dualities of
+                                  [] and [].
+                                  (1106.4893)
+                                - We recall the following result from [] and [].
+                                  (1708.09712)
+                                - Detailed accounts of the theory of double forms can
+                                  be found in [] and [].
+                                  (1208.1801)
+
+
+JJ¦JJ¦NNS¦<EOS>     0.871       - ... analogous to proton decay in grand unified
+                                  theories [].
+                                  (1104.2836)
+                                - ... the annihilation or decay of DM, and many other
+                                  processes [].
+                                  (1104.2836)
+                                - This recovers the convolution semi-group property
+                                  which can be found also in several recent papers [].
+                                  (cond-mat0305655)
+
+JJ¦NN¦NNS¦<EOS>     0.857       - The properties of the multi field expansion are all
+                                  easily understood as generalizations of their
+                                  single field counterparts [].
+                                  (astro-ph0505033)
+                                - However, this is at a much smaller level than the
+                                  dominant production modes [].
+                                  (1104.2836)
+                                - Gravity measurements are important for instance
+                                  for optical lattice clocks [].
+                                  (0906.1765)
+
+VBZ¦VBN¦IN¦<EOS>    0.852       - The present status of these studies is reported in [].
+                                  (hep-ph9711512)
+                                - An explanation of each algorithm is given in [].
+                                  (1704.02003)
+                                - Our work here is inspired by [].
+                                  (1006.0283)
+
+DT¦JJ¦NNS¦<EOS>     0.823       - The central star of G79.29+0.46 has been
+                                  spectroscopically studied at the optical and the
+                                  near-infrared wavelengths [].
+                                  (0804.0266)
+                                - This allows to explain quantitatively the divergence
+                                  of such transport coefficient observed in the
+                                  numerical simulations [].
+                                  (cond-mat9809105)
+                                - In fact, no differences in mass function depending on
+                                  metallicity are expected at these high masses [].
+                                  (0911.2428)
+
+IN¦NN¦NNS¦<EOS>     0.721       - However, the amount of molecular gas in late-type
+                                  compact group galaxies is still similar to that in
+                                  field galaxies [].
+                                  (1305.4644)
+                                - Helical waveguide structures have been treated
+                                  previously such as e.g., with helical sheaths [],
+                                  and approximations for wire helices [].
+                                  (1502.00496)
+                                - Rudolph mapped the GI problem onto a system of
+                                  hard-core atoms [].
+                                  (1002.3003)
+
+VBP¦VBN¦IN¦<EOS>    0.598       - ..., while multiple dimensions are analysed in [].
+                                  (1302.4872)
+                                - In REF, we briefly indicate how actions are used in [].
+                                  (1309.1776)
+                                - The technical aspects of this project are elaborated
+                                  in [].
+                                  (hep-ph9711512)
+
+IN¦JJ¦NNS¦<EOS>     0.578       - Again, this will be relevant for our discussion below
+                                  of the polynomial-time algorithm for semisimple groups
+                                  [].
+                                  (1309.1776)
+                                - Here we omit the cancellation of FORMULA, FORMULA and
+                                  FORMULA anomalies, because these constraints are always
+                                  satisfied by adding heavy particles with appropriate
+                                  charges [].
+                                  (hep-ph0702063)
+                                - Balloon experiments through the 1980s measured CR
+                                  electrons and positrons with inconsistent results [].
+                                  (1104.2836)
+
+IN¦DT¦JJ¦<EOS>      0.398       - ... one being a satellite of the other [].
+                                  (1504.06496)
+                                - ... near the center of the crystal [].
+                                  (1702.08446)
+                                - ... to determine both the diameter and albedo of an
+                                  asteroid [].
+                                  (1204.1116)
+
+NN¦IN¦JJ¦<EOS>      0.385       - This may be useful in some other areas such as
+                                  stochastic averaging and Poisson equations, see,
+                                  for example, [].
+                                  (1306.2359)
+                                - The perturbative treatment of the shell correction
+                                  energy in finite Fermi systems was elaborated by
+                                  Strutinsky in the case of nuclei [].
+                                  (nucl-th0601092)
+                                - This is an approach which is analogous to the
+                                  scissors congruence of definable sets (considered
+                                  in, for example, []).
+                                  (1401.3712)
+
+RB¦JJ¦NNS¦<EOS>     0.354       - At higher FORMULA, where the sensitivity to initial
+                                  conditions is diminished, there are still noticeable
+                                  differences [].
+                                  (hep-ph0507091)
+                                - Not only there are a large number of additional
+                                  mixings with wrong-chirality operators, but there
+                                  is even mixing with lower dimensional ones and
+                                  therefore power-diverging coefficients [].
+                                  (hep-lat0610129)
+                                - However, more recently, researchers have found that
+                                  CRWs and quantum random walks (QRWs) can exhibit
+                                  qualitatively different properties [].
+                                  (1002.3003)

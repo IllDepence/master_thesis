@@ -129,9 +129,9 @@ def marker_surr_patt(in_dir):
                 if orig_id not in patt_orig_freq_map_cit:
                     patt_orig_freq_map_cit[orig_id] = 0
                 patt_orig_freq_map_cit[orig_id] += 1
-                if orig_id == 'NN¦IN¦JJ¦<EOS>':
-                    print(words)
+                if orig_id == 'RB¦JJ¦NNS¦<EOS>':
                     print(sentence)
+                    print(fn)
                     input()
         # if file_idx > 200:
         #    break

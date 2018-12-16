@@ -117,16 +117,48 @@ def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
     return [aid] + moar
 
 
+def fos_distance(fosc_map, fosA, fosB):
+    def match(l1, l2):
+        if len(set(l1).intersection(set(l2))):
+            return True
+        else:
+            return False
+    def up(l):
+        ret = l
+        for f in l:
+            ret.extend(fosc_map.get(f, []))
+        return ret
+    if fosA == fosB:
+        return 0
+    upA1 = up([fosA])
+    upB1 = up([fosB])
+    if match(upA1, upB1):
+        return 1
+    upA2 = up(upA1)
+    upB2 = up(upB1)
+    if match(upA2, upB2):
+        return 2
+    upA3 = up(upA2)
+    upB3 = up(upB2)
+    if match(upA3, upB3):
+        return 3
+    upA4 = up(upA3)
+    upB4 = up(upB3)
+    if match(upA4, upB4):
+        return 4
+    upA5 = up(upA4)
+    upB5 = up(upB4)
+    if match(upA5, upB5):
+        return 5
+    return 6
+
+
 def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
              with_placeholder=True, global_ids='mag'):
-    """ Generate a list of citation contexts, given criteria:
-            context_size (in words)
-            min_contexts
-            with_placeholder
-
-        If no db_uri is given, a SQLite file metadata.db is expected in in_dir.
+    """ Lazily repurposed for analysing MAG FoS annotations.
     """
 
+    # Field of Study
     with open('field_of_study/FieldsOfStudy.txt') as f:
         fos_lines = f.readlines()
     fos_id_tup_map = {}
@@ -142,6 +174,20 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
             continue
         fos_id_tup_map[fid] = (fid, rank, norm_name, disp_name, level)
 
+    # Field of Study Children
+    with open('field_of_study/FieldOfStudyChildren.txt') as f:
+        fosc_lines = f.readlines()
+
+    fosc_map = {}
+    for l in fosc_lines:
+        fields = l.split('\t')
+        parent = fields[0].strip()
+        child = fields[1].strip()
+        if child not in fosc_map:
+            fosc_map[child] = []
+        fosc_map[child].append(parent)
+
+    # arXiv dump DB
     if not db_uri:
         db_path = os.path.join(in_dir, 'metadata.db')
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
@@ -209,6 +255,11 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     num_fos_min = 9999999
     num_contexts = 0
     num_level = [0, 0, 0, 0, 0, 0]
+    conf_vals = []
+    conf_dists = []
+    fos_dists = {}
+    annot_dist_conf_tuples = []
+    annot_dist_lvl_tuples = []
     for aid, doc_list in cited_docs.items():
         tmp_list = []
         num_docs = 0
@@ -238,6 +289,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                 margin = int(context_size/2)
                 idx = m.start()
                 edx = m.end()
+                cit_center = (idx+edx) / 2
                 pre = text[:idx]
                 post = text[edx:]
                 adj_pre = find_adjacent_citations(pre, uuid_aid_map,
@@ -256,18 +308,44 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                 min_end = idx-win_pre
                 max_start = edx+win_post
                 context_annot = []
-                # debug_annots = []
+                local_conf_vals = []
                 for annot in annots:
                     start = int(annot[2])
                     end = int(annot[3])
                     dbp_id = annot[4].split('/')[-1]
+                    conf = float(annot[5])
+                    conf_vals.append(conf)
+                    local_conf_vals.append(conf)
                     if start <= max_start and end >= min_end:
                         context_annot.append(dbp_id)
+                        annot_center = (start+end)/2
+                        annot_dist = abs(annot_center - cit_center)
+                        if cit_center - annot_center >= 0:
+                            max_dist = cit_center - min_end
+                        else:
+                            max_dist = max_start - cit_center
+                        annot_dist_rel = annot_dist / max_dist
+                        annot_dist_conf_tuples.append([annot_dist_rel, conf])
                         if dbp_id in fos_id_tup_map:
                             fos_tup = fos_id_tup_map[dbp_id]
                             level = fos_tup[4]
                             num_level[level] += 1
-                        # debug_annots.append([annot[0]-min_end, annot[1]-min_end, annot[2]])
+                            annot_dist_lvl_tuples.append([annot_dist_rel, level])
+                    # for annot_inner in annots:
+                    #     dbp_id_inner = annot_inner[4].split('/')[-1]
+                    #     if dbp_id != dbp_id_inner:
+                    #         # pairwise comparisons
+                    #         fos_dist = fos_distance(fosc_map,
+                    #                                 dbp_id,
+                    #                                 dbp_id_inner)
+                    #         if not fos_dist in fos_dists:
+                    #             fos_dists[fos_dist] = 0
+                    #         fos_dists[fos_dist] += 1
+                if len(local_conf_vals) > 0:
+                    conf_dists.append(
+                        max(local_conf_vals) - min(local_conf_vals)
+                        )
+                # print(fos_dists)
                 num_fos_total += len(context_annot)
                 if len(context_annot) > num_fos_max:
                     num_fos_max = len(context_annot)
@@ -321,11 +399,19 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
         if len(tmp_list) >= min_contexts and num_docs > 1:
             contexts.extend(tmp_list)
     print(len(contexts))
-    # sys.exit()
-    with open('items.csv', 'w') as f:
-        for vals in contexts:
-            line = '{}\n'.format('\u241E'.join(vals))
-            f.write(line)
+    with open('annot_dist_lvl_vals.json', 'w') as f:
+        f.write(json.dumps(annot_dist_lvl_tuples))
+    with open('annot_dist_conf_vals.json', 'w') as f:
+        f.write(json.dumps(annot_dist_conf_tuples))
+    # with open('conf_vals.json', 'w') as f:
+    #     f.write(json.dumps(conf_vals))
+    # with open('conf_dists.json', 'w') as f:
+    #     f.write(json.dumps(conf_dists))
+    sys.exit()
+    # with open('items.csv', 'w') as f:
+    #     for vals in contexts:
+    #         line = '{}\n'.format('\u241E'.join(vals))
+    #         f.write(line)
 
 
 if __name__ == '__main__':

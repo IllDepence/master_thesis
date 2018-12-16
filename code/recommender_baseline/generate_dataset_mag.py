@@ -54,6 +54,10 @@ def generate(db_uri, min_contexts=4, preprocess=False):
     #  '__slots__', '__str__', '__subclasshook__', '_asdict', '_fields',
     #  '_real_fields', 'citationcontext', 'count', 'index', 'keys', 'paperid',
     #  'paperreferenceid']
+    # 
+    # Work in progress. ↑ MAG DB results ↓ stuff to adjust for generating
+    #                                      a dataset
+    # 
     sys.exit()
 
     print('merging bibitems')

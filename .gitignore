@@ -13,3 +13,6 @@
 *.~lock*
 __pycache__
 venv
+code/mag_misc/*.json
+code/recommender_baseline/items_*.csv
+code/arxiv_prepare/aid_title.db

@@ -6,8 +6,9 @@ import os
 import re
 import sys
 import string
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, Table
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 from db_model import Base, Bibitem, BibitemArxivIDMap, BibitemMAGIDMap
 
 CITE_PATT = re.compile((r'\{\{cite:([0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}'
@@ -117,6 +118,31 @@ def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
     return [aid] + moar
 
 
+def fos_annot_score(fosc_map, paper_fos, annot_fos):
+    score = 0
+    for a_fos in annot_fos:
+        score += fos_annot_score_single(fosc_map, paper_fos, a_fos)
+    return score
+
+
+def fos_annot_score_single(fosc_map, paper_fos, annot_fos):
+    def one_up(fos_list):
+        ret = []
+        for fos in fos_list:
+            ret.extend(fosc_map.get(fos, []))
+        return ret
+    # match_score = 1
+    candidate_fos = [annot_fos]
+    for depth in range(6):
+        match_score = 1 - (.2*depth)
+        # match_score = match_score * (.8**depth)
+        for c_fos in candidate_fos:
+            if c_fos in paper_fos:
+                return match_score
+        candidate_fos = one_up(candidate_fos)
+    return 0
+
+
 def fos_distance(fosc_map, fosA, fosB):
     def match(l1, l2):
         if len(set(l1).intersection(set(l2))):
@@ -197,6 +223,17 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    # MAG DB
+    MAGBase = declarative_base()
+    mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG'
+    mag_engine = create_engine(mag_db_uri)
+    MAGBase.metadata.create_all(mag_engine)
+    MAGBase.metadata.bind = mag_engine
+    MAGDBSession = sessionmaker(bind=mag_engine)
+    mag_session = MAGDBSession()
+    MAGPaperFoS = Table('paperfieldsofstudy', MAGBase.metadata,
+                         autoload=True, autoload_with=mag_engine)
+
     print('querying DB')
     if global_ids == 'mag':
         have_global_id = session.query(BibitemMAGIDMap.mag_id).\
@@ -260,7 +297,15 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     fos_dists = {}
     annot_dist_conf_tuples = []
     annot_dist_lvl_tuples = []
+    annot_dist_qual_tuples = []
     for aid, doc_list in cited_docs.items():
+        mag_paper_foss_db = mag_session.query(MAGPaperFoS).\
+                filter_by(paperid=aid).all()
+        paper_fos_ids = []
+        for mag_paper_foss_db in mag_paper_foss_db:
+            fos_id = str(mag_paper_foss_db.fieldofstudyid)
+            paper_fos_ids.append(fos_id)
+            fos_tup = fos_id_tup_map.get(fos_id)
         tmp_list = []
         num_docs = 0
         for doc in doc_list:
@@ -317,6 +362,16 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                     conf_vals.append(conf)
                     local_conf_vals.append(conf)
                     if start <= max_start and end >= min_end:
+                        # fos_tup = fos_id_tup_map.get(dbp_id)
+                        # if fos_tup:
+                        #     fos_name = fos_tup[3]
+                        # else:
+                        #     fos_name = '-'
+                        # print('    annot fos: {}'.format(fos_name))
+                        match_single_score = fos_annot_score_single(
+                            fosc_map, paper_fos_ids, dbp_id
+                            )
+                        # print('             ({})'.format(match_single_score))
                         context_annot.append(dbp_id)
                         annot_center = (start+end)/2
                         annot_dist = abs(annot_center - cit_center)
@@ -326,11 +381,16 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                             max_dist = max_start - cit_center
                         annot_dist_rel = annot_dist / max_dist
                         annot_dist_conf_tuples.append([annot_dist_rel, conf])
+                        annot_dist_qual_tuples.append(
+                            [annot_dist_rel, match_single_score]
+                            )
                         if dbp_id in fos_id_tup_map:
                             fos_tup = fos_id_tup_map[dbp_id]
                             level = fos_tup[4]
                             num_level[level] += 1
-                            annot_dist_lvl_tuples.append([annot_dist_rel, level])
+                            annot_dist_lvl_tuples.append(
+                                [annot_dist_rel, level]
+                                )
                     # for annot_inner in annots:
                     #     dbp_id_inner = annot_inner[4].split('/')[-1]
                     #     if dbp_id != dbp_id_inner:
@@ -346,6 +406,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                         max(local_conf_vals) - min(local_conf_vals)
                         )
                 # print(fos_dists)
+                # match_score = fos_annot_score(
+                #     fosc_map, paper_fos_ids, context_annot
+                #     )
+                # print('-> score: {}'.format(match_score))
                 num_fos_total += len(context_annot)
                 if len(context_annot) > num_fos_max:
                     num_fos_max = len(context_annot)
@@ -399,10 +463,12 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
         if len(tmp_list) >= min_contexts and num_docs > 1:
             contexts.extend(tmp_list)
     print(len(contexts))
-    with open('annot_dist_lvl_vals.json', 'w') as f:
-        f.write(json.dumps(annot_dist_lvl_tuples))
-    with open('annot_dist_conf_vals.json', 'w') as f:
-        f.write(json.dumps(annot_dist_conf_tuples))
+    with open('annot_dist_qual_vals.json', 'w') as f:
+        f.write(json.dumps(annot_dist_qual_tuples))
+    # with open('annot_dist_lvl_vals.json', 'w') as f:
+    #     f.write(json.dumps(annot_dist_lvl_tuples))
+    # with open('annot_dist_conf_vals.json', 'w') as f:
+    #     f.write(json.dumps(annot_dist_conf_tuples))
     # with open('conf_vals.json', 'w') as f:
     #     f.write(json.dumps(conf_vals))
     # with open('conf_dists.json', 'w') as f:

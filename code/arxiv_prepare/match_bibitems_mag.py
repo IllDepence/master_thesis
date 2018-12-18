@@ -7,10 +7,14 @@ import os
 import re
 import requests
 import sys
+import time
 import unidecode
+from multiprocessing import Pool
+# from multiprocessing import Process
 from sqlalchemy import (create_engine, Column, Integer, String, UnicodeText,
-                        Table)
+                        Table, func)
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import TimeoutError as SQLAlchemyTimeoutError
 from sqlalchemy.ext.declarative import declarative_base
 from db_model import (Base, Bibitem, BibitemArxivIDMap, BibitemMAGIDMap,
                       BibitemLinkMap)
@@ -28,7 +32,10 @@ def parscit_parse(text):
     """
 
     url = 'http://localhost:8000/parscit/parse'
-    ret = requests.post(url, json={'string':text})
+    try:
+        ret = requests.post(url, json={'string':text}, timeout=360)
+    except requests.RequestException:
+        return False, False, False
     if ret.status_code != 200:
         return False, False, False
     response = json.loads(ret.text)
@@ -88,7 +95,9 @@ def title_by_doi(given_doi):
     try:
         resp = requests.get(
                 '{}{}'.format(doi_base_url, given_doi),
-                headers=doi_headers)
+                headers=doi_headers,
+                timeout=360
+                )
         rate_lim_lim = resp.headers.get('X-Rate-Limit-Limit', '9001')
         rate_lim_int = resp.headers.get(
             'X-Rate-Limit-Interval', '1s'
@@ -168,7 +177,7 @@ def find_arxiv_id(text):
     return False
 
 
-def match(db_uri=None, in_dir=None):
+def match(db_uri=None, in_dir=None, processes=1):
     """ Match bibitem strings to MAG IDs
     """
 
@@ -178,12 +187,81 @@ def match(db_uri=None, in_dir=None):
     if in_dir:
         db_path = os.path.join(in_dir, 'metadata.db')
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
+    print('Setting up preliminary bibitem DB connection')
+    pre_engine = create_engine(db_uri)
+
+    print('Querying bibitem DB')
+    bibitem_tuples = pre_engine.execute(
+        'select uuid, in_doc, bibitem_string from bibitem').fetchall()
+
+    done_uuids = []
+    if os.path.isfile('batch_prev_done.log'):
+        print('sorting bibitem tuples')
+        bibitem_tuples.sort(key=lambda tup: tup[0])
+        print('reading bibitems done in previous run')
+        with open('batch_prev_done.log') as f:
+            lines = f.readlines()
+        done_uuids = [l.strip() for l in lines]
+        print('sorting bibitems done in previous run')
+        done_uuids.sort()
+        done_uuid_idx = 0
+        bibitem_tuples_idx = 0
+        bibitem_tuples_new = []
+        print('filtering out bibitems done in previous run')
+        skipped = 0
+        filled = 0
+        inbetween = 0
+        found = 0
+        while done_uuid_idx < len(done_uuids):
+            done_uuid = done_uuids[done_uuid_idx]
+            bibitem_uuid = bibitem_tuples[bibitem_tuples_idx][0]
+            if done_uuid == bibitem_uuid:
+                found += 1
+                done_uuid_idx += 1
+                bibitem_tuples_idx += 1
+            else:
+                bibitem_tuples_new.append(bibitem_tuples[bibitem_tuples_idx])
+                bibitem_tuples_idx += 1
+        bibitem_tuples_new.extend(bibitem_tuples[bibitem_tuples_idx:])
+        bibitem_tuples = bibitem_tuples_new
+
+    print('to process: {} bibitems'.format(len(bibitem_tuples)))
+    print('number of processes: {}'.format(processes))
+    batch_size = int(len(bibitem_tuples)/processes)
+    batches = []
+    for batch_id in range(processes):
+        start = batch_size * batch_id
+        end = batch_size * (batch_id + 1)
+        if batch_id == processes - 1:
+            batch = bibitem_tuples[start:len(bibitem_tuples) - 1]
+        else:
+            batch = bibitem_tuples[start:end]
+        batches.append((batch, db_uri, batch_id))
+    print('batch size: {}'.format(len(batches[0][0])))
+
+    p = Pool(processes)
+    print(p.map(match_batch, batches))
+
+
+def match_batch(arg_tuple):
+    bibitem_tuples = arg_tuple[0]
+    db_uri = arg_tuple[1]
+    batch_id = arg_tuple[2]
+    done_log_fn = 'batch_{}_done.log'.format(batch_id)
+    def prind(msg):
+        print('[batch #{}]: {}'.format(batch_id, msg))
+    def log_done(uuid):
+        with open(done_log_fn, 'a') as f:
+            f.write('{}\n'.format(uuid))
+
+    prind('Setting up bibitem DB connection')
     engine = create_engine(db_uri)
     Base.metadata.create_all(engine)
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    prind('Setting up arXiv ID DB connection')
     # set up arXiv ID DB
     AIDBase = declarative_base()
 
@@ -194,18 +272,21 @@ def match(db_uri=None, in_dir=None):
         title = Column(UnicodeText())
 
     aid_db_uri = 'sqlite:///aid_title.db'
-    aid_engine = create_engine(aid_db_uri)
+    aid_engine = create_engine(aid_db_uri, connect_args={'timeout': 60})
     AIDBase.metadata.create_all(aid_engine)
     AIDBase.metadata.bind = aid_engine
     AIDDBSession = sessionmaker(bind=aid_engine)
     aid_session = AIDDBSession()
     # /set up arXiv ID DB
 
+    prind('Setting up MAG DB connection')
     # set up MAG DB
     MAGBase = declarative_base()
 
     mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG'
-    mag_engine = create_engine(mag_db_uri)
+    mag_engine = create_engine(mag_db_uri,
+        connect_args={'options': '-c statement_timeout=60000'}
+        )
     MAGBase.metadata.create_all(mag_engine)
     MAGBase.metadata.bind = mag_engine
     MAGDBSession = sessionmaker(bind=mag_engine)
@@ -215,11 +296,14 @@ def match(db_uri=None, in_dir=None):
                      autoload=True, autoload_with=mag_engine)
     # /set up MAG DB
 
-    arxiv_base_url = 'http://export.arxiv.org/api/query?search_query=id:'
-    arxiv_ns = {'atom': 'http://www.w3.org/2005/Atom',
-                'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
+    # set up bibitem_link_map
+    bibitem_link_tuples = engine.execute(
+        'select uuid, link from bibitemlinkmap').fetchall()
+    bibitem_link_map = {}
+    for bl_tup in bibitem_link_tuples:
+        bibitem_link_map[bl_tup[0]] = bl_tup[1]
+    # /set up bibitem_link_map
 
-    bibitems_db = session.query(Bibitem).all()
     num_matches = 0
     num_checked = 0
     num_false_positives = 0
@@ -230,7 +314,7 @@ def match(db_uri=None, in_dir=None):
     num_by_doi_fail = 0
     num_no_title = 0
     num_aps_doi_rebound = 0
-    bi_total = len(bibitems_db)
+    bi_total = len(bibitem_tuples)
     by_aid_total_time = 0
     by_aid_total_acc = 0
     by_doi_total_time = 0
@@ -245,24 +329,37 @@ def match(db_uri=None, in_dir=None):
     db_total_acc = 0
     db_w_total_time = 0
     db_w_total_acc = 0
-    for bi_idx, bibitem_db in enumerate(bibitems_db):
-        if bi_idx%1000 == 0:
-            session.commit()
-        text = bibitem_db.bibitem_string
-        in_doc = bibitem_db.in_doc
+    prind('starting to match')
+    for bi_idx, bibitem_tuple in enumerate(bibitem_tuples):
+        bibitem_uuid = bibitem_tuple[0]
+        bibitem_in_doc = bibitem_tuple[1]
+        bibitem_string = bibitem_tuple[2]
+        text = bibitem_string
+        in_doc = bibitem_in_doc
         aid = find_arxiv_id(text)
         arxiv_id_success = False
         if aid:
             t1 = datetime.datetime.now()
-            apaper_db = aid_session.query(Paper).filter_by(aid=aid).first()
+            try:
+                apaper_db = aid_session.query(Paper).filter_by(aid=aid).first()
+            except SQLAlchemyTimeoutError:
+                continue
             if not apaper_db:
                 # catch cases like quant-ph/0802.3625 (acutally 0802.3625)
                 guess = aid.split('/')[-1]
-                apaper_db = aid_session.query(Paper).filter_by(aid=guess).first()
+                try:
+                    apaper_db = aid_session.query(Paper).\
+                        filter_by(aid=guess).first()
+                except SQLAlchemyTimeoutError:
+                    continue
             if not apaper_db and re.match(r'^\d+$', aid):
                 # catch cases like 14025167 (acutally 1402.5167)
                 guess = '{}.{}'.format(aid[:4], aid[4:])
-                apaper_db = aid_session.query(Paper).filter_by(aid=guess).first()
+                try:
+                    apaper_db = aid_session.query(Paper).\
+                        filter_by(aid=guess).first()
+                except SQLAlchemyTimeoutError:
+                    continue
             # cases not handled:
             # - arXiv:9409089v2[hep-th] -> hep-th/9409089
             if apaper_db:
@@ -276,16 +373,15 @@ def match(db_uri=None, in_dir=None):
                 by_aid_total_time += d.total_seconds()
                 by_aid_total_acc += 1
         t1 = datetime.datetime.now()
-        bibitemlink_db = session.query(BibitemLinkMap).filter_by(
-                                  uuid=bibitem_db.uuid).first()
+        bibitemlink = bibitem_link_map.get(bibitem_uuid)
         t2 = datetime.datetime.now()
         d = t2 - t1
         db_total_time += d.total_seconds()
         db_total_acc += 1
         given_doi = False
-        if bibitemlink_db:
-            if 'doi' in bibitemlink_db.link:
-                m = DOI_PATT.search(bibitemlink_db.link)
+        if bibitemlink:
+            if 'doi' in bibitemlink:
+                m = DOI_PATT.search(bibitemlink)
                 if m:
                     given_doi = m.group(0)
         doi_success = False
@@ -324,6 +420,7 @@ def match(db_uri=None, in_dir=None):
         if not (arxiv_id_success or doi_success):
             if not text:
                 num_no_title += 1
+                log_done(bibitem_uuid)
                 continue
 
         t1 = datetime.datetime.now()
@@ -337,14 +434,20 @@ def match(db_uri=None, in_dir=None):
                     if len(pick) >= 3:
                         title_guesses.append(' '.join(pick))
             for title_guess in title_guesses:
-                mag_paper_db = mag_session.query(MAGPaper).\
-                        filter_by(papertitle=normalized_title).first()
+                try:
+                    mag_paper_db = mag_session.query(MAGPaper).\
+                            filter_by(papertitle=normalized_title).first()
+                except SQLAlchemyTimeoutError:
+                    continue
                 if mag_paper_db:
                     break
         else:
             normalized_title = mag_normalize(text)
-            mag_paper_db = mag_session.query(MAGPaper).\
-                    filter_by(papertitle=normalized_title).first()
+            try:
+                mag_paper_db = mag_session.query(MAGPaper).\
+                        filter_by(papertitle=normalized_title).first()
+            except SQLAlchemyTimeoutError:
+                continue
         t2 = datetime.datetime.now()
         d = t2 - t1
         magdb_total_time += d.total_seconds()
@@ -368,12 +471,13 @@ def match(db_uri=None, in_dir=None):
             if mag_id:
                 t1 = datetime.datetime.now()
                 mag_id_db = BibitemMAGIDMap(
-                    uuid=bibitem_db.uuid,
+                    uuid=bibitem_uuid,
                     mag_id=mag_id
                     )
                 # add to DB
                 session.add(mag_id_db)
-                session.flush()
+                session.commit()
+                log_done(bibitem_uuid)
                 t2 = datetime.datetime.now()
                 d = t2 - t1
                 db_w_total_time += d.total_seconds()
@@ -383,43 +487,61 @@ def match(db_uri=None, in_dir=None):
                 num_checked += 1
                 if not given_doi.lower() == result_doi.lower():
                     num_false_positives += 1
-        print('- - - - - - - - - - - - - - - - -')
-        print('{}/{}'.format(bi_idx+1, bi_total))
-        print('matches: {}'.format(num_matches))
-        print('checked: {}'.format(num_checked))
-        print('Phys. Rev.: {}'.format(num_phys_rev))
-        print('no title: {}'.format(num_no_title))
-        print('maybe (!) false positives: {}'.format(num_false_positives))
-        print('by arXiv ID: {}'.format(num_by_aid))
-        print('by arXiv ID fail: {}'.format(num_by_aid_fail))
-        print('by doi: {}'.format(num_by_doi))
-        print('by doi fail: {}'.format(num_by_doi_fail))
-        print('APS doi rebound: {}'.format(num_aps_doi_rebound))
-        print('>>> avg time aID: {:.2f}'.format(by_aid_total_time/max(by_aid_total_acc, 1)))
-        print('>>> avg time DOI: {:.2f}'.format(by_doi_total_time/max(by_doi_total_acc, 1)))
-        print('>>> avg time ParsCit: {:.2f}'.format(by_parscit_total_time/max(by_parscit_total_acc, 1)))
-        print('>>> avg time MAGDB: {:.2f}'.format(magdb_total_time/max(magdb_total_acc, 1)))
-        print('>>> avg time DB r: {:.2f}'.format(db_total_time/max(db_total_acc, 1)))
-        print('>>> avg time DB w: {:.2f}'.format(db_w_total_time/max(db_w_total_acc, 1)))
+        if bi_idx%100 == 0:
+            prind('- - - - - - - - - - - - - - - - -')
+            prind('{}/{}'.format(bi_idx+1, bi_total))
+            prind('matches: {}'.format(num_matches))
+            prind('checked: {}'.format(num_checked))
+            prind('Phys. Rev.: {}'.format(num_phys_rev))
+            prind('no title: {}'.format(num_no_title))
+            prind('maybe (!) false positives: {}'.format(num_false_positives))
+            prind('by arXiv ID: {}'.format(num_by_aid))
+            prind('by arXiv ID fail: {}'.format(num_by_aid_fail))
+            prind('by doi: {}'.format(num_by_doi))
+            prind('by doi fail: {}'.format(num_by_doi_fail))
+            prind('APS doi rebound: {}'.format(num_aps_doi_rebound))
+            prind('>>> avg time aID: {:.2f}'.format(
+                by_aid_total_time/max(by_aid_total_acc, 1)
+                ))
+            prind('>>> avg time DOI: {:.2f}'.format(
+                by_doi_total_time/max(by_doi_total_acc, 1)
+                ))
+            prind('>>> avg time ParsCit: {:.2f}'.format(
+                by_parscit_total_time/max(by_parscit_total_acc, 1)
+                ))
+            prind('>>> avg time MAGDB: {:.2f}'.format(
+                magdb_total_time/max(magdb_total_acc, 1)
+                ))
+            prind('>>> avg time DB r: {:.2f}'.format(
+                db_total_time/max(db_total_acc, 1)
+                ))
+            prind('>>> avg time DB w: {:.2f}'.format(
+                db_w_total_time/max(db_w_total_acc, 1)
+                ))
     session.commit()
-    print('>>> time aID: {:.2f}'.format(by_aid_total_time))
-    print('>>> time DOI: {:.2f}'.format(by_doi_total_time))
-    print('>>> time ParsCit: {:.2f}'.format(by_parscit_total_time))
-    print('>>> time MAGDB: {:.2f}'.format(magdb_total_time))
-    print('>>> time DB r: {:.2f}'.format(db_total_time))
-    print('>>> time DB w: {:.2f}'.format(db_w_total_time))
+    prind('>>> time aID: {:.2f}'.format(by_aid_total_time))
+    prind('>>> time DOI: {:.2f}'.format(by_doi_total_time))
+    prind('>>> time ParsCit: {:.2f}'.format(by_parscit_total_time))
+    prind('>>> time MAGDB: {:.2f}'.format(magdb_total_time))
+    prind('>>> time DB r: {:.2f}'.format(db_total_time))
+    prind('>>> time DB w: {:.2f}'.format(db_w_total_time))
+    return 'done'
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3 or (sys.argv[1] not in ['path', 'uri']):
+    if len(sys.argv) not in [3, 4] or (sys.argv[1] not in ['path', 'uri']):
         print(('usage: python3 parse_latex_tralics.py path|uri </path/to/in/di'
-               'r>|<db_uri>'))
+               'r>|<db_uri> [num processes]'))
         sys.exit()
     path = sys.argv[1] == 'path'
     arg = sys.argv[2]
-    if path:
-        ret = match(in_dir=arg)
+    if len(sys.argv) == 4:
+        proc = int(sys.argv[3])
     else:
-        ret = match(db_uri=arg)
+        proc = 1
+    if path:
+        ret = match(in_dir=arg, processes=proc)
+    else:
+        ret = match(db_uri=arg, processes=proc)
     if not ret:
         sys.exit()

@@ -6,7 +6,8 @@ from nltk import pos_tag
 from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 
 # with open('annot_dist_lvl_vals.json') as f:
-with open('annot_dist_conf_vals.json') as f:
+# with open('annot_dist_conf_vals.json') as f:
+with open('annot_dist_qual_vals.json') as f:
     tupls = json.load(f)
 
 x = []
@@ -19,10 +20,10 @@ for tupl in tupls:
         y.append(tupl[1])
 
 plt.xlabel('distance of annotation to citation marker (0=center, 1=border of context)')
-plt.ylabel('confidence value')
+plt.ylabel('agreement with MAG')
 # plt.ylabel('annotation level')
-# heatmap, xedges, yedges = np.histogram2d(x, y, bins=(50, 9))
-heatmap, xedges, yedges = np.histogram2d(x, y, bins=(50))
+heatmap, xedges, yedges = np.histogram2d(x, y, bins=(50, 11))
+# heatmap, xedges, yedges = np.histogram2d(x, y, bins=(50))
 extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
 plt.imshow(heatmap.T, extent=extent, origin='lower', norm=LogNorm(), aspect='auto')
 # plt.imshow(heatmap.T, extent=extent, origin='lower', aspect='auto')

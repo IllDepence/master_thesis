@@ -108,6 +108,7 @@ def title_by_doi(given_doi):
         wait = float(rate_lim_int)/float(rate_lim_lim)
         if resp.elapsed.total_seconds() < wait:
             delta = wait - resp.elapsed.total_seconds()
+            delta = max(delta, 3600)
             time.sleep(delta)
     except ValueError:
         pass
@@ -475,8 +476,11 @@ def match_batch(arg_tuple):
                     mag_id=mag_id
                     )
                 # add to DB
-                session.add(mag_id_db)
-                session.commit()
+                try:
+                    session.add(mag_id_db)
+                    session.commit()
+                except SQLAlchemyTimeoutError:
+                    continue
                 log_done(bibitem_uuid)
                 t2 = datetime.datetime.now()
                 d = t2 - t1
@@ -487,6 +491,8 @@ def match_batch(arg_tuple):
                 num_checked += 1
                 if not given_doi.lower() == result_doi.lower():
                     num_false_positives += 1
+        else:
+            log_done(bibitem_uuid)
         if bi_idx%100 == 0:
             prind('- - - - - - - - - - - - - - - - -')
             prind('{}/{}'.format(bi_idx+1, bi_total))

@@ -662,6 +662,20 @@ sqlite> select count(*) from bibitemarxividmap;
         * *Pascual Jordan: Schwerkraft und Weltall, Vieweg and Sohn, Braunschweig(1952), VII+207p. 1,680円*
     * non citations
         * *According to the numerous discussions with my colleagues D. Fischer and P. Mokler an experimental verification of our theoretical predictions is feasible.* (in 1305.0417)
+    * single process single thread bibitem-matching: extrapolated >40 days for whole arXiv dump → parallelization
+* bibitem-matching parallelization challenges:
+    * reading in all bibitems via SQLAlchemy ORM: can't be distributed to subprocesses:
+        ``` 
+        The communication protocol between processes uses pickling, and the pickled data is prefixed with the size of the pickled data. For your method, all arguments together are pickled as one object.
+        You produced an object that when pickled is larger than fits in a i struct formatter (a four-byte signed integer), which breaks the assumptions the code has made.
+        ```
+    * reading in bibitems via SQLAlchemy ORM in the subprocesses (and then selecting distributed chuck start/stops): server out of memory
+    * → read in bibitems via plain SQL, save in tuples, split and distribute tuples to subprocesses
+    * looking up xref links from bibitemlinkmap while matching takes too long → read into memory beforehand (build lookup map)
+    * resumability:
+        * 35M bibitems, xM logged done, resume after stop:
+        * looking through millions long log of stuff already done while matching not feasible → remove beforehand 
+        * removing several million from 35M doesn't work feasibly with loop in loop → sort both lists and create more efficient removal algorithm
 
 ##### experiments
 
@@ -974,6 +988,28 @@ false positives: 188
     * pipleline output: 1.151.707 (92.8%)
     * with citations: 1.018.976 (82.1%) (76.0% incl. PDFs)
     * 56.077.906 citation markers
+* **matching**
+    * snapshot (resumed with 5M done in previous session, 1 of 10 parallel processes)
+        ```
+        [batch #4]: - - - - - - - - - - - - - - - - -
+        [batch #4]: 1282601/2938817
+        [batch #4]: matches: 485063
+        [batch #4]: checked: 38825
+        [batch #4]: Phys. Rev.: 184615
+        [batch #4]: no title: 400544
+        [batch #4]: maybe (!) false positives: 1251
+        [batch #4]: by arXiv ID: 101193
+        [batch #4]: by arXiv ID fail: 23411
+        [batch #4]: by doi: 37043
+        [batch #4]: by doi fail: 5488
+        [batch #4]: APS doi rebound: 99071
+        [batch #4]: >>> avg time aID: 0.10
+        [batch #4]: >>> avg time DOI: 0.54
+        [batch #4]: >>> avg time ParsCit: 0.02
+        [batch #4]: >>> avg time MAGDB: 0.01
+        [batch #4]: >>> avg time DB r: 0.00
+        [batch #4]: >>> avg time DB w: 0.01
+        ```
 
 ### citation recommendation baseline
 

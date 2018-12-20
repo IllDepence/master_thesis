@@ -1,0 +1,37 @@
+bars 0-4 means number of child→parent hops from FoS annotations
+i.e. 0: FoS annotation is in MAG as is
+     1: FoS annotation's parent Fos is in Mag
+     etc.
+
+focus:
+    difference between bar heights for a given histogram bin
+    -> going child→parent in FoS "graph" introduces ambiguity, so doing as few
+       steps as possible (while still geting as much matches as needed) is
+       recommendable
+
+
+mean values with confidence >5.0 threshold:
+    0
+    mean: 0.023215659611017177
+    1
+    mean: 0.08274318056828875
+    2
+    mean: 0.18239956270359733
+    3
+    mean: 0.18239956270359733
+    4
+    mean: 0.19178903888188764
+
+mean values without confidence >5.0 threshold:
+    0
+    mean: 0.026222181702558897
+    1
+    mean: 0.0994277322906103
+    2
+    mean: 0.23940739155289298
+    3
+    mean: 0.23940739155289298
+    4
+    mean: 0.25241549140971337
+-> increase in number of hits BUT at the cost of a lot more
+   (often missing) "shots"

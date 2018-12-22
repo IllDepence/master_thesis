@@ -1,0 +1,26 @@
+problem: slightly more bad FoS annotations then good ones
+
+ways to filter out the bad ones:
+
+# conf==5.0:
+
+            in       out          Σ
+good    91.753    42.076    133.829
+bad     80.316    69.501    149.817
+Σ      172.069   111.577    283.646
+
+
+# conf==5.0 and maximally 2 hops in MAG (agreement w/ MAG FoS bins .2 and .4 don't count):
+
+            in       out          Σ
+good    85.138    31.007    116.145
+bad     80.316    69.501    149.817
+Σ      165.454   100.508    265.962
+
+
+# ¬(conf==5.0 ∧ annot lvl in [4, 5]) and maximally 2 hops in MAG:
+
+            in      out          Σ
+good   115.060    1.085    116.145
+bad    134.055   15.688    149.743
+Σ      249.115   16.773    265.888

@@ -121,7 +121,8 @@ def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
 def fos_annot_score(fosc_map, paper_fos, annot_fos):
     score = 0
     for a_fos in annot_fos:
-        score += fos_annot_score_single(fosc_map, paper_fos, a_fos)
+        match_score, fos = fos_annot_score_single(fosc_map, paper_fos, a_fos)
+        score += match_score
     return score
 
 
@@ -138,9 +139,9 @@ def fos_annot_score_single(fosc_map, paper_fos, annot_fos):
         # match_score = match_score * (.8**depth)
         for c_fos in candidate_fos:
             if c_fos in paper_fos:
-                return match_score
+                return match_score, c_fos
         candidate_fos = one_up(candidate_fos)
-    return 0
+    return 0, None
 
 
 def fos_distance(fosc_map, fosA, fosB):
@@ -298,6 +299,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     annot_dist_conf_tuples = []
     annot_dist_lvl_tuples = []
     annot_dist_qual_tuples = []
+    stepped_match_counts = [[], [], [], [], []]
+    stepped_match_counts_rel = [[], [], [], [], []]
+    conf_match_tups = []
+    conf_match_lvl_trips = []
     for aid, doc_list in cited_docs.items():
         mag_paper_foss_db = mag_session.query(MAGPaperFoS).\
                 filter_by(paperid=aid).all()
@@ -322,9 +327,9 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                     annots = []
                     for ann_line in ann_lines:
                         fos, disp, start, end, mid, conf = ann_line.split('\t')
-                        # annots.append((fos, disp, start, end, mid, conf))
-                        if float(conf) > 5:
-                            annots.append((fos, disp, start, end, mid, conf))
+                        annots.append((fos, disp, start, end, mid, conf))
+                        # if float(conf) > 5:
+                        #     annots.append((fos, disp, start, end, mid, conf))
             else:
                 continue
             marker = '{{{{cite:{}}}}}'.format(doc['uuid'])
@@ -354,6 +359,8 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                 max_start = edx+win_post
                 context_annot = []
                 local_conf_vals = []
+                stepped_matches = [0, 0, 0, 0, 0]
+                stepped_match_sets = [set(), set(), set(), set(), set()]
                 for annot in annots:
                     start = int(annot[2])
                     end = int(annot[3])
@@ -368,9 +375,33 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                         # else:
                         #     fos_name = '-'
                         # print('    annot fos: {}'.format(fos_name))
-                        match_single_score = fos_annot_score_single(
+                        match_single_score, match_fos = fos_annot_score_single(
                             fosc_map, paper_fos_ids, dbp_id
                             )
+                        conf_match_tups.append(
+                            [conf, match_single_score]
+                            )
+                        if dbp_id in fos_id_tup_map:
+                            fos_tup = fos_id_tup_map[dbp_id]
+                            level = fos_tup[4]
+                            conf_match_lvl_trips.append(
+                                [conf, match_single_score, level]
+                                )
+                        if match_single_score == 1:
+                            stepped_matches[0] += 1
+                            stepped_match_sets[0].add(match_fos)
+                        if match_single_score >= 0.8:
+                            stepped_matches[1] += 1
+                            stepped_match_sets[1].add(match_fos)
+                        if match_single_score >= 0.6:
+                            stepped_matches[2] += 1
+                            stepped_match_sets[2].add(match_fos)
+                        if match_single_score >= 0.4:
+                            stepped_matches[3] += 1
+                            stepped_match_sets[3].add(match_fos)
+                        if match_single_score >= 0.2:
+                            stepped_matches[4] += 1
+                            stepped_match_sets[4].add(match_fos)
                         # print('             ({})'.format(match_single_score))
                         context_annot.append(dbp_id)
                         annot_center = (start+end)/2
@@ -401,6 +432,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                     #         if not fos_dist in fos_dists:
                     #             fos_dists[fos_dist] = 0
                     #         fos_dists[fos_dist] += 1
+                for s in range(5):
+                    stepped_match_counts[s].append(stepped_matches[s])
+                    rel_val = len(stepped_match_sets[s]) / max(len(paper_fos_ids), 1)
+                    stepped_match_counts_rel[s].append(rel_val)
                 if len(local_conf_vals) > 0:
                     conf_dists.append(
                         max(local_conf_vals) - min(local_conf_vals)
@@ -463,8 +498,16 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
         if len(tmp_list) >= min_contexts and num_docs > 1:
             contexts.extend(tmp_list)
     print(len(contexts))
-    with open('annot_dist_qual_vals.json', 'w') as f:
-        f.write(json.dumps(annot_dist_qual_tuples))
+    with open('conf_match_lvl_trips.json', 'w') as f:
+       f.write(json.dumps(conf_match_lvl_trips))
+    # with open('conf_match_tups.json', 'w') as f:
+    #    f.write(json.dumps(conf_match_tups))
+    # with open('stepped_match_counts_rel.json', 'w') as f:
+    #    f.write(json.dumps(stepped_match_counts_rel))
+    # with open('stepped_match_counts.json', 'w') as f:
+    #     f.write(json.dumps(stepped_match_counts))
+    # with open('annot_dist_qual_vals.json', 'w') as f:
+    #     f.write(json.dumps(annot_dist_qual_tuples))
     # with open('annot_dist_lvl_vals.json', 'w') as f:
     #     f.write(json.dumps(annot_dist_lvl_tuples))
     # with open('annot_dist_conf_vals.json', 'w') as f:
@@ -473,11 +516,6 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     #     f.write(json.dumps(conf_vals))
     # with open('conf_dists.json', 'w') as f:
     #     f.write(json.dumps(conf_dists))
-    sys.exit()
-    # with open('items.csv', 'w') as f:
-    #     for vals in contexts:
-    #         line = '{}\n'.format('\u241E'.join(vals))
-    #         f.write(line)
 
 
 if __name__ == '__main__':

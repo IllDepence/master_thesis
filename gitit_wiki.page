@@ -989,27 +989,96 @@ false positives: 188
     * with citations: 1.018.976 (82.1%) (76.0% incl. PDFs)
     * 56.077.906 citation markers
 * **matching**
-    * snapshot (resumed with 5M done in previous session, 1 of 10 parallel processes)
+    * twice resumed with 5M and again 5M done in previous sessions; 10 parallel processes
         ```
-        [batch #4]: - - - - - - - - - - - - - - - - -
-        [batch #4]: 1282601/2938817
-        [batch #4]: matches: 485063
-        [batch #4]: checked: 38825
-        [batch #4]: Phys. Rev.: 184615
-        [batch #4]: no title: 400544
-        [batch #4]: maybe (!) false positives: 1251
-        [batch #4]: by arXiv ID: 101193
-        [batch #4]: by arXiv ID fail: 23411
-        [batch #4]: by doi: 37043
-        [batch #4]: by doi fail: 5488
-        [batch #4]: APS doi rebound: 99071
-        [batch #4]: >>> avg time aID: 0.10
-        [batch #4]: >>> avg time DOI: 0.54
-        [batch #4]: >>> avg time ParsCit: 0.02
-        [batch #4]: >>> avg time MAGDB: 0.01
-        [batch #4]: >>> avg time DB r: 0.00
-        [batch #4]: >>> avg time DB w: 0.01
+        $ python3 match_bibitems_mag.py path /home/saiert/arxiv-txt-data 10
+        [batch #6]: - - - - - - - - - - - - - - - - -                 
+        [batch #6]: 2462301/2462338                                   
+        [batch #6]: matches: 876586                                   
+        [batch #6]: checked: 70311                                    
+        [batch #6]: Phys. Rev.: 355204                                
+        [batch #6]: no title: 723153                                  
+        [batch #6]: maybe (!) false positives: 2239                   
+        [batch #6]: by arXiv ID: 190948                               
+        [batch #6]: by arXiv ID fail: 51041                           
+        [batch #6]: by doi: 68736                                     
+        [batch #6]: by doi fail: 11965                                
+        [batch #6]: APS doi rebound: 188593                           
+        [batch #6]: >>> avg time aID: 0.10                            
+        [batch #6]: >>> avg time DOI: 0.52                            
+        [batch #6]: >>> avg time ParsCit: 0.03                        
+        [batch #6]: >>> avg time MAGDB: 0.02                          
+        [batch #6]: >>> avg time DB r: 0.00                           
+        [batch #6]: >>> avg time DB w: 0.02
+        [batch #6]: >>> time aID: 18683.87                            
+        [batch #6]: >>> time DOI: 36193.84                            
+        [batch #6]: >>> time ParsCit: 55165.55                        
+        [batch #6]: >>> time MAGDB: 26188.81                          
+        [batch #6]: >>> time DB r: 30.61                              
+        [batch #6]: >>> time DB w: 13187.03
+        ```  
         ```
+        [batch #8]: - - - - - - - - - - - - - - - - -
+        [batch #8]: 2462301/2462338
+        [batch #8]: matches: 877929
+        [batch #8]: checked: 70544
+        [batch #8]: Phys. Rev.: 355071
+        [batch #8]: no title: 724875
+        [batch #8]: maybe (!) false positives: 2264
+        [batch #8]: by arXiv ID: 191175
+        [batch #8]: by arXiv ID fail: 50541
+        [batch #8]: by doi: 69380
+        [batch #8]: by doi fail: 12158
+        [batch #8]: APS doi rebound: 188111
+        [batch #8]: >>> avg time aID: 0.10
+        [batch #8]: >>> avg time DOI: 0.52
+        [batch #8]: >>> avg time ParsCit: 0.03
+        [batch #8]: >>> avg time MAGDB: 0.02
+        [batch #8]: >>> avg time DB r: 0.00
+        [batch #8]: >>> avg time DB w: 0.02
+        [batch #8]: >>> time aID: 18689.88
+        [batch #8]: >>> time DOI: 36617.27
+        [batch #8]: >>> time ParsCit: 55179.79
+        [batch #8]: >>> time MAGDB: 26167.74
+        [batch #8]: >>> time DB r: 30.43
+        [batch #8]: >>> time DB w: 13238.70
+        ['done', 'done', 'done', 'done', 'done', 'done', 'done', 'done', 'done', 'done']
+        ```  
+        ```
+        sqlite> select count(*) from bibitemmagidmap;
+        14169900        -> 40.4%
+        ```  
+        ```
+        sqlite> select count(distinct mag_id) from bibitemmagidmap;
+        2315884
+        ```
+    * further notes on results:
+        * most matched cited docs:
+            * 6662 [2595998925](https://academic.microsoft.com/#/detail/2595998925) -> should actually have been [2166248051](https://academic.microsoft.com/#/detail/2166248051) (same title & author)
+            * 5817 [201838852](https://academic.microsoft.com/#/detail/201838852) -> containing work
+            * 5424 [2547311611](https://academic.microsoft.com/#/detail/2547311611) -> containing work
+            * 5296 [1975165548](https://academic.microsoft.com/#/detail/1975165548) -> should actually have been [1631356911](https://academic.microsoft.com/#/detail/1631356911) (same title)
+            * 5133 [1981368803](https://academic.microsoft.com/#/detail/1981368803) ✔
+            * 4309 [250990466](https://academic.microsoft.com/#/detail/250990466) -> containing work
+            * 4283 [2044442377](https://academic.microsoft.com/#/detail/2044442377) -> should actually have been [2099111195](https://academic.microsoft.com/#/detail/2099111195)
+            * 4029 [1526931241](https://academic.microsoft.com/#/detail/1526931241) -> should actually have been [2120062331](https://academic.microsoft.com/#/detail/2120062331)
+            * 3979 [1889142700](https://academic.microsoft.com/#/detail/1889142700) ✔
+            * 3880 [2030690537](https://academic.microsoft.com/#/detail/2030690537) ✔
+            * 3394[1858542512](https://academic.microsoft.com/#/detail/1858542512) ✔
+            * 3262 [2139937287](https://academic.microsoft.com/#/detail/2139937287) ✔
+            * 3117 [2139937287](https://academic.microsoft.com/#/detail/2139937287) ✔
+            * 3113 [1978553093](https://academic.microsoft.com/#/detail/1978553093) ✔
+            * 3068 [1972485395](https://academic.microsoft.com/#/detail/1972485395) -> should actually have been [2157005274](https://academic.microsoft.com/#/detail/2157005274) (same title & author)
+            * 2937 [2794162265](https://academic.microsoft.com/#/detail/2794162265) -> should actually have been [2029403139](https://academic.microsoft.com/#/detail/2029403139)
+            * 2918 [2763160969](https://academic.microsoft.com/#/detail/2763160969) -> should actually have been [2167727518](https://academic.microsoft.com/#/detail/2167727518)
+            * 2752 [2011208902](https://academic.microsoft.com/#/detail/2011208902) ✔
+            * 2734 [2334487375](https://academic.microsoft.com/#/detail/2334487375) -> should actually have been  *C. Itzykson and J.-B. Zuber, Quantum Field Theory* (yet to be found in MAG) and/or [1577720992](https://academic.microsoft.com/#/detail/1577720992)
+            * 2734 [1909359706](https://academic.microsoft.com/#/detail/1909359706) ✔
+            * 2731 [1686810756](https://academic.microsoft.com/#/detail/1686810756) ✔
+            * 2723 [2800235016](https://academic.microsoft.com/#/detail/2800235016) -> should actually have been [2094438648](https://academic.microsoft.com/#/detail/2094438648)
+            * 2680 [2798540069](https://academic.microsoft.com/#/detail/2798540069) -> should actually have been [1486187347](https://academic.microsoft.com/#/detail/1486187347)
+            * 2656 [2039609754](https://academic.microsoft.com/#/detail/2039609754) ✔
+            * 2607 [1522301498](https://academic.microsoft.com/#/detail/1522301498) ✔
 
 ### citation recommendation baseline
 

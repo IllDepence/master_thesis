@@ -660,6 +660,7 @@ sqlite> select count(*) from bibitemarxividmap;
         * MAG: "Robust determination of maximally-localized Wannier functions"
     * MAG noise:
         * *Pascual Jordan: Schwerkraft und Weltall, Vieweg and Sohn, Braunschweig(1952), VII+207p. 1,680円*
+        * multiple papers with identical normalized title and (similar) authors (→ hard to distinguish, heuristically dealt with by number of citations)
     * non citations
         * *According to the numerous discussions with my colleagues D. Fischer and P. Mokler an experimental verification of our theoretical predictions is feasible.* (in 1305.0417)
     * single process single thread bibitem-matching: extrapolated >40 days for whole arXiv dump → parallelization
@@ -1053,7 +1054,7 @@ false positives: 188
         2315884
         ```
     * further notes on results:
-        * most matched cited docs:
+        * top 50 most matched cited docs (31/50 correct):
             * 6662 [2595998925](https://academic.microsoft.com/#/detail/2595998925) -> should actually have been [2166248051](https://academic.microsoft.com/#/detail/2166248051) (same title & author)
             * 5817 [201838852](https://academic.microsoft.com/#/detail/201838852) -> containing work
             * 5424 [2547311611](https://academic.microsoft.com/#/detail/2547311611) -> containing work
@@ -1079,6 +1080,34 @@ false positives: 188
             * 2680 [2798540069](https://academic.microsoft.com/#/detail/2798540069) -> should actually have been [1486187347](https://academic.microsoft.com/#/detail/1486187347)
             * 2656 [2039609754](https://academic.microsoft.com/#/detail/2039609754) ✔
             * 2607 [1522301498](https://academic.microsoft.com/#/detail/1522301498) ✔
+            * 2586 [1992204683](https://academic.microsoft.com/#/detail/1992204683) ✔
+            * 2559 [2095721433](https://academic.microsoft.com/#/detail/2095721433) ✔
+            * 2497 [2258584306](https://academic.microsoft.com/#/detail/2258584306) ✔
+            * 2448 [2135046866](https://academic.microsoft.com/#/detail/2135046866) ✔
+            * 2430 [254615967](https://academic.microsoft.com/#/detail/254615967) -> should actually have been [1488001281](https://academic.microsoft.com/#/detail/1488001281)
+            * 2407 [2037768897](https://academic.microsoft.com/#/detail/2037768897) ✔
+            * 2354 [2147875900](https://academic.microsoft.com/#/detail/2147875900) ✔
+            * 2250 [2073595060](https://academic.microsoft.com/#/detail/2073595060) ->  Phys. Rev. Lett. DOI heuristic took *Phys. Rev. Lett. 73 (1994) XXXX* for article #1994 from Phys. Rev. Lett. 73
+            * 2214 [1970127494](https://academic.microsoft.com/#/detail/1970127494) ✔
+            * 2211 [2046747256](https://academic.microsoft.com/#/detail/2046747256) -> should actually have been [2028815089](https://academic.microsoft.com/#/detail/2028815089)
+            * 2196 [2051051926](https://academic.microsoft.com/#/detail/2051051926) ✔
+            * 2125 [2194775991](https://academic.microsoft.com/#/detail/2194775991) ✔
+            * 2080 [2222357604](https://academic.microsoft.com/#/detail/2222357604) -> should actually have been [1575147392](https://academic.microsoft.com/#/detail/1575147392)
+            * 2028 [2064777467](https://academic.microsoft.com/#/detail/2064777467) ✔
+            * 1950 [2800027815](https://academic.microsoft.com/#/detail/2800027815) -> should actually have been [2751862591](https://academic.microsoft.com/#/detail/2751862591)
+            * 1941 [1525575583](https://academic.microsoft.com/#/detail/1525575583) ✔
+            * 1938 [1530042113](https://academic.microsoft.com/#/detail/1530042113) ✔
+            * 1926 [2044336104](https://academic.microsoft.com/#/detail/) ->  Phys. Rev. Lett. DOI heuristic took *Phys. Rev. Lett. 64 (1990) XXXX* for article #1990 from Phys. Rev. Lett. 64
+            * 1923 [1979544533](https://academic.microsoft.com/#/detail/1979544533) ✔
+            * 1868 [2035413341](https://academic.microsoft.com/#/detail/2035413341) ✔
+            * 1800 [2134251287](https://academic.microsoft.com/#/detail/2134251287) ✔
+            * 1800 [2030164271](https://academic.microsoft.com/#/detail/2030164271) ✔
+            * 1797 [2107240173](https://academic.microsoft.com/#/detail/2107240173) ✔
+            * 1790 [1986510200](https://academic.microsoft.com/#/detail/1986510200) ✔
+            * 1786 [2034920898](https://academic.microsoft.com/#/detail/2034920898) ✔
+        * → main problems:
+            * works with identical normalized title → FIX: re-check all in MAG w/ same title for author and #cit
+            * wrong title identified via e.g. APS DOI heuristic → (maybe) FIX: for all bibitems matched to a certain MAG ID, check overall text similarity of bibitem texts
 
 ### citation recommendation baseline
 

@@ -126,6 +126,12 @@ def guess_aps_journal_paper_doi(parscit_terms):
 
         E.g.: Phys. Rev. B 84, 245128
            -> 10.1103/physrevb.84.245128
+
+        FIXME: below method makes mistakes for inputs like
+                Phys. Rev. Lett. 73 (1994) 3070
+               -> 10.1103/physrevlett.73.1994
+                instead of the correct
+               -> 10.1103/physrevlett.73.3070
     """
 
     normalized_terms = []

@@ -303,6 +303,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     stepped_match_counts_rel = [[], [], [], [], []]
     conf_match_tups = []
     conf_match_lvl_trips = []
+    candidate_count_total = 0
+    candidate_count_min = 999999999
+    candidate_count_max = 0
+    one_step_matches = 0
     for aid, doc_list in cited_docs.items():
         mag_paper_foss_db = mag_session.query(MAGPaperFoS).\
                 filter_by(paperid=aid).all()
@@ -358,6 +362,7 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                 min_end = idx-win_pre
                 max_start = edx+win_post
                 context_annot = []
+                context_annot_ext = []
                 local_conf_vals = []
                 stepped_matches = [0, 0, 0, 0, 0]
                 stepped_match_sets = [set(), set(), set(), set(), set()]
@@ -404,6 +409,10 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                             stepped_match_sets[4].add(match_fos)
                         # print('             ({})'.format(match_single_score))
                         context_annot.append(dbp_id)
+                        ext = [dbp_id]
+                        if dbp_id in fosc_map:
+                            ext = ext + fosc_map[dbp_id]
+                        context_annot_ext.extend(ext)
                         annot_center = (start+end)/2
                         annot_dist = abs(annot_center - cit_center)
                         if cit_center - annot_center >= 0:
@@ -462,6 +471,31 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                     num_fos_4 += 1
                 else:
                     num_fos_gt4 += 1
+                if len(context_annot_ext) == 0:
+                    continue
+                fos_list = ', '.join(
+                    "'{}'".format(a) for a in context_annot_ext)
+                print('mag db select')
+                candidate_count = mag_engine.execute(
+                    ('select count(distinct paperid) from paperfieldsofstudy'
+                     ' where fieldofstudyid in ({})').format(fos_list)
+                    ).scalar()
+                print('done')
+                candidate_count_total += candidate_count
+                candidate_count_min = min(candidate_count_min, candidate_count)
+                candidate_count_max = max(candidate_count_max, candidate_count)
+                candidate_count_avg = candidate_count/num_contexts
+                candidate_count_avg_perc = candidate_count_avg / 209792741
+                if stepped_matches[1] > 0:
+                    one_step_matches += 1
+
+                print('- - - filter canditates - - -')
+                print('min: {}'.format(candidate_count_min))
+                print('max: {}'.format(candidate_count_max))
+                print('avg: {} ({}%)'.format(candidate_count_avg,
+                    candidate_count_avg_perc))
+                print('still in: {}/{}'.format(one_step_matches, num_contexts))
+                continue
 
                 if num_contexts%1000 == 0:
                     print('avg. annot./context: {}'.format(
@@ -498,8 +532,8 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
         if len(tmp_list) >= min_contexts and num_docs > 1:
             contexts.extend(tmp_list)
     print(len(contexts))
-    with open('conf_match_lvl_trips.json', 'w') as f:
-       f.write(json.dumps(conf_match_lvl_trips))
+    # with open('conf_match_lvl_trips.json', 'w') as f:
+    #    f.write(json.dumps(conf_match_lvl_trips))
     # with open('conf_match_tups.json', 'w') as f:
     #    f.write(json.dumps(conf_match_tups))
     # with open('stepped_match_counts_rel.json', 'w') as f:

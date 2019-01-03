@@ -1107,6 +1107,8 @@ false positives: 188
             * 1786 [2034920898](https://academic.microsoft.com/#/detail/2034920898) ✔
         * → main problems:
             * works with identical normalized title → FIX: re-check all in MAG w/ same title for author and #cit
+                * snapshot: `8329000/14169900 (521923 updated)`
+                    * TODO: "re-run" for counting cases of no author match
             * wrong title identified via e.g. APS DOI heuristic → (maybe) FIX: for all bibitems matched to a certain MAG ID, check overall text similarity of bibitem texts
 
 ### citation recommendation baseline
@@ -1404,6 +1406,14 @@ map@5: 0.18446961750926533
                     4: 4580
                     5: 0
                 ```
+        * testing annotations as pre-filter (snapshot) (candidates from *all* MAG papers (not *so* representative b/c arXiv papers mostly phys/math/cs))
+            ```
+            - - - filter canditates - - -
+            min: 2181
+            max: 42561564
+            avg: 41582.186180422264 (0.00019820602935171272%)
+            still in: 68/521
+            ```
 
 **simply feeding (dbpedia) annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
 ```

@@ -1,0 +1,50 @@
+*provide “information on the what, where, why, how and who of the data”* [wikipedia/data_papers](https://en.wikipedia.org/wiki/Data_publishing#Data_papers)
+
+# general description
+* primarily: arbitrary length citation contexts (from arXiv papers) referencing MAG papers (i.e. +metadata)
+
+![](/data_set_schema.png)
+
+**→** papers described by how they are cited
+
+## format
+
+* plain text `<arXivID>.txt` files containing citation markers `{{cite:<UUID>}}`
+* SQLite DB `metadata.db` with metadata on citation markers
+    ```
+    bibitem
+     +- uuid
+     +- in_doc
+     +- bibitem_string
+    
+    bibitemmagidmap
+     +- uuid
+     +- mag_id
+    ```
+
+# generation
+
+* **plain text with citation markers from arXiv source dump**
+    * flatten arXiv source to single LaTeX file
+        * skip source with only PDF/HTML/PS/TeX contents
+        * deal with file encodings
+        * resolve imports and include bbl using **latexpand**
+    * normalize `\cite` and `\bibitem` command styles in LaTeX source (natbib + `\bibitem[withOptions]`)
+    * generate plain text + citation metadata from LaTeX files
+        * LaTeX→XML using **Tralics**
+        * replace formula, figure and table environments as well as non citation references with replacement tokens
+        * place citation markers and save corresponding bibitem text in DB 
+* **matching of bibitem texts to MAG paper IDs**
+    * try to determine title of cited document
+        * arXiv ID in text → title from arXiv metadata dump
+        * DOI in text → title from crossref.org
+        * otherwise → use Neural Parscit and try identified substring +/- 3 words left/right
+    * normalize title and search normalized paper titles in MAG
+    * if multiple results, get author names and search them n bibitem text (require single hit of name with more than 1 character)
+    * if still multiple hits, go by citation count given in MAG (b/c of MAG noise)
+
+# key figures
+
+# challenges
+
+# usage

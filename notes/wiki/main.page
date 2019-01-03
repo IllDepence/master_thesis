@@ -1409,10 +1409,10 @@ map@5: 0.18446961750926533
         * testing annotations as pre-filter (snapshot) (candidates from *all* MAG papers (not *so* representative b/c arXiv papers mostly phys/math/cs))
             ```
             - - - filter canditates - - -
-            min: 2181
-            max: 42561564
-            avg: 41582.186180422264 (0.00019820602935171272%)
-            still in: 68/521
+            min: 813
+            max: 67438444
+            avg: 1248.1812758145938 (5.949592296973678e-06%)
+            still in: 296/2179
             ```
 
 **simply feeding (dbpedia) annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
@@ -1459,12 +1459,16 @@ sys     0m22.163s
 
 ### citation recommendation based on claims
 
-* some clue of argumentative structure (?) → mby variable citation context size
+* some clue of argumentative structure (?) → mby variable citation context size (i.e. sentences)
 * [ClausIE](https://gate.d5.mpi-inf.mpg.de/ClausIEGate/ClausIEGate/)
+* also consider *fact extraction*
 
 ### citation recommendation based on arguments
 
+* *as intro, read* `Stab2016` (+mby `Habernal2017`)
+
 * "detection of context should be related to the identification of the argument around the citation" (HERNANDEZ-ALVAREZ2016)
+* [MARGOT](http://margot.disi.unibo.it/) (!!! **local version on tuco** [+old page of same authors](http://argumentationmining.disi.unibo.it/publications.html)
 
 ##### michael notes
 

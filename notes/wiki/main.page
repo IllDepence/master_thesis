@@ -1130,7 +1130,11 @@ false positives: 188
             * works with identical normalized title → FIX: re-check all in MAG w/ same title for author and #cit
                 * snapshot: `8329000/14169900 (521923 updated)`
                     * TODO: "re-run" for counting cases of no author match
-            * wrong title identified via e.g. APS DOI heuristic → (maybe) FIX: for all bibitems matched to a certain MAG ID, check overall text similarity of bibitem texts
+                * → FIX integrated in actual matching process
+            * wrong title identified
+                * via e.g. APS DOI heuristic (`Phys. Rev. Lett. 73 (1994) 3070` → 1994 as article number) → FIX: pre-filter dates in brackets
+                * in general: for all bibitems matched to a certain MAG ID, mby check overall text similarity of bibitem texts
+            * wrong "extra matches" under certain conditions because a match variable was not reset for every turn of a loop → FIX: fix code, re-run matching
 
 ### citation recommendation baseline
 

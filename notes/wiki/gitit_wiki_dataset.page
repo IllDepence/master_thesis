@@ -48,8 +48,10 @@
         * DOI in text → title from crossref.org
         * otherwise → use Neural Parscit and try identified substring +/- 3 words left/right
     * normalize title and search normalized paper titles in MAG
-    * if multiple results, get author names and search them n bibitem text (require single hit of name with more than 1 character)
+    * if multiple results, get author names and search them in bibitem text (require single hit of name with more than 1 character)
     * if still multiple hits, go by citation count given in MAG (b/c of MAG noise)
+* **clean up**
+    * remove plain text files with no citation markers (mostly no/unusable output, few clean texts where citations could not be identified)
 
 # key figures
 

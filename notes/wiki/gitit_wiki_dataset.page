@@ -1,13 +1,21 @@
 *provide “information on the what, where, why, how and who of the data”* [wikipedia/data_papers](https://en.wikipedia.org/wiki/Data_publishing#Data_papers)
 
 # general description
-* primarily: arbitrary length citation contexts (from arXiv papers) referencing MAG papers (i.e. +metadata)
+* arbitrary length citation contexts (from arXiv papers) referencing (MAG) paper metadata records
+    * arXiv centric view: plaintext arXiv papers with citation markers matched to MAG IDs
+    * MAG centric view: MAG paper metadata records enriched with arbitrary length citation contexts describing them
 
 ![](/data_set_schema.png)
 
-**→** papers described by how they are cited
+### base data
 
-## format
+* arXiv:
+    * 14M publication sources (mainly LaTeX) from 1971~2017.12
+    * roughly 50% physics, 25% math, 25% computer science
+* MAG:
+    * very large *metadata* data set
+
+### format
 
 * plain text `<arXivID>.txt` files containing citation markers `{{cite:<UUID>}}`
 * SQLite DB `metadata.db` with metadata on citation markers
@@ -45,6 +53,32 @@
 
 # key figures
 
+* number of unique cited docs: 
+* number of citation contexts: 
+* number of citation contexts per cited doc (min/max/avg): 
+* number of citing docs per cited doc (min/max/avg): 
+* number of cited docs with at least 2 citing docs ("usable"):
+
 # challenges
+
+* general
+    * data size (and therefore technical challenges w/ parallelization)
+* arXiv sources
+    * general
+        * identification of LaTeX files (e.g. `.ltx` as file ending)
+        * problematic file encodings
+        * missing import/bbl files
+    * LaTeX
+        * cases where "source" is just a single `\includepdf`
+        * LaTeX complexity
+            * citation styles Tralics doesn't understand (e.g. Natbib)
+            * `\newcommand` madness
+* bibitems
+    * title determination
+        * bibitem does not reference anything
+        * author typos
+        * formulas is titles and different ways to treat them
+    * matching
+        * MAG noise
 
 # usage

@@ -1044,14 +1044,35 @@ false positives: 188
         [batch #8]: >>> time DB r: 30.43
         [batch #8]: >>> time DB w: 13238.70
         ['done', 'done', 'done', 'done', 'done', 'done', 'done', 'done', 'done', 'done']
-        ```  
+        ```
+        *number of matched bibitems*  
         ```
         sqlite> select count(*) from bibitemmagidmap;
         14169900        -> 40.4%
-        ```  
+        ```
+        *number of unique cited docs*  
         ```
         sqlite> select count(distinct mag_id) from bibitemmagidmap;
         2315884
+        ```
+        *number of unique cited docs usable for evaluation (!!! but all 2.3M usable for live system)*  
+        ```
+        sqlite> select count(*) from (select count(distinct in_doc) from bibitemmagidmap join bibitem on bibitemmagidmap.uuid = bibitem.uuid group by mag_id having count(distinct in_doc) > 1);
+        1320050 
+        ```
+        *number of bibitems usable for evaluation*  
+        ```
+        sqlite> select count(uuid) from bibitemmagidmap where mag_id in (select mid from (select count(distinct in_doc), mag_id as mid from bibitemmagidmap join bibitem on bibitemmagidmap.uuid = bibitem.uuid group by mag_id having count(distinct in_doc) > 1));
+        13162556
+        ```
+        *↑ simplified (by assuming a paper doesn't have 2 distinct bibitems referencing the same cited doc) (0.1% change likely due to matching errors)*
+        ```
+        sqlite> select count(uuid) from bibitemmagidmap where mag_id in (select mag_id from bibitemmagidmap group by mag_id having count(uuid) > 1);
+        13183546
+        ```
+        *way to query DB for evaluation (limit for smaller tests)*
+        ```
+        sqlite> select bibitem.uuid, mag_id, in_doc, bibitem_string from bibitemmagidmap join bibitem on bibitemmagidmap.uuid = bibitem.uuid where mag_id in (select mag_id from bibitemmagidmap group by mag_id having count(uuid) > 1 limit X) order by mag_id;
         ```
     * further notes on results:
         * top 50 most matched cited docs (31/50 correct):

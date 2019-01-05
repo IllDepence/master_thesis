@@ -431,6 +431,7 @@ def match_batch(arg_tuple):
                 continue
 
         t1 = datetime.datetime.now()
+        mag_paper_db = None
         if parscit_title:
             title_guesses = []
             normalized_title = mag_normalize(text)

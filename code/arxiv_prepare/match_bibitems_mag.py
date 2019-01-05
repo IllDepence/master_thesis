@@ -9,8 +9,8 @@ import requests
 import sys
 import time
 import unidecode
+from operator import itemgetter
 from multiprocessing import Pool
-# from multiprocessing import Process
 from sqlalchemy import (create_engine, Column, Integer, String, UnicodeText,
                         Table, func)
 from sqlalchemy.orm import sessionmaker
@@ -184,6 +184,26 @@ def find_arxiv_id(text):
     return False
 
 
+def MAG_paper_authors(db_engine, mid):
+    tuples = db_engine.execute(
+        ('select normalizedname from authors where authorid in (select'
+         ' authorid from paperauthoraffiliations where paperid = \'{}\')'
+         '').format(mid)
+        ).fetchall()
+    names = []
+    for tupl in tuples:
+        names.extend([n for n in tupl[0].split() if len(n) > 1])
+    return names
+
+
+def MAG_papers_by_title(db_engine, title):
+    tuples = db_engine.execute(
+        ('select paperid, citationcount from papers where papertitle = \'{}\''
+         '').format(title)
+        ).fetchall()
+    return tuples
+
+
 def match(db_uri=None, in_dir=None, processes=1):
     """ Match bibitem strings to MAG IDs
     """
@@ -312,8 +332,6 @@ def match_batch(arg_tuple):
     # /set up bibitem_link_map
 
     num_matches = 0
-    num_checked = 0
-    num_false_positives = 0
     num_phys_rev = 0
     num_by_aid = 0
     num_by_aid_fail = 0
@@ -430,8 +448,9 @@ def match_batch(arg_tuple):
                 log_done(bibitem_uuid)
                 continue
 
+        # determine candidate MAG papers by title
         t1 = datetime.datetime.now()
-        mag_paper_db = None
+        candidates = []
         if parscit_title:
             title_guesses = []
             normalized_title = mag_normalize(text)
@@ -439,75 +458,84 @@ def match_batch(arg_tuple):
                 for rshift in range(3):
                     words = normalized_title.split()
                     pick = words[lshift:(len(words)-rshift)]
-                    if len(pick) >= 3:
+                    if len(pick) >= 1:
                         title_guesses.append(' '.join(pick))
+            title_guesses = list(set(title_guesses))
             for title_guess in title_guesses:
                 try:
-                    mag_paper_db = mag_session.query(MAGPaper).\
-                            filter_by(papertitle=normalized_title).first()
+                    candidates = MAG_papers_by_title(mag_engine, title_guess)
                 except SQLAlchemyTimeoutError:
                     continue
-                if mag_paper_db:
+                if len(candidates) > 0:
                     break
         else:
             normalized_title = mag_normalize(text)
             try:
-                mag_paper_db = mag_session.query(MAGPaper).\
-                        filter_by(papertitle=normalized_title).first()
+                candidates = MAG_papers_by_title(mag_engine, normalized_title)
             except SQLAlchemyTimeoutError:
-                continue
+                pass
         t2 = datetime.datetime.now()
         d = t2 - t1
         magdb_total_time += d.total_seconds()
         magdb_total_acc += 1
 
-        if mag_paper_db:
-            magdb_match = True
-            magdb_resp = {'paper_id': mag_paper_db.paperid}
-            if 'doi' in mag_paper_db.keys() and mag_paper_db.doi:
-                magdb_resp['doi'] = mag_paper_db.doi
+        if len(candidates) == 0:
+            log_done(bibitem_uuid)
+            continue
+
+        # check author and citation count
+        good_candidates = []
+        choice = None
+        bibitem_string_normalized = mag_normalize(bibitem_string)
+        for c in candidates:
+            author_names = MAG_paper_authors(mag_engine, c[0])
+            for name in author_names:
+                if name in bibitem_string_normalized:
+                    good_candidates.append(c)
+                    break
+        if len(good_candidates) == 0:
+            log_done(bibitem_uuid)
+            continue
+        elif len(good_candidates) == 1:
+            choice = good_candidates[0]
         else:
-            magdb_match = False
+            # pick the one with the highest citation count
+            good_candidates = sorted(good_candidates,
+                                     key=itemgetter(1),
+                                     reverse=True)
+            choice = good_candidates[0]
+
+        if choice:
+            mag_id = choice[0]
+            num_matches += 1
+            t1 = datetime.datetime.now()
+            mag_id_db = BibitemMAGIDMap(
+                uuid=bibitem_uuid,
+                mag_id=mag_id
+                )
+            # add to DB
+            try:
+                session.add(mag_id_db)
+                session.commit()
+            except SQLAlchemyTimeoutError:
+                continue
+            log_done(bibitem_uuid)
+            t2 = datetime.datetime.now()
+            d = t2 - t1
+            db_w_total_time += d.total_seconds()
+            db_w_total_acc += 1
+        else:
             if arxiv_id_success:
                 num_by_aid_fail += 1
             if doi_success:
                 num_by_doi_fail += 1
-
-        if magdb_match:
-            num_matches += 1
-            mag_id = magdb_resp.get('paper_id', False)
-            if mag_id:
-                t1 = datetime.datetime.now()
-                mag_id_db = BibitemMAGIDMap(
-                    uuid=bibitem_uuid,
-                    mag_id=mag_id
-                    )
-                # add to DB
-                try:
-                    session.add(mag_id_db)
-                    session.commit()
-                except SQLAlchemyTimeoutError:
-                    continue
-                log_done(bibitem_uuid)
-                t2 = datetime.datetime.now()
-                d = t2 - t1
-                db_w_total_time += d.total_seconds()
-                db_w_total_acc += 1
-            result_doi = magdb_resp.get('doi', False)
-            if given_doi and result_doi:
-                num_checked += 1
-                if not given_doi.lower() == result_doi.lower():
-                    num_false_positives += 1
-        else:
             log_done(bibitem_uuid)
-        if bi_idx%100 == 0:
+        if num_matches%100 == 0:
             prind('- - - - - - - - - - - - - - - - -')
             prind('{}/{}'.format(bi_idx+1, bi_total))
             prind('matches: {}'.format(num_matches))
-            prind('checked: {}'.format(num_checked))
             prind('Phys. Rev.: {}'.format(num_phys_rev))
             prind('no title: {}'.format(num_no_title))
-            prind('maybe (!) false positives: {}'.format(num_false_positives))
             prind('by arXiv ID: {}'.format(num_by_aid))
             prind('by arXiv ID fail: {}'.format(num_by_aid_fail))
             prind('by doi: {}'.format(num_by_doi))
@@ -532,13 +560,15 @@ def match_batch(arg_tuple):
                 db_w_total_time/max(db_w_total_acc, 1)
                 ))
     session.commit()
-    prind('>>> time aID: {:.2f}'.format(by_aid_total_time))
-    prind('>>> time DOI: {:.2f}'.format(by_doi_total_time))
-    prind('>>> time ParsCit: {:.2f}'.format(by_parscit_total_time))
-    prind('>>> time MAGDB: {:.2f}'.format(magdb_total_time))
-    prind('>>> time DB r: {:.2f}'.format(db_total_time))
-    prind('>>> time DB w: {:.2f}'.format(db_w_total_time))
-    return 'done'
+    final_stats = '------[ {} ]------\n'.format(batch_id)
+    final_stats += '>>> time aID: {:.2f}\n'.format(by_aid_total_time)
+    final_stats += '>>> time DOI: {:.2f}\n'.format(by_doi_total_time)
+    final_stats += '>>> time ParsCit: {:.2f}\n'.format(by_parscit_total_time)
+    final_stats += '>>> time MAGDB: {:.2f}\n'.format(magdb_total_time)
+    final_stats += '>>> time DB r: {:.2f}\n'.format(db_total_time)
+    final_stats += '>>> time DB w: {:.2f}'.format(db_w_total_time)
+    prind(final_stats)
+    return final_stats
 
 
 if __name__ == '__main__':

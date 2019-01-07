@@ -13,8 +13,10 @@ from operator import itemgetter
 from multiprocessing import Pool
 from sqlalchemy import (create_engine, Column, Integer, String, UnicodeText,
                         Table, func)
+from sqlalchemy.sql import text as sqltext
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import TimeoutError as SQLAlchemyTimeoutError
+from sqlalchemy.exc import OperationalError as SQLAlchemyOperationalError
 from sqlalchemy.ext.declarative import declarative_base
 from db_model import (Base, Bibitem, BibitemArxivIDMap, BibitemMAGIDMap,
                       BibitemLinkMap)
@@ -185,9 +187,13 @@ def find_arxiv_id(text):
 
 
 def MAG_paper_authors(db_engine, mid):
+    # q = sqltext(("select normalizedname from authors where authorid in (select"
+    #              " authorid from paperauthoraffiliations where paperid = :mid)"
+    #             ))
+    # tuples = db_engine.execute(q, mid=mid).fetchall()
     tuples = db_engine.execute(
         ('select normalizedname from authors where authorid in (select'
-         ' authorid from paperauthoraffiliations where paperid = \'{}\')'
+         ' authorid from paperauthoraffiliations where paperid = {})'
          '').format(mid)
         ).fetchall()
     names = []
@@ -197,6 +203,12 @@ def MAG_paper_authors(db_engine, mid):
 
 
 def MAG_papers_by_title(db_engine, title):
+    # q = sqltext(("select paperid, citationcount from papers where papertitle ="
+    #              " :title"))
+    # tuples = db_engine.execute(q, title=title).fetchall()
+    if '\'' in title:
+        # this is impossible
+        title = mag_normalize(mag_normalize(mag_normalize(title)))
     tuples = db_engine.execute(
         ('select paperid, citationcount from papers where papertitle = \'{}\''
          '').format(title)
@@ -282,7 +294,7 @@ def match_batch(arg_tuple):
             f.write('{}\n'.format(uuid))
 
     prind('Setting up bibitem DB connection')
-    engine = create_engine(db_uri)
+    engine = create_engine(db_uri, connect_args={'timeout': 600})
     Base.metadata.create_all(engine)
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
@@ -515,11 +527,18 @@ def match_batch(arg_tuple):
                 )
             # add to DB
             try:
-                session.add(mag_id_db)
-                session.commit()
-            except SQLAlchemyTimeoutError:
+                try:
+                    session.add(mag_id_db)
+                    session.commit()
+                    log_done(bibitem_uuid)
+                except SQLAlchemyTimeoutError:
+                    continue
+            except SQLAlchemyOperationalError:
+                prind(' - - - !!! - - -')
+                prind('OperationalError at session.commit()')
+                prind('for match to {}'.format(mag_id))
+                prind(' - - - !!! - - -')
                 continue
-            log_done(bibitem_uuid)
             t2 = datetime.datetime.now()
             d = t2 - t1
             db_w_total_time += d.total_seconds()

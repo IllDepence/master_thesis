@@ -304,9 +304,12 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
     conf_match_tups = []
     conf_match_lvl_trips = []
     candidate_count_total = 0
+    candidate_count_total_small = 0
     candidate_count_min = 999999999
     candidate_count_max = 0
+    no_step_matches = 0
     one_step_matches = 0
+    two_step_matches = 0
     for aid, doc_list in cited_docs.items():
         mag_paper_foss_db = mag_session.query(MAGPaperFoS).\
                 filter_by(paperid=aid).all()
@@ -473,28 +476,48 @@ def generate(in_dir, db_uri=None, context_size=100, min_contexts=1,
                     num_fos_gt4 += 1
                 if len(context_annot_ext) == 0:
                     continue
+                fos_list_small = ', '.join(
+                    "'{}'".format(a) for a in context_annot)
                 fos_list = ', '.join(
                     "'{}'".format(a) for a in context_annot_ext)
-                print('mag db select')
+                print('mag db select 1')
+                candidate_count_small = mag_engine.execute(
+                    ('select count(distinct paperid) from paperfieldsofstudy'
+                     ' where fieldofstudyid in ({})').format(fos_list_small)
+                    ).scalar()
+                print('mag db select 2')
                 candidate_count = mag_engine.execute(
                     ('select count(distinct paperid) from paperfieldsofstudy'
                      ' where fieldofstudyid in ({})').format(fos_list)
                     ).scalar()
                 print('done')
                 candidate_count_total += candidate_count
+                candidate_count_total_small += candidate_count_small
                 candidate_count_min = min(candidate_count_min, candidate_count)
                 candidate_count_max = max(candidate_count_max, candidate_count)
-                candidate_count_avg = candidate_count/num_contexts
+                candidate_count_avg = candidate_count_total/num_contexts
+                candidate_count_avg_small = candidate_count_total_small/num_contexts
                 candidate_count_avg_perc = candidate_count_avg / 209792741
+                candidate_count_avg_perc_small = candidate_count_avg_small / 209792741
+                if stepped_matches[0] > 0:
+                    no_step_matches += 1
                 if stepped_matches[1] > 0:
                     one_step_matches += 1
+                if stepped_matches[2] > 0:
+                    two_step_matches += 1
 
-                print('- - - filter canditates - - -')
+                print('- - - filter candidates - - -')
                 print('min: {}'.format(candidate_count_min))
                 print('max: {}'.format(candidate_count_max))
                 print('avg: {} ({}%)'.format(candidate_count_avg,
                     candidate_count_avg_perc))
                 print('still in: {}/{}'.format(one_step_matches, num_contexts))
+                print('- - no ext:')
+                print('avg: {} ({}%)'.format(candidate_count_avg_small,
+                    candidate_count_avg_perc_small))
+                print('still in: {}/{}'.format(no_step_matches, num_contexts))
+                print('- - two ext:')
+                print('still in: {}/{}'.format(two_step_matches, num_contexts))
                 continue
 
                 if num_contexts%1000 == 0:

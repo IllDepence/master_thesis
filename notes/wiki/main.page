@@ -2,14 +2,29 @@
 
 ### big TODOs
 
+* clean DB of bibitems where in_doc has been removed due to not containing any `{{cite:...}}`s
+    * *also* clean DB of bibitems where UUID is not in in_doc
+    * *also* clean linked bibitemmagidmap entries in ↑ cases 
 * k-fold cross validation (somehow)
 * generate a complete dataset (instead of just one month)
 * pre-selection of candidate recommendations to speed up process
     * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
-    * clustering of comparison targets, "
-    * [k4nn](https://arxiv.org/abs/1802.08301), "
+    * clustering of comparison targets
+    * [k4nn](https://arxiv.org/abs/1802.08301)
 
 ### recent notes
+
+* dataset generation for the big DB (with sentence size contexts)
+    * OpenIE test
+    * pre clustering for pre filtering
+        * baseline recommendation w/ the big dataset
+    * generation of a "sub"/more processed dataset (contexts of only usable citations)
+        * FoS/claim/argument annotations
+            * semantic approach recommendation w/ the big dataset
+* read up on argument mining etc.
+
+---
+
 * compare in context FoS annotations w/ all annotations of cited paper (i.e. look at references to 22k set)
     * also compare to FoS annotations of citing paper to see if it is an "outlier" context
     * (MAG also has FoS for papers, mby also use, but their confidence values are not that telling)
@@ -1433,11 +1448,19 @@ map@5: 0.18446961750926533
                 ```
         * testing annotations as pre-filter (snapshot) (candidates from *all* MAG papers (not *so* representative b/c arXiv papers mostly phys/math/cs))
             ```
-            - - - filter canditates - - -
-            min: 813
-            max: 67438444
-            avg: 1248.1812758145938 (5.949592296973678e-06%)
-            still in: 296/2179
+
+
+            - - - filter candidates - - -
+            min: 813              ← based on 3995 contexts
+            max: 67438444         ← based on 3995 contexts
+            (!!! wrong number, RERUN !!!) avg: 830.9411764705883 (3.960771819414802e-06%) (!!! wrong number, RERUN !!!)
+            still in [0 hops]: 7355/39979
+            still in [1 hop ]: 18959/39979
+            still in [2 hops]: 30924/39979
+            
+            real    11048m22.560s    → almost 8 days for 4000 contexts
+            user    0m23.986s
+            sys     0m3.719s
             ```
 
 **simply feeding (dbpedia) annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  

@@ -64,7 +64,10 @@
 # challenges
 
 * general
-    * data size (and therefore technical challenges w/ parallelization)
+    * data size (and therefore technical challenges w/ parallelization and processing in general)
+        * LaTeX→txt can't function as [all dump]→[all extracted]→[all flattened]→[all parsed] b/c of storage constraints (therefore go through pipeline in small packages)
+        * resumability: set difference of two lists of IDs (length (10s of) millions) can't be done naively
+        * parallelization: see main wiki
 * arXiv sources
     * general
         * identification of LaTeX files (e.g. `.ltx` as file ending)

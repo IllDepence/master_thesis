@@ -9,6 +9,7 @@ import string
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from db_model import Base, Bibitem, BibitemArxivIDMap
+from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 
 CITE_PATT = re.compile((r'\{\{cite:([0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}'
                          '-[89AB][0-9A-F]{3}-[0-9A-F]{12})\}\}'), re.I)
@@ -16,6 +17,11 @@ RE_WHITESPACE = re.compile(r'[\s]+', re.UNICODE)
 RE_PUNCT = re.compile('[%s]' % re.escape(string.punctuation), re.UNICODE)
 # ↑ modified from gensim.parsing.preprocessing.RE_PUNCT
 RE_WORD = re.compile('[^\s%s]+' % re.escape(string.punctuation), re.UNICODE)
+
+punkt_param = PunktParameters()
+abbreviation = ['al', 'fig', 'e.g', 'i.e', 'eq', 'cf', 'ref', 'refs']
+punkt_param.abbrev_types = set(abbreviation)
+tokenizer = PunktSentenceTokenizer(punkt_param)
 
 
 def clean_window_distance_words(adfix, num_words, backwards=False):
@@ -92,7 +98,8 @@ def clean_window_distance_words(adfix, num_words, backwards=False):
                 print('something went wrong in clean_window_distance_words')
     return win_dist
 
-def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
+
+def find_adjacent_citations(adfix, uuid_mid_map, backwards=False):
     """ Given text after or before a citation, find all directly adjacent
         citations.
     """
@@ -105,16 +112,110 @@ def find_adjacent_citations(adfix, uuid_aid_map, backwards=False):
     if not match:
         return []
     uuid = match.group(1)
-    if uuid not in uuid_aid_map:
+    if uuid not in uuid_mid_map:
         return []
-    aid = uuid_aid_map[uuid]
+    aid = uuid_mid_map[uuid]
     margin = perimeter.index(match.group(0))
     if backwards:
         adfix = adfix[:-(50-margin)]
     else:
         adfix = adfix[45+margin:]
-    moar = find_adjacent_citations(adfix, uuid_aid_map, backwards=backwards)
+    moar = find_adjacent_citations(adfix, uuid_mid_map, backwards=backwards)
     return [aid] + moar
+
+
+def window_distance_sentences(prefix, postfix, num_sentences):
+    """ Return the window distance that includes <num_sentences> sentences.
+
+        (Go heuristically by periods and then check properly.)
+    """
+
+    directional_margin = int((num_sentences-1)/2)
+    safety_multiplier = 3
+    pre_end = False
+    post_end = False
+    window_found = False
+
+    while not window_found and not (pre_end and post_end):
+        dots_to_pass = (directional_margin + 1) * safety_multiplier
+        pre = ''
+        post = ''
+        for backwards in [True, False]:
+            if backwards:
+                adfix = prefix
+            else:
+                adfix = postfix
+            num_dots = 0
+            win_dist = 0
+            if backwards:
+                start = len(adfix) - 1
+                end = 0
+                delta = -1
+            else:
+                start = 0
+                end = len(adfix) - 1
+                delta = 1
+            pos = start
+            while num_dots < dots_to_pass and pos != end:
+                char = adfix[pos]
+                if char == '.':
+                    num_dots += 1
+                win_dist += 1
+                pos += delta
+
+            if pos+delta == end:
+                if backwards:
+                    pre_end = True
+                else:
+                    post_end = True
+
+            if backwards:
+                win_dist -= 1  # cut the dot
+                pre = adfix[-win_dist:]
+            else:
+                post = adfix[:win_dist]
+        cit_marker = 'TMP\u200CCIT'
+        tmp_cut = '{}{}{}'.format(pre, cit_marker, post)
+
+        sentences_pre = []
+        sentence_mid = None
+        sentences_post = []
+        passed_middle = False
+        for sent_idx, sent_edx in tokenizer.span_tokenize(tmp_cut):
+            sentence = tmp_cut[sent_idx:sent_edx]
+            if cit_marker in sentence:
+                sentence_mid = sentence
+                passed_middle = True
+                continue
+            if not passed_middle:
+                dist_to_marker = len(pre) - sent_idx
+                sentences_pre.append((sentence, dist_to_marker))
+            else:
+                dist_to_marker = sent_edx - (len(pre) + len(cit_marker))
+                sentences_post.append((sentence, dist_to_marker))
+
+        if len(sentences_pre) >= directional_margin and \
+                len(sentences_post) >= directional_margin:
+            window_found = True
+        else:
+            safety_multiplier *= 3
+
+    m = re.search(cit_marker, sentence_mid)
+    sentence_mid_pre_part_length = m.start()
+    sentence_mid_post_part_length = len(sentence_mid) - m.end()
+    if len(sentences_pre) >= directional_margin:
+        sentences_pre_dist = sentences_pre[-directional_margin][1] - \
+                                                sentence_mid_pre_part_length
+    else:
+        sentences_pre_dist = len(prefix)
+    if len(sentences_post) >= directional_margin:
+        sentences_post_dist = sentences_post[directional_margin-1][1] - \
+                                                sentence_mid_post_part_length
+    else:
+        sentences_post_dist = len(postfix)
+    pre_dist = sentences_pre_dist + m.start()
+    post_dist = sentences_post_dist + (len(sentence_mid) - m.end())
+    return pre_dist, post_dist
 
 
 def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
@@ -154,9 +255,9 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
     else:
         tuples = engine.execute(q).fetchall()
     print('building uuid->mag_id in memory map')
-    uuid_aid_map = {}
+    uuid_mid_map = {}
     for uuid, mag_id, in_doc in tuples:
-        uuid_aid_map[uuid] = mag_id
+        uuid_mid_map[uuid] = mag_id
     print('going through {} docs'.format(len(tuples)))
     contexts = []
     tuple_idx = 0
@@ -185,22 +286,20 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
             marker = '{{{{cite:{}}}}}'.format(uuid)
             marker_found = False
             for m in re.finditer(marker, text):
-                margin = int((context_size-1)/2)
                 idx = m.start()
                 edx = m.end()
                 pre = text[:idx]
                 post = text[edx:]
-                adj_pre = find_adjacent_citations(pre, uuid_aid_map,
+                adj_pre = find_adjacent_citations(pre, uuid_mid_map,
                                                   backwards=True)
-                adj_post = find_adjacent_citations(post, uuid_aid_map)
+                adj_post = find_adjacent_citations(post, uuid_mid_map)
+                # NOTE: in case of a (small) sample, adjacent citations will
+                #       almost always be empty. that's not a bug.
                 adjacent_citations = adj_pre + adj_post
 
-                # TODO: jump <margin>*3 dots, split in sentences,
-                #       if not enoug, jump more etc.
-                #       then use sentence size citation context
-                win_pre = clean_window_distance_words(pre, margin,
-                                                    backwards=True)
-                win_post = clean_window_distance_words(post, margin)
+                win_pre, win_post = window_distance_sentences(
+                    pre, post, context_size
+                    )
 
                 pre = pre[-win_pre:]
                 post = post[:win_post]
@@ -219,6 +318,10 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
                 adj_cit_str = '{}'.format('\u241F'.join(adjacent_citations))
                 tmp_list.append([mag_id, adj_cit_str, in_doc, context])
                 marker_found = True
+
+                print(context)
+                input()
+                print()
             if marker_found:
                 num_docs += 1
             tuple_idx += 1

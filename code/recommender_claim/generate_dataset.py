@@ -156,18 +156,21 @@ def window_distance_sentences(prefix, postfix, num_sentences):
                 end = len(adfix) - 1
                 delta = 1
             pos = start
-            while num_dots < dots_to_pass and pos != end:
+            while num_dots < dots_to_pass:
+                if backwards and pos <= end:
+                    break
+                if not backwards and pos >= end:
+                    break
                 char = adfix[pos]
                 if char == '.':
                     num_dots += 1
                 win_dist += 1
                 pos += delta
 
-            if pos+delta == end:
-                if backwards:
-                    pre_end = True
-                else:
-                    post_end = True
+            if backwards and pos+delta <= end:
+                pre_end = True
+            if not backwards and pos+delta >= end:
+                post_end = True
 
             if backwards:
                 win_dist -= 1  # cut the dot
@@ -219,7 +222,7 @@ def window_distance_sentences(prefix, postfix, num_sentences):
 
 
 def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
-             with_placeholder=True, sample_size=5):
+             with_placeholder=True, sample_size=100):
     """ Generate a list of citation contexts, given criteria:
             context_size (in sentences)
             min_contexts
@@ -258,7 +261,7 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
     uuid_mid_map = {}
     for uuid, mag_id, in_doc in tuples:
         uuid_mid_map[uuid] = mag_id
-    print('going through {} docs'.format(len(tuples)))
+    print('going through {} citing docs'.format(len(tuples)))
     contexts = []
     tuple_idx = 0
     mag_id = tuples[0][1]
@@ -269,8 +272,9 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
         tmp_list = []
         num_docs = 0
         while mag_id == bag_mag_id and tuple_idx < len(tuples):
+            if tuple_idx % 1000 == 0:
+                print('{}/{}'.format(tuple_idx, len(tuples)))
             uuid = tuples[tuple_idx][0]
-            mag_id = tuples[tuple_idx][1]
             in_doc = tuples[tuple_idx][2]
             fn_txt = '{}.txt'.format(in_doc)
             path_txt = os.path.join(in_dir, fn_txt)
@@ -318,13 +322,11 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
                 adj_cit_str = '{}'.format('\u241F'.join(adjacent_citations))
                 tmp_list.append([mag_id, adj_cit_str, in_doc, context])
                 marker_found = True
-
-                print(context)
-                input()
-                print()
             if marker_found:
                 num_docs += 1
             tuple_idx += 1
+            if tuple_idx < len(tuples):
+                mag_id = tuples[tuple_idx][1]
 
         if tuple_idx < len(tuples):
             bag_mag_id = tuples[tuple_idx][1]
@@ -333,8 +335,9 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
             num_used_cited_docs += 1
             nums_contexts.append(len(tmp_list))
     print('ended up using {} cited docs'.format(num_used_cited_docs))
-    print('number of contexts: {}'.format(nums_contexts))
-    sys.exit()
+    print('number of contexts (Σ: {}): {}'.format(
+        sum(nums_contexts), nums_contexts)
+        )
     with open('items.csv', 'w') as f:
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))

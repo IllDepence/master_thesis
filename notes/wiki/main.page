@@ -1375,6 +1375,11 @@ map@5: 0.18446961750926533
         8821
         ```
 * MAG entity test
+    * **idea**
+        * if annotated FoSs can be shown to be not more informative than FoS for the whole paper in MAG itself, then annotating FoS MAG *for the dataset* itself is not necessary
+            * user input→FoS annotate
+            * dataset contexts: just "annotate" with MAG paper FoS
+            * → evaluation of how informative FoS annotations are for a MAG paper can still be seen as a predictive measure of how informative the annotations on user input will be
     * 8808 citation contexts (100w)
         ```
         $ ls citcontxs | wc -l
@@ -1462,6 +1467,17 @@ map@5: 0.18446961750926533
             user    0m23.986s
             sys     0m3.719s
             ```
+    * 86k of the 1M plain text *papers* (snapshot, "paused")
+        ```
+        $ time java -jar linking_file_tarek.jar /home/saiert/arxiv-txt-data /home/saiert/arxiv-txt-data_fos-annot/
+        [pagerankloading] Executed in 1135 ms.
+         INFO [main] (NodeBlacklisting.java:181) - Removed 8 blacklisted nodes from succ/pred from 229304 other nodes.
+        [Blacklist] Executed in 323 ms.
+        ^C
+        real    14327m59.712s
+        user    949m36.386s
+        sys     63m38.535s
+        ```
 
 **simply feeding (dbpedia) annotations into TFIDF baseline** (building on above *counting adjacent citations as half relevant*)  
 ```

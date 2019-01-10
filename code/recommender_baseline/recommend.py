@@ -93,13 +93,13 @@ def recommend(docs_path):
     ndcg_sum_5 = 0
     map_sum_5 = 0
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
+    index = similarities.SparseMatrixSimilarity(
+                tfidf[corpus],
+                num_features=num_unique_tokens)
     for tpl in test:
         test_aid = tpl[0]
         test_text = tpl[1].split()
         test_bow = dictionary.doc2bow(test_text)
-        index = similarities.SparseMatrixSimilarity(
-                    tfidf[corpus],
-                    num_features=num_unique_tokens)
         sims = index[tfidf[test_bow]]
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)

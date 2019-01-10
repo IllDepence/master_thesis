@@ -24,6 +24,13 @@ P:  6.5/9       3/5
 Σ   23/39     20/26
       59%       77%
 
+### side note
+-> juding claims concerning their *relevance* to the citation would require a more detailed look
+   in such a case, classification of integral vs non-integral citations would maybe be helpful
+   e.g.: non-integral: focus on all claims of the (sub) clause preceding the citations
+         integral: look at a depencency graph and figure out claims closely related to the citation
+
+
 One main contribution in this paper is the introduction of a projection operator which achieves the same effect. In CIT we already discussed this operator which has recently also been addressed under the name “reduced stabilization” in CIT , CIT , CIT , MAINCIT . In these papers the construction of the corresponding operator is only possible in two dimensions using special integration rules.
 
 # by hand

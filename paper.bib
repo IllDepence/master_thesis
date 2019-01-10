@@ -510,7 +510,14 @@
         "[42] argues that ..."                                         -> int
 
 - integral vs. non-integral distinction on _having a grammatical role or not_ (as opposed to Lamers2018)
-    - "[42] argues that ..." -> int},
+    - "[42] argues that ..." -> int
+
+- wording not to use (wording in Okamura2008)
+    integral: syntactically integrated citation
+    non-integral: syntactically non-integrated
+    -> b/c in both cases the citations are within the array of words that make up the sentence
+         (semantically integrated also doesn't really work)
+         (-> stick with _having a grammatical role or not_)},
 }
 
 @Article{Hyland1999,
@@ -658,17 +665,31 @@
 }
 
 @InProceedings{Stanovsky2016,
-  author        = {Stanovsky, Gabriel and Dagan, Ido},
-  title         = {Creating a Large Benchmark for Open Information Extraction},
-  booktitle     = {Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing},
-  year          = {2016},
-  pages         = {2300--2305},
-  publisher     = {Association for Computational Linguistics},
+  author    = {Stanovsky, Gabriel and Dagan, Ido},
+  title     = {Creating a Large Benchmark for Open Information Extraction},
+  booktitle = {Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing},
+  year      = {2016},
+  pages     = {2300--2305},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/D16-1252},
+  location  = {Austin, Texas},
+  review    = {- citation for OpenIE 4.0 performing comparatively well (side note: running on shetland is OpenIE 5.0 https://github.com/dair-iitd/OpenIE-standalone)},
+  url       = {http://aclweb.org/anthology/D16-1252},
+}
+
+@InBook{,
+}
+
+@Article{Okamura2008,
+  author        = {Okamura, Akiko},
+  title         = {Citation forms in scientific texts: Similarities and differences in L1 and L2 professional writing},
+  journal       = {Nordic Journal of English Studies},
+  year          = {2008},
+  volume        = {7},
+  number        = {3},
+  pages         = {61--81},
   __markedentry = {[tarek:]},
-  doi           = {10.18653/v1/D16-1252},
-  location      = {Austin, Texas},
-  review        = {- citation for OpenIE 4.0 performing comparatively well (side note: running on shetland is OpenIE 5.0 https://github.com/dair-iitd/OpenIE-standalone)},
-  url           = {http://aclweb.org/anthology/D16-1252},
+  review        = {- integral vs. non-integral citations (study on 30 papers)},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

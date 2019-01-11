@@ -1344,6 +1344,29 @@ false positives: 188
             * 2096 [2064675550](https://academic.microsoft.com/#/detail/2064675550) ✔
             * 2081 [1970127494](https://academic.microsoft.com/#/detail/1970127494) ✔
             * 2066 [2003378896](https://academic.microsoft.com/#/detail/2003378896) ✔
+        * **combining output of process #4 and #8**
+            * last print at: (3505270+3505166)/2 = 3505218
+            * percentage of total: 3505218/35053329 = 0,09999672213728972789
+            * check with result size:
+                * real 14046239
+                * interpolated ((1380100+1430200)/2)*(35053329/3505218) = 14051960,6
+                * → 0.0407% error
+            * inerpolations:
+                * Phys. Rev.: ((497904+501365)/2)*(35053329/3505218) = 4996508,8 → 35.57% (of matches)
+                * no title: ((1192683+1130708)/2)*(35053329/3505218) = 11617335,8 → 33.14% (of all bibitems)
+                * by arXiv ID: ((268239+284149)/2)*(35053329/3505218) = 2762030,5 → 19.66% (of matches)
+                * by doi: ((113952+110068)/2)*(35053329/3505218) = 1120136,7 → 7.97% (of matches)
+                * APS doi rebound: ((306470+303153)/2)*(35053329/3505218) = 3048214,9 → 21.70% (of matches)
+            * of all bibitems:
+                * 33.14% no arXiv ID, DOI, DOI deducable pattern & Neural ParsCit can't identify a title
+                * 40.07% matched
+                * 26.79% some (/wrong) title identified by Neural ParsCit; unable to match with MAG
+            * of all matches:
+                * 50,67 via Neural ParsCit
+                * 29.67% by DOI
+                    * 7.97% directly
+                    * 21.70% heuristically
+                * 19.66% by arXiv ID
 
 ### citation recommendation baseline
 

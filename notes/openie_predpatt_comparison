@@ -4,6 +4,9 @@
 - Precision: count correct claims (✓)
              ignore kind of correct/trivial claim (△)
              tital is sum of correct (✓) and incorrect (✗) claims
+
+- Open IE 5.0: see below
+- PredPatt: see below
 - ClausIE has obvious problems with CIT tokens
 - Ollie ...
 

@@ -14,6 +14,19 @@
 
 ### recent notes
 
+* dataset
+    * more stats on dataset (citing docs per cited doc (expect long tail distribution))
+    * create visualization, explaining 3 types of quantities (#contexts, #citing docs, #cited docs)
+* FoS
+    * rather from context then just from MAG (how a publication is referred to might differ from its content; e.g. standard citation for lod is about dbpedia (or so ...))
+* claims
+    * for claim extraction think of replacing Citation tokens w/ a name or so
+    * extracted claims how to model? how to use?
+* for [non-]integral citations look again at dependency parsers (mby use online demos)
+* FoS annotation tool probably overwrites; calc speed, restart etc.
+
+---
+
 * dataset generation for the big DB (with sentence size contexts)
     * OpenIE test
     * pre clustering for pre filtering

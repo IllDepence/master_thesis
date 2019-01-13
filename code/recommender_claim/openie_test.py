@@ -1,3 +1,5 @@
+import datetime
+import json
 import pexpect
 import re
 
@@ -6,7 +8,8 @@ FACT_PATT = re.compile(r'^(\d\.\d+)\s([^:]+:)?\((.+)\)$')
 
 def get_claims(openie_proc, input_sentence):
     openie_proc.sendline(input_sentence)
-    openie_proc.expect(re.escape(input_sentence))
+    # FIXME
+    openie_proc.expect(re.escape(input_sentence))  # hung here; investigate!
     more_output = True
     output = []
     min_reads = 2
@@ -59,22 +62,13 @@ def get_claims(openie_proc, input_sentence):
 
 
 test_input = []
-test_input.append(
-    'The Web is huge, diverse, and dynamic and thus raises the scalability, mu'
-    'ltimedia data, and temporal issues respectively. Due to those situations,'
-    ' we are currently drowning in information and facing information overload'
-    '.'
-    )
-test_input.append(
-    'There is a close relationship between data mining, machine learning and a'
-    'dvanced data analysis.'
-    )
-test_input.append(
-    'Recent research focuses on utilizing the Web as a knowledge base for deci'
-    'sion making.'
-    )
+with open('items.csv') as f:
+    lines = f.readlines()
+for line in lines:
+    mid, adjacent, in_doc, text = line.split('\u241E')
+    test_input.append(text)
 
-print('starting')
+print('starting OpenIE')
 child = pexpect.spawnu(
     'java -jar openie-assembly.jar',
     cwd='/home/saiert/OpenIE-standalone',
@@ -84,7 +78,24 @@ child.expect(re.escape('* * * * * * * * * * * * *'))
 child.expect(re.escape('* OpenIE 5.0 is ready *'))
 child.expect(re.escape('* * * * * * * * * * * * *'))
 
-for sentence in test_input:
-    print('Input: {}'.format(sentence))
+claims_total = 0
+openie_total_time = 0
+all_claims = []
+for idx, sentence in enumerate(test_input):
+    # print('Input: {}'.format(sentence))
+    t1 = datetime.datetime.now()
     claims = get_claims(child, sentence)
-    print('Output: {}'.format(claims))
+    all_claims.append(claims)
+    claims_total += len(claims)
+    t2 = datetime.datetime.now()
+    d = t2 - t1
+    if idx >= 1:
+        openie_total_time += d.total_seconds()
+    if idx%100 == 0 or idx == len(test_input)-1:
+        print('avg #claims/context: {}'.format(claims_total/(idx+1)))
+        print('avg time/context: {}s'.format(openie_total_time/idx))
+    # print('Output: {}'.format(claims))
+print('claims_total: {}'.format(claims_total))
+print('openie_total_time: {}s'.format(openie_total_time))
+with open('claims.json', 'w') as f:
+    f.write(json.dumps(all_claims))

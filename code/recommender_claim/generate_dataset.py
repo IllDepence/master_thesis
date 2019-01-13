@@ -222,7 +222,7 @@ def window_distance_sentences(prefix, postfix, num_sentences):
 
 
 def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
-             with_placeholder=True, sample_size=100):
+             with_placeholder=True, sample_size=-1):
     """ Generate a list of citation contexts, given criteria:
             context_size (in sentences)
             min_contexts
@@ -301,9 +301,14 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
                 #       almost always be empty. that's not a bug.
                 adjacent_citations = adj_pre + adj_post
 
-                win_pre, win_post = window_distance_sentences(
-                    pre, post, context_size
-                    )
+                # win_pre, win_post = window_distance_sentences(
+                #     pre, post, context_size
+                #     )
+                # FIXME: temorarily changed back to words, make optional
+                win_pre = clean_window_distance_words(pre, 50)
+                win_post = clean_window_distance_words(post, 50,
+                                                       backwards=False)
+                # FIXME: temorarily changed back to words, add parameter
 
                 pre = pre[-win_pre:]
                 post = post[:win_post]

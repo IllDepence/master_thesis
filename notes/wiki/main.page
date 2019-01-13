@@ -6,7 +6,7 @@
     * *also* clean DB of bibitems where UUID is not in in_doc
     * *also* clean linked bibitemmagidmap entries in ↑ cases 
 * k-fold cross validation (somehow)
-* generate a complete dataset (instead of just one month)
+* generate a complete dataset ✔
 * pre-selection of candidate recommendations to speed up process
     * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
     * clustering of comparison targets
@@ -15,8 +15,8 @@
 ### recent notes
 
 * dataset
-    * more stats on dataset (citing docs per cited doc (expect long tail distribution))
-    * create visualization, explaining 3 types of quantities (#contexts, #citing docs, #cited docs)
+    * more stats on dataset (citing docs per cited doc (expect long tail distribution)) → screen *dataset_stats1*
+    * create visualization, explaining ~~3~~ 4 types of quantities (#contexts, #citing docs, #cited docs) ✔
 * FoS
     * rather from context then just from MAG (how a publication is referred to might differ from its content; e.g. standard citation for lod is about dbpedia (or so ...))
 * claims

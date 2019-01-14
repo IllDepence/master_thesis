@@ -1380,6 +1380,32 @@ false positives: 188
                     * 7.97% directly
                     * 21.70% heuristically
                 * 19.66% by arXiv ID
+        * **more stats**
+            ```
+            14046000/14046239
+            num_citing_docs_total: 13303149 ← rather "references" (bibitems)
+            num_contexts_total: 24558172
+            cited_docs_per_fos:
+              mathematics: 852169
+              computer science: 293954
+              physics: 893937
+              materials science: 28943
+              business: 4229
+              engineering: 31148
+              psychology: 18322
+              medicine: 12777
+              geography: 4103
+              history: 837
+              economics: 26879
+              biology: 67194
+              political science: 2514
+              sociology: 3034
+              environmental science: 1645
+              chemistry: 78100
+              philosophy: 2172
+              geology: 18330
+              art: 858
+            ```
 
 ### citation recommendation baseline
 

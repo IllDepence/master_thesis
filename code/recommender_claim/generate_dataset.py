@@ -221,11 +221,14 @@ def window_distance_sentences(prefix, postfix, num_sentences):
     return pre_dist, post_dist
 
 
-def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
-             with_placeholder=True, sample_size=-1):
+def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
+             min_contexts=5, min_citing_docs=5, with_placeholder=True,
+             sample_size=100):
     """ Generate a list of citation contexts, given criteria:
-            context_size (in sentences)
+            context_size
+            context_size_unit (s=setences, w=words)
             min_contexts
+            min_citing_docs
             with_placeholder
             sample_size
 
@@ -236,10 +239,6 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
         db_path = os.path.join(in_dir, 'metadata.db')
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
     engine = create_engine(db_uri)
-    # Base.metadata.create_all(engine)
-    # Base.metadata.bind = engine
-    # DBSession = sessionmaker(bind=engine)
-    # session = DBSession()
 
     print('querying DB')
     limit_insert = ''
@@ -251,8 +250,8 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
          ' on bibitemmagidmap.uuid = bibitem.uuid'
          ' where mag_id in '
          '(select mag_id from bibitemmagidmap group by mag_id '
-           'having count(uuid) > 1{})'
-         ' order by mag_id').format(limit_insert);
+           'having count(uuid) > {}{})'
+         ' order by mag_id').format(min_citing_docs-1, limit_insert);
     if sample_size > 0:
         tuples = engine.execute(q, sample_size).fetchall()
     else:
@@ -301,14 +300,17 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
                 #       almost always be empty. that's not a bug.
                 adjacent_citations = adj_pre + adj_post
 
-                # win_pre, win_post = window_distance_sentences(
-                #     pre, post, context_size
-                #     )
-                # FIXME: temorarily changed back to words, make optional
-                win_pre = clean_window_distance_words(pre, 50)
-                win_post = clean_window_distance_words(post, 50,
-                                                       backwards=False)
-                # FIXME: temorarily changed back to words, add parameter
+                if context_size_unit == 's':
+                    win_pre, win_post = window_distance_sentences(
+                        pre, post, context_size
+                        )
+                elif context_size_unit == 'w':
+                    win_pre = clean_window_distance_words(pre, 50)
+                    win_post = clean_window_distance_words(post, 50,
+                                                           backwards=False)
+                else:
+                    print('invalid context size unit')
+                    return False
 
                 pre = pre[-win_pre:]
                 post = post[:win_post]
@@ -335,7 +337,7 @@ def generate(in_dir, db_uri=None, context_size=3, min_contexts=4,
 
         if tuple_idx < len(tuples):
             bag_mag_id = tuples[tuple_idx][1]
-        if len(tmp_list) >= min_contexts and num_docs > 1:
+        if len(tmp_list) >= min_contexts and num_docs >= min_citing_docs:
             contexts.extend(tmp_list)
             num_used_cited_docs += 1
             nums_contexts.append(len(tmp_list))

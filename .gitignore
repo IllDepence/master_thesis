@@ -15,5 +15,6 @@ __pycache__
 venv
 code/mag_misc/*.json
 code/arxiv_misc/*.json
+code/recommender_*/*.json
 code/recommender_*/items*.csv
 code/arxiv_prepare/aid_title.db

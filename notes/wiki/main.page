@@ -5,8 +5,10 @@
 * clean DB of bibitems where in_doc has been removed due to not containing any `{{cite:...}}`s
     * *also* clean DB of bibitems where UUID is not in in_doc
     * *also* clean linked bibitemmagidmap entries in ↑ cases 
-* k-fold cross validation (somehow)
 * generate a complete dataset ✔
+    * generate derivative datase that allows for 5-fold CV (screen `dataset_gen1`)
+        * fix memory problems in recommendation
+            * implement k-fold cross validation
 * pre-selection of candidate recommendations to speed up process
     * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
     * clustering of comparison targets
@@ -15,7 +17,9 @@
 ### recent notes
 
 * dataset
-    * more stats on dataset (citing docs per cited doc (expect long tail distribution)) → screen *dataset_stats1*
+    * more stats on dataset (citing docs per cited doc (expect long tail distribution))
+        * → screen *dataset_stats1* (re-calc of cited doc foss)
+        * → screen *dataset_stats2* (citing foss + citation fos pairs)
     * create visualization, explaining ~~3~~ 4 types of quantities (#contexts, #citing docs, #cited docs) ✔
 * FoS
     * rather from context then just from MAG (how a publication is referred to might differ from its content; e.g. standard citation for lod is about dbpedia (or so ...))
@@ -23,7 +27,7 @@
     * for claim extraction think of replacing Citation tokens w/ a name or so
     * extracted claims how to model? how to use?
 * for [non-]integral citations look again at dependency parsers (mby use online demos)
-* FoS annotation tool probably overwrites; calc speed, restart etc.
+* FoS annotation tool probably overwrites; calc speed, restart etc. ✔
 
 ---
 

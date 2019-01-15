@@ -21,7 +21,7 @@ def mag_paper_fos(db_engine, mid):
     return [t[0] for t in tuples]
 
 
-def get_arxiv_fos(aid):
+def get_arxiv_fos_web(aid):
     base_url = 'http://export.arxiv.org/api/query?search_query=id:'
     namespaces = {'atom': 'http://www.w3.org/2005/Atom',
                   'opensearch': 'http://a9.com/-/spec/opensearch/1.1/'}
@@ -41,6 +41,15 @@ def get_arxiv_fos(aid):
     fos_elem = res_elem.find('{http://arxiv.org/schemas/atom}primary_category')
     return fos_elem.get('term')
 
+
+def get_arxiv_fos_db(aid, db_engine):
+    tpl = db_engine.execute(
+        'select fos from paper where aid  = \'{}\''.format(aid)
+        ).fetchone()
+    if tpl and len(tpl) > 0:
+        return tpl[0]
+    else:
+        return 'other'
 
 def in_doc_to_aid(in_doc):
     aid = in_doc
@@ -66,6 +75,9 @@ def generate(in_dir, db_uri=None):
     mag_engine = create_engine(mag_db_uri,
         connect_args={'options': '-c statement_timeout=60000'}
         )
+
+    aid_db_uri = 'sqlite:///aid_fos.db'
+    aid_engine = create_engine(aid_db_uri, connect_args={'timeout': 60})
 
     print('querying DB')
     q = ('select bibitem.uuid, mag_id, in_doc'
@@ -132,7 +144,7 @@ def generate(in_dir, db_uri=None):
                     cited_docs_per_fos[fos] += 1
                 # citing
                 aid = in_doc_to_aid(in_doc)
-                arxiv_fos = get_arxiv_fos(aid)
+                arxiv_fos = get_arxiv_fos_db(aid, aid_engine)
                 if arxiv_fos:
                     if not arxiv_fos in citing_docs_per_fos:
                         citing_docs_per_fos[arxiv_fos] = 0

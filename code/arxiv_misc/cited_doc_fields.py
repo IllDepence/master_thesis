@@ -1,23 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-s = """  mathematics: 852169
-  computer science: 293954
-  physics: 893937
-  materials science: 28943
-  business: 4229
+s = """  mathematics: 852206
+  computer science: 293971
+  physics: 893950
+  materials science: 28944
+  business: 4231
   engineering: 31148
   psychology: 18322
   medicine: 12777
   geography: 4103
-  history: 837
-  economics: 26879
+  history: 838
+  economics: 26882
   biology: 67194
   political science: 2514
   sociology: 3034
   environmental science: 1645
-  chemistry: 78100
-  philosophy: 2172
+  chemistry: 78102
+  philosophy: 2173
   geology: 18330
   art: 858"""
 

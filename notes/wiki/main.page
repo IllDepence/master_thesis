@@ -6,9 +6,10 @@
     * *also* clean DB of bibitems where UUID is not in in_doc
     * *also* clean linked bibitemmagidmap entries in ↑ cases 
 * generate a complete dataset ✔
-    * generate derivative datase that allows for 5-fold CV (screen `dataset_gen1`)
-        * fix memory problems in recommendation
+    * generate derivative datase that allows for 5-fold CV ✔
+        * fix memory problems in recommendation ✔
             * implement k-fold cross validation
+                * last minute changes to BOW baseline (stopwords, case insensitivity, etc.); then do baseline eval
 * pre-selection of candidate recommendations to speed up process
     * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
     * clustering of comparison targets
@@ -17,9 +18,10 @@
 ### recent notes
 
 * dataset
+    * fill contents into Overleaf project (guidance: LREC2018 paper)
     * more stats on dataset (citing docs per cited doc (expect long tail distribution))
-        * → screen *dataset_stats1* (re-calc of cited doc foss)
-        * → screen *dataset_stats2* (citing foss + citation fos pairs)
+        * → screen *dataset_stats1* (re-calc of cited doc foss) ✔
+        * → screen *dataset_stats2* (citing foss + citation fos pairs) 〜 (mby ~25.01.)
     * create visualization, explaining ~~3~~ 4 types of quantities (#contexts, #citing docs, #cited docs) ✔
 * FoS
     * rather from context then just from MAG (how a publication is referred to might differ from its content; e.g. standard citation for lod is about dbpedia (or so ...))
@@ -1387,7 +1389,7 @@ false positives: 188
         * **more stats**
             ```
             14046239/14046239
-            num_citing_docs_total: 13303373
+            num_reference_items_total: 13303373
             num_contexts_total: 24558560
             cited_docs_per_fos:
               mathematics: 852206
@@ -1409,7 +1411,35 @@ false positives: 188
               philosophy: 2173
               geology: 18330
               art: 858
+            (↓snapshot↓)
+            1820000/14046239
+            citing_docs_per_fos:
+              cs: 77662
+              math: 79806
+              physics: 53039
+              physics:hep-ph: 6820
+              physics:gr-qc: 4232
+              physics:cond-mat: 11993
+              physics:physics: 11992
+              other: 11838
+              physics:nlin: 1590
+              physics:quant-ph: 5087
+              physics:math-ph: 3982
+              physics:astro-ph: 11705
+              physics:hep-th: 6625
+              physics:nucl-th: 1301
+              physics:nucl-ex: 784
+              physics:hep-ex: 2139
+              physics:hep-lat: 898
+              eess: 181
+              q-bio: 555
+              econ: 53
             ```
+        * **4 numbers** (in brackets w/o considering that bibitems might have no markers associated in the plain text docs)
+            * 2.343.585 (2.412.432) cited papers
+            * 926.644 (1.018.976) citing papers
+            * 13.303.373 (14.046.239) references
+            * 24.558.560 (-) citation contexts
 
 ### citation recommendation baseline
 
@@ -1587,6 +1617,37 @@ ndcg@5: 0.1968435487531205
 map@5: 0.18446961750926533
 ```
 
+just to show that difficulty increases with dataset size
+```
+$ python3 recommend_baseline.py items_1ksample_3s_5mindoc_5mincont.csv items_1ksample_3s_5mindoc_5mincont.dict
+- - - - - 6389/6389 - - - - -
+#1: 4527
+in top 5: 5739
+in top 10: 5987
+ndcg@5: 0.7886603135592953
+map@5: 0.7841289716700552
+```
+
+early snapshot of first eval with full arXiv dataset 
+```
+$ python3 recommend_baseline.py items_all_3s_5mindoc_5mincont.csv
+19400000/19401145 lines
+loading dictionary
+building corpus
+generating TFIDF model
+prepring similarities
+test set size: 3507348
+- - - - - - - -
+- - - - - 1/3507348 - - - - -
+[...]
+- - - - - 8250/3507348 - - - - -
+#1: 701
+in top 5: 1852
+in top 10: 2437
+ndcg@5: 0.13634958002563027
+map@5: 0.1344888888888896
+```
+
 ##### notes on evaluation
 
 * thoughts on exact re-recommendation
@@ -1602,6 +1663,33 @@ map@5: 0.18446961750926533
 * misc
     * minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
  
+
+### citation recommendation with pre-clustering
+
+unstructured notes
+```
+# create tfidf "view" on corpus (computed on the fly when used)
+corpus_tfidf = tfidf[corpus]
+
+# lsi stuff (really useful for speedup?)
+lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=10)
+for t in lsi.print_topics(10):
+    print(t)
+corpus_lsi = lsi[corpus_tfidf]
+for doc in corpus_lsi[:10]:
+    print(doc)
+
+# clustering
+import gensim
+from sklearn.cluster import KMeans
+scipy_csc_matrix = gensim.matutils.corpus2csc(corpus)
+kmeans = KMeans(n_clusters=2, random_state=0, n_jobs=20).fit(scipy_csc_matrix.transpose())  # 2 min on shetland
+
+>>> len(kmeans.labels_)
+961
+>>> len(corpus)
+961
+```
 
 
 ### citation recommendation based on entities

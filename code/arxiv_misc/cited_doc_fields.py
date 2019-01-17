@@ -1,6 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# s = """  cs: 138845
+#   math: 180190
+#   physics: 356282
+#   eess: 415
+#   q-bio: 1654
+#   econ: 107"""
+# [...]
+# label_val_tups = [('other', 33909)] + label_val_tups
+# [...]
+# plt.title('fields of study of citing docs')
+
 s = """  mathematics: 852206
   computer science: 293971
   physics: 893950

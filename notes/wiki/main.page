@@ -1628,7 +1628,7 @@ ndcg@5: 0.7886603135592953
 map@5: 0.7841289716700552
 ```
 
-early snapshot of first eval with full arXiv dataset 
+early (~1%) snapshot of first eval with full arXiv dataset (cancelled)
 ```
 $ python3 recommend_baseline.py items_all_3s_5mindoc_5mincont.csv
 19400000/19401145 lines
@@ -1640,12 +1640,12 @@ test set size: 3507348
 - - - - - - - -
 - - - - - 1/3507348 - - - - -
 [...]
-- - - - - 8250/3507348 - - - - -
-#1: 701
-in top 5: 1852
-in top 10: 2437
-ndcg@5: 0.13634958002563027
-map@5: 0.1344888888888896
+- - - - - 35213/3507348 - - - - -
+#1: 2782
+in top 5: 7123
+in top 10: 9512
+ndcg@5: 0.12204397533455158
+map@5: 0.12257262942663173
 ```
 
 ##### notes on evaluation

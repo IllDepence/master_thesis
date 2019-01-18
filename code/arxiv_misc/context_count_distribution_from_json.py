@@ -11,6 +11,8 @@ from matplotlib.colors import LogNorm
 
 with open('citing_docs_per_cited_doc.json') as f:
     citing_counts = json.load(f)
+# with open('contexts_per_reference.json') as f:
+#     citing_counts = json.load(f)
 
 fig, ax = plt.subplots()
 # citing_count_map = {}
@@ -33,8 +35,8 @@ y = sorted(citing_counts, reverse=True)[1:]
 x = list(range(len(citing_counts)))[1:]
 plt.plot(x, y, '-', markersize=1)
 ax.grid(color='lightgray', linestyle='--', linewidth=0.5)
-ax.set_xlabel('doc ID')
-ax.set_ylabel('citing docs')
+ax.set_xlabel('reference ID')
+ax.set_ylabel('citation contexts')
 # ax.set_xlabel('citing docs')
 # ax.set_ylabel('cited docs')
 # plt.xticks(np.arange(0, 100, step=1))

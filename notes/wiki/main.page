@@ -1412,28 +1412,28 @@ false positives: 188
               geology: 18330
               art: 858
             (↓snapshot↓)
-            1820000/14046239
+            7262000/14046239
             citing_docs_per_fos:
-              cs: 77662
-              math: 79806
-              physics: 53039
-              physics:hep-ph: 6820
-              physics:gr-qc: 4232
-              physics:cond-mat: 11993
-              physics:physics: 11992
-              other: 11838
-              physics:nlin: 1590
-              physics:quant-ph: 5087
-              physics:math-ph: 3982
-              physics:astro-ph: 11705
-              physics:hep-th: 6625
-              physics:nucl-th: 1301
-              physics:nucl-ex: 784
-              physics:hep-ex: 2139
-              physics:hep-lat: 898
-              eess: 181
-              q-bio: 555
-              econ: 53
+              cs: 200641
+              math: 287298
+              physics: 265714
+              physics:hep-ph: 21878
+              physics:gr-qc: 15368
+              physics:cond-mat: 93689
+              physics:physics: 74136
+              other: 57069
+              physics:nlin: 9491
+              physics:quant-ph: 23782
+              physics:math-ph: 15972
+              physics:astro-ph: 40361
+              physics:hep-th: 28116
+              physics:nucl-th: 6828
+              physics:nucl-ex: 3987
+              physics:hep-ex: 6598
+              physics:hep-lat: 3219
+              eess: 690
+              q-bio: 2838
+              econ: 158
             ```
         * **4 numbers** (in brackets w/o considering that bibitems might have no markers associated in the plain text docs)
             * 2.343.585 (2.412.432) cited papers

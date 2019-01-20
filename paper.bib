@@ -246,6 +246,11 @@
   journal = {D-Lib Magazine},
   year    = {2016},
   volume  = {22},
+  review  = {- annotate citation contexts with CoreSC classes (hypothesis, motivation, background, result, conclusion, etc.)
+
+- uses PubMed Open Access Subset (https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/)
+
+- "a citation to a paper is accompanied by text that often summarizes a key point in the cited paper, or its contribution to the field. It has been found experimentally that there is useful information in these ILCs that is not found in the cited paper itself [17]"},
 }
 
 @InProceedings{Liakata2010,
@@ -254,8 +259,7 @@
   booktitle = {LREC},
   year      = {2010},
   note      = {READ!},
-  review    = {- "a citation to a paper is accompanied by text that often summarizes a key point in the cited paper, or its contribution to the field. It has been found experimentally that there is useful information in these ILCs that is not found in the cited paper itself [17]"
-- "We only consider resolvable citations, that is, citations to references that point to a paper that is in our collection, which means we have access to its metadata and full machine-readable contents"},
+  review    = {- "We only consider resolvable citations, that is, citations to references that point to a paper that is in our collection, which means we have access to its metadata and full machine-readable contents"},
 }
 
 @InProceedings{Kobayashi2018,
@@ -701,21 +705,106 @@
 }
 
 @InProceedings{Sordo2015,
-  author        = {Sordo, Mohamed and Oramas, Sergio and Espinosa-Anke, Luis},
-  title         = {Extracting Relations from Unstructured Text Sources for Music Recommendation},
-  booktitle     = {Natural Language Processing and Information Systems},
-  year          = {2015},
-  editor        = {Biemann, Chris and Handschuh, Siegfried and Freitas, Andr{\'e} and Meziane, Farid and M{\'e}tais, Elisabeth},
-  pages         = {369--382},
-  address       = {Cham},
-  publisher     = {Springer International Publishing},
-  __markedentry = {[tarek:]},
-  abstract      = {This paper presents a method for the generation of structured data sources for music recommendation using information extracted from unstructured text sources. The proposed method identifies entities in text that are relevant to the music domain, and then extracts semantically meaningful relations between them. The extracted entities and relations are represented as a graph, from which the recommendations are computed. A major advantage of this approach is that the recommendations can be conveyed to the user using natural language, thus providing an enhanced user experience. We test our method on texts from songfacts.com, a website that provides facts and stories about songs. The extracted relations are evaluated intrinsically by assessing their linguistic quality, as well as extrinsically by assessing the extent to which they map an existing music knowledge base. Finally, an experiment with real users is performed to assess the suitability of the extracted knowledge for music recommendation. Our method is able to extract relations between pair of musical entities with high precision, and the explanation of those relations to the user improves user satisfaction considerably.},
-  isbn          = {978-3-319-19581-0},
-  review        = {- use NEL + relation extraction for recommendation
+  author    = {Sordo, Mohamed and Oramas, Sergio and Espinosa-Anke, Luis},
+  title     = {Extracting Relations from Unstructured Text Sources for Music Recommendation},
+  booktitle = {Natural Language Processing and Information Systems},
+  year      = {2015},
+  editor    = {Biemann, Chris and Handschuh, Siegfried and Freitas, Andr{\'e} and Meziane, Farid and M{\'e}tais, Elisabeth},
+  pages     = {369--382},
+  address   = {Cham},
+  publisher = {Springer International Publishing},
+  abstract  = {This paper presents a method for the generation of structured data sources for music recommendation using information extracted from unstructured text sources. The proposed method identifies entities in text that are relevant to the music domain, and then extracts semantically meaningful relations between them. The extracted entities and relations are represented as a graph, from which the recommendations are computed. A major advantage of this approach is that the recommendations can be conveyed to the user using natural language, thus providing an enhanced user experience. We test our method on texts from songfacts.com, a website that provides facts and stories about songs. The extracted relations are evaluated intrinsically by assessing their linguistic quality, as well as extrinsically by assessing the extent to which they map an existing music knowledge base. Finally, an experiment with real users is performed to assess the suitability of the extracted knowledge for music recommendation. Our method is able to extract relations between pair of musical entities with high precision, and the explanation of those relations to the user improves user satisfaction considerably.},
+  isbn      = {978-3-319-19581-0},
+  review    = {- use NEL + relation extraction for recommendation
 - view depentency tree as undirected, then look for path between NEL entities
     - use words passed along path as "relation" between the entities (but filter heuristically for linguistically sensible relations)
     - paper includes POS rules that represent relevant/useful relations between serveral entitiy types},
+}
+
+@Article{Ley2009,
+  author     = {Ley, Michael},
+  title      = {DBLP: Some Lessons Learned},
+  journal    = {Proc. VLDB Endow.},
+  year       = {2009},
+  volume     = {2},
+  number     = {2},
+  pages      = {1493--1500},
+  month      = aug,
+  issn       = {2150-8097},
+  acmid      = {1687577},
+  doi        = {10.14778/1687553.1687577},
+  issue_date = {August 2009},
+  numpages   = {8},
+  publisher  = {VLDB Endowment},
+  review     = {- paper on the design of the DBLP},
+  url        = {https://doi.org/10.14778/1687553.1687577},
+}
+
+@Article{Garcia2012,
+  author  = {Garcia, Alexander and Garcia, Leyla Jael and McLaughlin, Casey and Flager, Stephen},
+  title   = {RDFising PubMed Central},
+  journal = {Bio-ontologies, Long Beach},
+  year    = {2012},
+  review  = {- point out not all citations in PubMec Central (PMC) XMLs are matched to IDs (example: PMC2971765)},
+}
+
+@InProceedings{Duma2014,
+  author    = {Duma, Daniel and Klein, Ewan},
+  title     = {Citation resolution: A method for evaluating context-based citation recommendation systems},
+  booktitle = {Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
+  year      = {2014},
+  volume    = {2},
+  pages     = {358--363},
+  review    = {- cite rec by similar sentences: "exploits  the implicit human relevance judgements found in existing scientific articles"
+
+- citation recommendation by re-prediction, but candidates are only the set of cited docs of the paper},
+}
+
+@Article{Nasar2018,
+  author   = {Nasar, Zara and Jaffry, Syed Waqar and Malik, Muhammad Kamran},
+  title    = {Information extraction from scientific articles: a survey},
+  journal  = {Scientometrics},
+  year     = {2018},
+  volume   = {117},
+  number   = {3},
+  pages    = {1931--1990},
+  month    = {Dec},
+  issn     = {1588-2861},
+  abstract = {In last few decades, with the advent of World Wide Web (WWW), world is being overloaded with huge data. This huge data carries potential information that once extracted, can be used for betterment of humanity. Information from this data can be extracted using manual and automatic analysis. Manual analysis is not scalable and efficient, whereas, the automatic analysis involves computing mechanisms that aid in automatic information extraction over huge amount of data. WWW has also affected overall growth in scientific literature that makes the process of literature review quite laborious, time consuming and cumbersome job for researchers. Hence a dire need is felt to automatically extract potential information out of immense set of scientific articles to automate the process of literature review. Therefore, in this study, aim is to present the overall progress concerning automatic information extraction from scientific articles. The information insights extracted from scientific articles are classified in two broad categories i.e. metadata and key-insights. As available benchmark datasets carry a significant role in overall development in this research domain, existing datasets against both categories are extensively reviewed. Later, research studies in literature that have applied various computational approaches applied on these datasets are consolidated. Major computational approaches in this regard include Rule-based approaches, Hidden Markov Models, Conditional Random Fields, Support Vector Machines, Na{\"i}ve-Bayes classification and Deep Learning approaches. Currently, there are multiple projects going on that are focused towards the dataset construction tailored to specific information needs from scientific articles. Hence, in this study, state-of-the-art regarding information extraction from scientific articles is covered. This study also consolidates evolving datasets as well as various toolkits and code-bases that can be used for information extraction from scientific articles.},
+  day      = {01},
+  doi      = {10.1007/s11192-018-2921-5},
+  review   = {- on IE for scientific text in general
+- Reference Field Extraction as a form of Named Entity Recognition and Classification (NERC), "NERC task from references"
+- survey tools, datasets, approaches, etc.},
+  url      = {https://doi.org/10.1007/s11192-018-2921-5},
+}
+
+@InProceedings{Anzaroot2013,
+  author    = {Sam Anzaroot and Andrew McCallum},
+  title     = {A New Dataset for Fine-Grained Citation Field Extraction},
+  booktitle = {ICML Workshop on Peer Reviewing and Publishing Models},
+  year      = {2013},
+}
+
+@InProceedings{Tkaczyk2018,
+  author        = {Tkaczyk, Dominika and Collins, Andrew and Sheridan, Paraic and Beel, Joeran},
+  title         = {Machine Learning vs. Rules and Out-of-the-Box vs. Retrained: An Evaluation of Open-Source Bibliographic Reference and Citation Parsers},
+  booktitle     = {Proceedings of the 18th ACM/IEEE on Joint Conference on Digital Libraries},
+  year          = {2018},
+  series        = {JCDL '18},
+  pages         = {99--108},
+  address       = {New York, NY, USA},
+  publisher     = {ACM},
+  __markedentry = {[tarek:]},
+  acmid         = {3197048},
+  doi           = {10.1145/3197026.3197048},
+  isbn          = {978-1-4503-5178-2},
+  keywords      = {bibliographic reference parsing, citation parsing, machine learning, sequence tagging},
+  location      = {Fort Worth, Texas, USA},
+  numpages      = {10},
+  review        = {- evaluation of reference string parsers
+- "We  were  not  able  to  evaluate  three  tools,  due  to installation errors or missing resources: BibPro, Free_cite and Neural ParsCit." :F},
+  url           = {http://doi.acm.org/10.1145/3197026.3197048},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -1801,16 +1801,16 @@ kmeans = KMeans(n_clusters=2, random_state=0, n_jobs=20).fit(scipy_csc_matrix.tr
                 ```
         * testing annotations as pre-filter (snapshot) (candidates from *all* MAG papers (not *so* representative b/c arXiv papers mostly phys/math/cs))
             ```
-
-
             - - - filter candidates - - -
-            min: 813              ← based on 3995 contexts
-            max: 67438444         ← based on 3995 contexts
-            still in [0 hops]: 7355/39979     (based on 1188 contexts → avg: 947.217 (0.047%))
-            still in [1 hop ]: 18959/39979    (based on 1188 contexts → avg: 9.882.112 (0.0045%))
-            still in [2 hops]: 30924/39979
+
+            min: 584              ← based on 4809 contexts
+            max: 67438444         ← based on 4809 contexts
+            still in [0 hops]: 7355/39979   ← based on 39979 c.  (4809 contexts → avg #candidates: 10.205.735 (0.049%))
+            still in [1 hop ]: 18959/39979  ← based on 39979 c.  (4809 contexts → avg #candidates: 852.221 (0.0041%))
+            still in [2 hops]: 30924/39979  ← based on 39979 c.
             
-            real    11048m22.560s    → almost 8 days for 4000 contexts
+            ↓ based on 3995 contexts ↓
+            real    11048m22.560s    → almost 8 days for ~4k contexts
             user    0m23.986s
             sys     0m3.719s
             ```

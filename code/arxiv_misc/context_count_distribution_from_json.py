@@ -9,10 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 
-with open('citing_docs_per_cited_doc.json') as f:
-    citing_counts = json.load(f)
-# with open('contexts_per_reference.json') as f:
+# with open('citing_docs_per_cited_doc.json') as f:
 #     citing_counts = json.load(f)
+
+with open('contexts_per_reference.json') as f:
+    citing_counts = json.load(f)
+# print(np.mean(citing_counts))
+# print(np.std(citing_counts))
+# sys.exit()
 
 fig, ax = plt.subplots()
 # citing_count_map = {}

@@ -89,27 +89,31 @@ def generate(in_dir, db_uri=None):
     tuple_idx = 0
     mag_id = tuples[0][1]
     bag_mag_id = mag_id
-    num_citing_docs_total = 0
-    nums_citing_docs_per_cited_doc = []
+    num_reference_items_total = 0
+    citing_docs = set()
+    cited_docs = set()
+    nums_reference_items_per_cited_doc = []
     num_contexts_total = 0
     nums_contexts_per_citing_doc = []
     cited_docs_per_fos = {}
-    citing_docs_per_fos = {}
+    reference_items_per_fos = {}
     citation_fos_pairs = []
     while tuple_idx < len(tuples):
         tmp_list = []
-        num_citing_docs = 0
+        num_reference_items = 0
         fos_added = False
         while mag_id == bag_mag_id and tuple_idx < len(tuples):
             if tuple_idx % 1000 == 0:
                 print('{}/{}'.format(tuple_idx, len(tuples)))
-                print('num_citing_docs_total: {}'.format(num_citing_docs_total))
+                print('num_reference_items_total: {}'.format(num_reference_items_total))
+                print('num_citing_docs_total: {}'.format(len(citing_docs)))
+                print('num_cited_docs_total: {}'.format(len(cited_docs)))
                 print('num_contexts_total: {}'.format(num_contexts_total))
                 print('cited_docs_per_fos:')
                 for k, v in cited_docs_per_fos.items():
                     print('  {}: {}'.format(k, v))
-                print('citing_docs_per_fos:')
-                for k, v in citing_docs_per_fos.items():
+                print('reference_items_per_fos:')
+                for k, v in reference_items_per_fos.items():
                     print('  {}: {}'.format(k, v))
             uuid = tuples[tuple_idx][0]
             in_doc = tuples[tuple_idx][2]
@@ -128,14 +132,16 @@ def generate(in_dir, db_uri=None):
                 tuple_idx += 1
                 continue
             # everything in order, do stats from here
-            num_citing_docs_total += 1
+            cited_docs.add(mag_id)
+            citing_docs.add(in_doc)
+            num_reference_items_total += 1
             num_contexts_total += num_contexts
-            num_citing_docs += 1
-            nums_contexts_per_citing_doc.append(num_contexts)
+            num_reference_items += 1
+            nums_contexts_per_referece.append(num_contexts)
             tuple_idx += 1
             if tuple_idx < len(tuples):
                 mag_id = tuples[tuple_idx][1]
-            if not fos_added:
+            if not fos_added and False:
                 # cited
                 foss = mag_paper_fos(mag_engine, mag_id)
                 for fos in foss:
@@ -146,30 +152,32 @@ def generate(in_dir, db_uri=None):
                 aid = in_doc_to_aid(in_doc)
                 arxiv_fos = get_arxiv_fos_db(aid, aid_engine)
                 if arxiv_fos:
-                    if not arxiv_fos in citing_docs_per_fos:
-                        citing_docs_per_fos[arxiv_fos] = 0
-                    citing_docs_per_fos[arxiv_fos] += 1
+                    if not arxiv_fos in reference_items_per_fos:
+                        reference_items_per_fos[arxiv_fos] = 0
+                    reference_items_per_fos[arxiv_fos] += 1
                     if len(foss) > 0:
                         citation_fos_pairs.append((arxiv_fos, foss[0]))
                 fos_added = True
-        nums_citing_docs_per_cited_doc.append(num_citing_docs)
+        nums_reference_items_per_cited_doc.append(num_reference_items)
         if tuple_idx < len(tuples):
             bag_mag_id = tuples[tuple_idx][1]
     print('{}/{}'.format(tuple_idx, len(tuples)))
-    print('num_citing_docs_total: {}'.format(num_citing_docs_total))
+    print('num_reference_items_total: {}'.format(num_reference_items_total))
+    print('num_citing_docs_total: {}'.format(len(citing_docs)))
+    print('num_cited_docs_total: {}'.format(len(cited_docs)))
     print('num_contexts_total: {}'.format(num_contexts_total))
     print('cited_docs_per_fos:')
     for k, v in cited_docs_per_fos.items():
         print('  {}: {}'.format(k, v))
-    print('citing_docs_per_fos:')
-    for k, v in citing_docs_per_fos.items():
+    print('reference_items_per_fos:')
+    for k, v in reference_items_per_fos.items():
         print('  {}: {}'.format(k, v))
-    with open('contexts_per_citing_doc.json', 'w') as f:
-        f.write(json.dumps(nums_contexts_per_citing_doc))
-    with open('citing_docs_per_cited_doc.json', 'w') as f:
-        f.write(json.dumps(nums_citing_docs_per_cited_doc))
-    with open('citation_fos_pairs.json', 'w') as f:
-        f.write(json.dumps(citation_fos_pairs))
+    # with open('contexts_per_referece.json', 'w') as f:
+    #     f.write(json.dumps(nums_contexts_per_referece))
+    # with open('reference_items_per_cited_doc.json', 'w') as f:
+    #     f.write(json.dumps(nums_reference_items_per_cited_doc))
+    # with open('citation_fos_pairs.json', 'w') as f:
+    #     f.write(json.dumps(citation_fos_pairs))
 
 if __name__ == '__main__':
     if len(sys.argv) not in [2, 3]:

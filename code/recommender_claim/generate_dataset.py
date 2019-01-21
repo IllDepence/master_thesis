@@ -223,7 +223,7 @@ def window_distance_sentences(prefix, postfix, num_sentences):
 
 def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
              min_contexts=5, min_citing_docs=5, with_placeholder=True,
-             sample_size=100):
+             sample_size=-1):
     """ Generate a list of citation contexts, given criteria:
             context_size
             context_size_unit (s=setences, w=words)
@@ -345,7 +345,7 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
     print('number of contexts (Σ: {}): {}'.format(
         sum(nums_contexts), nums_contexts)
         )
-    with open('items.csv', 'w') as f:
+    with open('items_all_3s_5mindoc_5mincont.csv', 'w') as f:
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))
             f.write(line)

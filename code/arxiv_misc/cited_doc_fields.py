@@ -1,14 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# s = """  cs: 138845
-#   math: 180190
-#   physics: 356282
-#   eess: 415
-#   q-bio: 1654
-#   econ: 107"""
+# s = """  cs: 485127
+#   math: 575016
+#   physics: 498621
+#   physics:hep-ph: 40576
+#   physics:gr-qc: 28378
+#   physics:cond-mat: 171906
+#   physics:physics: 148118
+#   physics:nlin: 18184
+#   physics:quant-ph: 43946
+#   physics:math-ph: 28474
+#   physics:astro-ph: 77856
+#   physics:hep-th: 51034
+#   physics:nucl-th: 12085
+#   physics:nucl-ex: 7347
+#   physics:hep-ex: 14622
+#   physics:hep-lat: 5793
+#   eess: 2292
+#   q-bio: 5809
+#   econ: 456"""
+
+# s = """    cs: 485127
+#   math: 575016
+#   physics: 1146940
+#   eess: 2292
+#   q-bio: 5809
+#   econ: 456"""
+
 # [...]
-# label_val_tups = [('other', 33909)] + label_val_tups
+# label_val_tups = [('other', 127945)] + label_val_tups
 # [...]
 # plt.title('fields of study of citing docs')
 

@@ -143,6 +143,13 @@
         206252196
         ```
         * → 36.5%
+    * level 0 FoS overlap
+        * phys         8,682,931
+        * math         6,701,038
+        * cs          14,225,297
+        * cs+math     2,254
+        * math+phys   1,737
+        * phys+cs       287
 
 # questions
 

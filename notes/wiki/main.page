@@ -1694,8 +1694,34 @@ kmeans = KMeans(n_clusters=2, random_state=0, n_jobs=20).fit(scipy_csc_matrix.tr
 961
 >>> len(corpus)
 961
+
+# faster clustering
+from sklearn.cluster import MiniBatchKMeans
+kmeans = MiniBatchKMeans(n_clusters=2, random_state=0).fit(scipy_csc_matrix.transpose())
 ```
 
+first test with bad clusters and bad results
+```
+cluster sizes:
+  50
+  909
+  1
+  1
+- - - - - 6389/6389 - - - - -
+#1: 3891
+in top 5: 4476
+in top 10: 4587
+ndcg@5: 0.5735516233092415
+map@5: 0.6458992017530135
+
+no cluster:
+- - - - - 6389/6389 - - - - -
+#1: 4397
+in top 5: 5669
+in top 10: 5952
+ndcg@5: 0.7747797443150142
+map@5: 0.7685109824176948
+```
 
 ### citation recommendation based on entities
 

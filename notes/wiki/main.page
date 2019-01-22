@@ -17,6 +17,17 @@
 
 ### recent notes
 
+* predpatt annotations
+* distinguish by pattern (e.g. ?a does ?b vs. using ?b)
+    * also evaluate useful patterns/throw out those where sub. or obj. is too long etc. (goal: focus on a specific type)
+* predpatt manual evaluation of relevance
+    * mby do something with distance
+* re-run seeland fos annot.
+* test clusting on larger set
+* wait for feedback on paper
+
+---
+
 * dataset
     * fill contents into Overleaf project (guidance: LREC2018 paper)
     * more stats on dataset (citing docs per cited doc (expect long tail distribution))
@@ -1445,6 +1456,21 @@ false positives: 188
             * 926.644 (1.018.976) citing papers
             * 13.303.373 (14.046.239) references
             * 24.558.560 (-) citation contexts
+        * estimate of citation resolution hardness
+            ```
+            in arXiv metadata dump:  from citation pair stats:
+            
+            physics 922504  64.3%   |   51.9%  1146940
+            math    357903  24.9%   |   26.1%   575016
+            cs      155308  10.8%   |   22.0%   485127
+            
+                # documents       <--->      # citations
+                       \__________________________/
+                                    v
+                   comparison therefore only works, assuming
+                   an equal amout of citations per paper for
+                   all fields compared
+            ```
 
 ### citation recommendation baseline
 

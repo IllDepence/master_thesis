@@ -41,11 +41,12 @@
     * generate plain text + citation metadata from LaTeX files
         * LaTeX→XML using **Tralics**
         * replace formula, figure and table environments as well as non citation references with replacement tokens
-        * place citation markers and save corresponding bibitem text in DB 
+        * place citation markers and save corresponding bibitem text in DB
+            * also save links from latex source (`xref` elements in Tralics output) in DB 
 * **matching of bibitem texts to MAG paper IDs**
     * try to determine title of cited document
         * arXiv ID in text → title from arXiv metadata dump
-        * DOI in text → title from crossref.org
+        * DOI in *saved link* (not text) → title from crossref.org
         * otherwise → use Neural Parscit and try identified substring +/- 3 words left/right
     * normalize title and search normalized paper titles in MAG
     * if multiple results, get author names and search them in bibitem text (require single hit of name with more than 1 character)

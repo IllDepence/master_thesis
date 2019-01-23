@@ -1,0 +1,10 @@
+https://machinelearningmastery.com/report-classifier-performance-confidence-intervals/
+
+classification error: 0.01
+99% confidence inverval: 0.01 +/- 2.58 * sqrt((0.01*(1-0.01))/200)
+                         0.01 +/- 0.01815
+
+1-(0.01+2.58 * sqrt((0.01*(1-0.01))/300))
+= 0,97517902837193188606
+
+^ but population size doesn't factor in

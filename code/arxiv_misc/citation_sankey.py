@@ -2,7 +2,7 @@ import json
 import plotly
 import matplotlib as mpl
 
-with open('citation_fos_pairs.json') as f:
+with open('citation_fos_pairs_fixed.json') as f:
     tups = json.load(f)
 
 from_to_map = {}
@@ -37,7 +37,7 @@ for tup in tups:
         fos_arx = 'physics'
     elif fos_arx in arx_remap:
         fos_arx = arx_remap[fos_arx]
-    if fos_mag not in ['computer science', 'physics', 'mathematics', 'chemistry', 'biology']:
+    if fos_mag not in ['computer science', 'physics', 'mathematics']:
         fos_mag = 'other'
     if not fos_arx in from_to_physcomb_map:
         from_to_physcomb_map[fos_arx] = {}

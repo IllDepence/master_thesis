@@ -8,3 +8,9 @@ classification error: 0.01
 = 0,97517902837193188606
 
 ^ but population size doesn't factor in
+    -> b/c assumed infinite: see https://stats.stackexchange.com/questions/257697/how-to-calculate-confidence-level-for-a-given-sample-size-and-population-size
+
+^ apparently problematic when error close to 0 or 1
+
+alternative intervals:
+http://epitools.ausvet.com.au/content.php?page=CIProportion&SampleSize=300&Positive=297&Conf=0.99&method=6&Digits=4

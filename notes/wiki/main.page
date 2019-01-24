@@ -1409,34 +1409,32 @@ false positives: 188
             14046239/14046239
             num_reference_items_total: 13303373
             num_contexts_total: 24558560
-            cited_docs_per_fos:
-              mathematics: 852206
-              computer science: 293971
-              physics: 893950
-              materials science: 28944
-              business: 4231
-              engineering: 31148
-              psychology: 18322
-              medicine: 12777
-              geography: 4103
-              history: 838
-              economics: 26882
-              biology: 67194
-              political science: 2514
-              sociology: 3034
-              environmental science: 1645
-              chemistry: 78102
-              philosophy: 2173
-              geology: 18330
-              art: 858
-              one's where there is no level 0 FoS: 2363 (probably)
-            citing_docs_per_fos (preliminary numbers (estimates)):
-              physics: 642628 (629975)
-              math: 215522 (211279)
-              cs: 85951 (84259)
-              q-bio: 718 (704)
-              econ: 96 (94)
-              eess: 340 (333)
+            cited_docs_per_fos (slightly more than 2.343.585 b/c few papers have more than 1 level 0 FoS in mag):
+              computer science: 321605
+              mathematics: 806993
+              physics: 824175
+              materials science: 35929
+              biology: 85023
+              business: 5330
+              engineering: 41256
+              psychology: 24936
+              medicine: 19585
+              geography: 5302
+              history: 1130
+              economics: 31729
+              chemistry: 100091
+              political science: 3306
+              sociology: 4071
+              environmental science: 2037
+              other: 3005
+              philosophy: 2735
+              geology: 24583
+              art: 1144
+            citing_docs_per_fos:
+              cs: 84824
+              math: 210602
+              phys: 610159
+              other: 21059
             ```
         * **4 numbers** (in brackets w/o considering that bibitems might have no markers associated in the plain text docs)
             * 2.343.585 (2.412.432) cited papers

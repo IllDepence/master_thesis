@@ -2,7 +2,7 @@ import json
 import plotly
 import matplotlib as mpl
 
-with open('citation_fos_pairs_fixed.json') as f:
+with open('citation_fos_pairs_fixed_fixed.json') as f:
     tups = json.load(f)
 
 from_to_map = {}

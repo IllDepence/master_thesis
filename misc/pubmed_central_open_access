@@ -1,0 +1,19 @@
+stats:
+https://www.ncbi.nlm.nih.gov/pmc/utils/oa/oa.fcgi
+
+<OA>
+<responseDate>2019-01-25 11:49:36</responseDate>
+<request>http://www.ncbi.nlm.nih.gov/pmc/utils/oa/oa.fcgi</request>
+<repositoryName>PubMed Central Open Access FTP Repository</repositoryName>
+<formats>
+<format>tgz</format>
+<format>pdf</format>
+</formats>
+<records>
+<count>2303803</count>
+<count format="tgz">2303803</count>
+<count format="pdf">553869</count>
+<earliest>1970-01-01 00:00:00</earliest>
+<latest>2019-01-25 10:17:10</latest>
+</records>
+</OA>

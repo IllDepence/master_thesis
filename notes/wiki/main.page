@@ -18,12 +18,13 @@
 ### recent notes
 
 * predpatt annotations
-* distinguish by pattern (e.g. ?a does ?b vs. using ?b)
-    * also evaluate useful patterns/throw out those where sub. or obj. is too long etc. (goal: focus on a specific type)
-* predpatt manual evaluation of relevance
-    * mby do something with distance
-* re-run seeland fos annot.
-* test clusting on larger set
+    * distinguish by pattern (e.g. ?a does ?b vs. using ?b)
+        * also evaluate useful patterns/throw out those where sub. or obj. is too long etc. (goal: focus on a specific type)
+    * predpatt manual evaluation of relevance
+        * mby do something with distance
+* re-run seeland fos annot. 〜
+* manually eval matching accuracy ✔
+* test clustering on larger set
 * wait for feedback on paper
 
 ---

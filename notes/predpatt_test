@@ -1,0 +1,210 @@
+# results first run (35157 citation contexts, all predicats and arguments)
+
+number of timeouts 811
+avg time per context: 3.18s
+
+- - - top 100 predicates - - -
+3783: using
+3502: is
+3438: formula
+2709: have
+2287: used
+2144: has
+2023: see
+1748: use
+1701: given
+1430: shown
+1382: found
+1351: consider
+1347: cit
+1288: studied
+1242: obtained
+1213: show
+1169: obtain
+1142: are
+1035: known
+955: proposed
+917: defined
+868: find
+865: let
+843: considered
+807: note
+803: provide
+769: study
+759: follows
+729: give
+689: proved
+688: include
+683: exists
+636: based
+636: applied
+627: related
+622: assume
+617: observed
+616: described
+610: take
+598: set
+596: define
+595: gives
+594: describe
+592: introduced
+582: allows
+579: refer
+577: shows
+574: maincit
+570: present
+546: becomes
+540: implies
+532: provides
+530: possible
+527: leads
+518: function
+504: exist
+495: called
+490: prove
+490: made
+487: discussed
+482: need
+475: make
+470: developed
+454: showed
+444: compute
+443: lead
+435: requires
+434: performed
+423: equivalent
+421: depends
+421: holds
+416: solve
+415: determined
+409: introduce
+408: form
+407: expected
+400: become
+398: construct
+397: contains
+392: computed
+390: derived
+382: extended
+382: investigated
+380: taking
+377: apply
+376: denote
+374: written
+372: important
+371: presented
+369: taken
+362: denotes
+360: allow
+358: remains
+357: provided
+356: discuss
+355: get
+352: satisfies
+350: focus
+349: constructed
+345: involving
+
+- - - top 100 args - - -
+22095: we
+19788: formula
+11976: which
+9834: it
+6116: that
+3758: this
+3533: cit
+2766: one
+2458: they
+2189: maincit
+1666: formula and formula
+1172: us
+805: cit cit
+792: particular
+706: example
+571: this paper
+556: them
+474: what
+458: the other hand
+450: formula formula
+434: maincit cit
+411: fact
+380: account
+372: cit maincit
+370: these
+362: instance
+351: cit cit cit
+325: this case
+308: the system
+298: eq lrb ref
+291: the authors
+290: who
+286: addition
+285: this work
+272: the formula
+263: this approach
+261: rise
+257: theorem ref
+250: ref cit
+243: fig ref
+242: the latter
+230: our results
+229: ref
+225: the model
+218: this section
+218: all formula
+213: section
+204: the results
+203: this result
+202: the problem
+188: cit cit cit cit
+186: ref maincit
+183: let formula
+181: the reader
+181: general
+180: itself
+175: the proof
+173: this problem
+173: time
+173: cit cit maincit
+167: the following
+164: he
+162: contrast
+161: these results
+157: recent years
+157: cit maincit cit
+154: the literature
+153: that formula
+152: this model
+150: this method
+147: practice
+146: the case
+145: each other
+143: i
+141: the function formula
+139: maincit cit cit
+139: detail
+137: formula formula and formula
+137: the result
+135: to
+134: the data
+134: the detector
+132: each formula
+129: zero
+126: our approach
+123: these models
+122: figure ref
+121: cit and cit
+116: the theory
+112: any formula
+111: these methods
+105: turn
+104: maincit formula
+102: formula cit
+102: follows
+101: its
+98: then formula
+97: cit formula
+94: our method
+93: other words
+
+# results second run (35157 citation contexts, only ?s ?p ?o cases)

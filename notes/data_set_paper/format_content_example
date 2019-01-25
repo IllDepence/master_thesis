@@ -1,0 +1,14 @@
+arxiv-txt-data/1508.04843.txt (https://arxiv.org/abs/1508.04843)
+citing
+https://academic.microsoft.com/#/detail/1686810756
+
+
+select * from bibitem join bibitemmagidmap on bibitem.uuid = bibitemmagidmap.uuid where in_doc = '1508.04843';
+
+Our VD2D architecture is deeper than N4 (Figure REF ), and borrows other now-standard practices from the literature, such as rectified linear units (ReLUs), small filter sizes, and multiple convolution layers between pooling layers. VD2D already outperforms N4, without any use of 3D context. VD2D is motivated by the principle “the deeper, the better,” which has become popular for ConvNets applied to object recognition {{cite:a0c2ac61-c5bb-47ad-9cc9-334a49f8b0fd}}, {{cite:7c9e0f44-2314-4d78-93c2-f878724cd22d}}, {{cite:49f7e6a7-e449-41d3-a059-dc01fdca8761}}.
+
+a0c2ac61-c5bb-47ad-9cc9-334a49f8b0fd, 1508.04843, "A. Krizhevsky, I. Sutskever, and G. Hinton. Imagenet classification with deep convolutional neural networks. In NIPS, 2012.", 2618530766
+
+7c9e0f44-2314-4d78-93c2-f878724cd22d, 1508.04843, "K. Simonyan and A. Zisserman. Very deep convolutional networks for large-scale image recognition. In ICLR, 2015.", 1686810756
+
+49f7e6a7-e449-41d3-a059-dc01fdca8761, 1508.04843, "K. He, X. Zhang, S. Ren, and J. Sun. Delving deep into rectiviers: surpassing human-level performance on ImageNet classification. arXiv:1502.01852, 2015.", 1677182931

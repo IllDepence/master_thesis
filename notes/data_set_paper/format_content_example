@@ -1,14 +1,40 @@
-arxiv-txt-data/1508.04843.txt (https://arxiv.org/abs/1508.04843)
+arxiv-txt-data/1412.3684.txt (https://arxiv.org/abs/1412.3684)
 citing
-https://academic.microsoft.com/#/detail/1686810756
+https://academic.microsoft.com/#/detail/2038721957
 
 
 select * from bibitem join bibitemmagidmap on bibitem.uuid = bibitemmagidmap.uuid where in_doc = '1508.04843';
 
-Our VD2D architecture is deeper than N4 (Figure REF ), and borrows other now-standard practices from the literature, such as rectified linear units (ReLUs), small filter sizes, and multiple convolution layers between pooling layers. VD2D already outperforms N4, without any use of 3D context. VD2D is motivated by the principle “the deeper, the better,” which has become popular for ConvNets applied to object recognition {{cite:a0c2ac61-c5bb-47ad-9cc9-334a49f8b0fd}}, {{cite:7c9e0f44-2314-4d78-93c2-f878724cd22d}}, {{cite:49f7e6a7-e449-41d3-a059-dc01fdca8761}}.
+exceprt from 1412.3684.txt
+[...]
+It has over 79 million images stored at the resolution of FORMULA . Each image is labeled with one of the 75,062 non-abstract nouns in English, as listed in the Wordnet{{cite:9ad20b7d-87d1-47f5-aeed-10a1cf89a2e2}}{{cite:298db7f5-9ebb-4e98-9ecf-0bdda28a42cb}} lexical database.
+[...]
 
-a0c2ac61-c5bb-47ad-9cc9-334a49f8b0fd, 1508.04843, "A. Krizhevsky, I. Sutskever, and G. Hinton. Imagenet classification with deep convolutional neural networks. In NIPS, 2012.", 2618530766
+uuid           in_doc     mag_id      reference_string
 
-7c9e0f44-2314-4d78-93c2-f878724cd22d, 1508.04843, "K. Simonyan and A. Zisserman. Very deep convolutional networks for large-scale image recognition. In ICLR, 2015.", 1686810756
+9ad20b7d-87d1  1412.3684  2081580037  George A. Miller (1995). WordNe
+-47f5-aeed-10                         t: A Lexical Database for Engli
+a1cf89a2e2                            sh. Communications of the ACM V
+                                      ol. 38, No. 11: 39-41.
 
-49f7e6a7-e449-41d3-a059-dc01fdca8761, 1508.04843, "K. He, X. Zhang, S. Ren, and J. Sun. Delving deep into rectiviers: surpassing human-level performance on ImageNet classification. arXiv:1502.01852, 2015.", 1677182931
+298db7f5-9ebb  1412.3684  2038721957  Christiane Fellbaum (1998), ""W
+-4e98-9ecf-0b                         ordNet: An Electronic Lexical D
+dda28a42cb                            atabase. Cambridge"", MA: MIT P
+                                      ress.
+
+paperid     originaltitle                             publisher  ...
+
+2038721957  WordNet : an electronic lexical database  MIT Press  ...
+2081580037  WordNet: a lexical database for English   ACM        ...
+
+# RAW
+
+select * from bibitem join bibitemmagidmap on bibitem.uuid = bibitemmagidmap.uuid where in_doc = '1412.3684';
+9ad20b7d-87d1-47f5-aeed-10a1cf89a2e2  1412.3684  George A. Miller (1995). WordNet: A Lexical Database for English. Communications of the ACM Vol. 38, No. 11: 39-41.  2081580037
+298db7f5-9ebb-4e98-9ecf-0bdda28a42cb  1412.3684  Christiane Fellbaum (1998), ""WordNet: An Electronic Lexical Database. Cambridge"", MA: MIT Press."  2038721957
+
+MAG=> select paperid, originaltitle, publisher from papers where paperid in (2081580037, 2038721957);
+  paperid   |              originaltitle               | publisher
+------------+------------------------------------------+-----------
+ 2038721957 | WordNet : an electronic lexical database | MIT Press
+ 2081580037 | WordNet: a lexical database for English  | ACM

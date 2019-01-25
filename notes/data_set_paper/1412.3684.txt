@@ -1,0 +1,162 @@
+
+Object Recognition Using Deep Neural Networks: A Survey
+Soren Goyal, IIT Kanpur Paul Benjamin, Pace University
+Recognition of objects using Deep Neural Networks is an active area of research and many breakthroughs have been made in the last few years. The paper attempts to indicate how far this field has progressed. The paper briefly describes the history of research in Neural Networks and describe several of the recent advances in this field. The performances of recently developed Neural Network Algorithm over benchmark datasets have been tabulated. Finally, some the applications of this field have been provided.
+
+
+Convolutional, Neural Networks, Datasets, ILSVRC, Pooling, Activation Functions, Regularization, Object Recognition, Datasets
+Introduction
+Recognition of objects is one of the challenges in the field of Artificial Intelligence. Many systems have been developed to recognize and classify images. In the recent years huge strides have been made in making these systems more accurate. "Deep Neural Network" is one class of algorithms that have shown good results on benchmark datasets{{cite:044e9773-20c1-4036-9d2e-43b9073580b3}}{{cite:4709508c-b8f7-4434-a3f6-e8230c96c363}}. Prior to using Neural Networks, the popular approach for recognizing objects was to design algorithms that would look for predetermined features in an image. To do this the programmer was required to have a deep knowledge of the data and would laboriously engineer each one the feature detection algorithms. The expert systems so created were still vulnerable to small ambiguities in the image. With Neural Networks the effort of decding and engineering each feature detector is dispensed with. The advantage of the neural network lies in the following theoretical aspects. First, neural networks are data driven self-adaptive algorithms; they require no prior knowledge of the data or underlying properties. Second, they can approximate any function with arbitrary accuracy {{cite:b29d5d8a-d1eb-4905-a124-e30668d41825}}{{cite:bb06e5d0-f0a0-4db8-8bc9-fe9d35580dad}}{{cite:3e4f847d-6d48-4acc-af00-63c9ee4e8cae}}; as any classification task is essentially the task of determining the underlying function, this property is important. And thirdly, neural networks can estimate the posterior probabilities, which provides the basis for establishing classification rule and performing statistical analysis {{cite:55137b57-aff5-469c-a8bf-a92ace50fe9a}}.
+The vast research topics and extensive literature makes it impossible for one review to cover all of the work in the filed. This review aims to provide a summary of the recent improvements that have been made to the Deep Neural Network Architecture that have led to the record breaking performances in Object Recognition.
+The overall organization of the paper is as follows. After the introduction, a brief history of research in this field is given in Section . Section  describes innovations done in sub parts of the Neural Network. Section  lists out the most commonly used datasets to benchmark an Image Classification Algorithm. Finally Section  tabulates the state-of-the-art performance over the benchmark data sets.
+A lot of literature has been compiled at deeplearning.net hosted by University of Montreal.
+
+History of Neural Networks
+Early Research
+Earliest of experiments with Neural Networks began in 1943 when neurophysiologist Warren McCulloch and mathematician Walter Pitts modeled a simple neural network using electrical circuits{{cite:ae6eb3a7-c486-4fa4-870d-2acb8d53cb85}}. The neuron took inputs and depending on the weighted sum, it would give out a binary output.
+With the advent of fast computers in 1950's, it became possible to simulate neural networks on a bigger scale. In 1955, IBM organized a group to study pattern recognition, information theory and switching circuit theory, headed by Nathanial Rochester{{cite:d63b9902-31ab-47e1-a095-9edebeb203de}}. Among other projects, the group simulated the behavior of abstract neural networks on an IBM 704 computer. In 1959, Bernard Widrow and Marcian Hoff of Stanford developed models called "ADALINE" and "MADALINE." ADALINE was similar to todays Perceptron. It developed to recognize binary patterns, so that if it was reading streaming bits from a phone line, it could predict the next bit. MADALINE was an extension of ADALINE and similar to today's single layer Neural netowrk. It was the first neural network applied to a real world problem, using an adaptive filter that eliminates echoes on phone lines. In 1962, they developed a learning procedure that could change the weight values depending on the error in prediction.
+Alongside the research on Artificial Neural Networks, basic research on layout of neurons inside the brain was also being conducted.The idea of a Convoluted Neural Networks can be traced to Hubel and Wiesel’s 1962 work on the cat’s primary visual cortex. It identified orientation-selective simple cells with local receptive fields, whose role is similar to the Feature Extractors, and complex cells, whose role is similar to the Pooling units. The first such model to be simulated on a computer was Fukushima’s Neocognitron{{cite:d3254c78-eb63-49c7-b279-56278f0911b3}}, which used a layer-wise, unsupervised competitive learning algorithm for the feature extractors, and a separately-trained supervised linear classifier for the output layer. Even after 4 decades of research in Artificial Neural Networks, there was very little these networks could perform, owing mainly to their requirement of fast computations for operation and lack of a good technique to train them.
+
+Recent Developments
+In 1985, Yann Le Cun proposed an algorithm to train Neural Networks. The innovation {{cite:ea0ffb13-f775-4738-a1ac-e358b2f4a00f}} was to simplify the architecture and to use the back-propagation algorithm to train the entire system. The approach was very successful for tasks such as OCR and handwriting recognition. An operational bank check reading system built around Convolutional Neural Networks was developed at ATT in the early 1990’s. It was first deployed commercially in 1993, in check-reading ATM machines in Europe and the US. By the late 90’s it was reading over 10% of all the checks in the US. This motivated Microsoft to deploy Convolutional Neural Networks in a number of OCR and handwriting recognition systems including for Arabic and Chinese characters. Supervised Convolutional Neural Networks(ConvNet) have also been used for object detection in images, including faces with record accuracy and real-time performance. Google recently deployed a Convolutional Neural Networks(ConvNet) to detect faces and license plate in StreetView images to protect privacy. Supervised ConvNets have also been used for vision-based obstacle avoidance for off-road mobile robots. Two participants in the recent DARPA-sponsored LAGR program on vision-based navigation for off-road robots used ConvNets for long-range obstacle detection{{cite:797af5da-b4bf-4e41-a533-b002b21315f4}}.
+More recently, a lot of development has occurred in this field leading to a number of improvements in the performances and accuracy. In ILSVRC-2012 (Large Scale Visual Recognition Challenge) the task was to assign labels to an image. The winning algorithm produced the result{{cite:044e9773-20c1-4036-9d2e-43b9073580b3}} as shown in Fig.1. The accuracy in the task was as described in the image caption was 83%. Two years since then, in ILSVRC-2014, the winning team from Google had an accuracy of 93.3%{{cite:4709508c-b8f7-4434-a3f6-e8230c96c363}}.
+FIGURE 
+
+Deep Neural Networks
+A Neural Network comprising of 2 to 6 of layers of neurons stacked one on top another is called a Deep Neural Network. The Deep Architecture faces two primary issues -
+
+Due to such a large number of trainable parameters the network tends to overfit the training data.
+
+When trained using Gradient Gescent, the gradient does not trickle down to the lower layers; so the sub-optimal sets of weights are obtained.
+
+A number of modifications have been proposed to the Deep Architecture to overcome these issues.
+Convolutional Layer
+A fully connected Layer in a Neural Net comes with a large number of parameters. This leads to over-fitting and reduced generality. A simple solution comes by imitating the way Visual Cortex work in living organisms. From Hubel's research{{cite:dc5546be-0e8c-42cc-b634-6ceae5c42ccd}}, we know that in the Visual Cortex a hierarchy exists, where the neuron of the upper layer is connected to small region of the lower layer. First Neural Nets based on these models were Neo-Cognitron{{cite:441b09d0-b81d-4cf6-b684-7a404a04a505}} and LeCun's Net-3{{cite:e39ea8e1-ca72-4c1f-b16f-5ec1f3e73dc8}}. In this architecture, the lower layer is divided into a number of small regions called "Receptive Fields", each such receptive field is mapped a to a neuron of upper layer. Such a connection is called a "Feature Extractor". It is so named because the connection extracts features from the Receptive Field. Many such Feature Extractors are applied to the same Receptive Fields to generate a Feature Vector for that field.
+The key advantages of using this architecture are -
+
+Sparse Connectivity - Instead of connecting the whole lower layer to the upper layer, each section on the lower layer is connected to only a single neuron of the upper layer. This drastically cuts down the number of connections and hence the parameters. This makes the training easier.
+
+Shared Weights - Each one of such “Feature Extractors” is replicated over the entire lower layer. This leads to each "Receptive Field" being connected to the upper layer by identical set of weights.
+
+FIGURE 
+To determine the parameters of the “Feature Extractors", usually back propagation of error is used. Other methods have been developed. The aim here is to create a function FORMULA  that maps an input vector FORMULA  to a new feature vector of FORMULA  features. Many small patches of the images are sampled and supervised & unsupervised techniques are used to model the function.
+
+Unsupervised Learning- Methods commonly{{cite:eab8ae22-9b68-43a6-af7c-2a0211f09024}} used for this role:
+
+Sparse Auto-Encoders: An Auto-Encoder with K hidden nodes is trained using back-propagation to minimize squared reconstruction error with an additional penalty term that encourages the units to maintain a low average activation{{cite:1dcb5f36-4318-4e5e-884e-187ba07662f4}}{{cite:137b9a29-a792-41a9-af28-be3f3bd49778}}. The algorithm outputs weights FORMULA  and biases FORMULA  such that the feature mapping FORMULA  is defined by FORMULA , where FORMULA  is the logistic sigmoid function, applied component-wise to the vector z.
+
+Sparse restricted Boltzmann machine: The restricted Boltzmann machine (RBM) is an undirected graphical model with K binary hidden variables. Sparse RBMs can be trained using the contrastive divergence approximation{{cite:880c709c-8ce3-4336-98a6-026c35345520}} with the same type of sparsity penalty as the autoencoders. The training also produces weights FORMULA  and biases FORMULA , and we can use the same feature mapping as the auto-encoder. Thus, these algorithms differ primarily in their training method.
+
+K-Means Clustering: The data points are clustered around K centroids FORMULA . Then the distances from the data is used to generate a FORMULA -dimensional vector. Two choices are commonly used for creating the FORMULA -dimensional vector. The first one is 1-of-K, hard-assignment coding scheme:
+FORMULA 
+where FORMULA  is the k-dimensional vector representing distances from FORMULA  centroids. This scheme gives FORMULA  such that FORMULA  if FORMULA  is the centroid closest to FORMULA , and the remaining FORMULA  are set to zero. It has been noted, however, that this may be too terse{{cite:06f789ed-2902-44bb-9cc7-2dfb6290bae0}}. The second choice of feature mapping is a non-linear mapping that attempts to be “softer” than the above encoding while also keeping some sparsity:
+FORMULA 
+where FORMULA  and FORMULA  is the mean of the elements of FORMULA . This activation function outputs
+0 for any feature FORMULA  where the distance to the centroid FORMULA  is “above average”. In practice, this means that roughly half of the features will be set to 0. This can be thought of as a very simple form of “competition” between features. These methods are referred to as K-means (hard) and K-means (triangle) respectively.
+
+Gaussian mixtures: Gaussian mixture models (GMMs) represent the density of input data as a mixture of K Gaussian distributions and is widely used for clustering. GMMs can be trained using the Expectation-Maximization (EM) algorithms in{{cite:4e34c406-4130-4959-827c-9285abb1b79c}}. A single iteration of K-means to initialize the mixture model. The feature mapping FORMULA  maps each input to the posterior membership probabilities:
+FORMULA 
+where FORMULA  is a diagonal covariance and FORMULA  are the cluster prior probabilities learned by the EM algorithm.
+
+
+Mlpconv Units{{cite:2433f177-908f-46f2-88d3-5969a0849798}} The conventional convolutional layer uses linear filters followed by a nonlinear activation function to scan the input. In {{cite:2433f177-908f-46f2-88d3-5969a0849798}} micro neural networks are used to convolve the input. Each is convolution unit is called a MLPconv unit as it contains a Multi Layer Perceptron. Each MLPconv unit contains FORMULA  layers with Rectified Linear Units as activation function.
+
+
+
+Pooling
+Once a feature map has been created for an input image, "Pooling" is performed. In Spatial Pooling the outputs of several nearby feature detectors are combined into a local or global ‘bag of features’, in a way that preserves task-related information while removing irrelevant details. Pooling is used to achieve invariance to image transformations, more compact representations, and better robustness to noise and clutter{{cite:a3201d62-0258-49bf-bba9-c05952f1ea83}}.
+The Pooling layer can be thought of as a grid of pooling units spaced FORMULA  pixels apart, each summarizing a neighborhood of size FORMULA  called a Pooling Window, centered at the location of the pooling unit. Typically the stride FORMULA  is taken to be equal to window size FORMULA , But if FORMULA  is taken such that FORMULA , the pooling units act over overlapping Pooling Windows in the feature map. Overlapping Architecture has been shown in {{cite:044e9773-20c1-4036-9d2e-43b9073580b3}} to be better as it is more difficult to overfit.
+The functions commonly used in Pooling Units are -
+
+Max Pooling: The output is given by the function FORMULA , where FORMULA  refers to all the features in the Pooling Window.
+
+Average Pooling: The output is given by the function FORMULA , where FORMULA  refers to all the features in the Pooling Window.
+
+Stochastic Pooling{{cite:5e563e02-6124-4547-bfa8-a183a81d3669}} Max Pooling and Average Pooling are strongly affected by the largest activation in the Pooling window. However, there may be additional activations in the same pooling window that should be taken into account when passing information up the network and stochastic pooling ensures that these non-maximal activations are utilized. Each feature in a Pooling Region is assigned a probability
+FORMULA 
+The pooling unit then simply outputs
+FORMULA 
+
+Experiments have also been done with different types pooling windows or regions. Typically these regions are hand crafted. For example in {{cite:eab8ae22-9b68-43a6-af7c-2a0211f09024}} the Feature Map is split in 4 equal sized quadrants and pooling is performed over these 4 regions. In contrast to this{{cite:f0aea709-13a8-4722-aedc-4ae19cb3548a}} propose an algorithm to generate learnable pooling regions. It allows for a richer set of possible pooling regions which depend on the task and data.
+
+
+Activation Functions
+Every neuron in the neural network gives an output as determined by an activation function acting on the inputs. Most often non-linear activation functions are used so that the network is able to approximate Non-Linear Functions. Commonly used function are the sigmoid function ( FORMULA ) and FORMULA  function. However on running gradient descent to train networks, these saturating functions require more time to converge as compared to non-saturating functions. In {{cite:044e9773-20c1-4036-9d2e-43b9073580b3}} it is shown that Rectified Linear Units (FORMULA )(ReLUs) train several times faster than their equivalent FORMULA  units.
+An adaptable activation function Maxout{{cite:33a6bc50-c366-49e8-8bf5-b65087b5a645}} has also been proposed. A single maxout unit can be interpreted as making a piecewise linear approximation to an arbitrary convex function. Maxout units learn not just the relationship between hidden units, but also the activation function of each hidden unit. Given an input FORMULA , a maxout hidden layer implements the function
+FORMULA 
+where FORMULA  and FORMULA  and FORMULA . The parameter FORMULA  and FORMULA  are learned parameters.
+FIGURE 
+
+
+Methods of Regularization
+As mentioned earlier owing to their large number of adjustable parameters, Neural Networks overfit training data easily. To avoid this, techniques of regularization are used.
+
+The simplest way to regularize is to prevent the weights of the connections from getting too big. This is achieved by adding a penalty term to the error.
+FORMULA 
+
+where,
+FORMULA  is the average Mean Squared Error for the parameter set FORMULA ,
+FORMULA  is the modified error containing the penalty term,
+FORMULA  are the correct labels and FORMULA  are the predicted labels,
+FORMULA  is the total number of instances,
+FORMULA  is the regularization coefficient,
+So now the error increases if the weights become too high. And when this larger error is back propagated, the bigger weights are forced to become smaller again.
+
+Dropout{{cite:afdceb24-bf55-4dec-a82f-61c787763eda}} and its generalization DropConnect{{cite:e5e7ba77-eefe-46c2-98bc-d6746213ef84}} attempt to regularize the network in novel way which are equivalent to training an ensemble of networks and averaging their predictions. Consider following notation, Input vector to a layer FORMULA  and Weight Parameters of the layer FORMULA  of size FORMULA  are used to calculate the output vector for the layer FORMULA  as FORMULA , where a is the learnt function. In Dropout, on each presentation of each training case, the output of hidden unit in is randomly omitted from the network with a probability of 0.5. Therefore the output of each fully connected layer is modified as FORMULA , where FORMULA  is a FORMULA  binary mask and 'FORMULA ' is a element wise product operator. In {{cite:afdceb24-bf55-4dec-a82f-61c787763eda}} it is hypothesized that this prevents complex co-adaptations in which a neuron is only helpful in the context of several other specific neurons. Instead, each neuron learns to detect a feature that is generally helpful for producing the correct answer given the combinatorially large variety of internal contexts in which it must operate. In the DropConnect technique instead of masking the outputs, the inputs to the neurons are randomly switched off. This makes it a generalization of the Dropout technique. The output during training is given as, FORMULA  where FORMULA  is a binary mask equal in dimension to FORMULA . This equation holds true for the case of Dropout also, the only difference being that the mask FORMULA  is constrained by the fact all the input weights of a chosen neurons are either turned off or on together.
+During inference the output of all the networks has to be averaged and is give by
+FORMULA 
+
+FORMULA  refers to the number of binary masks. This computation is unfeasible as there are FORMULA  masks. Instead of doing this massive computation, in the Dropout technique a “mean network” is created that contains all of the hidden units but with their outgoing weights halved to compensate for the fact that twice as many of them are active. This "Mean Network" is essentially an approximation of the equation above, mathematically this approximation can be written as FORMULA . Although it shows good performance, this approximation is not mathematically justified. In DropConnect a different approach is used: consider a single unit FORMULA  before the activation function FORMULA ;FORMULA . Since FORMULA  is sampled froma bernoulli's distribution the mean and variance of FORMULA  can be calculated, so FORMULA  and FORMULA . After constructing a gaussian using these parameters, the values of FORMULA  can be sampled and passed through the activation function FORMULA  before averaging them and presenting to the next layer.
+
+Data Augmentation Increasing the size of the dataset reduces overfitting and improves the generalization for any machine learning algorithm. When the dataset consists of images, simple distortion such as translations, rotations and skewing can be generated by applying affine displacement fields. This works because, intuitively the identity of an object should be invariant under affine transformations.
+In {{cite:044e9773-20c1-4036-9d2e-43b9073580b3}} two data augmentation techniques are used. The first form of data augmentation consists of generating image translations and horizontal reflections. This is done by extracting random FORMULA  patches (and their horizontal reflections) from the FORMULA  images and training our network on these extracted patches. This increases the size of the training set by a factor of 2048. At test time, the network makes a prediction by extracting five FORMULA  patches (the four corner patches and the center patch) as well as their horizontal reflections (hence ten patches in all), and averaging the predictions made by the network’s softmax layer on the ten patches.
+The second form of data augmentation uses the property that the identity of an object should be invariant under change in intensity and color of illumination.
+
+
+Data Sets used for Evaluation
+One of the difficulties faced in the early experiments of Machine Learning was the limited availability of labeled data sets. Many image datasets have now been created and are growing rapidly to meet the demand for larger data sets by the Image and Vision Research Community. The following is a list of data sets frequently used for testing object classification algorithms.
+
+Microsoft COCO {{cite:8536e8dc-42e1-4424-af6a-75c6e9985d70}} is the Microsoft Common Objects in COntext dataset. It contains 91 common object categories and 328,000 images containing 2,500,000 instances. The spatial location of each object is given by a precise pixel level segmentation. Additionally, a critical distinction of this dataset is that it has a number of labeled instances per image. This may aid in learning contextual information.
+
+Tiny Image Data Set{{cite:dc29e091-ebb5-4c82-8470-5147f8e69140}} is the largest image data set available. It has over 79 million images stored at the resolution of FORMULA . Each image is labeled with one of the 75,062 non-abstract nouns in English, as listed in the Wordnet{{cite:9ad20b7d-87d1-47f5-aeed-10a1cf89a2e2}}{{cite:298db7f5-9ebb-4e98-9ecf-0bdda28a42cb}} lexical database. It has been noted that many of the labels are not reliable{{cite:82938068-f5f0-4733-9928-58aa2848ae8b}}. This dataset offers the possiblity of using Wordnet in cinjuction with nearest-neighbor methods to perform object classification over a range of semantic levels minimizing the effects of labeling noise.
+
+CIFAR-10 and CIFAR-100{{cite:82938068-f5f0-4733-9928-58aa2848ae8b}} These subsets are derived from the Tiny Image Dataset, with the images being labelled more accurately. The CIFAR-10 set has 6000 examples of each of 10 classes and the CIFAR-100 set has 600 examples of each of 100 classes. Each image has a resolution of FORMULA .
+
+ImageNet{{cite:279adc79-3e1b-4168-8114-cbb6016ea08f}} ImageNet is an image dataset organized according to the WordNet hierarchy. Each meaningful concept in WordNet (word or a phrase), is called a "synonym set" or "synset". In ImageNet, there are on average 1000 images to illustrate each synset. Images of each concept are quality-controlled and human-annotated. The ImageNet is expected to label tens of millions of images. At present it has slightly over 14 million labeled images. The images come in various sizes. Generally the resolution is around FORMULA  as compared to FORMULA  images of Tiny Image Data set. Also, the images have more than one object, with each object being annotated with a bounding box.
+
+STL-10{{cite:0ba9a2ab-352e-47f6-b2ae-fd8c41c26ac9}} The STL-10 dataset is derived from the Imagenet. It has 10 classes with 1300 images in each class. Apart from these it has 100000 unlabeled images for unsupervised learning which belong to one of the 10 classes. The resolution of each image is FORMULA .
+
+Street View House Numbers{{cite:94af4b19-9304-4464-a886-b8a16afad359}} SVHN is a real-world image dataset with minimal requirement on data preprocessing and formatting. It can be seen as similar in flavor to MNIST (e.g., the images are of small cropped digits), but incorporates an order of magnitude more labeled data (over 600,000 digit images) and comes from a significantly harder, unsolved, real world problem (recognizing digits and numbers in natural scene images). SVHN is obtained from house numbers in Google Street View images. The resolution of the images is FORMULA .
+
+MNIST{{cite:2718ecd6-90b0-481d-9b3e-305497d7cfa4}} The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples. It is a subset of a larger set available from NIST. The digits have been size-normalized and centered in a fixed-size image of resolution FORMULA .
+
+NORB{{cite:8957809c-e458-406a-90c3-b85bc4624bfd}} This database is intended for experiments in 3D object recognition from shape. It contains images of 50 toys belonging to 5 generic categories: four-legged animals, human figures, airplanes, trucks, and cars. The objects were imaged by two cameras under 6 lighting conditions, 9 elevations (30 to 70 degrees), and 18 azimuths (0 to 340). The training set is composed of 5 instances of each category and the test set of the remaining 5 instances, making the total number of image pairs 50.
+
+
+Performances of Neural Networks
+Table REF  shows the best performing algorithm on various benchmark datasets.
+TABLE 
+
+Emerging Applications
+Having demonstrated a high level of accuracy, Convoluted Neural Networks are seeing applications in may fields -
+
+Image Recognition{{cite:caed6fc6-5357-4f98-b4f6-3758daef2607}} - Neural Networks have been already deployed in Image Recognition Applications. The Google Image Search is based on {{cite:044e9773-20c1-4036-9d2e-43b9073580b3}}.
+
+Speech Recognition{{cite:580dc427-fa04-4698-a691-e76bb752462a}} - Most current speech recognition systems use hidden Markov models (HMMs) to deal with the temporal variability of speech and Gaussian mixture models to determine how well each state of each HMM fits a frame or a short window of frames of coefficients that represents the acoustic input. Deep neural networks with many hidden layers, that are trained using new methods have been shown to outperform GMMs on a variety of speech recognition benchmarks, sometimes by a large margin.
+
+Image Compression - Neural Networks have a property of creating a lower dimensional internal representation of input. This has been tapped to create algorithms for image compression. These techniques fall into three main categories - direct development of neural learning algorithms for image compression, neural network implementation of traditional image compression algorithms, and indirect applications of neural networks to assist with those existing image compression techniques{{cite:267b7093-e3ad-4acf-8be1-e5bb1072fc1d}}.
+
+Medical Diagnosis - There are vast amounts of medical data in store today, in the form of medical images, doctors' notes, and structured lab tests. Convoluted Neural Networks have been used to analyze such data. For example in medical image analysis, it is common to design a group of specific features for a high-level task such as classification and segmentation. But detailed annotation of medical images is often an ambiguous and challenging task. In {{cite:582694ad-4618-4423-9346-34701085c2bb}} it shown that deep neural networks have been effectively used to perform this tasks.
+
+
+Conclusion
+In this paper as we summarize the recent advances in Deep Neural Network for Object Recognition, we observe the great leaps that are being made in this field{{cite:4709508c-b8f7-4434-a3f6-e8230c96c363}} in recent years.
+
+Datasets need to be made more reliable. Also, as datasets grow larger, annotating them gets difficult. Crowd sourcing has been used to create big datasets - like TinyImage dataset {{cite:dc29e091-ebb5-4c82-8470-5147f8e69140}}, MS-COCO {{cite:8536e8dc-42e1-4424-af6a-75c6e9985d70}} and ImageNet{{cite:279adc79-3e1b-4168-8114-cbb6016ea08f}} but still have many ambiguities that have removed manually. Better crowd sourcing strategies have to developed.
+
+Strategies to use the vast amounts of unlabeled data must also be developed.
+
+Training of Neural Networks requires a huge amount of computational resource. Efforts have to be made to make the code more efficient and compatible with new upcoming High Performance Computational Platforms.
+
+Investigation needs to be done as to how an image is being stored in a neural network. This is to gain an intuitive understanding as to how features are organized at a high level. More ever once a neural network is trained new knowledge cannot be added to it without retraining it entirely, understanding high level feature representation seem to be the key in to adding new knowledge to neural networks.
+

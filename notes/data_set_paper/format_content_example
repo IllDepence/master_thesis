@@ -27,6 +27,18 @@ paperid     originaltitle                             publisher  ...
 2038721957  WordNet : an electronic lexical database  MIT Press  ...
 2081580037  WordNet: a lexical database for English   ACM        ...
 
+
+between mag_id, adjacent, etc.: record separator (U+241E)
+between adjacent: unit separator (U+241F)
+
+↓ bad shocase b/c doesn't include unit separator
+contexts.csv
+2038721957␞2081580037␞1412.3684␞It has over 79 million images stored at the resolution of FORMULA . Each image is labeled with one of the 75,062 non-abstract nouns in English, as listed in the Wordnet CIT MAINCIT lexical database. It has been noted that many of the labels are not reliable CIT .
+
+other doc but better:
+2108598570␞2011949660␟385811667␞1705.09217␞We will also be using the usual grading of a matrix of finite order. For this and for the various properties of graded rings and graded modules, we refer to CIT , MAINCIT and CIT . A breaking vertex of a hereditary saturated subset FORMULA is an infinite emitter FORMULA with the property that FORMULA .
+
+
 # RAW
 
 select * from bibitem join bibitemmagidmap on bibitem.uuid = bibitemmagidmap.uuid where in_doc = '1412.3684';

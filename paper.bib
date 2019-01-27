@@ -819,15 +819,32 @@
 }
 
 @Article{Brown2001,
-  author        = {Lawrence D. {Brown} and T. Tony {Cai} and Anirban {DasGupta}},
-  title         = {Interval Estimation for a Binomial Proportion},
-  journal       = {Statistical Science},
-  year          = {2001},
-  volume        = {16},
-  number        = {2},
-  pages         = {101--133},
+  author  = {Lawrence D. {Brown} and T. Tony {Cai} and Anirban {DasGupta}},
+  title   = {Interval Estimation for a Binomial Proportion},
+  journal = {Statistical Science},
+  year    = {2001},
+  volume  = {16},
+  number  = {2},
+  pages   = {101--133},
+  review  = {- citaiton for confidence invervals for estimation of bibitem matching accuracy},
+}
+
+@InProceedings{Gipp2015,
+  author        = {Gipp, Bela and Meuschke, Norman and Lipinski, Mario},
+  title         = {CITREC : An Evaluation Framework for Citation-Based Similarity Measures based on TREC Genomics and PubMed Central},
+  booktitle     = {iConference 2015 Proceedings},
+  year          = {2015},
+  publisher     = {iSchools},
   __markedentry = {[tarek:]},
-  review        = {- citaiton for confidence invervals for estimation of bibitem matching accuracy},
+  review        = {- parsing PubMed Central OA in text citations is hard b/c they're heterogenous:
+    "The extraction of in-text citations from the PMC OAS documents posed some problems to parser  development. Among these challenges was the use of heterogeneous XML-markups
+     for labeling in-text citations in the source files. For this reason, we incorporated eight differentmarkup variations into the parser."
+    - details: http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf
+- furthermore different types of IDs are used:
+    "Different  unique document identifiers, such as PubMed and MEDLINE identifiers (PMId, MEDId) or DOIs are commonly stated for references in the PMC OAS. Nevertheless, it cannot be
+     assumed that identifiers are used consistently for all possible references. For instance, some authors might state no unique identifiers, some might use a PMId, some others a DOI or
+    vice versa."},
+  url           = {http://hdl.handle.net/2142/73680},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

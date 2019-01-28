@@ -1,0 +1,36 @@
+[...]
+Iteration 122, inertia 9255002310.536
+Converged at iteration 122: center shift 1.451601e-06 within tolerance 3.178566e-06
+Initialization complete
+Iteration  0, inertia 11636376082.000
+[...]
+Iteration 63, inertia 9173144224.734
+Converged at iteration 63: center shift 5.914844e-07 within tolerance 3.178566e-06
+cluster sizes:
+  92448
+  2
+  12
+  1786
+  426494
+  1
+  310
+  11
+  1
+  1071
+  2
+  56
+  103
+  1
+  5
+  153
+  4620
+  7
+  1
+  6
+  1
+  23
+  63
+  20816
+  13
+
+(enter to continue)

@@ -830,13 +830,12 @@
 }
 
 @InProceedings{Gipp2015,
-  author        = {Gipp, Bela and Meuschke, Norman and Lipinski, Mario},
-  title         = {CITREC : An Evaluation Framework for Citation-Based Similarity Measures based on TREC Genomics and PubMed Central},
-  booktitle     = {iConference 2015 Proceedings},
-  year          = {2015},
-  publisher     = {iSchools},
-  __markedentry = {[tarek:]},
-  review        = {- parsing PubMed Central OA in text citations is hard b/c they're heterogenous:
+  author    = {Gipp, Bela and Meuschke, Norman and Lipinski, Mario},
+  title     = {CITREC : An Evaluation Framework for Citation-Based Similarity Measures based on TREC Genomics and PubMed Central},
+  booktitle = {iConference 2015 Proceedings},
+  year      = {2015},
+  publisher = {iSchools},
+  review    = {- parsing PubMed Central OA in text citations is hard b/c they're heterogenous:
     "The extraction of in-text citations from the PMC OAS documents posed some problems to parser  development. Among these challenges was the use of heterogeneous XML-markups
      for labeling in-text citations in the source files. For this reason, we incorporated eight differentmarkup variations into the parser."
     - details: http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf
@@ -844,7 +843,48 @@
     "Different  unique document identifiers, such as PubMed and MEDLINE identifiers (PMId, MEDId) or DOIs are commonly stated for references in the PMC OAS. Nevertheless, it cannot be
      assumed that identifiers are used consistently for all possible references. For instance, some authors might state no unique identifiers, some might use a PMId, some others a DOI or
     vice versa."},
-  url           = {http://hdl.handle.net/2142/73680},
+  url       = {http://hdl.handle.net/2142/73680},
+}
+
+@Article{Berger2016,
+  author  = {Berger, Matthew and McDonough, Katherine and M. Seversky, Lee},
+  title   = {Cite2vec: Citation-Driven Document Exploration via Word Embeddings},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  year    = {2016},
+  volume  = {23},
+  pages   = {1-1},
+  month   = {01},
+  doi     = {10.1109/TVCG.2016.2598667},
+  review  = {- cite2vec (as title suggests) but used for the purpose discovery/visualization},
+}
+
+@InProceedings{He2018,
+  author    = {Jian He and Chaomei Chen},
+  title     = {Temporal Representations of Citations for Understanding the Changing Roles of Scientific Publications},
+  booktitle = {Front. Res. Metr. Anal.},
+  year      = {2018},
+  review    = {- early version: https://arxiv.org/pdf/1711.05822.pdf
+- "approach to understanding the changing roles of a publication characterized by its citation contexts"},
+}
+
+@InProceedings{Galke2018,
+  author        = {Galke, Lukas and Mai, Florian and Vagliano, Iacopo and Scherp, Ansgar},
+  title         = {Multi-Modal Adversarial Autoencoders for Recommendations of Citations and Subject Labels},
+  booktitle     = {Proceedings of the 26th Conference on User Modeling, Adaptation and Personalization},
+  year          = {2018},
+  series        = {UMAP '18},
+  pages         = {197--205},
+  address       = {New York, NY, USA},
+  publisher     = {ACM},
+  __markedentry = {[tarek:]},
+  acmid         = {3209236},
+  doi           = {10.1145/3209219.3209236},
+  isbn          = {978-1-4503-5589-6},
+  keywords      = {adversarial autoencoders, multi-modal, neural networks, recommender systems, sparsity},
+  location      = {Singapore, Singapore},
+  numpages      = {9},
+  review        = {- use PMC Open Access Subset (same as Gipp2015)},
+  url           = {http://doi.acm.org/10.1145/3209219.3209236},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

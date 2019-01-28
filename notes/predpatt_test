@@ -208,3 +208,409 @@ avg time per context: 3.18s
 93: other words
 
 # results second run (35157 citation contexts, only ?s ?p ?o cases)
+- - top 100 subjects - -
+14002: we
+3696: which
+2923: it
+2515: that
+2118: formula
+1733: one
+1116: they
+978: this
+510: cit
+380: us
+218: maincit
+213: the authors
+209: formula and formula
+196: who
+119: the detector
+114: these
+94: cit cit
+90: he
+88: this approach
+77: i
+76: the system
+60: the latter
+59: ref
+57: formula formula
+51: the model
+51: this paper
+51: our results
+49: these models
+46: these methods
+45: this method
+42: figure ref
+41: our method
+39: the goal
+37: the formula
+37: the theory
+36: what
+36: maincit cit
+35: eq lrb ref
+35: cit cit cit
+32: let formula
+32: cit maincit
+32: these results
+32: this model
+31: researchers
+31: this result
+31: cit cit cit cit
+31: others
+31: the function formula
+30: theorem ref
+30: this work
+28: the problem
+27: section
+27: our goal
+27: the proof
+26: formula one
+26: our model
+26: this research
+24: the method
+24: ref cit
+24: our approach
+23: itself
+23: the idea
+23: cit cit maincit
+23: the results
+22: then formula
+21: the algorithm
+21: this problem
+21: the sme
+20: spectral methods
+19: the
+19: this observation
+18: our aim
+18: then we
+18: fig ref
+18: the result
+18: this fact
+17: our work
+17: equation lrb ref
+17: the main idea
+17: then it
+17: this equation
+16: formula formula and formula
+16: many authors
+16: wang et al maincit
+15: them
+15: the author
+15: people
+15: the aim
+15: our analysis
+15: this theory
+15: both
+15: this procedure
+15: maincit cit cit cit
+14: cit maincit cit
+14: another approach
+14: the data
+14: this effect
+14: the horseshoe
+13: the former
+13: this section
+
+- - top 100 predicates - -
+2057: have
+1897: has
+1300: use
+1131: used
+892: see
+763: using
+735: consider
+648: is
+613: provide
+598: obtain
+536: gives
+531: give
+531: include
+512: provides
+450: allows
+445: take
+394: define
+392: proposed
+365: contains
+344: requires
+337: denotes
+330: present
+321: need
+321: show
+320: includes
+308: satisfies
+297: find
+295: denote
+288: describe
+286: uses
+285: formula
+284: require
+281: introduce
+277: study
+275: studied
+271: takes
+269: discuss
+257: shows
+249: exists
+241: found
+234: represents
+232: possible
+227: implies
+227: shown
+226: follow
+226: introduced
+225: allow
+223: describes
+220: yields
+220: satisfy
+213: able
+205: contain
+197: obtained
+196: apply
+194: form
+194: make
+193: represent
+192: refer
+190: compute
+188: set
+188: get
+186: propose
+181: involves
+176: assume
+173: considered
+163: play
+163: compare
+161: write
+159: made
+158: provided
+158: considering
+157: prove
+157: given
+155: construct
+148: follows
+148: solve
+147: determine
+145: produce
+140: developed
+140: taking
+139: proved
+139: plays
+138: generates
+138: applied
+137: choose
+136: exhibit
+135: perform
+135: defines
+135: let
+133: achieve
+133: known
+133: review
+132: recall
+131: extend
+130: expect
+129: explain
+128: applying
+127: makes
+125: exist
+124: derive
+
+- - top 100 objects - -
+2194: formula
+553: cit
+463: us
+450: which
+375: it
+335: maincit
+287: that
+218: them
+208: cit cit
+200: rise
+143: formula and formula
+140: what
+135: this
+116: one
+115: that formula
+106: the reader
+106: maincit cit
+100: cit maincit
+91: cit cit cit
+72: place
+53: the problem
+53: formula or formula quarks
+49: an important role
+45: itself
+45: eq lrb ref
+43: our results
+43: the form
+43: the proof
+42: the model
+42: a high precision tracking syst
+41: the system
+41: ourselves
+39: the results
+39: cit cit cit cit
+38: theorem ref
+38: cit cit maincit
+37: cit maincit cit
+36: information
+35: formula formula
+35: our attention
+34: data
+34: results
+33: maincit cit cit
+32: each other
+30: attention
+30: this problem
+29: the following
+28: fig ref
+27: a lot of attention
+25: the data
+25: the formula
+24: maincit formula
+24: cit cit cit cit cit
+23: these results
+23: the notation
+23: sense
+22: order
+22: a crucial role
+22: here
+22: this approach
+21: much attention
+20: bounds
+20: this section
+20: the case
+20: saddle points
+20:
+20: cit maincit cit cit
+19: cit cit cit cit cit cit
+19: e g cit
+19: themselves
+19: this result
+18: this issue
+18: a role
+17: values
+16: the situation
+16: the constraints
+16: this property
+16: cit cit maincit cit
+16: the following result
+16: the result
+16: we
+16: the finiteness property
+16: cit cit cit maincit
+16: detection
+15: maincit cit cit cit
+15: the interested reader
+15: this idea
+15: our approach
+15: a bounded formula calculus
+15: the theory
+14: formula cit
+14: the dynamics
+14: e g
+14: both formula and formula
+14: considerable attention
+13: the proof of theorem ref
+13: proposition ref
+13: the limit formula
+13: experiments
+13: 1
+- - top 100 claims - -
+125: we have formula
+88: we refer the reader
+65: we obtain formula
+53: we set formula
+52: we write formula
+52: the detector containing formula or formula quarks
+43: we take formula
+40: the detector includes a high precision tracking system consisting of a silicon strip vertex detector
+39: we get formula
+36: we define formula
+28: this allows us
+23: we use formula
+21: we restrict ourselves
+19: we use which
+19: we find formula
+19: one has formula
+19: we call which
+18: we denote which
+17: we use it
+15: which allows us
+14: we have that formula
+12: that give rise
+12: formula let formula
+11: we refer the readers
+10: we view formula
+10: we compare our results
+10: we assume formula
+10: this gives rise
+10: we compute formula
+10: which allows one
+10: we refer the interested reader
+10: which give rise
+10: e chooses formula
+9: formula see cit
+9: we have formula and formula
+9: we used formula
+9: we let formula
+9: we compare it
+9: we do this
+9: we replace formula
+9: which implies formula
+9: it escape detection
+8: it allows one
+8: one obtains formula
+8: which allow us
+8: formula has dense range
+8: formula has a bounded formula calculus
+8: we choose formula
+8: we focus our attention
+8: we consider that
+8: we obtain that
+8: which gives rise
+8: we restrict our attention
+8: we prove theorem ref
+7: we identify formula
+7: we apply it
+7: we consider formula
+7: we discuss which
+7: we fix formula
+7: we assume that formula
+7: we have that
+7: which satisfies formula
+7: we need formula
+7: we conclude this section
+7: formula implies formula
+7: it satisfies formula
+7: we consider which
+7: three stations of silicon strip detectors and straw drift tubes placed downstream of the magnet
+6: we call what
+6: we use the notation
+6: we expand formula
+6: we describe which
+6: we used which
+6: this allows one
+6: it follows formula
+6: we recall which
+6: this implies formula
+6: formula let us
+6: we use results
+6: formula satisfies formula
+6: one replaces formula
+6: that allows us
+6: one gets formula
+6: we show fig ref
+6: one take formula
+6: we recommend the survey cit
+6: we state it
+6: which measures the ratio between current and reference volumes of the solid component
+6: we take which
+6: that explain dm
+6: violating renormalisable terms appear thus lepton and number
+5: formula see maincit
+5: we defined formula
+5: we use this
+5: we denote it
+5: we expect which
+5: it natural formula
+5: we setting formula
+5: we obtain formula for every formula and every formula
+5: we estimate formula

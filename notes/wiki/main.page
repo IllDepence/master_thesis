@@ -1332,7 +1332,7 @@ false positives: 188
         ```
     * further notes on results:
         * top 50 most matched cited docs (46.5/50 correct):
-            * 13041 [2811252340](https://academic.microsoft.com/#/detail/2811252340) → mismatch of arXiv IDs noted like *T. Heinzl, hep-th/9812190.* w/ MAG noise
+            * 13041 [2811252340](https://academic.microsoft.com/#/detail/2811252340) → mismatch of arXiv IDs noted like *T. Heinzl, hep-th/9812190.* w/ MAG noise (**note:** 2811252340 has one author listed with name *He*, which matches *hep-th*)
             * 9671 [1631356911](https://academic.microsoft.com/#/detail/1631356911) ✔
             * 6852 [2120062331](https://academic.microsoft.com/#/detail/2120062331) ✔
             * 6264 [2166248051](https://academic.microsoft.com/#/detail/2166248051) ✔
@@ -1735,6 +1735,67 @@ ndcg@5: 0.7747797443150142
 map@5: 0.7685109824176948
 ```
 
+full data set clustering
+```
+kmeans = KMeans(
+    n_clusters=n_clusters, random_state=27, n_jobs=-1, verbose=1
+    ).fit(csc_corpus.transpose())
+```
+```
+[...]
+Iteration 122, inertia 9255002310.536
+Converged at iteration 122: center shift 1.451601e-06 within tolerance 3.178566e-06
+Initialization complete
+Iteration  0, inertia 11636376082.000
+[...]
+Iteration 63, inertia 9173144224.734
+Converged at iteration 63: center shift 5.914844e-07 within tolerance 3.178566e-06
+cluster sizes:
+  92448
+  2
+  12
+  1786
+  426494
+  1
+  310
+  11
+  1
+  1071
+  2
+  56
+  103
+  1
+  5
+  153
+  4620
+  7
+  1
+  6
+  1
+  23
+  63
+  20816
+  13
+
+(enter to continue)
+```
+10 clusters
+```
+Iteration 49, inertia 10662151434.133
+Converged at iteration 49: center shift 0.000000e+00 within tolerance 3.178566e-06
+cluster sizes:
+  516830
+  1
+  1
+  304
+  1954
+  148
+  28735
+  2
+  22
+  9
+```
+
 ### citation recommendation based on entities
 
 * no clue of argumentative structure yet → chose fixed citation context size
@@ -1959,3 +2020,6 @@ sys     0m22.163s
 * probably not useful but:
     * [pybtex.org](https://pybtex.org/)
     * [pycld2 (language detection)](https://github.com/aboSamoor/pycld2)
+* Japanese arXiv submissions:
+    * full: 1612.09014, 1706.03497, 1705.05099, 1705.06376, 1705.06377, 1712.10228
+    * abstract: 1706.07104, 1704.02620

@@ -614,3 +614,39 @@ avg time per context: 3.18s
 5: we setting formula
 5: we obtain formula for every formula and every formula
 5: we estimate formula
+
+# manual experiments
+
+Input:
+Much of the early work targets shared memory architectures although several recent efforts focus on grid environments. Feldmann et al. MAINCIT propose an algorithm for dynamic scheduling on parallel machines under a PRAM programming model. McCann et al. CIT propose a dynamic processor allocation policy for shared memory multiprocessors and study space-sharing vs. time-sharing in this context.
+-> messy output
+
+Input:
+Feldmann et al. MAINCIT propose an algorithm for dynamic scheduling on parallel machines under a PRAM programming model.
+    ?a propose ?b on ?c under ?d
+        ?a: Feldmann et al. MAINCIT
+        ?b: an algorithm for dynamic scheduling
+        ?c: parallel machines
+        ?d: a PRAM programming model
+-> clean output
+=> *feed one sentence at a time*
+-> pp.events[0] ("propose")'s .obj().phrase() caputres main point about MAINCIT, but omits details afterwards
+
+### case
+    ?a also describe ?b for ?c
+        ?a: Huedo et al. MAINCIT
+        ?b: a framework , called Gridway
+        ?c: adaptive execution of applications in Grids
+
+to get to "Gridway":
+pp.events[0].arguments[1].root.dependents[2].dep.dependents[0].dep.text
+          ^            ^   ^              ^   ^             ^   ^
+[?a descr. ?b f. ?c]  ?b   |              |  MAINCIT        |  Gridway
+                         framework        |           called--[xcomp]-->Gridway
+                             describe--[nsubj]-->MAINCIT
+
+alternative to "Gridway":
+pp.events[0].root.dependents[2].dep.dependents[2].dep.dependents[0].dep.text
+
+-> just going through the dependency tree handling certain relation types in ceratin ways would be ''undoing'' part of PredPatt's work (not the identification of roots though)
+-> mby visualize dependency trees and evaluate relevance to citation for several cases, then decide on usage

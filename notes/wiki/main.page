@@ -1677,6 +1677,27 @@ map@5: 0.12257262942663173
     * because an author's word choice and a paper's content can be a strong signal, it would be ideal to not have citations from one paper split (some in test, some in training)
         * just like typhoon/sequence wise splits in pyphoon
         * → require at least 2 *containing docs* for evaluation, then do a document wise train/test split
+    * algo
+        ```
+        min_num_train = math.floor(num_contexts * 0.8)
+        train_texts_comb = []
+        test_texts = []
+        for jdx, sub_bag_key in enumerate(order):
+            sb_texts = sub_bags_dict[sub_bag_key]
+            if len(train_texts_comb) > min_num_train or jdx == len(order)-1:
+                test_texts.extend(sb_texts)
+            else:
+                train_texts_comb.extend(sb_texts)
+        ```
+        ```
+        go through 'per citing doc packages':
+          if combined number of train contexts did not reach given percentage yet and not very last citing doc package:
+            add to train contexts
+          else:
+            add to test contexts
+        ```
+        * results in 3,507,348 / 15,893,797 (18/82) split for full arxiv
+
 * misc
     * minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
  
@@ -1794,6 +1815,15 @@ cluster sizes:
   2
   22
   9
+```
+?
+```
+- - - - - 35213/3507348 - - - - -   no cluster numbers
+#1: 5822                            2782
+in top 5: 10681                     7123
+in top 10: 12236                    9512
+ndcg@5: 0.06899620276169097         0.12204397533455158
+map@5: 0.2270965268508764           0.12257262942663173
 ```
 
 ### citation recommendation based on entities
@@ -1979,7 +2009,20 @@ sys     0m22.163s
 * manually tested Open IE 5.0 and PredPatt → latter achieved better results
     * open questions
         * more approaches to compare to? ([Graphene](https://github.com/Lambda-3/Graphene), [Reverb](https://github.com/knowitall/reverb), [ClausIE](https://www.mpi-inf.mpg.de/departments/databases-and-information-systems/software/clausie/))
+            * also tested ClausIE and Ollie, PredPatt seems most sophisticated
         * how to model facts into citation context representation?
+
+##### understanding PredPatt output
+[Stanford Lecture: Dependency Parsing](https://www.youtube.com/watch?v=PVShkZgXznc)
+
+PredPatt works with [dependency grammar](https://en.wikipedia.org/wiki/Dependency_grammar) as opposed to [phrase structure (/constituency) grammar](https://en.wikipedia.org/wiki/Phrase_structure_grammar). ([YT: Grammar of Sentences: Phrases vs. Dependencies](https://www.youtube.com/watch?v=BZij1XlN4wc))
+
+* [universaldependencies.org English grammatical relations](http://universaldependencies.org/docs/en/dep/all.html)
+* [Universal Dependencies: A cross-linguistic typology](https://nlp.stanford.edu/~manning/papers/USD_LREC14_UD_revision.pdf)
+    * [Government and binding theory](https://en.wikipedia.org/wiki/Government_and_binding_theory)
+        * [Government (linguistics)](https://en.wikipedia.org/wiki/Government_(linguistics))
+            * → PredPatt's DepTriple(rel, gov, dep) consist of [relation](http://universaldependencies.org/docs/en/dep/all.html), governor, dependent(s)
+
 
 ### citation recommendation based on arguments
 

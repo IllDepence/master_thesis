@@ -78,6 +78,13 @@ def generate(in_dir, db_uri=None):
 
     aid_db_uri = 'sqlite:///aid_fos.db'
     aid_engine = create_engine(aid_db_uri, connect_args={'timeout': 60})
+    print('generating aid FoS map')
+    tpls = aid_engine.execute(
+        'select aid, fos from paper'
+        ).fetchall()
+    aid_fos_map = {}
+    for tpl in tpls:
+        aid_fos_map[tpl[0]] = tpl[1]
 
     print('querying DB')
     q = ('select bibitem.uuid, mag_id, in_doc'
@@ -91,23 +98,28 @@ def generate(in_dir, db_uri=None):
     bag_mag_id = mag_id
     num_reference_items_total = 0
     citing_docs = set()
+    citing_docs_cs = set()
+    citing_docs_phys = set()
+    citing_docs_math = set()
+    citing_docs_other = set()
     cited_docs = set()
     nums_reference_items_per_cited_doc = []
     num_contexts_total = 0
-    nums_contexts_per_citing_doc = []
+    nums_contexts_per_referece = []
     cited_docs_per_fos = {}
     reference_items_per_fos = {}
     citation_fos_pairs = []
     while tuple_idx < len(tuples):
         tmp_list = []
         num_reference_items = 0
-        fos_added = False
+        cited_fos_added = False
+        foss = []
         while mag_id == bag_mag_id and tuple_idx < len(tuples):
             if tuple_idx % 1000 == 0:
                 print('{}/{}'.format(tuple_idx, len(tuples)))
                 print('num_reference_items_total: {}'.format(num_reference_items_total))
                 print('num_citing_docs_total: {}'.format(len(citing_docs)))
-                print('num_cited_docs_total: {}'.format(len(cited_docs)))
+                # print('num_cited_docs_total: {}'.format(len(cited_docs)))
                 print('num_contexts_total: {}'.format(num_contexts_total))
                 print('cited_docs_per_fos:')
                 for k, v in cited_docs_per_fos.items():
@@ -115,6 +127,13 @@ def generate(in_dir, db_uri=None):
                 print('reference_items_per_fos:')
                 for k, v in reference_items_per_fos.items():
                     print('  {}: {}'.format(k, v))
+                print('num_citation_pairs_total: {}'.format(
+                    len(citation_fos_pairs))
+                    )
+                print('citing_docs_cs: {}'.format(len(citing_docs_cs)))
+                print('citing_docs_math: {}'.format(len(citing_docs_math)))
+                print('citing_docs_phys: {}'.format(len(citing_docs_phys)))
+                print('citing_docs_other: {}'.format(len(citing_docs_other)))
             uuid = tuples[tuple_idx][0]
             in_doc = tuples[tuple_idx][2]
             fn_txt = '{}.txt'.format(in_doc)
@@ -132,32 +151,41 @@ def generate(in_dir, db_uri=None):
                 tuple_idx += 1
                 continue
             # everything in order, do stats from here
-            cited_docs.add(mag_id)
-            citing_docs.add(in_doc)
+            # cited_docs.add(mag_id)
+            # citing_docs.add(in_doc)
             num_reference_items_total += 1
             num_contexts_total += num_contexts
             num_reference_items += 1
             nums_contexts_per_referece.append(num_contexts)
-            tuple_idx += 1
-            if tuple_idx < len(tuples):
-                mag_id = tuples[tuple_idx][1]
-            if not fos_added and False:
-                # cited
+            if not cited_fos_added:
+                # cited doc level
                 foss = mag_paper_fos(mag_engine, mag_id)
+                if len(foss) == 0:
+                    foss = ['other']
                 for fos in foss:
                     if fos not in cited_docs_per_fos:
                         cited_docs_per_fos[fos] = 0
                     cited_docs_per_fos[fos] += 1
-                # citing
-                aid = in_doc_to_aid(in_doc)
-                arxiv_fos = get_arxiv_fos_db(aid, aid_engine)
-                if arxiv_fos:
-                    if not arxiv_fos in reference_items_per_fos:
-                        reference_items_per_fos[arxiv_fos] = 0
-                    reference_items_per_fos[arxiv_fos] += 1
-                    if len(foss) > 0:
-                        citation_fos_pairs.append((arxiv_fos, foss[0]))
-                fos_added = True
+                cited_fos_added = True
+            # reference level
+            aid = in_doc_to_aid(in_doc)
+            arxiv_fos = aid_fos_map.get(aid, 'other')
+            if not arxiv_fos in reference_items_per_fos:
+                reference_items_per_fos[arxiv_fos] = 0
+            reference_items_per_fos[arxiv_fos] += 1
+            if arxiv_fos == 'cs':
+                citing_docs_cs.add(aid)
+            elif arxiv_fos == 'math':
+                citing_docs_math.add(aid)
+            elif 'physics' in arxiv_fos:
+                citing_docs_phys.add(aid)
+            else:
+                citing_docs_other.add(aid)
+            citation_fos_pairs.append((arxiv_fos, foss[0]))
+            # end
+            tuple_idx += 1
+            if tuple_idx < len(tuples):
+                mag_id = tuples[tuple_idx][1]
         nums_reference_items_per_cited_doc.append(num_reference_items)
         if tuple_idx < len(tuples):
             bag_mag_id = tuples[tuple_idx][1]
@@ -172,12 +200,16 @@ def generate(in_dir, db_uri=None):
     print('reference_items_per_fos:')
     for k, v in reference_items_per_fos.items():
         print('  {}: {}'.format(k, v))
+    print('citing_docs_cs: {}'.format(len(citing_docs_cs)))
+    print('citing_docs_math: {}'.format(len(citing_docs_math)))
+    print('citing_docs_phys: {}'.format(len(citing_docs_phys)))
+    print('citing_docs_other: {}'.format(len(citing_docs_other)))
     # with open('contexts_per_referece.json', 'w') as f:
     #     f.write(json.dumps(nums_contexts_per_referece))
     # with open('reference_items_per_cited_doc.json', 'w') as f:
     #     f.write(json.dumps(nums_reference_items_per_cited_doc))
-    # with open('citation_fos_pairs.json', 'w') as f:
-    #     f.write(json.dumps(citation_fos_pairs))
+    with open('citation_fos_pairs_fixed_fixed.json', 'w') as f:
+        f.write(json.dumps(citation_fos_pairs))
 
 if __name__ == '__main__':
     if len(sys.argv) not in [2, 3]:

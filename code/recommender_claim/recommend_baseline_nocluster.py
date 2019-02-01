@@ -7,10 +7,6 @@ import sys
 import random
 from gensim import corpora, models, similarities
 from util import bow_preprocess_string
-from scipy import sparse
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.cluster import KMeans
-from gensim.matutils import corpus2csc
 
 
 # @profile
@@ -61,6 +57,10 @@ def recommend(docs_path, dict_path):
                                key=lambda k: len(sub_bags_dict[k]),
                                reverse=True)
                 # ↑ keys for sub_bags_dict, ordered for largest bag to smallest
+
+                # min_num_train = math.floor(num_contexts)  # FIXME just a test
+                #            FIXME should give 1~few test items per cited doc
+
                 min_num_train = math.floor(num_contexts * 0.8)
                 train_texts_comb = []
                 test_texts = []
@@ -91,58 +91,7 @@ def recommend(docs_path, dict_path):
 
     # import console
     # console.copen(globals(), locals())
-    # print('this will be continued')
-
-    print('clustering')
-    n_clusters = 5
-    csc_corpus = corpus2csc(corpus)
-    kmeans = KMeans(
-        n_clusters=n_clusters, random_state=27, n_jobs=-1, verbose=1
-        ).fit(csc_corpus.transpose())
-    # make sparse vectors from cluster centroids
-    centers_sparse = sparse.csr_matrix(kmeans.cluster_centers_)
-    num_candidates = len(kmeans.labels_)
-
-    print('cluster sizes:')
-    for cluster_number in range(n_clusters):
-        print('  {}'.format(
-            len([d for d in kmeans.labels_ if d == cluster_number])
-            ))
-    print('\n(enter to continue)')
-    input()
-    print('continuing')
-
-    # split corpus
-    corpus_cluster = []
-    cluster_idx_2_real_idx = {}
-    for cluster_number in range(n_clusters):
-        if cluster_number not in cluster_idx_2_real_idx:
-            cluster_idx_2_real_idx[cluster_number] = {}
-        cluster_docs = []
-        for corpus_idx, d in enumerate(corpus):
-            if kmeans.labels_[corpus_idx] == cluster_number:
-                # keep track of IDs
-                curr_cluster_idx = len(cluster_docs)
-                cluster_idx_2_real_idx[cluster_number][
-                    curr_cluster_idx] = corpus_idx
-                # split
-                cluster_docs.append(d)
-        corpus_cluster.append(cluster_docs)
-
-        # corpus_cluster.append(
-        #     [d for i, d in enumerate(corpus)
-        #         if kmeans.labels_[i] == cluster_number]
-        #     )
-
-    print('prepring similarities')
-    index_cluster = []
-    for cluster_number in range(n_clusters):
-        index_cluster.append(
-            similarities.SparseMatrixSimilarity(
-                tfidf[corpus_cluster[cluster_number]],
-                num_features=num_unique_tokens
-                )
-            )
+    # print 'this will be continued'
 
     num_cur = 0
     num_top = 0
@@ -150,58 +99,30 @@ def recommend(docs_path, dict_path):
     num_top_10 = 0
     ndcg_sum_5 = 0
     map_sum_5 = 0
-    # print('prepring similarities')
-    # index = similarities.SparseMatrixSimilarity(
-    #             tfidf[corpus],
-    #             num_features=num_unique_tokens)
+    print('prepring similarities')
+    index = similarities.SparseMatrixSimilarity(
+                tfidf[corpus],
+                num_features=num_unique_tokens)
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
     for tpl in test:
         test_aid = tpl[0]
         test_text = bow_preprocess_string(tpl[1])
         test_bow = dictionary.doc2bow(test_text)
-
-        # old:
-        # sims = index[tfidf[test_bow]]
-
-        # new:
-        need_extend = True
-        for tup in test_bow:
-            if tup[0] == num_unique_tokens-1:
-                need_extend = False
-        if need_extend:
-            # correct shape
-            test_bow4csc = test_bow + [(num_unique_tokens-1, 0)]
-        else:
-            test_bow4csc = test_bow
-        csc_test_bow = corpus2csc([test_bow4csc])
-
-        # get similarities
-        try:
-            center_sims = cosine_similarity(
-                centers_sparse,
-                csc_test_bow.transpose()
-                )
-        except ValueError:
-            center_sims = cosine_similarity(
-                centers_sparse,
-                csc_test_bow.transpose()[:, :-1]
-                )
-        l = [x[0] for x in center_sims]
-        cluster_choice = l.index(max(l))
-        sims = index_cluster[cluster_choice][tfidf[test_bow]]
-        # /new
-
+        sims = index[tfidf[test_bow]]
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
-        # rank = len(sims_list)
-        rank = num_candidates
+        # print('correct: {}'.format(test_aid))
+        # print('- - - - - - - -')
+        # for idx, sim in enumerate(sims_list[:11]):
+        #     pre = '{} '.format(idx)
+        #     if train_aids[sim[0]] == test_aid:
+        #         pre += '✔ '
+        #     else:
+        #         pre += '  '
+        #     print('{}{}: {}'.format(pre, sim[1], train_aids[sim[0]]))
+        rank = len(sims_list)
         for idx, sim in enumerate(sims_list):
-            # new stuff
-            cluster_idx = sim[0]
-            idx_map = cluster_idx_2_real_idx[cluster_choice]
-            in_corpus_idx = idx_map[cluster_idx]
-            # / new stuff
-            if train_aids[in_corpus_idx] == test_aid:
+            if train_aids[sim[0]] == test_aid:
                 rank = idx+1
                 break
             if idx >= 10:
@@ -211,16 +132,8 @@ def recommend(docs_path, dict_path):
         num_rel = 1 + len(adjacent_cit_map[test_aid])
         for i in range(5):
             placement = i+1
-            try:
-                sim = sims_list[i]
-                # new stuff
-                cluster_idx = sim[0]
-                idx_map = cluster_idx_2_real_idx[cluster_choice]
-                in_corpus_idx = idx_map[cluster_idx]
-                # / new stuff
-                result_aid = train_aids[in_corpus_idx]
-            except IndexError:
-                result_aid = -1
+            sim = sims_list[i]
+            result_aid = train_aids[sim[0]]
             if result_aid == test_aid:
                 relevance = 1
             elif result_aid in adjacent_cit_map[test_aid]:

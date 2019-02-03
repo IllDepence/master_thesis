@@ -41,6 +41,7 @@
     * generate plain text + citation metadata from LaTeX files
         * LaTeX→XML using **Tralics**
         * replace formula, figure and table environments as well as non citation references with replacement tokens
+            * **!!!** when describing this mention Yokoi2009 *"An approach to similarity search for mathematical expressions using MathML"*
         * place citation markers and save corresponding bibitem text in DB
             * also save links from latex source (`xref` elements in Tralics output) in DB 
 * **matching of bibitem texts to MAG paper IDs**

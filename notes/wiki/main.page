@@ -8,8 +8,8 @@
 * generate a complete dataset ✔
     * generate derivative datase that allows for 5-fold CV ✔
         * fix memory problems in recommendation ✔
-            * implement k-fold cross validation
-                * last minute changes to BOW baseline (stopwords, case insensitivity, etc.); then do baseline eval
+            * implement k-fold cross validation 〜
+            * last minute changes to BOW baseline (stopwords, case insensitivity, etc.); ✔ then do baseline eval (currently running: 97.2/2.8 split all and 80/20 split 10% (\* adjacent still counted as .5 relevant—**fix** after runs over and numbers compared))
 * pre-selection of candidate recommendations to speed up process
     * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
     * clustering of comparison targets
@@ -1665,6 +1665,18 @@ ndcg@5: 0.12204397533455158
 map@5: 0.12257262942663173
 ```
 
+testing TFIDF all CS (1835797/324466 (82.3/17.7) split)
+```
+$ python3 recommend_baseline_nocluster.py items_CSall_3s_5mindoc_5mincont.csv items_CSall_3s_5mindoc_5mincont.dict
+[...]
+- - - - - 324466/324466 - - - - -
+#1: 32558
+in top 5: 89570
+in top 10: 121106
+ndcg@5: 0.1712868034589398
+map@5: 0.16274411905511044
+```
+
 ##### notes on evaluation
 
 * thoughts on exact re-recommendation
@@ -1710,7 +1722,8 @@ unstructured notes
 corpus_tfidf = tfidf[corpus]
 
 # lsi stuff (really useful for speedup?)
-lsi = models.LsiModel(corpus_tfidf, id2word=dictionary, num_topics=10)
+from gensim.models import LsiModel
+lsi = LsiModel(corpus_tfidf, id2word=dictionary, num_topics=10)
 for t in lsi.print_topics(10):
     print(t)
 corpus_lsi = lsi[corpus_tfidf]
@@ -1754,6 +1767,21 @@ in top 5: 5669
 in top 10: 5952
 ndcg@5: 0.7747797443150142
 map@5: 0.7685109824176948
+```
+csc_corpus = corpus2csc(**tfidf[**corpus**]**)
+```
+cluster sizes:
+  280
+  71
+  252
+  230
+  128
+- - - - - 6389/6389 - - - - -
+#1: 3847
+in top 5: 4798
+in top 10: 4985
+ndcg@5: 0.6653964455166995
+map@5: 0.6632754212970214
 ```
 
 full data set clustering
@@ -2021,7 +2049,7 @@ PredPatt works with [dependency grammar](https://en.wikipedia.org/wiki/Dependenc
 * [Universal Dependencies: A cross-linguistic typology](https://nlp.stanford.edu/~manning/papers/USD_LREC14_UD_revision.pdf)
     * [Government and binding theory](https://en.wikipedia.org/wiki/Government_and_binding_theory)
         * [Government (linguistics)](https://en.wikipedia.org/wiki/Government_(linguistics))
-            * → PredPatt's DepTriple(rel, gov, dep) consist of [relation](http://universaldependencies.org/docs/en/dep/all.html), governor, dependent(s)
+            * → PredPatt's DepTriple(rel, gov, dep) consist of [relation](http://universaldependencies.org/docs/en/dep/all.html), governor, dependant: governor--[relation--]--> dependant
 
 
 ### citation recommendation based on arguments
@@ -2066,3 +2094,4 @@ PredPatt works with [dependency grammar](https://en.wikipedia.org/wiki/Dependenc
 * Japanese arXiv submissions:
     * full: 1612.09014, 1706.03497, 1705.05099, 1705.06376, 1705.06377, 1712.10228
     * abstract: 1706.07104, 1704.02620
+* [NLP papers with code](https://paperswithcode.com/area/nlp) (by task)

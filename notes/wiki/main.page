@@ -10,10 +10,12 @@
         * fix memory problems in recommendation ✔
             * implement k-fold cross validation 〜
             * last minute changes to BOW baseline (stopwords, case insensitivity, etc.); ✔ then do baseline eval (currently running: 97.2/2.8 split all and 80/20 split 10% (\* adjacent still counted as .5 relevant—**fix** after runs over and numbers compared))
-* pre-selection of candidate recommendations to speed up process
-    * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
-    * clustering of comparison targets
-    * [k4nn](https://arxiv.org/abs/1802.08301)
+    * pre-selection of candidate recommendations to speed up process
+        * IR type method: generate index for comparison targets, retrieve e.g. 1k targets, really compare to those
+        * clustering of comparison targets
+        * [k4nn](https://arxiv.org/abs/1802.08301)
+* test conditional probability sentence end citation on arXiv CS dataset
+    * focus on precision b/c few patterns will probably not cover most of the citations at sentence ends
 
 ### recent notes
 
@@ -1664,6 +1666,24 @@ in top 10: 9512
 ndcg@5: 0.12204397533455158
 map@5: 0.12257262942663173
 ```
+snapshot of 97.2/2.8 split (cancelled) (estimated full runtime: 8.5 days)
+```
+- - - - - 220388/551728 - - - - -
+#1: 16433
+in top 5: 43433
+in top 10: 58617
+ndcg@5: 0.12266359294399554
+map@5: 0.11835641383983334
+```
+snapshot of 10% sample
+```
+- - - - - 538479/1428766 - - - - -
+#1: 61849
+in top 5: 149272
+in top 10: 194336
+ndcg@5: 0.16809617864819412
+map@5: 0.17328035695596722
+```
 
 testing TFIDF all CS (1835797/324466 (82.3/17.7) split)
 ```
@@ -1675,6 +1695,17 @@ in top 5: 89570
 in top 10: 121106
 ndcg@5: 0.1712868034589398
 map@5: 0.16274411905511044
+```
+testing TFIDF all MATH
+```
+$ python3 recommend_baseline_nocluster.py items_MATHCSsize_3s_5mindoc_5mincont.csv items_MATHCSsize_3s_5mindoc_5mincont.dict
+[...]
+- - - - - 325830/325830 - - - - -
+#1: 50483
+in top 5: 113511
+in top 10: 142262
+ndcg@5: 0.1964657159233343
+map@5: 0.22582317977675412
 ```
 
 ##### notes on evaluation
@@ -1782,6 +1813,59 @@ in top 5: 4798
 in top 10: 4985
 ndcg@5: 0.6653964455166995
 map@5: 0.6632754212970214
+↓ fix test bow generation w/ TFIDF vals ↓
+- - - - - 6389/6389 - - - - -
+#1: 3982
+in top 5: 4962
+in top 10: 5159                   no cluster:
+ndcg@5: 0.6886718460042281        0.7747797443150142
+map@5: 0.6863932801168672         0.7685109824176948
+↓ using LDA for clustering ↓
+- - - - - 6389/6389 - - - - -
+#1: 3393
+in top 5: 3906
+in top 10: 3961
+ndcg@5: 0.5590948786636911
+map@5: 0.5649632180309913
+```
+on TFIDF vals with CSall
+```
+Iteration 159, inertia 59258.047
+Converged at iteration 159: center shift 0.000000e+00 within tolerance 4.317925e-10
+cluster sizes:
+  522
+  4532
+  1114
+  2853
+  3356
+  2828
+  4880
+  2221
+  1838
+  3894
+  1187
+  2924
+  1147
+  280
+  1822
+  375
+  2566
+  936
+  500
+  1082
+  2156
+  486
+  1092
+  17464
+  1185
+
+(enter to continue)   50 cluster (limited to 1 init, 41 itr.)  500 cluster (*36% snapshot)
+[...]                          v                               v                                 non cluster numbers
+#1: 26078                     #1: 26430                       #1: 8482*                          #1: 32558
+in top 5: 67882               in top 5: 68204                 in top 5: 21714*                   in top 5: 89570
+in top 10: 89490              in top 10: 89142                in top 10: 28079*                  in top 10: 121106
+ndcg@5: 0.1330362841406317    ndcg@5: 0.1350676714519149      ndcg@5: 0.12270955401333589*       ndcg@5: 0.1712868034589398
+map@5: 0.12652054966211118    map@5: 0.12774147881955733      map@5: 0.11292460199111788*        map@5: 0.16274411905511044
 ```
 
 full data set clustering
@@ -1844,7 +1928,7 @@ cluster sizes:
   22
   9
 ```
-?
+↓ 0.22 because of bug in code (took rank in selected cluster which could be size 1)
 ```
 - - - - - 35213/3507348 - - - - -   no cluster numbers
 #1: 5822                            2782
@@ -1965,10 +2049,10 @@ map@5: 0.2270965268508764           0.12257262942663173
             ```
             - - - filter candidates - - -
 
-            min: 584              ← based on 4809 contexts
-            max: 67438444         ← based on 4809 contexts
-            still in [0 hops]: 7355/39979   ← based on 39979 c.  (4809 contexts → avg #candidates: 10.205.735 (0.049%))
-            still in [1 hop ]: 18959/39979  ← based on 39979 c.  (4809 contexts → avg #candidates: 852.221 (0.0041%))
+            min: 1              ← based on 11810 contexts
+            max: 70,404,442         ← based on 11810 contexts
+            still in [0 hops]: 7355/39979   ← based on 39979 c.  (11810 contexts → avg #candidates: 846,145 (0.0040%))
+            still in [1 hop ]: 18959/39979  ← based on 39979 c.  (11810 contexts → avg #candidates: 10,461,426 (0.0498%))
             still in [2 hops]: 30924/39979  ← based on 39979 c.
             
             ↓ based on 3995 contexts ↓

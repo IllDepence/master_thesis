@@ -11,6 +11,8 @@ from scipy import sparse
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import KMeans
 from gensim.matutils import corpus2csc
+from gensim.models import LsiModel
+from gensim.models.ldamulticore import LdaMulticore
 
 
 # @profile
@@ -92,10 +94,15 @@ def recommend(docs_path, dict_path):
     # import console
     # console.copen(globals(), locals())
     # print('this will be continued')
+    # sys.exit()
 
     print('clustering')
     n_clusters = 5
-    csc_corpus = corpus2csc(corpus)
+    # csc_corpus = corpus2csc(corpus)  # bad clustering results
+    csc_corpus = corpus2csc(tfidf[corpus])  # to test
+    # lsi = LsiModel(tfidf[corpus], id2word=dictionary, num_topics=10)
+    # csc_corpus = corpus2csc(lsi[corpus])  # to test
+    # TODO: also test LDA: LdaMulticore
     kmeans = KMeans(
         n_clusters=n_clusters, random_state=27, n_jobs=-1, verbose=1
         ).fit(csc_corpus.transpose())
@@ -170,10 +177,10 @@ def recommend(docs_path, dict_path):
                 need_extend = False
         if need_extend:
             # correct shape
-            test_bow4csc = test_bow + [(num_unique_tokens-1, 0)]
+            test_bow4csc = tfidf[test_bow] + [(num_unique_tokens-1, 0)]
         else:
-            test_bow4csc = test_bow
-        csc_test_bow = corpus2csc([test_bow4csc])
+            test_bow4csc = tfidf[test_bow]
+        csc_test_bow = corpus2csc([test_bow4csc])  # FIXME: is a tfidf[] missing here?
 
         # get similarities
         try:
@@ -224,7 +231,7 @@ def recommend(docs_path, dict_path):
             if result_aid == test_aid:
                 relevance = 1
             elif result_aid in adjacent_cit_map[test_aid]:
-                relevance = .5
+                relevance = .5  # FIXME: set to 1
             else:
                 relevance = 0
             denom = math.log2(placement + 1)
@@ -233,7 +240,7 @@ def recommend(docs_path, dict_path):
             if placement == 1:
                 ideal_rel = 1
             elif placement <= num_rel:
-                ideal_rel = .5
+                ideal_rel = .5  # FIXME: set to 1
             else:
                 ideal_rel = 0
             idcg_numer = math.pow(2, ideal_rel) - 1

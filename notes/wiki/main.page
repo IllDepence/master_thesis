@@ -1666,23 +1666,23 @@ in top 10: 9512
 ndcg@5: 0.12204397533455158
 map@5: 0.12257262942663173
 ```
-snapshot of 97.2/2.8 split (cancelled) (estimated full runtime: 8.5 days)
+snapshot of 97.2/2.8 split (cancelled) (estimated full runtime: 8.5 days) (~1.36s/doc)
 ```
-- - - - - 220388/551728 - - - - -
-#1: 16433
-in top 5: 43433
-in top 10: 58617
-ndcg@5: 0.12266359294399554
-map@5: 0.11835641383983334
+- - - - - 284414/551728 - - - - -
+#1: 21055
+in top 5: 55903
+in top 10: 75398
+ndcg@5: 0.12220673380877238
+map@5: 0.11773207366725469
 ```
-snapshot of 10% sample
+snapshot of 10% sample (cancelled) (estimated full runtime: 8.5 days) (~0.5s/doc)
 ```
-- - - - - 538479/1428766 - - - - -
-#1: 61849
-in top 5: 149272
-in top 10: 194336
-ndcg@5: 0.16809617864819412
-map@5: 0.17328035695596722
+- - - - - 716990/1428766 - - - - - 6066m
+#1: 83205
+in top 5: 200705
+in top 10: 261160
+ndcg@5: 0.1697610086377023
+map@5: 0.17504377094972065
 ```
 
 testing TFIDF all CS (1835797/324466 (82.3/17.7) split)
@@ -1859,13 +1859,13 @@ cluster sizes:
   17464
   1185
 
-(enter to continue)   50 cluster (limited to 1 init, 41 itr.)  500 cluster (*36% snapshot)
-[...]                          v                               v                                 non cluster numbers
-#1: 26078                     #1: 26430                       #1: 8482*                          #1: 32558
-in top 5: 67882               in top 5: 68204                 in top 5: 21714*                   in top 5: 89570
-in top 10: 89490              in top 10: 89142                in top 10: 28079*                  in top 10: 121106
-ndcg@5: 0.1330362841406317    ndcg@5: 0.1350676714519149      ndcg@5: 0.12270955401333589*       ndcg@5: 0.1712868034589398
-map@5: 0.12652054966211118    map@5: 0.12774147881955733      map@5: 0.11292460199111788*        map@5: 0.16274411905511044
+(enter to continue)   50 cluster (limited to 1 init, 41 itr.)  500 cluster
+324466/324466                  v                               v                                 non cluster numbers
+#1: 26078                     #1: 26430                       #1: 23516                          #1: 32558
+in top 5: 67882               in top 5: 68204                 in top 5: 59867                    in top 5: 89570
+in top 10: 89490              in top 10: 89142                in top 10: 77709                   in top 10: 121106
+ndcg@5: 0.1330362841406317    ndcg@5: 0.1350676714519149      ndcg@5: 0.12293981186824066        ndcg@5: 0.1712868034589398
+map@5: 0.12652054966211118    map@5: 0.12774147881955733      map@5: 0.11270677564572494         map@5: 0.16274411905511044
 ```
 
 full data set clustering
@@ -2097,6 +2097,26 @@ real    67m51.744s
 user    67m43.101s
 sys     0m22.163s
 ```
+
+———ｎｅｗ—ｓｈｉｎｙ—ｅｒａ———
+
+1k sample test
+```
+$ python3 recommend_baseline_nocluster.py items_1ksample_wFoS_3s_5mindoc_5mincont.csv items_1ksample_wFoS_3s_5mindoc_5mincont.dict
+- - - - - 5422/5422 - - - - - BOW only
+#1: 3807
+in top 5: 4827
+in top 10: 5073
+ndcg@5: 0.7941903291193916
+map@5: 0.7776650682405032
+- - - - - 5422/5422 - - - - - FoS dot product only
+#1: 1085
+in top 5: 2112
+in top 10: 2560
+ndcg@5: 0.2942255234311445
+map@5: 0.26928562646010107
+```
+
 
 ##### ~~named entity recognition~~ (probably not so important)
 

@@ -230,7 +230,7 @@ def in_doc_to_aid(in_doc):
     return aid
 
 
-def get_cont_ann(idx, edx, win_pre, win_post, annots):
+def get_cont_ann(idx, edx, win_pre, win_post, annots, fosp_map, threshold=5.0):
     min_end = idx-win_pre
     max_start = edx+win_post
     context_annot = []
@@ -238,20 +238,22 @@ def get_cont_ann(idx, edx, win_pre, win_post, annots):
     for annot in annots:
         start = int(annot[2])
         end = int(annot[3])
-        dbp_id = annot[4].split('/')[-1]
+        fos_id = annot[4].split('/')[-1]
         conf = float(annot[5])
+        if conf <= threshold:
+            continue
         if start <= max_start and end >= min_end:
-            context_annot.append(dbp_id)
-        context_annot_ext = None  # FIXME
-        # if dbp_id in fosc_map:
-        #     ext = ext + fosc_map[dbp_id]
-        # context_annot_ext.extend(ext)
+            context_annot.append(fos_id)
+            ext = [fos_id]
+            if fos_id in fosp_map:
+                ext = ext + fosp_map[fos_id]
+            context_annot_ext.extend(ext)
     return context_annot, context_annot_ext
 
 
 def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
              min_contexts=5, min_citing_docs=5, with_placeholder=True,
-             sample_size=100, only_fos=False, fos_annot=True):
+             sample_size=1000, only_fos=False, fos_annot=True):
     """ Generate a list of citation contexts, given criteria:
             context_size
             context_size_unit (s=setences, w=words)
@@ -278,6 +280,25 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
         aid_fos_map = {}
         for tpl in tpls:
             aid_fos_map[tpl[0]] = tpl[1]
+    if fos_annot:
+        # fos child->parent map
+        fosp_path = 'FieldOfStudyChildren.txt'
+        if not os.path.isfile(fosp_path):
+            print('Couldn\'t find file FieldOfStudyChildren.txt.')
+            sys.exit()
+        print('generating FoS child->parent map')
+        with open(fosp_path) as f:
+            fosp_lines = f.readlines()
+
+        fosp_map = {}
+        for l in fosp_lines:
+            fields = l.split('\t')
+            parent = fields[0].strip()
+            child = fields[1].strip()
+            if child not in fosp_map:
+                fosp_map[child] = []
+            fosp_map[child].append(parent)
+
     print('querying DB')
     limit_insert = ''
     if sample_size > 0:
@@ -379,9 +400,9 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
 
                 if fos_annot:
                     context_annot, context_annot_ext = get_cont_ann(
-                        idx, edx, win_pre, win_post, annots)
-                    print('#annots: {}'.format(len(context_annot)))
-                    input()
+                        idx, edx, win_pre, win_post, annots, fosp_map)
+                    cont_ann_str = '{}'.format(
+                        '\u241F'.join(context_annot))  # TODO: try 2 steps ext
 
                 placeholder = ''
                 if with_placeholder:
@@ -395,7 +416,11 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
                 context = re.sub(RE_WHITESPACE, ' ', context)
 
                 adj_cit_str = '{}'.format('\u241F'.join(adjacent_citations))
-                tmp_list.append([mag_id, adj_cit_str, in_doc, context])
+                if fos_annot:
+                    tmp_list.append([mag_id, adj_cit_str, in_doc, context,
+                        cont_ann_str])
+                else:
+                    tmp_list.append([mag_id, adj_cit_str, in_doc, context])
                 marker_found = True
             if marker_found:
                 num_docs += 1

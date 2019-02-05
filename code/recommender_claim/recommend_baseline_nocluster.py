@@ -5,18 +5,34 @@ import os
 import math
 import sys
 import random
+import operator
 from gensim import corpora, models, similarities
 from util import bow_preprocess_string
+from sklearn.preprocessing import MultiLabelBinarizer
 
 
-# @profile
-def recommend(docs_path, dict_path):
+def combine_rankings(bow_ranking, fos_ranking):
+    point_dic = {}
+    for i in range(len(bow_ranking)):
+        points = len(bow_ranking) - i
+        if bow_ranking[i] not in point_dic:
+            point_dic[bow_ranking[i]] = 0
+        point_dic[bow_ranking[i]] += points
+        # FIXME: find a way to actually make use of FoS ranking
+        if i < 5 and bow_ranking[i] == fos_ranking[0]:
+            point_dic[bow_ranking[i]] *= 1.1
+    comb = sorted(point_dic.items(), key=operator.itemgetter(1), reverse=True)
+    return [c[0] for c in comb]
+
+def recommend(docs_path, dict_path, fos_annot=True):
     """ - foo
     """
 
     test = []
-    train_aids = []
+    train_mids = []
     train_texts = []
+    train_foss = []
+    foss = []
     tmp_bag = []
     adjacent_cit_map = {}
 
@@ -27,32 +43,37 @@ def recommend(docs_path, dict_path):
     with open(docs_path) as f:
         for idx, line in enumerate(f):
             if idx == 0:
-                tmp_bag_current_aid = line.split('\u241E')[0]
+                tmp_bag_current_mid = line.split('\u241E')[0]
             if idx%10000 == 0:
                 print('{}/{} lines'.format(idx, num_lines))
-                # if idx > 470000:
-                #     sys.exit()
-            aid, adjacent, in_doc, text = line.split('\u241E')
+            cntxt_foss = []
+            if fos_annot:
+                mid, adjacent, in_doc, text, fos_annot = line.split('\u241E')
+                cntxt_foss = [f.strip() for f in fos_annot.split('\u241F')]
+                foss.extend(cntxt_foss)
+            else:
+                mid, adjacent, in_doc, text = line.split('\u241E')
             # create adjacent map for later use in eval
-            if aid not in adjacent_cit_map:
-                adjacent_cit_map[aid] = []
+            if mid not in adjacent_cit_map:
+                adjacent_cit_map[mid] = []
             if len(adjacent) > 0:
                 adj_cits = adjacent.split('\u241F')
                 for adj_cit in adj_cits:
-                    if adj_cit not in adjacent_cit_map[aid]:
-                        adjacent_cit_map[aid].append(adj_cit)
+                    if adj_cit not in adjacent_cit_map[mid]:
+                        adjacent_cit_map[mid].append(adj_cit)
             # fill texts
             text = text.replace('[]', '')
-            if aid != tmp_bag_current_aid or idx == num_lines-1:
-                # tmp_bag now contains all lines sharing ID tmp_bag_current_aid
+            if mid != tmp_bag_current_mid or idx == num_lines-1:
+                # tmp_bag now contains all lines sharing ID tmp_bag_current_mid
                 num_contexts = len(tmp_bag)
                 sub_bags_dict = {}
                 for item in tmp_bag:
                     item_in_doc = item[0]
                     item_text = item[1]
+                    item_foss = item[2]
                     if item_in_doc not in sub_bags_dict:
                         sub_bags_dict[item_in_doc] = []
-                    sub_bags_dict[item_in_doc].append(item_text)
+                    sub_bags_dict[item_in_doc].append([item_text, item_foss])
                 order = sorted(sub_bags_dict,
                                key=lambda k: len(sub_bags_dict[k]),
                                reverse=True)
@@ -62,36 +83,43 @@ def recommend(docs_path, dict_path):
                 #            FIXME should give 1~few test items per cited doc
 
                 min_num_train = math.floor(num_contexts * 0.8)
-                train_texts_comb = []
-                test_texts = []
+                train_tups = []
+                test_tups = []
                 # TODO: how to do k-fold cross val with this?
                 for jdx, sub_bag_key in enumerate(order):
-                    sb_texts = sub_bags_dict[sub_bag_key]
-                    if len(train_texts_comb) > min_num_train or jdx == len(order)-1:
-                        test_texts.extend(sb_texts)
+                    sb_tup = sub_bags_dict[sub_bag_key]
+                    if len(train_tups) > min_num_train or jdx == len(order)-1:
+                        test_tups.extend(sb_tup)
                     else:
-                        train_texts_comb.extend(sb_texts)
-                test.extend([(tmp_bag_current_aid, txt) for txt in test_texts])
+                        train_tups.extend(sb_tup)
+                test.extend([
+                    [tmp_bag_current_mid, tup[0], tup[1]]
+                    for tup in test_tups])
                 # because we use BOW we can just combine train docs here
-                train_text_combined = ' '.join(txt for txt in train_texts_comb)
-                train_aids.append(tmp_bag_current_aid)
+                train_text_combined = ' '.join(tup[0] for tup in train_tups)
+                train_mids.append(tmp_bag_current_mid)
                 train_texts.append(train_text_combined.split())
+                train_foss.append([fos for tup in train_tups for fos in tup[1]])
                 # reset bag
                 tmp_bag = []
-                tmp_bag_current_aid = aid
-            tmp_bag.append([in_doc, text])
+                tmp_bag_current_mid = mid
+            tmp_bag.append([in_doc, text, cntxt_foss])
     print('loading dictionary')
     dictionary = corpora.Dictionary.load(dict_path)
     num_unique_tokens = len(dictionary.keys())
     print('building corpus')
     corpus = [dictionary.doc2bow(text) for text in train_texts]
     # corpora.MmCorpus.serialize('3s5min5min_corpus.mm', corpus)
+    if fos_annot:
+        print('preparing FoS model')
+        mlb = MultiLabelBinarizer()
+        mlb.fit([foss])
+        train_foss_matrix = mlb.transform(train_foss)
     print('generating TFIDF model')
     tfidf = models.TfidfModel(corpus)
 
     # import console
     # console.copen(globals(), locals())
-    # print 'this will be continued'
 
     num_cur = 0
     num_top = 0
@@ -105,38 +133,41 @@ def recommend(docs_path, dict_path):
                 num_features=num_unique_tokens)
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
     for tpl in test:
-        test_aid = tpl[0]
+        test_mid = tpl[0]
         test_text = bow_preprocess_string(tpl[1])
+        if fos_annot:
+            test_foss_vec = mlb.transform([tpl[2]])
+            sorted_dot_prods = train_foss_matrix.dot(
+                test_foss_vec.transpose()
+                ).transpose()[0].argsort()
+            fos_ranking = sorted_dot_prods[::-1].tolist()
+            # TODO: mby find a way to incorporate dot product value or
+            #       FoS level here
         test_bow = dictionary.doc2bow(test_text)
         sims = index[tfidf[test_bow]]
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
-        # print('correct: {}'.format(test_aid))
-        # print('- - - - - - - -')
-        # for idx, sim in enumerate(sims_list[:11]):
-        #     pre = '{} '.format(idx)
-        #     if train_aids[sim[0]] == test_aid:
-        #         pre += '✔ '
-        #     else:
-        #         pre += '  '
-        #     print('{}{}: {}'.format(pre, sim[1], train_aids[sim[0]]))
-        rank = len(sims_list)
-        for idx, sim in enumerate(sims_list):
-            if train_aids[sim[0]] == test_aid:
+        bow_ranking = [s[0] for s in sims_list]
+        final_ranking = combine_rankings(bow_ranking, fos_ranking)
+        rank = len(bow_ranking)  # assign worst possible
+        # rank by fos only:
+        # sims_list = [[i, 0] for i in fos_top_10]
+        for idx, doc_id in enumerate(final_ranking):
+            if train_mids[doc_id] == test_mid:
                 rank = idx+1
                 break
             if idx >= 10:
                 break
         dcg = 0
         idcg = 0
-        num_rel = 1 + len(adjacent_cit_map[test_aid])
+        num_rel = 1 + len(adjacent_cit_map[test_mid])
         for i in range(5):
             placement = i+1
-            sim = sims_list[i]
-            result_aid = train_aids[sim[0]]
-            if result_aid == test_aid:
+            doc_id = final_ranking[i]
+            result_mid = train_mids[doc_id]
+            if result_mid == test_mid:
                 relevance = 1
-            elif result_aid in adjacent_cit_map[test_aid]:
+            elif result_mid in adjacent_cit_map[test_mid]:
                 relevance = .5  # FIXME: set to 1
             else:
                 relevance = 0

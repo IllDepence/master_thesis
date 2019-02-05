@@ -20,7 +20,10 @@ def build(docs_path):
         for idx, line in enumerate(f):
             if idx%10000 == 0:
                 print('{}/{} lines'.format(idx, total))
-            aid, adjacent, in_doc, text = line.split('\u241E')
+            try:
+                aid, adjacent, in_doc, text = line.split('\u241E')
+            except ValueError:
+                aid, adjacent, in_doc, text, fos_annot = line.split('\u241E')
             preprocessed_text = bow_preprocess_string(text)
             texts.append(preprocessed_text)
     print('building dictionary')

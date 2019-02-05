@@ -54,6 +54,9 @@ def foo(docs_path):
             d = t2 - t1
             pp_total_time += d.total_seconds()
             for pred, patt in pp.event_dict.items():
+                # TODO: rework with following dependency trees
+                #       and evaluating relevance of nodes with
+                #       regards to cited doc
                 if not patt.has_subj() or not patt.has_obj():
                     bad_patterns += 1
                     continue

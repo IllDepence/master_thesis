@@ -11,12 +11,11 @@ from scipy import sparse
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import KMeans
 from gensim.matutils import corpus2csc
-from gensim.models import LsiModel
 from gensim.models.ldamulticore import LdaMulticore
 
 
 # @profile
-def recommend(docs_path, dict_path):
+def recommend(docs_path, dict_path, n_clusters):
     """ - foo
     """
 
@@ -97,12 +96,13 @@ def recommend(docs_path, dict_path):
     # sys.exit()
 
     print('clustering')
-    n_clusters = 5
     # csc_corpus = corpus2csc(corpus)  # bad clustering results
-    csc_corpus = corpus2csc(tfidf[corpus])  # to test
-    # lsi = LsiModel(tfidf[corpus], id2word=dictionary, num_topics=10)
-    # csc_corpus = corpus2csc(lsi[corpus])  # to test
-    # TODO: also test LDA: LdaMulticore
+    # lda = LdaMulticore(tfidf[corpus],
+    #     id2word=dictionary, num_topics=n_clusters)  # somewhat better
+    # csc_corpus = corpus2csc(lda[corpus])
+
+    csc_corpus = corpus2csc(tfidf[corpus])  # best so far
+
     kmeans = KMeans(
         n_clusters=n_clusters, random_state=27, n_jobs=-1, verbose=1
         ).fit(csc_corpus.transpose())
@@ -180,7 +180,7 @@ def recommend(docs_path, dict_path):
             test_bow4csc = tfidf[test_bow] + [(num_unique_tokens-1, 0)]
         else:
             test_bow4csc = tfidf[test_bow]
-        csc_test_bow = corpus2csc([test_bow4csc])  # FIXME: is a tfidf[] missing here?
+        csc_test_bow = corpus2csc([test_bow4csc])
 
         # get similarities
         try:
@@ -264,10 +264,11 @@ def recommend(docs_path, dict_path):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print(('usage: python3 recommend.py </path/to/docs_file> </path/to/gen'
-               'sim_dict>'))
+               'sim_dict> <num_clusters>'))
         sys.exit()
     docs_path = sys.argv[1]
     dict_path = sys.argv[2]
-    recommend(docs_path, dict_path)
+    n_clusters = int(sys.argv[3])
+    recommend(docs_path, dict_path, n_clusters)

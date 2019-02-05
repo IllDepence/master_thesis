@@ -55,6 +55,7 @@ def generate(db_uri, min_contexts=4, preprocess=False):
     #  '_real_fields', 'citationcontext', 'count', 'index', 'keys', 'paperid',
     #  'paperreferenceid']
     # 
+    # TODO
     # Work in progress. ↑ MAG DB results ↓ stuff to adjust for generating
     #                                      a dataset
     # 

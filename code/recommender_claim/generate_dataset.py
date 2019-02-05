@@ -221,9 +221,37 @@ def window_distance_sentences(prefix, postfix, num_sentences):
     return pre_dist, post_dist
 
 
+def in_doc_to_aid(in_doc):
+    aid = in_doc
+    if re.search('[a-z]', in_doc, re.I):
+        m = re.search('[a-z][0-9]', in_doc, re.I)
+        cut = m.start() + 1
+        aid = '{}/{}'.format(in_doc[:cut], in_doc[cut:])
+    return aid
+
+
+def get_cont_ann(idx, edx, win_pre, win_post, annots):
+    min_end = idx-win_pre
+    max_start = edx+win_post
+    context_annot = []
+    context_annot_ext = []
+    for annot in annots:
+        start = int(annot[2])
+        end = int(annot[3])
+        dbp_id = annot[4].split('/')[-1]
+        conf = float(annot[5])
+        if start <= max_start and end >= min_end:
+            context_annot.append(dbp_id)
+        context_annot_ext = None  # FIXME
+        # if dbp_id in fosc_map:
+        #     ext = ext + fosc_map[dbp_id]
+        # context_annot_ext.extend(ext)
+    return context_annot, context_annot_ext
+
+
 def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
              min_contexts=5, min_citing_docs=5, with_placeholder=True,
-             sample_size=-1):
+             sample_size=100, only_fos=False, fos_annot=True):
     """ Generate a list of citation contexts, given criteria:
             context_size
             context_size_unit (s=setences, w=words)
@@ -240,6 +268,16 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
     engine = create_engine(db_uri)
 
+    if only_fos:
+        aid_db_uri = 'sqlite:///aid_fos.db'
+        aid_engine = create_engine(aid_db_uri, connect_args={'timeout': 60})
+        print('generating aid FoS map')
+        tpls = aid_engine.execute(
+            'select aid, fos from paper'
+            ).fetchall()
+        aid_fos_map = {}
+        for tpl in tpls:
+            aid_fos_map[tpl[0]] = tpl[1]
     print('querying DB')
     limit_insert = ''
     if sample_size > 0:
@@ -275,6 +313,12 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
                 print('{}/{}'.format(tuple_idx, len(tuples)))
             uuid = tuples[tuple_idx][0]
             in_doc = tuples[tuple_idx][2]
+            if only_fos:
+                aid = in_doc_to_aid(in_doc)
+                fos = aid_fos_map.get(aid, False)
+                if fos != only_fos:
+                    tuple_idx += 1
+                    continue
             fn_txt = '{}.txt'.format(in_doc)
             path_txt = os.path.join(in_dir, fn_txt)
             if not os.path.isfile(path_txt):
@@ -286,6 +330,24 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
                 continue
             with open(path_txt) as f:
                 text = f.read()
+
+            if fos_annot:
+                annots = []
+                txt_dir_path = os.path.split(path_txt)[0]
+                path_parts = os.path.split(txt_dir_path)
+                annot_dir_path = os.path.join(
+                    path_parts[0],
+                    '{}_fos-annot'.format(path_parts[1])
+                    )
+                annot_file = os.path.join(annot_dir_path, fn_txt)
+                if os.path.isfile(annot_file):
+                    with open(annot_file) as f:
+                        ann_lines = f.readlines()
+                        annots = []
+                        for ann_line in ann_lines:
+                            fos, disp, start, end, mid, conf = ann_line.split('\t')
+                            annots.append((fos, disp, start, end, mid, conf))
+
             marker = '{{{{cite:{}}}}}'.format(uuid)
             marker_found = False
             for m in re.finditer(marker, text):
@@ -314,6 +376,12 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
 
                 pre = pre[-win_pre:]
                 post = post[:win_post]
+
+                if fos_annot:
+                    context_annot, context_annot_ext = get_cont_ann(
+                        idx, edx, win_pre, win_post, annots)
+                    print('#annots: {}'.format(len(context_annot)))
+                    input()
 
                 placeholder = ''
                 if with_placeholder:
@@ -345,7 +413,7 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
     print('number of contexts (Σ: {}): {}'.format(
         sum(nums_contexts), nums_contexts)
         )
-    with open('items_all_3s_5mindoc_5mincont.csv', 'w') as f:
+    with open('items_foo_3s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))
             f.write(line)

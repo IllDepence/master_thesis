@@ -137,7 +137,7 @@ def recommend(docs_path, dict_path):
             if result_aid == test_aid:
                 relevance = 1
             elif result_aid in adjacent_cit_map[test_aid]:
-                relevance = .5
+                relevance = .5  # FIXME: set to 1
             else:
                 relevance = 0
             denom = math.log2(placement + 1)
@@ -146,7 +146,7 @@ def recommend(docs_path, dict_path):
             if placement == 1:
                 ideal_rel = 1
             elif placement <= num_rel:
-                ideal_rel = .5
+                ideal_rel = .5  # FIXME: set to 1
             else:
                 ideal_rel = 0
             idcg_numer = math.pow(2, ideal_rel) - 1

@@ -6,3 +6,4 @@ git+https://github.com/hltcoe/PredPatt.git
 psycopg2-binary==2.7.6.1
 lxml==4.2.5
 scikit-learn==0.20.2
+pydot==1.4.1

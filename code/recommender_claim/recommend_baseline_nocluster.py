@@ -6,21 +6,23 @@ import math
 import sys
 import random
 import operator
+import numpy as np
 from gensim import corpora, models, similarities
 from util import bow_preprocess_string
 from sklearn.preprocessing import MultiLabelBinarizer
 
 
-def combine_rankings(bow_ranking, fos_ranking):
+def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
+    if top_dot_prod < 1:
+        return bow_ranking
     point_dic = {}
     for i in range(len(bow_ranking)):
         points = len(bow_ranking) - i
         if bow_ranking[i] not in point_dic:
             point_dic[bow_ranking[i]] = 0
         point_dic[bow_ranking[i]] += points
-        # FIXME: find a way to actually make use of FoS ranking
-        if i < 5 and bow_ranking[i] == fos_ranking[0]:
-            point_dic[bow_ranking[i]] *= 1.1
+    for boost in fos_boost:
+        point_dic[boost] += 1.1
     comb = sorted(point_dic.items(), key=operator.itemgetter(1), reverse=True)
     return [c[0] for c in comb]
 
@@ -137,18 +139,23 @@ def recommend(docs_path, dict_path, fos_annot=True):
         test_text = bow_preprocess_string(tpl[1])
         if fos_annot:
             test_foss_vec = mlb.transform([tpl[2]])
-            sorted_dot_prods = train_foss_matrix.dot(
+            sorted_dot_prod_ids = train_foss_matrix.dot(
                 test_foss_vec.transpose()
                 ).transpose()[0].argsort()
-            fos_ranking = sorted_dot_prods[::-1].tolist()
-            # TODO: mby find a way to incorporate dot product value or
-            #       FoS level here
+            sorted_dot_prods = train_foss_matrix.dot(
+                test_foss_vec.transpose()
+                ).transpose()[0]
+            fos_ranking = sorted_dot_prod_ids[::-1].tolist()
+            fos_boost = np.where(
+                sorted_dot_prods >= sorted_dot_prods.max()-1
+                )[0].tolist()
+            top_dot_prod = sorted_dot_prods[-1]
         test_bow = dictionary.doc2bow(test_text)
         sims = index[tfidf[test_bow]]
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
         bow_ranking = [s[0] for s in sims_list]
-        final_ranking = combine_rankings(bow_ranking, fos_ranking)
+        final_ranking = combine_rankings(bow_ranking, fos_boost, top_dot_prod)
         rank = len(bow_ranking)  # assign worst possible
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]

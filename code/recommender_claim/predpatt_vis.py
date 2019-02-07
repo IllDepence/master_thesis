@@ -1,6 +1,13 @@
 import pydot
+import re
 import zlib
+import numpy as np
 from predpatt import PredPatt
+
+
+CITS_TOKEN_PATT = re.compile(r'(MAIN)?CIT( , (MAIN)?CIT)+')
+CIT_TOKEN_PATT = re.compile(r'((MAIN)?CIT|((MAIN)?CIT)?( , (MAIN)?CIT))')
+
 
 def recursive_follow_deps(graph, n):
     for d in n.dependents:
@@ -15,18 +22,58 @@ def recursive_follow_deps(graph, n):
         graph.add_edge(pydot.Edge(gov_id, dep_id, label=d.rel))
         recursive_follow_deps(graph, d.dep)
 
-def pp_event_tree(e):
+
+def pp_dot_tree(e):
     graph = pydot.Dot(graph_type='graph')
     root = e.root
     graph.add_node(pydot.Node(root.__repr__(), label=root.text))
     recursive_follow_deps(graph, root)
     return graph
 
+
+def average_out_degree(e):
+    """ Calculate the average out degree of nodes, not counting leaves as 0.
+    """
+    def _out_degree_list(node):
+        deg = 0
+        child_degs = []
+        for d in node.dependents:
+            if d.rel == 'punct':
+                continue
+            deg += 1
+            child_degs.extend(_out_degree_list(d.dep))
+        return [deg] + child_degs
+    degrees = [d for d in _out_degree_list(e.root) if d != 0]
+    if len(degrees) == 0:
+        degrees = [0]
+    return np.mean(degrees)
+
+
+def citation_relations(e):
+    """ Return list of relations through which citations are connected to the
+        rest of the sentence.
+
+        Explicit non-integral citations are distinguishable by punct rels.
+        Distinction integral / non-intergal seems non obvious on first look.
+    """
+    def _rels(node):
+        rels = []
+        for d in node.dependents:
+            rels.extend(_rels(d.dep))
+            if CIT_TOKEN_PATT.fullmatch(d.gov.text):
+                rels.extend([d.rel])
+            if CIT_TOKEN_PATT.fullmatch(d.dep.text):
+                rels.extend([d.rel])
+        return rels
+
+    return _rels(e.root)
+
+
 def predpatt_visualize(s):
     sid = '{:x}'.format(zlib.adler32(s.encode()))
     pp = PredPatt.from_sentence(s)
     for i, e in enumerate(pp.events):
-        tree = pp_event_tree(e)
+        tree = pp_dot_tree(e)
         tree.add_node(pydot.Node('label', label=s, shape='plaintext'))
         tree.add_edge(pydot.Edge('label', e.root.__repr__(), style='invis'))
         try:
@@ -34,6 +81,7 @@ def predpatt_visualize(s):
         except:
             print(s)
             pass  # pydot errors are useless
+
 
 sentences = []
 sentences.append('Huedo et al. MAINCIT also describe a framework, called Gridway, for adaptive execution of applications in Grids.')
@@ -55,4 +103,10 @@ sentences.append('Lemma 1.2 ( MAINCIT ) Let FORMULA and assume that FORMULA .')
 sentences.append('FIGURE Bayesian decision theory Loss and risk In Bayesian decision theory a set FORMULA of possible actions FORMULA is considered, together with a function FORMULA describing the loss FORMULA suffered in situation FORMULA if FORMULA appears and action FORMULA is selected CIT , CIT , MAINCIT , CIT .')
 
 for s in sentences:
-    predpatt_visualize(s)
+    # predpatt_visualize(s)
+    s = CITS_TOKEN_PATT.sub('CIT', s)
+    s = CIT_TOKEN_PATT.sub('CIT', s)
+    print(s)
+    pp = PredPatt.from_sentence(s)
+    for e in pp.events:
+        print('  > {}'.format(citation_relations(e)))

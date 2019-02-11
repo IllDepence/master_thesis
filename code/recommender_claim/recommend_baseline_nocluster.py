@@ -26,7 +26,7 @@ def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
     comb = sorted(point_dic.items(), key=operator.itemgetter(1), reverse=True)
     return [c[0] for c in comb]
 
-def recommend(docs_path, dict_path, fos_annot=True):
+def recommend(docs_path, dict_path, fos_annot=False):
     """ - foo
     """
 
@@ -51,7 +51,8 @@ def recommend(docs_path, dict_path, fos_annot=True):
             cntxt_foss = []
             if fos_annot:
                 mid, adjacent, in_doc, text, fos_annot = line.split('\u241E')
-                cntxt_foss = [f.strip() for f in fos_annot.split('\u241F')]
+                cntxt_foss = [f.strip() for f in fos_annot.split('\u241F')
+                              if len(f.strip()) > 0]
                 foss.extend(cntxt_foss)
             else:
                 mid, adjacent, in_doc, text = line.split('\u241E')
@@ -134,6 +135,7 @@ def recommend(docs_path, dict_path, fos_annot=True):
                 tfidf[corpus],
                 num_features=num_unique_tokens)
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
+    foo = 0
     for tpl in test:
         test_mid = tpl[0]
         test_text = bow_preprocess_string(tpl[1])
@@ -155,7 +157,16 @@ def recommend(docs_path, dict_path, fos_annot=True):
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
         bow_ranking = [s[0] for s in sims_list]
-        final_ranking = combine_rankings(bow_ranking, fos_boost, top_dot_prod)
+        if fos_annot:
+            final_ranking = combine_rankings(
+                bow_ranking, fos_boost, top_dot_prod)
+        else:
+            final_ranking = bow_ranking
+        # if top_dot_prod < 1:                # FIXME just a test
+        #     continue
+        # else:
+        #     foo += 1
+        #     final_ranking = fos_ranking
         rank = len(bow_ranking)  # assign worst possible
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]
@@ -205,6 +216,7 @@ def recommend(docs_path, dict_path, fos_annot=True):
         print('in top 10: {}'.format(num_top_10))
         print('ndcg@5: {}'.format(ndcg_sum_5/num_cur))
         print('map@5: {}'.format(map_sum_5/num_cur))
+        print('foo: {}'.format(foo))  # FIXME remove
 
 
 if __name__ == '__main__':

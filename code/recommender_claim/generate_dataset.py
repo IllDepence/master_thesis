@@ -206,16 +206,20 @@ def window_distance_sentences(prefix, postfix, num_sentences):
     m = re.search(cit_marker, sentence_mid)
     sentence_mid_pre_part_length = m.start()
     sentence_mid_post_part_length = len(sentence_mid) - m.end()
-    if len(sentences_pre) >= directional_margin:
-        sentences_pre_dist = sentences_pre[-directional_margin][1] - \
+    if num_sentences == 1:
+        sentences_pre_dist = 0
+        sentences_post_dist = 0
+    else:
+        if len(sentences_pre) >= directional_margin:
+            sentences_pre_dist = sentences_pre[-directional_margin][1] - \
                                                 sentence_mid_pre_part_length
-    else:
-        sentences_pre_dist = len(prefix)
-    if len(sentences_post) >= directional_margin:
-        sentences_post_dist = sentences_post[directional_margin-1][1] - \
+        else:
+            sentences_pre_dist = len(prefix)
+        if len(sentences_post) >= directional_margin:
+            sentences_post_dist = sentences_post[directional_margin-1][1] - \
                                                 sentence_mid_post_part_length
-    else:
-        sentences_post_dist = len(postfix)
+        else:
+            sentences_post_dist = len(postfix)
     pre_dist = sentences_pre_dist + m.start()
     post_dist = sentences_post_dist + (len(sentence_mid) - m.end())
     return pre_dist, post_dist
@@ -231,6 +235,9 @@ def in_doc_to_aid(in_doc):
 
 
 def get_cont_ann(idx, edx, win_pre, win_post, annots, fosp_map, threshold=5.0):
+    """ Get all FoS annotations within the context
+    """
+
     min_end = idx-win_pre
     max_start = edx+win_post
     context_annot = []
@@ -251,9 +258,35 @@ def get_cont_ann(idx, edx, win_pre, win_post, annots, fosp_map, threshold=5.0):
     return context_annot, context_annot_ext
 
 
-def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
+def get_preceding_ann(idx, annots, fos_id_tup_map, conf_thr=5.0, level_thr=2):
+    """ Get directly preceding FoS annotation.
+    """
+
+    prec_annot = None
+    for annot in annots:
+        start = int(annot[2])
+        end = int(annot[3])
+        fos_id = annot[4].split('/')[-1]
+        conf = float(annot[5])
+        fos_tup = fos_id_tup_map.get(fos_id)
+        if fos_tup:
+            level = fos_tup[4]
+        else:
+            level = -1
+        if conf <= conf_thr:
+            continue
+        if level < level_thr:
+            continue
+        if idx-end <= 5 and idx-end > 0:
+            prec_annot = fos_id
+            break
+    return prec_annot
+
+
+def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
              min_contexts=5, min_citing_docs=5, with_placeholder=True,
-             sample_size=1000, only_fos=False, fos_annot=True):
+             sample_size=-1, only_fos='cs', fos_annot=True,
+             only_directly_preceding_fos_annot=False):
     """ Generate a list of citation contexts, given criteria:
             context_size
             context_size_unit (s=setences, w=words)
@@ -298,6 +331,25 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
             if child not in fosp_map:
                 fosp_map[child] = []
             fosp_map[child].append(parent)
+        # fos info
+        fosi_path = 'FieldsOfStudy.txt'
+        if not os.path.isfile(fosi_path):
+            print('Couldn\'t find file FieldsOfStudy.txt.')
+            sys.exit()
+        with open(fosi_path) as f:
+            fos_lines = f.readlines()
+        fos_id_tup_map = {}
+        for l in fos_lines:
+            fields = l.split('\t')
+            fid = fields[0].strip()
+            rank = fields[1].strip()
+            norm_name = fields[2].strip()
+            disp_name = fields[3].strip()
+            try:
+                level = int(fields[5].strip())
+            except ValueError:
+                continue
+            fos_id_tup_map[fid] = (fid, rank, norm_name, disp_name, level)
 
     print('querying DB')
     limit_insert = ''
@@ -401,6 +453,12 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
                 if fos_annot:
                     context_annot, context_annot_ext = get_cont_ann(
                         idx, edx, win_pre, win_post, annots, fosp_map)
+                    if only_directly_preceding_fos_annot:
+                        prec_annot = get_preceding_ann(
+                            idx, annots, fos_id_tup_map)
+                        context_annot = []
+                        if prec_annot:
+                            context_annot = [prec_annot]
                     cont_ann_str = '{}'.format(
                         '\u241F'.join(context_annot))  # TODO: try 2 steps ext
 
@@ -438,7 +496,7 @@ def generate(in_dir, db_uri=None, context_size=3, context_size_unit='s',
     print('number of contexts (Σ: {}): {}'.format(
         sum(nums_contexts), nums_contexts)
         )
-    with open('items_foo_3s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
+    with open('items_CSall_1s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))
             f.write(line)

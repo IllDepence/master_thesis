@@ -19,6 +19,14 @@
 
 ### recent notes
 
+* evaluate FoS (only) recommendation
+    * with limitations found to be "effective" for combined recomm.
+    * only in cases where FoS annotations is directly preceding/very close before citation marker (`foo bar <annot> [1] bam baz`)
+* evaluation on MAG citation contexts (best just CS↔CS), also, for MAG, filter by language (only English)
+    * select, export, run FoS annotation
+
+---
+
 * predpatt annotations
     * distinguish by pattern (e.g. ?a does ?b vs. using ?b)
         * also evaluate useful patterns/throw out those where sub. or obj. is too long etc. (goal: focus on a specific type)
@@ -1743,7 +1751,36 @@ map@5: 0.22582317977675412
 
 * misc
     * minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
- 
+
+##### MAG specific notes
+query DB for citation contexts for English CS cited papers with at least 5 citing papers ()
+```
+select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid;
+
+select paperreferenceid, paperid, citationcontext from
+    papercitationcontexts
+    where paperreferenceid in
+        (select cont.paperreferenceid from
+            papercitationcontexts as cont
+            join
+            (select fos.paperid from
+                paperfieldsofstudy as fos
+                join
+                paperlanguages as lang
+                on fos.paperid = lang.paperid
+                where fieldofstudyid = 41008148 and languagecode = 'en') as foslang
+            on cont.paperreferenceid = foslang.paperid
+            group by cont.paperreferenceid having count(cont.paperid) > 4)
+    order by paperreferenceid;
+```
+
+count of contexts as described above
+```
+MAG=> select count(*) from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4);
+  count   
+----------
+ 21955013
+```
 
 ### citation recommendation with pre-clustering
 
@@ -1938,6 +1975,124 @@ ndcg@5: 0.06899620276169097         0.12204397533455158
 map@5: 0.2270965268508764           0.12257262942663173
 ```
 
+full dataset 100 clusters
+```
+Iteration 296, inertia 496332.217
+Converged at iteration 296: center shift 0.000000e+00 within tolerance 1.047159e-10
+cluster sizes:
+  6066
+  5830
+  2661
+  4279
+  7293
+  21218
+  3093
+  11019
+  3449
+  6139
+  1212
+  3105
+  58956
+  5523
+  5711
+  1411
+  4673
+  6357
+  10191
+  7497
+  4261
+  2926
+  7707
+  5902
+  6186
+  565
+  2326
+  9799
+  1003
+  3039
+  2142
+  2085
+  1125
+  6587
+  3482
+  4487
+  1364
+  8906
+  3591
+  7656
+  4325
+  5654
+  4097
+  4373
+  6724
+  2992
+  6941
+  2701
+  3851
+  2843
+  3554
+  2961
+  4072
+  3213
+  2291
+  873
+  1855
+  2577
+  3243
+  5794
+  2369
+  4980
+  2362
+  17982
+  5903
+  4520
+  8001
+  2675
+  2315
+  7475
+  1875
+  1105
+  1810
+  4437
+  2857
+  6195
+  2586
+  6969
+  1295
+  1993
+  6281
+  6003
+  882
+  7451
+  4558
+  2563
+  13947
+  2997
+  7656
+  2468
+  1495
+  7907
+  3532
+  33014
+  3650
+  2967
+  1191
+  4872
+  3013
+  6099
+
+(clustering took ~80 hours (default values; i.e. 10 times, max. 300 iterations))
+(continued 19/02/09 22:44)
+
+(snapshot 19/03/10 9:39)
+- - - - - 564476/3507348 - - - - - (0.065s / doc)
+#1: 28175
+in top 5: 73814
+in top 10: 98961
+ndcg@5: 0.07962698906940996
+map@5: 0.0786942226064535
+```
+
 ### citation recommendation based on entities
 
 * no clue of argumentative structure yet → chose fixed citation context size
@@ -2121,6 +2276,11 @@ in top 5: 4851
 in top 10: 5078
 ndcg@5: 0.8006535381316311
 map@5: 0.7850547153571877
+```
+
+using only directly preceding FoS annot (... DBPedia [27] ... case)
+```
+not enough train/test overlap in a 5k citing doc sample
 ```
 
 

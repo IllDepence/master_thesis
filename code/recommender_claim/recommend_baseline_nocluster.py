@@ -10,6 +10,7 @@ import numpy as np
 from gensim import corpora, models, similarities
 from util import bow_preprocess_string
 from sklearn.preprocessing import MultiLabelBinarizer
+from gensim.models.ldamulticore import LdaMulticore
 
 
 def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
@@ -26,7 +27,7 @@ def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
     comb = sorted(point_dic.items(), key=operator.itemgetter(1), reverse=True)
     return [c[0] for c in comb]
 
-def recommend(docs_path, dict_path, fos_annot=False):
+def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
     """ - foo
     """
 
@@ -121,6 +122,10 @@ def recommend(docs_path, dict_path, fos_annot=False):
     num_unique_tokens = len(dictionary.keys())
     print('building corpus')
     corpus = [dictionary.doc2bow(text) for text in train_texts]
+
+    # import console
+    # console.copen(globals(), locals())
+
     # corpora.MmCorpus.serialize('3s5min5min_corpus.mm', corpus)
     if fos_annot:
         print('preparing FoS model')
@@ -129,9 +134,20 @@ def recommend(docs_path, dict_path, fos_annot=False):
         train_foss_matrix = mlb.transform(train_foss)
     print('generating TFIDF model')
     tfidf = models.TfidfModel(corpus)
+    print('prepring similarities')
+    index = similarities.SparseMatrixSimilarity(
+                tfidf[corpus],
+                num_features=num_unique_tokens)
 
-    # import console
-    # console.copen(globals(), locals())
+    if lda_preselect:
+        orig_index = index.index.copy()
+
+        print('generating LDA model')
+        lda = LdaMulticore(tfidf[corpus], id2word=dictionary, num_topics=100)
+        print('prepring similarities')
+        lda_index = similarities.SparseMatrixSimilarity(
+                    lda[tfidf[corpus]],
+                    num_features=num_unique_tokens)
 
     num_cur = 0
     num_top = 0
@@ -139,10 +155,6 @@ def recommend(docs_path, dict_path, fos_annot=False):
     num_top_10 = 0
     ndcg_sum_5 = 0
     map_sum_5 = 0
-    print('prepring similarities')
-    index = similarities.SparseMatrixSimilarity(
-                tfidf[corpus],
-                num_features=num_unique_tokens)
     print('test set size: {}\n- - - - - - - -'.format(len(test)))
     foo = 0
     for tpl in test:
@@ -162,10 +174,21 @@ def recommend(docs_path, dict_path, fos_annot=False):
                 )[0].tolist()
             top_dot_prod = sorted_dot_prods[-1]
         test_bow = dictionary.doc2bow(test_text)
+        if lda_preselect:
+            # pre select in LDA space
+            lda_sims = lda_index[tfidf[test_bow]]
+            lda_sims_list = list(enumerate(lda_sims))
+            lda_sims_list.sort(key=lambda tup: tup[1], reverse=True)
+            lda_ranking = [s[0] for s in lda_sims_list]
+            lda_picks = lda_ranking[:1000]
+            index.index = orig_index[lda_picks]
         sims = index[tfidf[test_bow]]
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
         bow_ranking = [s[0] for s in sims_list]
+        if lda_preselect:
+            # translate back from listing in LDA pick subset to global listing
+            bow_ranking = [lda_picks[r] for r in bow_ranking]
         if fos_annot:
             final_ranking = combine_rankings(
                 bow_ranking, fos_boost, top_dot_prod)

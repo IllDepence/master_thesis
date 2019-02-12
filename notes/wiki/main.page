@@ -1704,6 +1704,16 @@ in top 10: 121106
 ndcg@5: 0.1712868034589398
 map@5: 0.16274411905511044
 ```
+testing TFIDF all CS **one sentence** contexts → only minor difference for BOW approach
+```
+$ python3 recommend_baseline_nocluster.py items_CSall_1s_5mindoc_5mincont.csv items_CSall_1s_5mindoc_5mincont.dict
+- - - - - 324466/324466 - - - - -
+#1: 37037
+in top 5: 83754
+in top 10: 107471
+ndcg@5: 0.1578428957340939
+map@5: 0.1664695735968292
+```
 testing TFIDF all MATH
 ```
 $ python3 recommend_baseline_nocluster.py items_MATHCSsize_3s_5mindoc_5mincont.csv items_MATHCSsize_3s_5mindoc_5mincont.dict
@@ -1714,6 +1724,37 @@ in top 5: 113511
 in top 10: 142262
 ndcg@5: 0.1964657159233343
 map@5: 0.22582317977675412
+```
+
+testing TFIDF CS **in MAG**
+```
+$ python3 recommend_baseline_nocluster.py items_MAG_CS_EN_arXivCSsize_5mindoc.csv items_MAG_CS_EN_arXivCSsize_5mindoc.dict
+- - - - - 344092/344092 - - - - -
+#1: 106184
+in top 5: 160444
+in top 10: 180082
+ndcg@5: 0.39330421057547543
+map@5: 0.3689516660271934
+
+after heuristically removing authors' names from citations
+
+$ python3 recommend_baseline_nocluster.py items_MAG_CS_EN_arXivCSsize_5mindoc_stripped.csv items_MAG_CS_EN_arXivCSsize_5mindoc_stripped.dict
+- - - - - 344092/344092 - - - - -
+#1: 84803
+in top 5: 134606
+in top 10: 154697
+ndcg@5: 0.32350134348045967
+map@5: 0.3009809876427639
+
+controlling CS EN for citing docs instead of cited
+
+$ python3 recommend_baseline_nocluster.py items_MAG_citing_CS_EN_arXivCSsize_5mindoc_stripped.csv items_MAG_citing_CS_EN_arXivCSsize_5mindoc_stripped.dict
+- - - - - 339266/339266 - - - - -
+#1: 95167
+in top 5: 150830
+in top 10: 171915
+ndcg@5: 0.36833062588337273
+map@5: 0.34291873240062887
 ```
 
 ##### notes on evaluation
@@ -1749,6 +1790,15 @@ map@5: 0.22582317977675412
         ```
         * results in 3,507,348 / 15,893,797 (18/82) split for full arxiv
 
+* notes on citation styles
+    * depending on source of contexts (e.g. LaTeX vs PDF), author/journal preference, writing style, etc. names and dates can end up in citation contexts
+        * `As Bartels (2005) points out ...`
+        * `Havinga [22], and Lettieri [31] have applied ...`
+        * `Mc Laughlin et al. show in [7] a way how ...`
+        * `... affected perceived usefulness (Wu and Lu, 2013).`
+    * attempts at removing those could, however, remove valid information
+        * `Xax [15], Native Client [40], and Drawbridge [29] provide tenants with ...`
+        * → question of where to draw the border when a method named after an author becomes widely known in a field 
 * misc
     * minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
 
@@ -1756,6 +1806,9 @@ map@5: 0.22582317977675412
 query DB for citation contexts for English CS cited papers with at least 5 citing papers ()
 ```
 select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid;
+
+alternative, EN CS citing papers:
+select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid
 
 select paperreferenceid, paperid, citationcontext from
     papercitationcontexts
@@ -1769,7 +1822,7 @@ select paperreferenceid, paperid, citationcontext from
                 paperlanguages as lang
                 on fos.paperid = lang.paperid
                 where fieldofstudyid = 41008148 and languagecode = 'en') as foslang
-            on cont.paperreferenceid = foslang.paperid
+            on cont.paperreferenceid = foslang.paperid              / on cont.paperid = foslang.paperid
             group by cont.paperreferenceid having count(cont.paperid) > 4)
     order by paperreferenceid;
 ```
@@ -1779,7 +1832,7 @@ count of contexts as described above
 MAG=> select count(*) from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4);
   count   
 ----------
- 21955013
+ 21955013       / 47410586 when filtering for citing papers
 ```
 
 ### citation recommendation with pre-clustering
@@ -2084,13 +2137,13 @@ cluster sizes:
 (clustering took ~80 hours (default values; i.e. 10 times, max. 300 iterations))
 (continued 19/02/09 22:44)
 
-(snapshot 19/03/10 9:39)
-- - - - - 564476/3507348 - - - - - (0.065s / doc)
-#1: 28175
-in top 5: 73814
-in top 10: 98961
-ndcg@5: 0.07962698906940996
-map@5: 0.0786942226064535
+(snapshot 19/03/11 16:15)
+- - - - - 2209402/3507348 - - - - - (~0.07s / doc)
+#1: 116986
+in top 5: 308590
+in top 10: 412979
+ndcg@5: 0.08642255712607769
+map@5: 0.08381511528163213
 ```
 
 ### citation recommendation based on entities

@@ -2138,12 +2138,19 @@ cluster sizes:
 (continued 19/02/09 22:44)
 
 (snapshot 19/03/11 16:15)
-- - - - - 2209402/3507348 - - - - - (~0.07s / doc)
+- - - - - 2209402/3507348 - - - - - (~0.07s / doc) → possible to do 8h clustering + 68h eval ⇨ ~3d
 #1: 116986
 in top 5: 308590
 in top 10: 412979
 ndcg@5: 0.08642255712607769
 map@5: 0.08381511528163213
+
+- - - - - 3507348/3507348 - - - - -
+#1: 184847
+in top 5: 490061
+in top 10: 656413
+ndcg@5: 0.08671017439772115
+map@5: 0.08365948669300437
 ```
 
 ### citation recommendation based on entities

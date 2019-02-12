@@ -1,0 +1,42 @@
+### items_CSall_3s_5mindoc_5mincont.csv
+
+cited docs: 61,253
+
+train contexts: 1,460,762
+test contexts: 313,475
+
+avg train set bow size: 1,943 (SD 4,722) (140~359,670)
+avg num contexts per cited doc: 17 (SD 55) (5~6,019)
+avg length of test citation contexts: 525 (SD 445) (32~13,242)
+
+ndcg@5: 0.171
+map@5: 0.163
+
+### items_CSall_1s_5mindoc_5mincont.csv
+
+cited docs: 63,239
+
+train contexts: 151,1330
+test contexts: 324,460
+
+avg train set bow size: 1621 (SD 4,432) (40~191,488)
+avg num contexts per cited doc: 29 (SD 75) (5~6,019)
+avg length of test citation contexts: 406 (SD 3,278) (12~251,737)
+                     if capped at 2k: 220 (SD 224) (12~2,000)
+
+ndcg@5: 0.158
+map@5: 0.166
+
+### items_MAG_citing_CS_EN_arXivCSsize_5mindoc_stripped.csv
+
+cited docs: 63,222
+
+train contexts: 1,495,428
+test contexts: 331,293
+
+avg train set bow size: 657 (SD 1627) (10~100,995)
+avg num contexts per cited doc: 28 (SD 71) (4~5,264)
+avg length of test citation contexts: 201 (SD 178) (1~3,501)
+
+ndcg@5: 0.368
+map@5: 0.343

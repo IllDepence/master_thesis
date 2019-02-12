@@ -14,6 +14,9 @@ with open(in_file) as fi:
             if i%10000 == 0:
                 print(i)
             m = patt.match(line)
+            if m == None:
+                # empty citation context, skip
+                continue
             cited_mid = m.group(1)
             citing_mid = m.group(2)
             context = m.group(3)

@@ -58,6 +58,11 @@ def recommend(docs_path, dict_path, n_clusters):
                     if item_in_doc not in sub_bags_dict:
                         sub_bags_dict[item_in_doc] = []
                     sub_bags_dict[item_in_doc].append(item_text)
+                if len(sub_bags_dict) < 2:
+                    # can't split, reset bag, next
+                    tmp_bag = []
+                    tmp_bag_current_aid = aid
+                    continue
                 order = sorted(sub_bags_dict,
                                key=lambda k: len(sub_bags_dict[k]),
                                reverse=True)

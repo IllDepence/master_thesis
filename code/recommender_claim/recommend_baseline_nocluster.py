@@ -55,7 +55,11 @@ def recommend(docs_path, dict_path, fos_annot=False):
                               if len(f.strip()) > 0]
                 foss.extend(cntxt_foss)
             else:
-                mid, adjacent, in_doc, text = line.split('\u241E')
+                try:
+                    mid, adjacent, in_doc, text = line.split('\u241E')
+                except ValueError:
+                    # for evaluating w/ FoS data w/o FoS
+                    mid, adjacent, in_doc, text, unused = line.split('\u241E')
             # create adjacent map for later use in eval
             if mid not in adjacent_cit_map:
                 adjacent_cit_map[mid] = []
@@ -77,6 +81,11 @@ def recommend(docs_path, dict_path, fos_annot=False):
                     if item_in_doc not in sub_bags_dict:
                         sub_bags_dict[item_in_doc] = []
                     sub_bags_dict[item_in_doc].append([item_text, item_foss])
+                if len(sub_bags_dict) < 2:
+                    # can't split, reset bag, next
+                    tmp_bag = []
+                    tmp_bag_current_mid = mid
+                    continue
                 order = sorted(sub_bags_dict,
                                key=lambda k: len(sub_bags_dict[k]),
                                reverse=True)

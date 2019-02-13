@@ -134,7 +134,7 @@ def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
         train_foss_matrix = mlb.transform(train_foss)
     print('generating TFIDF model')
     tfidf = models.TfidfModel(corpus)
-    print('prepring similarities')
+    print('preparing similarities')
     index = similarities.SparseMatrixSimilarity(
                 tfidf[corpus],
                 num_features=num_unique_tokens)
@@ -144,7 +144,7 @@ def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
 
         print('generating LDA model')
         lda = LdaMulticore(tfidf[corpus], id2word=dictionary, num_topics=100)
-        print('prepring similarities')
+        print('preparing similarities')
         lda_index = similarities.SparseMatrixSimilarity(
                     lda[tfidf[corpus]],
                     num_features=num_unique_tokens)
@@ -176,7 +176,7 @@ def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
         test_bow = dictionary.doc2bow(test_text)
         if lda_preselect:
             # pre select in LDA space
-            lda_sims = lda_index[tfidf[test_bow]]
+            lda_sims = lda_index[lda[tfidf[test_bow]]]
             lda_sims_list = list(enumerate(lda_sims))
             lda_sims_list.sort(key=lambda tup: tup[1], reverse=True)
             lda_ranking = [s[0] for s in lda_sims_list]

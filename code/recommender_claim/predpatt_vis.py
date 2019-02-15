@@ -1,9 +1,12 @@
 import pydot
 import re
+import sys
 import zlib
 import numpy as np
 from predpatt import PredPatt
 
+MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
+CITS_PATT = re.compile(r'(((?<!MAIN)CIT , )*(?<!MAIN)CIT( , (?<!MAIN)CIT)*)')
 
 CITS_TOKEN_PATT = re.compile(r'(MAIN)?CIT( , (MAIN)?CIT)+')
 CIT_TOKEN_PATT = re.compile(r'((MAIN)?CIT|((MAIN)?CIT)?( , (MAIN)?CIT))')
@@ -21,6 +24,12 @@ def recursive_follow_deps(graph, n):
         graph.add_node(pydot.Node(dep_id, label=dep_label))
         graph.add_edge(pydot.Edge(gov_id, dep_id, label=d.rel))
         recursive_follow_deps(graph, d.dep)
+
+
+def merge_citation_token_lists(s):
+    s = MAINCITS_PATT.sub('MAINCIT', s)
+    s = CITS_PATT.sub('CIT', s)
+    return s
 
 
 def pp_dot_tree(e):
@@ -47,6 +56,47 @@ def average_out_degree(e):
     if len(degrees) == 0:
         degrees = [0]
     return np.mean(degrees)
+
+
+def contains_maincit(node):
+    """ Traverse a PredPatt event tree and return whether or not it contains a
+        MAINCIT node or not.
+    """
+
+    mc = False
+    for d in node.dependents:
+        mc = mc or (d.gov.text == 'MAINCIT')
+        mc = mc or (d.dep.text == 'MAINCIT')
+        if mc:
+            break
+        mc = mc or contains_maincit(d.dep)
+    return mc
+
+
+def get_maincit(root_node, found_node=None):
+    """ Traverse a PredPatt event tree and return MAINCIT node if contained.
+    """
+
+    if found_node:
+        return found_node
+    for d in root_node.dependents:
+        if d.gov.text == 'MAINCIT':
+            return d.gov
+        if d.dep.text == 'MAINCIT':
+            return d.dep
+        found_node = get_maincit(d.dep, found_node)
+    return found_node
+
+
+def build_context_representation(e):
+    maincit_node = get_maincit(e.root)
+    if not maincit_node:
+        return []
+    print(dir(maincit_node))
+    sys.exit()
+    # sth sth traverse, add strings like 'is:<appos_stuff>', 'about:<nmod_stuff>'
+    # maincit_node.gov for going upwards the tree
+    # maincit_node.dependents for going downwards
 
 
 def citation_relations(e):
@@ -78,8 +128,8 @@ def predpatt_visualize(s):
         tree.add_edge(pydot.Edge('label', e.root.__repr__(), style='invis'))
         try:
             tree.write_png('tree_{}_{}.png'.format(sid, i))
-        except:
-            print(s)
+        except AssertionError:
+            print('AssertionError for: {}'.format(s))
             pass  # pydot errors are useless
 
 
@@ -103,10 +153,12 @@ sentences.append('Lemma 1.2 ( MAINCIT ) Let FORMULA and assume that FORMULA .')
 sentences.append('FIGURE Bayesian decision theory Loss and risk In Bayesian decision theory a set FORMULA of possible actions FORMULA is considered, together with a function FORMULA describing the loss FORMULA suffered in situation FORMULA if FORMULA appears and action FORMULA is selected CIT , CIT , MAINCIT , CIT .')
 
 for s in sentences:
-    # predpatt_visualize(s)
-    s = CITS_TOKEN_PATT.sub('CIT', s)
-    s = CIT_TOKEN_PATT.sub('CIT', s)
-    print(s)
+    s = merge_citation_token_lists(s)
     pp = PredPatt.from_sentence(s)
     for e in pp.events:
-        print('  > {}'.format(citation_relations(e)))
+        build_context_representation(e)
+    # predpatt_visualize(s)
+    # print(s)
+    # pp = PredPatt.from_sentence(s)
+    # for e in pp.events:
+    #     print('  > {}'.format(citation_relations(e)))

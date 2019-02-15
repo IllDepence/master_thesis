@@ -19,6 +19,14 @@
 
 ### recent notes
 
+* when restricting test set to last X months of citing papers, how much of all possible cited papers are then covered in our dataset?
+    * side thought: mby integrate time of publication of citing papers into learning  
+        (=recent citations are more valid. rly true? possibly not necessarily)  
+        (better idea? citations in papers with many citations are more valid? page rank like)
+* test michael noun phrase tool
+
+---
+
 * evaluate FoS (only) recommendation
     * with limitations found to be "effective" for combined recomm.
     * only in cases where FoS annotations is directly preceding/very close before citation marker (`foo bar <annot> [1] bam baz`)
@@ -1714,6 +1722,15 @@ in top 10: 107471
 ndcg@5: 0.1578428957340939
 map@5: 0.1664695735968292
 ```
+testing TFIDF all CS *one sentence* contexts **with 2k character limit** → slight improvement for BOW approach
+```
+- - - - - 324460/324460 - - - - -
+#1: 41507
+in top 5: 92856
+in top 10: 117132
+ndcg@5: 0.177910862350392
+map@5: 0.18562668228236676
+```
 testing TFIDF all MATH
 ```
 $ python3 recommend_baseline_nocluster.py items_MATHCSsize_3s_5mindoc_5mincont.csv items_MATHCSsize_3s_5mindoc_5mincont.dict
@@ -1757,7 +1774,40 @@ ndcg@5: 0.36833062588337273
 map@5: 0.34291873240062887
 ```
 
-##### notes on evaluation
+##### MAG specific notes
+query DB for citation contexts for English CS cited papers with at least 5 citing papers ()
+```
+select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid;
+
+alternative, EN CS citing papers:
+select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid
+
+select paperreferenceid, paperid, citationcontext from
+    papercitationcontexts
+    where paperreferenceid in
+        (select cont.paperreferenceid from
+            papercitationcontexts as cont
+            join
+            (select fos.paperid from
+                paperfieldsofstudy as fos
+                join
+                paperlanguages as lang
+                on fos.paperid = lang.paperid
+                where fieldofstudyid = 41008148 and languagecode = 'en') as foslang
+            on cont.paperreferenceid = foslang.paperid              / on cont.paperid = foslang.paperid
+            group by cont.paperreferenceid having count(cont.paperid) > 4)
+    order by paperreferenceid;
+```
+
+count of contexts as described above
+```
+MAG=> select count(*) from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4);
+  count   
+----------
+ 21955013       / 47410586 when filtering for citing papers
+```
+
+### notes on evaluation
 
 * thoughts on exact re-recommendation
     * exact re-recommendation would imply the assumption, that for a given context only this very citation is acceptable
@@ -1802,38 +1852,23 @@ map@5: 0.34291873240062887
 * misc
     * minimum threshold for citation contexts (2 and 4 tested) has large impact on performance
 
-##### MAG specific notes
-query DB for citation contexts for English CS cited papers with at least 5 citing papers ()
-```
-select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid;
+##### Temporal cut
 
-alternative, EN CS citing papers:
-select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid
-
-select paperreferenceid, paperid, citationcontext from
-    papercitationcontexts
-    where paperreferenceid in
-        (select cont.paperreferenceid from
-            papercitationcontexts as cont
-            join
-            (select fos.paperid from
-                paperfieldsofstudy as fos
-                join
-                paperlanguages as lang
-                on fos.paperid = lang.paperid
-                where fieldofstudyid = 41008148 and languagecode = 'en') as foslang
-            on cont.paperreferenceid = foslang.paperid              / on cont.paperid = foslang.paperid
-            group by cont.paperreferenceid having count(cont.paperid) > 4)
-    order by paperreferenceid;
-```
-
-count of contexts as described above
-```
-MAG=> select count(*) from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4);
-  count   
-----------
- 21955013       / 47410586 when filtering for citing papers
-```
+* coverage of certain cuts in unarXive case
+    * all: citing 966,203 — cited 2,412,432
+    * Dec '17: citing 8,040 — cited 135,698
+    * Nov~Dec '17: citing 17,029 — cited 250,352
+    * Oct~Dec '17: citing 26,015 — cited 348,184
+    * Sep~Dec '17: citing 34,107 — cited 430,786
+    * Aug~Dec '17: citing 41,737 — cited 501,614
+    * Jan~Dec '17: citing 95,850 — cited 882,215
+    * Jan '16~Dec '17: citing 183,272 — cited 1,289,252
+    * Jan '15~Dec '17: citing 263,978 — cited 1,558,873
+    * Jan '14~Dec '17: citing 337,697 — cited 1,750,657
+    ```
+    select count(distinct t.in_doc) from ((select uuid, in_doc from bibitem where in_doc like '1712%' or in_doc like '1711%') as t join (select uuid, mag_id from bibitemmagidmap) as b on t.uuid = b.uuid);
+    select count(distinct mag_id) from ((select uuid from bibitem where in_doc like '1712%') as t join (select uuid, mag_id from bibitemmagidmap) as b on t.uuid = b.uuid);
+    ```
 
 ### citation recommendation with pre-clustering
 
@@ -2138,7 +2173,7 @@ cluster sizes:
 (continued 19/02/09 22:44)
 
 (snapshot 19/03/11 16:15)
-- - - - - 2209402/3507348 - - - - - (~0.07s / doc) → possible to do 8h clustering + 68h eval ⇨ ~3d
+- - - - - 2209402/3507348 - - - - - (~0.07s / recomm) → possible to do 8h clustering + 68h eval ⇨ ~3d
 #1: 116986
 in top 5: 308590
 in top 10: 412979
@@ -2151,6 +2186,45 @@ in top 5: 490061
 in top 10: 656413
 ndcg@5: 0.08671017439772115
 map@5: 0.08365948669300437
+```
+full dataset 50 clusters
+```
+- - - - - 2452039/3507305 - - - - - (snapshot) 0.07s / recomm
+#1: 138400
+in top 5: 368045
+in top 10: 494584
+ndcg@5: 0.09263201383532488
+map@5: 0.0897251906135927
+```
+
+### citation recommendation pre-filtering with LDA
+
+gist
+```
+lda = LdaMulticore(tfidf[corpus], id2word=dictionary, num_topics=100)    # LDA model
+lda_index = similarities.SparseMatrixSimilarity(
+    lda[tfidf[corpus]],
+    num_features=num_unique_tokens)
+lda_sims = lda_index[tfidf[test_bow]]                                    # rank in LDA space
+lda_sims_list = list(enumerate(lda_sims))
+lda_sims_list.sort(key=lambda tup: tup[1], reverse=True)
+lda_ranking = [s[0] for s in lda_sims_list]
+lda_picks = lda_ranking[:1000]                                           # get top 1000
+index.index = orig_index[lda_picks]                                      # restrict BOW model to above 1000
+sims = index[tfidf[test_bow]]
+[...]
+bow_ranking = [lda_picks[r] for r in bow_ranking]                        # translate back ranking
+```
+
+test with 1000 topics and top 5000 cut:
+```
+$ python3 recommend_baseline_nocluster.py items_CSall_3s_5mindoc_5mincont.csv items_CSall_3s_5mindoc_5mincont.dict
+- - - - - 324460/324460 - - - - -
+#1: 28075
+in top 5: 69084
+in top 10: 86166
+ndcg@5: 0.13126081735308817
+map@5: 0.13253189915552152
 ```
 
 ### citation recommendation based on entities

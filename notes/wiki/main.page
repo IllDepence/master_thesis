@@ -2189,12 +2189,12 @@ map@5: 0.08365948669300437
 ```
 full dataset 50 clusters
 ```
-- - - - - 2452039/3507305 - - - - - (snapshot) 0.07s / recomm
-#1: 138400
-in top 5: 368045
-in top 10: 494584
-ndcg@5: 0.09263201383532488
-map@5: 0.0897251906135927
+- - - - - 3507305/3507305 - - - - - 0.07s / recomm    (~82h including n_init=2, max_iter=100 clustering)
+#1: 196502
+in top 5: 525506
+in top 10: 707348
+ndcg@5: 0.09263015209062501
+map@5: 0.08933528735035522
 ```
 
 ### citation recommendation pre-filtering with LDA

@@ -22,3 +22,4 @@ code/recommender_*/*.mm.index
 code/recommender_*/*.db
 code/recommender_*/items*.csv
 code/arxiv_prepare/aid_title.db
+report/out

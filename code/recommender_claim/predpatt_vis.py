@@ -232,13 +232,28 @@ def build_tree_representation(e):
     return depth, list(set(representation))
 
 
-def build_fallback_representation(s):
-    """ Just build compound_text_variations of all nouns in the tree.
+def build_fallback_representation(e):
+    """ Just build compound_text_variations of all nodes tagged NOUN in the
+        tree.
     """
 
-    # TODO
+    real_root = e.root
+    while real_root.gov:
+        real_root = real_root.gov
 
-    return None
+    def _collect_phrases(node):
+        cur_phrss = []
+        if node.tag == 'NOUN':
+            cur_phrss = compound_text_variations(node)
+        dep_phrss = []
+        for d in node.dependents:
+            if d.rel == 'punct':
+                continue
+            dep_phrss.extend(_collect_phrases(d.dep))
+        return cur_phrss + dep_phrss
+    phrases = _collect_phrases(real_root)
+
+    return list(set(phrases))
 
 
 def build_sentence_representation(s):
@@ -251,6 +266,8 @@ def build_sentence_representation(s):
     s = remove_qutation_marks(s)
     pp = PredPatt.from_sentence(s)
     raw_lists = []
+    if len(pp.events) == 0:
+        return []
     for e in pp.events:
         depth, rep = build_tree_representation(e)
         if len(rep) > 0:
@@ -260,6 +277,10 @@ def build_sentence_representation(s):
     for rl in sorted(raw_lists, key=itemgetter(0)):
         rep_lists.append([weight, rl[1]])
         weight *= .5
+    if len(rep_lists) == 0:
+        fallback = build_fallback_representation(pp.events[0])
+        if len(fallback) > 0:
+            rep_lists = [[.25, fallback]]
 
     return rep_lists
 

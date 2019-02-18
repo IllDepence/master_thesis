@@ -1663,6 +1663,34 @@ ndcg@5: 0.7886603135592953
 map@5: 0.7841289716700552
 ```
 
+combining training set contexts vs not combining (all other evaluations in this document are done *combining* training set contexts)
+```
+>>> not combining <<<
+$ time python3 recommend_baseline_nocluster.py items_1ksample_3s_5mindoc_5mincont.csv items_1ksample_3s_5mindoc_5mincont.dict
+- - - - - 6389/6389 - - - - -
+#1: 4159
+in top 5: 5490
+in top 10: 5829
+ndcg@5: 0.7410420928469783
+map@5: 0.7336020243126191
+
+real    2m30.310s
+user    2m31.928s
+sys     0m6.052s
+
+>> combining <<<
+- - - - - 6389/6389 - - - - - 10 times faster + better results
+#1: 4397
+in top 5: 5669
+in top 10: 5952
+ndcg@5: 0.7747797443150142
+map@5: 0.7685109824176948
+
+real    0m15.758s
+user    0m17.406s
+sys     0m5.807s
+```
+
 early (~1%) snapshot of first eval with full arXiv dataset (cancelled)
 ```
 $ python3 recommend_baseline.py items_all_3s_5mindoc_5mincont.csv
@@ -1731,7 +1759,7 @@ in top 10: 117132
 ndcg@5: 0.177910862350392
 map@5: 0.18562668228236676
 ```
-testing TFIDF all MATH
+testing TFIDF "all" MATH
 ```
 $ python3 recommend_baseline_nocluster.py items_MATHCSsize_3s_5mindoc_5mincont.csv items_MATHCSsize_3s_5mindoc_5mincont.dict
 [...]
@@ -2196,8 +2224,17 @@ in top 10: 707348
 ndcg@5: 0.09263015209062501
 map@5: 0.08933528735035522
 ```
+full dataset 25 clusters
+```
+- - - - - 1555002/3507305 - - - - - (snapshot) 0.13s / recomm
+#1: 90540
+in top 5: 243102
+in top 10: 328528
+ndcg@5: 0.09575525362643722
+map@5: 0.09305566809556776
+```
 
-### citation recommendation pre-filtering with LDA
+### citation recommendation pre-filtering with LDA/LSI
 
 gist
 ```
@@ -2216,7 +2253,7 @@ sims = index[tfidf[test_bow]]
 bow_ranking = [lda_picks[r] for r in bow_ranking]                        # translate back ranking
 ```
 
-test with 1000 topics and top 5000 cut:
+LDA test with 1000 topics and top 5000 cut:
 ```
 $ python3 recommend_baseline_nocluster.py items_CSall_3s_5mindoc_5mincont.csv items_CSall_3s_5mindoc_5mincont.dict
 - - - - - 324460/324460 - - - - -
@@ -2225,6 +2262,18 @@ in top 5: 69084
 in top 10: 86166
 ndcg@5: 0.13126081735308817
 map@5: 0.13253189915552152
+```
+→ size problems w/ full data set
+
+**LSI** test with 100 topics and top 1000 cut:
+```
+$ python3 recommend_baseline_nocluster.py items_CSall_3s_5mindoc_5mincont.csv items_CSall_3s_5mindoc_5mincont.dict
+- - - - - 324460/324460 - - - - -
+#1: 34293
+in top 5: 93035
+in top 10: 124284
+ndcg@5: 0.1805019751033324
+map@5: 0.17029505434671832
 ```
 
 ### citation recommendation based on entities

@@ -1,3 +1,6 @@
+""" Draw PredPatt output dependency trees.
+"""
+
 import pydot
 import re
 import sys
@@ -110,7 +113,8 @@ def compound_text_variations(node):
              'publicly available large-scale datasets']
     """
 
-    tag_blacklist = ['PRON', 'DET', 'VERB', 'NUM']
+    # tag_blacklist = ['PRON', 'DET', 'VERB', 'NUM']
+    tag_blacklist = []
 
     texts = []
     if node.tag not in tag_blacklist:
@@ -160,10 +164,10 @@ def compound_text_variations(node):
                         texts.append('{} {}'.format(ddd.dep.text, texts[-2]))
 
     # clean
-    # return texts
-    texts = [TOKEN_PATT.sub('', t).strip() for t in texts]
-    texts = [re.sub('\s+', ' ', t) for t in texts]
-    return [t for t in texts if len(t) > 0]
+    return texts
+    # texts = [TOKEN_PATT.sub('', t).strip() for t in texts]
+    # texts = [re.sub('\s+', ' ', t) for t in texts]
+    # return [t for t in texts if len(t) > 0]
 
 
 def is_example_for(node):
@@ -183,106 +187,6 @@ def is_example_for(node):
     if has_such_as and node.gov_rel == 'nmod':
         return node.gov
     return None
-
-
-def build_tree_representation(e):
-    """ Build a representation of a predpatt event tree by traversing it from
-        the MAINCIT token towards the predicate.
-    """
-
-    representation = []
-
-    maincit_node = get_maincit(e.root)
-    if not maincit_node:
-        return -1, representation
-
-    # look 1 hop downward from MAINCIT
-    for dep in maincit_node.dependents:
-        if dep.rel in ['appos', 'nmod']:
-            representation.extend(compound_text_variations(dep.dep))
-    # traverse tree upward
-    # NOTE: while predpatt assigns each event a root (accessible as e.root) it
-    #       does NOT change the root's gov_rel to "root" or its gov to None in
-    #       case the event describes a subtree of the sentence's dependency
-    #       tree. A check for traversing the tree up to the root *of the event*
-    #       can not be
-    #           cur_node.gov
-    #       but must be
-    #           cur_node.__repr__() != e.root.__repr__()
-    cur_node = maincit_node
-    last_non_root_node_passed = None
-    depth = 0
-    while cur_node.__repr__() != e.root.__repr__():
-        depth += 1
-        representation.extend(compound_text_variations(cur_node))
-        last_non_root_node_passed = cur_node.__repr__()
-        cur_node = cur_node.gov
-    # look 1 hop downward from root
-    for dep in e.root.dependents:
-        if dep.dep.__repr__() == last_non_root_node_passed:
-            continue
-        if dep.rel in ['nsubj', 'nsubjpass', 'dobj', 'iobj', 'nmod', 'dep']:
-            representation.extend(compound_text_variations(dep.dep))
-        elif dep.rel in ['csubj', 'csubjpass', 'ccomp', 'xcomp', 'advcl']:
-            # dependent itself is a clause, need to do one more hop
-            for ddep in dep.dep.dependents:
-                if ddep.rel in ['nsubj', 'nsubjpass', 'dobj', 'iobj', 'nmod',
-                                'conj', 'dep']:
-                    representation.extend(compound_text_variations(ddep.dep))
-    return depth, list(set(representation))
-
-
-def build_fallback_representation(e):
-    """ Just build compound_text_variations of all nodes tagged NOUN in the
-        tree.
-    """
-
-    real_root = e.root
-    while real_root.gov:
-        real_root = real_root.gov
-
-    def _collect_phrases(node):
-        cur_phrss = []
-        if node.tag == 'NOUN':
-            cur_phrss = compound_text_variations(node)
-        dep_phrss = []
-        for d in node.dependents:
-            if d.rel == 'punct':
-                continue
-            dep_phrss.extend(_collect_phrases(d.dep))
-        return cur_phrss + dep_phrss
-    phrases = _collect_phrases(real_root)
-
-    return list(set(phrases))
-
-
-def build_sentence_representation(s):
-    """ Build representation of a sentence by analyzing predpatt output.
-
-        Returns a weighted list of lists of terms.
-    """
-
-    s = merge_citation_token_lists(s)
-    s = remove_qutation_marks(s)
-    pp = PredPatt.from_sentence(s)
-    raw_lists = []
-    if len(pp.events) == 0:
-        return []
-    for e in pp.events:
-        depth, rep = build_tree_representation(e)
-        if len(rep) > 0:
-            raw_lists.append([depth, rep])
-    weight = 1
-    rep_lists = []
-    for rl in sorted(raw_lists, key=itemgetter(0)):
-        rep_lists.append([weight, rl[1]])
-        weight *= .5
-    if len(rep_lists) == 0:
-        fallback = build_fallback_representation(pp.events[0])
-        if len(fallback) > 0:
-            rep_lists = [[.25, fallback]]
-
-    return rep_lists
 
 
 def citation_relations(e):
@@ -339,13 +243,6 @@ sentences.append('Beyond the correlation filter based method, extensive tracking
 sentences.append('The idea of SVM is based on structural risk minimization ( MAINCIT ).')
 
 for s in sentences:
-    print(build_sentence_representation(s))
-    input()
-    print()
-    print('- - - - - - -')
-    print()
-    # predpatt_visualize(s)
-    # print(s)
-    # pp = PredPatt.from_sentence(s)
-    # for e in pp.events:
-    #     print('  > {}'.format(citation_relations(e)))
+    s = merge_citation_token_lists(s)
+    s = remove_qutation_marks(s)
+    predpatt_visualize(s)

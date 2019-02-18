@@ -11,6 +11,8 @@ from gensim import corpora, models, similarities
 from util import bow_preprocess_string
 from sklearn.preprocessing import MultiLabelBinarizer
 from gensim.models.ldamulticore import LdaMulticore
+# from gensim.models.ldamodel import LdaModel
+from gensim.models import LsiModel
 
 
 def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
@@ -27,7 +29,8 @@ def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
     comb = sorted(point_dic.items(), key=operator.itemgetter(1), reverse=True)
     return [c[0] for c in comb]
 
-def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
+def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=False,
+              combine_train_contexts=True):
     """ - foo
     """
 
@@ -109,10 +112,18 @@ def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
                     [tmp_bag_current_mid, tup[0], tup[1]]
                     for tup in test_tups])
                 # because we use BOW we can just combine train docs here
-                train_text_combined = ' '.join(tup[0] for tup in train_tups)
-                train_mids.append(tmp_bag_current_mid)
-                train_texts.append(train_text_combined.split())
-                train_foss.append([fos for tup in train_tups for fos in tup[1]])
+                if combine_train_contexts:
+                    train_text_combined = ' '.join(tup[0] for tup in train_tups)
+                    train_mids.append(tmp_bag_current_mid)
+                    train_texts.append(train_text_combined.split())
+                    train_foss.append(
+                        [fos for tup in train_tups for fos in tup[1]]
+                        )
+                else:
+                    for tup in train_tups:
+                        train_mids.append(tmp_bag_current_mid)
+                        train_texts.append(tup[0].split())
+                        train_foss.append([fos for fos in tup[1]])
                 # reset bag
                 tmp_bag = []
                 tmp_bag_current_mid = mid
@@ -143,7 +154,9 @@ def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
         orig_index = index.index.copy()
 
         print('generating LDA model')
-        lda = LdaMulticore(tfidf[corpus], id2word=dictionary, num_topics=100)
+        lda = LsiModel(tfidf[corpus], id2word=dictionary, num_topics=100)
+        # lda = LdaMulticore(tfidf[corpus], id2word=dictionary, num_topics=500)
+        # lda = LdaModel(tfidf[corpus], id2word=dictionary, num_topics=10000)
         print('preparing similarities')
         lda_index = similarities.SparseMatrixSimilarity(
                     lda[tfidf[corpus]],
@@ -194,6 +207,11 @@ def recommend(docs_path, dict_path, fos_annot=False, lda_preselect=True):
                 bow_ranking, fos_boost, top_dot_prod)
         else:
             final_ranking = bow_ranking
+        if not combine_train_contexts:
+            seen = set()
+            seen_add = seen.add
+            final_ranking = [x for x in final_ranking
+                     if not (train_mids[x] in seen or seen_add(train_mids[x]))]
         # if top_dot_prod < 1:                # FIXME just a test
         #     continue
         # else:

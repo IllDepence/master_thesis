@@ -3,6 +3,7 @@ import re
 import sys
 import zlib
 import numpy as np
+from operator import itemgetter
 from predpatt import PredPatt
 
 MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
@@ -109,45 +110,50 @@ def compound_text_variations(node):
              'publicly available large-scale datasets']
     """
 
-    texts = [node.text]
+    tag_blacklist = ['PRON', 'DET', 'VERB', 'NUM']
+
+    texts = []
+    if node.tag not in tag_blacklist:
+        texts.append(node.text)
+
     # names
     for d in node.dependents:
-        if d.rel == 'name':
+        if d.rel == 'name' and d.dep.tag not in tag_blacklist:
             texts.append('{} {}'.format(texts[-1], d.dep.text))
     # goeswith
     for d in node.dependents:
-        if d.rel == 'goeswith':
+        if d.rel == 'goeswith' and d.dep.tag not in tag_blacklist:
             texts.append('{} {}'.format(texts[-1], d.dep.text))
     # multi word expressions
     for d in node.dependents:
-        if d.rel == 'mwe':
+        if d.rel == 'mwe' and d.dep.tag not in tag_blacklist:
             texts.append('{} {}'.format(d.dep.text, texts[-1]))
     # compounds
     for d in node.dependents[::-1]:
-        if d.rel == 'compound':
+        if d.rel == 'compound' and d.dep.tag not in tag_blacklist:
             texts.append('{} {}'.format(d.dep.text, texts[-1]))
             # conjunctions
             for dd in d.dep.dependents:
-                if dd.rel == 'conj':
+                if dd.rel == 'conj' and dd.dep.tag not in tag_blacklist:
                     # TODO: this could be done in a way such that a copy of all
                     #       following modifiers is created with the conjunct
                     texts.append('{} {}'.format(dd.dep.text, texts[-2]))
     # adjective modifiers
     for d in node.dependents[::-1]:
-        if d.rel == 'amod':
+        if d.rel == 'amod' and d.dep.tag not in tag_blacklist:
             texts.append('{} {}'.format(d.dep.text, texts[-1]))
             # conjunctions
             for dd in d.dep.dependents:
-                if dd.rel == 'conj':
+                if dd.rel == 'conj' and dd.dep.tag not in tag_blacklist:
                     # TODO: this could be done in a way such that a copy of all
                     #       following modifiers is created with the conjunct
                     texts.append('{} {}'.format(dd.dep.text, texts[-2]))
             # adverbial modifiers of adjective modifiers
             for dd in d.dep.dependents:
-                if dd.rel == 'advmod':
+                if dd.rel == 'advmod' and dd.dep.tag not in tag_blacklist:
                     texts.append('{} {}'.format(dd.dep.text, texts[-1]))
                 for ddd in dd.dep.dependents:
-                    if ddd.rel == 'conj':
+                    if ddd.rel == 'conj' and ddd.dep.tag not in tag_blacklist:
                         # TODO: this could be done in a way such that a copy of
                         #       all following modifiers is created with the
                         #       conjunct
@@ -179,45 +185,83 @@ def is_example_for(node):
     return None
 
 
-def build_context_representation(e):
+def build_tree_representation(e):
+    """ Build a representation of a predpatt event tree by traversing it from
+        the MAINCIT token towards the predicate.
+    """
+
     representation = []
 
     maincit_node = get_maincit(e.root)
     if not maincit_node:
-        return representation
+        return -1, representation
 
-    # resolve appos
-    representatives = [maincit_node]
-    for d in maincit_node.dependents:
-        if d.rel == 'appos':
-            representatives.append(d.dep)
-    if maincit_node.gov_rel == 'appos':
-        representatives.append(maincit_node.gov)
+    # look 1 hop downward from MAINCIT
+    for dep in maincit_node.dependents:
+        if dep.rel in ['appos', 'nmod']:
+            representation.extend(compound_text_variations(dep.dep))
+    # traverse tree upward
+    # NOTE: while predpatt assigns each event a root (accessible as e.root) it
+    #       does NOT change the root's gov_rel to "root" or its gov to None in
+    #       case the event describes a subtree of the sentence's dependency
+    #       tree. A check for traversing the tree up to the root *of the event*
+    #       can not be
+    #           cur_node.gov
+    #       but must be
+    #           cur_node.__repr__() != e.root.__repr__()
+    cur_node = maincit_node
+    last_non_root_node_passed = None
+    depth = 0
+    while cur_node.__repr__() != e.root.__repr__():
+        depth += 1
+        representation.extend(compound_text_variations(cur_node))
+        last_non_root_node_passed = cur_node.__repr__()
+        cur_node = cur_node.gov
+    # look 1 hop downward from root
+    for dep in e.root.dependents:
+        if dep.dep.__repr__() == last_non_root_node_passed:
+            continue
+        if dep.rel in ['nsubj', 'nsubjpass', 'dobj', 'iobj', 'nmod', 'dep']:
+            representation.extend(compound_text_variations(dep.dep))
+        elif dep.rel in ['csubj', 'csubjpass', 'ccomp', 'xcomp', 'advcl']:
+            # dependent itself is a clause, need to do one more hop
+            for ddep in dep.dep.dependents:
+                if ddep.rel in ['nsubj', 'nsubjpass', 'dobj', 'iobj', 'nmod',
+                                'conj', 'dep']:
+                    representation.extend(compound_text_variations(ddep.dep))
+    return depth, list(set(representation))
 
-    print([rep.text for rep in representatives])
-    for rep in representatives:
-        # resolve compound
-        representation.extend(compound_text_variations(rep))
-        ex = is_example_for(rep)
-        if ex:
-            representation.extend(compound_text_variations(ex))
-        # traverse tree upward
-        cur_node = rep
-        while cur_node.gov_rel in ['conj', 'nmod']:
-            representation.extend(compound_text_variations(cur_node.gov))
-            ex = is_example_for(cur_node.gov)
-            if ex:
-                representation.extend(compound_text_variations(ex))
-            cur_node = cur_node.gov
-        # look downward
-        for dep in rep.dependents:
-            if dep.rel in ['nmod']:
-                representation.extend(compound_text_variations(dep.dep))
 
-    # FIXME: - remove predicate from representation
-    #        - follow relations other than nmod towards predicate
-    #        - then follow selected relations downward from predicate
-    return list(set(representation))
+def build_fallback_representation(s):
+    """ Just build compound_text_variations of all nouns in the tree.
+    """
+
+    # TODO
+
+    return None
+
+
+def build_sentence_representation(s):
+    """ Build representation of a sentence by analyzing predpatt output.
+
+        Returns a weighted list of lists of terms.
+    """
+
+    s = merge_citation_token_lists(s)
+    s = remove_qutation_marks(s)
+    pp = PredPatt.from_sentence(s)
+    raw_lists = []
+    for e in pp.events:
+        depth, rep = build_tree_representation(e)
+        if len(rep) > 0:
+            raw_lists.append([depth, rep])
+    weight = 1
+    rep_lists = []
+    for rl in sorted(raw_lists, key=itemgetter(0)):
+        rep_lists.append([weight, rl[1]])
+        weight *= .5
+
+    return rep_lists
 
 
 def citation_relations(e):
@@ -274,13 +318,7 @@ sentences.append('Beyond the correlation filter based method, extensive tracking
 sentences.append('The idea of SVM is based on structural risk minimization ( MAINCIT ).')
 
 for s in sentences:
-    s = merge_citation_token_lists(s)
-    s = remove_qutation_marks(s)
-    pp = PredPatt.from_sentence(s)
-    print(s)
-    for e in pp.events:
-        rep = build_context_representation(e)
-        print(rep)
+    print(build_sentence_representation(s))
     input()
     print()
     print('- - - - - - -')

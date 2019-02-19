@@ -285,7 +285,7 @@ def get_preceding_ann(idx, annots, fos_id_tup_map, conf_thr=5.0, level_thr=2):
 
 def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
              min_contexts=5, min_citing_docs=5, with_placeholder=True,
-             sample_size=-1, only_fos='cs', fos_annot=True,
+             sample_size=1000, restrict_fos_citing=False, fos_annot=True,
              only_directly_preceding_fos_annot=False):
     """ Generate a list of citation contexts, given criteria:
             context_size
@@ -303,7 +303,7 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
     engine = create_engine(db_uri)
 
-    if only_fos:
+    if restrict_fos_citing:
         aid_db_uri = 'sqlite:///aid_fos.db'
         aid_engine = create_engine(aid_db_uri, connect_args={'timeout': 60})
         print('generating aid FoS map')
@@ -351,6 +351,10 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
                 continue
             fos_id_tup_map[fid] = (fid, rank, norm_name, disp_name, level)
 
+    # with open('/home/saiert/semantic_web_mag_ids') as f:
+    #     sem_web_ids = [l.strip() for l in f.readlines()]
+    # sem_web_where_in = '({})'.format(','.join(["'{}'".format(i) for i in sem_web_ids]))
+
     print('querying DB')
     limit_insert = ''
     if sample_size > 0:
@@ -386,10 +390,10 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
                 print('{}/{}'.format(tuple_idx, len(tuples)))
             uuid = tuples[tuple_idx][0]
             in_doc = tuples[tuple_idx][2]
-            if only_fos:
+            if restrict_fos_citing:
                 aid = in_doc_to_aid(in_doc)
-                fos = aid_fos_map.get(aid, False)
-                if fos != only_fos:
+                citing_fos = aid_fos_map.get(aid, False)
+                if citing_fos != restrict_fos_citing:
                     tuple_idx += 1
                     continue
             fn_txt = '{}.txt'.format(in_doc)
@@ -418,8 +422,8 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
                         ann_lines = f.readlines()
                         annots = []
                         for ann_line in ann_lines:
-                            fos, disp, start, end, mid, conf = ann_line.split('\t')
-                            annots.append((fos, disp, start, end, mid, conf))
+                            fos_ann, disp, start, end, mid, conf = ann_line.split('\t')
+                            annots.append((fos_ann, disp, start, end, mid, conf))
 
             marker = '{{{{cite:{}}}}}'.format(uuid)
             marker_found = False
@@ -496,7 +500,7 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
     print('number of contexts (Σ: {}): {}'.format(
         sum(nums_contexts), nums_contexts)
         )
-    with open('items_CSall_1s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
+    with open('items_1ksample_wFoS_1s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))
             f.write(line)

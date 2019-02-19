@@ -1,4 +1,3 @@
-import pydot
 import re
 import signal
 import sys
@@ -56,7 +55,7 @@ def compound_text_variations(node):
 
     tag_blacklist = ['PRON', 'DET', 'VERB', 'NUM']
 
-    texts = []
+    texts = ['']  # to make the [-1] indexing happy (filtered out at the end)
     if node.tag not in tag_blacklist:
         texts.append(node.text)
 
@@ -199,6 +198,24 @@ def build_fallback_representation(e):
     return list(set(phrases))
 
 
+def normalize_rep_lists(lists):
+    """ Put terms in lower case
+        remove non alphanumeric characters
+        replace multiple whitespaces with one
+    """
+
+    def _norm(term):
+        term = re.sub('[^A-Za-z0-9]', ' ', term)
+        term = term.lower()
+        term = re.sub('\s+', ' ', term)
+        return term
+
+    norm_lists = []
+    for weight, terms in lists:
+        norm_lists.append([weight, [_norm(t) for t in terms]])
+    return norm_lists
+
+
 def build_sentence_representation(s):
     """ Build representation of a sentence by analyzing predpatt output.
 
@@ -233,4 +250,4 @@ def build_sentence_representation(s):
         if len(fallback) > 0:
             rep_lists = [[.25, fallback]]
 
-    return rep_lists
+    return normalize_rep_lists(rep_lists)

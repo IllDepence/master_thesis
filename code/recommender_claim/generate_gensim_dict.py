@@ -4,6 +4,7 @@
 """
 
 import os
+import json
 import sys
 from gensim import corpora, models
 from util import bow_preprocess_string
@@ -14,29 +15,44 @@ def build(docs_path):
     """ - foo
     """
 
-    texts = []  # for dictionary generation
+    texts = []
+    pp_terms = []
     total = sum(1 for line in open(docs_path))
     with open(docs_path) as f:
         for idx, line in enumerate(f):
             if idx%10000 == 0:
                 print('{}/{} lines'.format(idx, total))
-            try:
-                aid, adjacent, in_doc, text = line.split('\u241E')
-            except ValueError:
-                aid, adjacent, in_doc, text, fos_annot = line.split('\u241E')
+            vals = line.split('\u241E')
+            with_predpatt_rep = False
+            if len(vals) == 4:
+                aid, adjacent, in_doc, text = vals
+            elif len(vals) == 5:
+                aid, adjacent, in_doc, text, fos_annot = vals
+            elif len(vals) == 6:
+                aid, adjacent, in_doc, text, fos_annot, pp_rep = vals
+                with_predpatt_rep = True
+            else:
+                print('input file format can not be parsed\nexiting')
+                sys.exit()
             preprocessed_text = bow_preprocess_string(text)
             texts.append(preprocessed_text)
-    print('building dictionary')
-    dictionary = corpora.Dictionary(texts)
-    once_ids = [tokenid for tokenid, docfreq in iteritems(dictionary.dfs)
-                if docfreq == 1]
-    dictionary.filter_tokens(once_ids)
-    dictionary.compactify()
-    print('saving dictionary')
-    docs_fn = os.path.split(docs_path)[-1]
+            if with_predpatt_rep:
+                pp_lists = json.loads(pp_rep)
+                for weight, terms in pp_lists:
+                    pp_terms.append(terms)
     docs_n = os.path.splitext(docs_path)[0]
-    dictionary.save('{}.dict'.format(docs_n))
-
+    dict_tasks = [[texts, '{}.dict'.format(docs_n)]]
+    if with_predpatt_rep:
+        dict_tasks.append([pp_terms, '{}_PPterms.dict'.format(docs_n)])
+    for texts, save_fn in dict_tasks:
+        print('building dictionary "{}"'.format(save_fn))
+        dictionary = corpora.Dictionary(texts)
+        once_ids = [tokenid for tokenid, docfreq in iteritems(dictionary.dfs)
+                    if docfreq == 1]
+        dictionary.filter_tokens(once_ids)
+        dictionary.compactify()
+        print('saving dictionary')
+        dictionary.save(save_fn)
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:

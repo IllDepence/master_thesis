@@ -1476,6 +1476,35 @@ false positives: 188
                    all fields compared
             ```
 
+##### 2018〜 extension
+
+* plain text extraction w/o matching (~7/8h)
+    ```
+    $ python3 prepare.py /vol3/data/arxiv-src-data-addition/ /home/saiert/arxiv-txt-data_2018/
+    [...]
+    430/430
+    152153 files
+    14587 PDFs
+    ```  
+    ```
+    $ ls arxiv-txt-data_2018/ | grep .txt | wc -l
+    131877
+    $ du -h arxiv-txt-data_2018/
+    6,5G    arxiv-txt-data_2018/
+    $ du -h arxiv-txt-data_2018/metadata.db
+    1,3G    arxiv-txt-data_2018/metadata.db
+    ```
+    ```
+    sqlite> select count(*) from bibitem;
+    4640754
+    ```
+    * 100% → 152,153
+    * minus 14,587 PDFs → 137,566
+    * pipleline output: 131,877 (95.9%)
+    * with citations: 120,814 (-11,063) (87.8%) (79.4% incl. PDFs)
+* matching
+    * ...
+
 ### citation recommendation baseline
 
 * idea: only syntax (mby +metadata) based

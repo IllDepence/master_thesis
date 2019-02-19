@@ -1,0 +1,55 @@
+# structure
+
+**Answer:**
+
+* Why is this work important (introduction)?
+* How was it done (methods)?
+* What were the results (results)?
+* What do those results mean (discussion)?
+
+### typical structure
+
+* Introduction
+    * Background/Context
+    * Problem
+    * Justification
+    * Objectives & Hypotheses/Research Questions
+    * Research Method
+    * Structure of the Thesis
+* Related Work
+* (Background)
+* Approach / Methods (Algorithms and Implementation) / Experiments + Evaluation
+* Conclusion
+* Future work
+
+### planned structure
+
+TODO
+
+# general notes
+
+### "story" the report tells
+
+[Too many](https://arxiv.org/stats/monthly_submissions) new content too keep track of (in general and for researchers as well)  
+→ X  
+—→ Y  
+——→ semantic approaches to citerec
+
+open question: how to bridge the gap between formal definition of a fact/claim and predpatt model?
+
+### preference picks
+
+* integral/non-integral citations
+* dependency grammar vs phrase structure (/constituency) grammar → universal dependencies
+* *similarity search for mathematical expressions using MathML* (Yokoi2009)
+
+### semi preference picks
+* cold start problem: *"with every new publication, new citation links are added to older work. In studies depending solely on the citation network, cutting-edge work is marginalized as they do not have any citations yet; this is a kind of 'cold-start problem'"* (Sugiyama2013)
+* old citations being old: *"references and citations in a paper are static and never change, ..."* (Sugiyama2013)
+* *"cite rec by similar sentences: "exploits the implicit human relevance judgements found in existing scientific articles"* (Duma2014)
+* several disciplines have traditions of citation analysis (White2004) (applied linguistics, history and sociology of science, information science)
+* important work can be absorbed into the background knowledge of a subject and is then no longer referenced (e.g. Einstein 1905 for the Theory of Relativity) (Swales1986)
+    * morphological and syntactic evolutions:
+        * discoveries become 'named' (Lotka's Law, the Mossbauer Effect)
+        * Proper Name adjectivization takes place (Widdowsonian dichotomies, a Sinclo-Coulthardian approach)
+* sth like Habernal2017's *base applied NLP in argumentation mining on "substantial research in argumentation itself"* but for claims (esp. PredPatt approach)

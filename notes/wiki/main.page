@@ -2550,11 +2550,35 @@ PredPatt works with [dependency grammar](https://en.wikipedia.org/wiki/Dependenc
         * [Government (linguistics)](https://en.wikipedia.org/wiki/Government_(linguistics))
             * → PredPatt's DepTriple(rel, gov, dep) consist of [relation](http://universaldependencies.org/docs/en/dep/all.html), governor, dependant: governor--[relation--]--> dependant
 
+##### PredPatt model
+
+using identified claims directly resulted in not enough overlap. therefore:
+
+* for each claim identified by PredPatt for a given sentence
+    * starting from the root predicate of the claim, traverse the dependency tree sentence downwards and locate the MAINCIT token (if not found, no output)
+    * from the MAINCIT token, traverse one step downward, then upwards until the predicate and from there one step downward — while doing this, pick up descriptive tokens
+
+##### PredPatt annotation
+
+```
+$ time python3 predpatt_extend_contexts.py items_1ksample_wFoS_1s_5mindoc_5mincont.csv 
+0/31321 lines
+10000/31321 lines
+20000/31321 lines
+30000/31321 lines
+
+real    292m41.847s   -> 0.56s / 1s context
+user    317m16.292s
+sys     19m27.007s
+```
 
 ### citation recommendation based on arguments
 
+gg b/c time
+
 * *as intro, read* `Stab2016` (+mby `Habernal2017`)
 
+<!--
 * "detection of context should be related to the identification of the argument around the citation" (HERNANDEZ-ALVAREZ2016)
 * [MARGOT](http://margot.disi.unibo.it/) (!!! **local version on tuco** [+old page of same authors](http://argumentationmining.disi.unibo.it/publications.html)
 
@@ -2572,6 +2596,7 @@ PredPatt works with [dependency grammar](https://en.wikipedia.org/wiki/Dependenc
 * Auch noch leicht verwandt: [SemEval-2018 Task12: Argument Reasoning Comprehension](https://competitions.codalab.org/competitions/17327)
 * further resources
     * Sehr nützlich: ["Transition words"](https://msu.edu/~jdowell/135/transw.html) benutzt in Recognizing the Absence of Opposing Arguments in Persuasive Essays.
+-->
 * also
     * Discourse Theory, e.g. Discourse Representation Theory, bzw. Discourse Analysis:
         * "Similar  to  the  identification  of  argumentation structures,  discourse  analysis  aims  at identifying elementary discourse units and discourse relations between them. Existing approaches on discourse analysis mainly differ in the employed discourse theory." [https://arxiv.org/pdf/1604.07370.pdf](https://arxiv.org/pdf/1604.07370.pdf)

@@ -2229,8 +2229,8 @@ cluster sizes:
 (clustering took ~80 hours (default values; i.e. 10 times, max. 300 iterations))
 (continued 19/02/09 22:44)
 
-(snapshot 19/03/11 16:15)
-- - - - - 2209402/3507348 - - - - - (~0.07s / recomm) → possible to do 8h clustering + 68h eval ⇨ ~3d
+(snapshot 19/02/11 16:15)
+- - - - - 2209402/3507348 - - - - - 0.065s / recomm; 63h eval (+ ~8h clustering)
 #1: 116986
 in top 5: 308590
 in top 10: 412979
@@ -2246,7 +2246,7 @@ map@5: 0.08365948669300437
 ```
 full dataset 50 clusters
 ```
-- - - - - 3507305/3507305 - - - - - 0.07s / recomm    (~82h including n_init=2, max_iter=100 clustering)
+- - - - - 3507305/3507305 - - - - - 0.07s / recomm; 68h eval    (~82h including n_init=2, max_iter=100 clustering)
 #1: 196502
 in top 5: 525506
 in top 10: 707348
@@ -2255,12 +2255,12 @@ map@5: 0.08933528735035522
 ```
 full dataset 25 clusters
 ```
-- - - - - 1555002/3507305 - - - - - (snapshot) 0.13s / recomm
-#1: 90540
-in top 5: 243102
-in top 10: 328528
-ndcg@5: 0.09575525362643722
-map@5: 0.09305566809556776
+- - - - - 3507305/3507305 - - - - - 0.095s / recomm; 92h eval    (~94h including n_init=2, max_iter=100 clustering)
+#1: 205722
+in top 5: 555144
+in top 10: 750504
+ndcg@5: 0.09745781608881406
+map@5: 0.09399823131063591
 ```
 
 ### citation recommendation pre-filtering with LDA/LSI
@@ -2303,6 +2303,23 @@ in top 5: 93035
 in top 10: 124284
 ndcg@5: 0.1805019751033324
 map@5: 0.17029505434671832
+```
+
+LSI, 100 topics, 1000 cut w/ full dataset
+```
+- - - - - 5282/3507305 - - - - - (snapshot) 0.95s / recomm
+#1: 391
+in top 5: 988
+in top 10: 1282
+ndcg@5: 0.11489955148078625
+map@5: 0.11377950271361854
+[...]
+- - - - - 10000/3507305 - - - - - (snapshot) (cancelled) too slow
+#1: 671
+in top 5: 1794
+in top 10: 2384
+ndcg@5: 0.10742533534115675
+map@5: 0.10685166666666744
 ```
 
 ### citation recommendation based on entities

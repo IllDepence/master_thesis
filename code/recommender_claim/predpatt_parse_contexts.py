@@ -224,15 +224,7 @@ def build_sentence_representation(s):
 
     s = merge_citation_token_lists(s)
     s = remove_qutation_marks(s)
-    signal.signal(signal.SIGALRM, signal_handler)
-    signal.alarm(60)
-    try:
-        pp = PredPatt.from_sentence(s)
-        # pp = PredPatt.from_sentence(s, cacheable=False) for speed tests
-    except Exception as msg:
-        signal.alarm(0)
-        return []
-    signal.alarm(0)
+    pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
     raw_lists = []
     if len(pp.events) == 0:
         return []

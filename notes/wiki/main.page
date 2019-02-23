@@ -2558,6 +2558,47 @@ using identified claims directly resulted in not enough overlap. therefore:
     * starting from the root predicate of the claim, traverse the dependency tree sentence downwards and locate the MAINCIT token (if not found, no output)
     * from the MAINCIT token, traverse one step downward, then upwards until the predicate and from there one step downward — while doing this, pick up descriptive tokens
 
+**example**
+```
+The advantages of these approaches have led the Semantic Web community to investigate the fundamentals of
+querying over the Web CIT, and developing algorithms for answering SPARQL queries over Linked Data MAINCIT.
+
+->
+advantages of these approaches have led the Semantic Web community to
+developing algorithms for answering SPARQL queries over Linked Data
+
+->
+(a): certain approaches have advantages
+(b): the Semantic Web community developed algorithms for answering SPARQL queries over Linked Data
+(c): (b) because of (a)
+
+
+raw:
+[[1, ['data', 'queries', 'sparql queries', 'linked data']],
+ [0.5, ['algorithms', 'data', 'linked data']],
+ [0.25, ['algorithms', 'data', 'web', 'linked data']],
+ [0.125,
+  ['advantages',
+   'web community',
+   'semantic web community',
+   'fundamentals',
+   'linked data',
+   'algorithms',
+   'data',
+   'community']]]
+
+only longest:
+1       sparql queries, linked data
+0.5     algorithms, linked data
+0.25    algorithms, web, linked data
+0.125   advantages, semantic web community, fundamentals, linked data, algorithms
+
+interpret as:
+<MAINCIT> is about <sparql queries>
+<MAINCIT> is about <linked data>
+...
+```
+
 ##### PredPatt annotation
 
 ```

@@ -9,6 +9,8 @@
 
 ### typical structure
 
+IMRaD (Introduction, Methods, Results and Discussion)
+
 * Introduction
     * Background/Context
     * Problem
@@ -24,18 +26,66 @@
 
 ### planned structure
 
-TODO
+* Introduction
+    * Background  
+        this is citation recommendation and this is why it is relevant  
+        also there's different approaches to it (collab.fil. / input=paper / input=sentence / …)
+    * Problem setting  
+        explicit semantic representations frequently seen in IR but no large body of work applying them for citation recommendation  
+        therefore investigate how they can be applied to citation recommendation
+    * Method
+        generate a data set fit for investigation of citation recommendation employing named entities and claims  
+        devise citation recommendation approach
+        implement and evaluate
+    * structure of the thesis
+* Related work
+    * `<insert paper.bib>` (state of the art citrec, use of explicit semantic representations in adjacent fields, ...)
+* Data set
+    * Existing data sets  
+        and why a new one was necessary
+    * The unarXive data set  
+        `<insert BIR paper here>`
+* Semantic approaches to citation recommendation  
+        types of citations (naming an entity, backing up a claim, etc.)  
+        how citations are embedded in sentences (integral/non-integral)
+    * Fields of Study as names entities  
+        `<insert pain here>`
+    * Claims
+        * Tools for extracting claims
+        * A model of aboutness closely tied to claim structure  
+            unfeasibility of use of PredPatt output as is  
+            resulting compromise model
+* Evaluation
+    * Special considerations for citation recommendation  
+        train/test splitting (per cited doc, temporal, ...), re-recommendation, number of contexts describing a recommendation item, ...
+    * Offline evaluation  
+        pre-filtering experiments (knn, lsi, lda, fos, ...)  
+        different evaluation settings (all, CSonly, comparison to MAG, ...)
+        `<insert many numbers here>`
+    * Online evaluation  
+        `<insert future results here>`
+* Conclusion  
+    'twas nice but now I'm exhausted
+* Future work  
+    more sophisticated (i.e. actual) modeling of claims  
+    argumentative structure  
+    mby classifier of citation type in front
 
 # general notes
 
 ### "story" the report tells
 
-[Too many](https://arxiv.org/stats/monthly_submissions) new content too keep track of (in general and for researchers as well)  
-→ X  
-—→ Y  
-——→ semantic approaches to citerec
+b/c of [too much](https://arxiv.org/stats/monthly_submissions) new content to keep track of (in general and for researchers as well), citrec is an active area of research with variations XYZ (collab.fil. / input=paper / input=sentence / ...)
 
-open question: how to bridge the gap between formal definition of a fact/claim and predpatt model?
+explicit semantic representations frequently seen in IR but yet to be thoroughly examined in the context of citrec; therefore add to the body of work in this area/direction
+
+for this, generate a data set fit for investigation of citrec employing NEs and claims, devise citrec approach, implement and evaluate
+
+---
+
+in data set chapter: proper investigation requires data set to be large, clean (esp. citation marker) and w/ resolved reference items. non existent, therefore created.
+
+in part about claim based approach: *direct* usage of identified claims with complete predicate arguments unfeasible, therefore model of *"cited doc aboutness"* closely tied to claim structure. 
 
 ### preference picks
 

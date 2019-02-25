@@ -16,6 +16,7 @@ from gensim.models.ldamulticore import LdaMulticore
 # from gensim.models.ldamodel import LdaModel
 from gensim.models import LsiModel
 from gensim.matutils import corpus2csc, Sparse2Corpus
+from gensim.summarization.bm25 import BM25
 
 
 def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
@@ -208,6 +209,12 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                 tfidf[corpus],
                 num_features=num_unique_tokens)
 
+    # bm25 = BM25(corpus)
+    # average_idf = sum(
+    #     map(lambda k: float(bm25.idf[k]),
+    #         bm25.idf.keys())
+    #     ) / len(bm25.idf.keys())
+
     if lda_preselect:
         orig_index = index.index.copy()
 
@@ -269,6 +276,11 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         sims_list = list(enumerate(sims))
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
         bow_ranking = [s[0] for s in sims_list]
+
+        # bm25_scores = list(enumerate(bm25.get_scores(test_bow, average_idf)))
+        # bm25_scores.sort(key=lambda tup: tup[1], reverse=True)
+        # bm25_ranking = [s[0] for s in bm25_scores]
+
         if lda_preselect:
             # translate back from listing in LDA/LSI pick subset to global listing
             bow_ranking = [lda_picks[r] for r in bow_ranking]
@@ -282,18 +294,24 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             seen_add = seen.add
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
-        if pp_sims_list[0][1] == 0:
-            final_ranking = bow_ranking
-        else:
-            final_ranking = pp_ranking
+        if use_predpatt_model:
+            # if pp_sims_list[0][1] == 0:
+            if pp_sims_list[0][1] < sims_list[0][1]:
+                final_ranking = bow_ranking
+            else:
+                foo += 1
+                final_ranking = pp_ranking
+
         # if top_dot_prod < 1:                # FIXME just a test
         #     continue
         # else:
         #     foo += 1
         #     final_ranking = fos_ranking
-        rank = len(bow_ranking)  # assign worst possible
+
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]
+
+        rank = len(bow_ranking)  # assign worst possible
         for idx, doc_id in enumerate(final_ranking):
             if train_mids[doc_id] == test_mid:
                 rank = idx+1

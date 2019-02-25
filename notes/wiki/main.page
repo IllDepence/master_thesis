@@ -1831,6 +1831,38 @@ ndcg@5: 0.36833062588337273
 map@5: 0.34291873240062887
 ```
 
+##### BM25
+
+1k sample bow; combine_train_contexts=True
+```
+- - - - - 5626/5626 - - - - -
+#1: 3166
+in top 5: 4218
+in top 10: 4566
+ndcg@5: 0.6485655663276514
+map@5: 0.6351078326815991
+```
+
+1k sample bow; combine_train_contexts=False
+```
+- - - - - 5626/5626 - - - - -
+#1: 2962
+in top 5: 4146
+in top 10: 4510
+ndcg@5: 0.6236042277134703     — sliiightly better
+map@5: 0.6068076786349099
+```
+
+1k sample BM25; combine_train_contexts=False
+```
+- - - - - 5626/5626 - - - - -
+#1: 3043
+in top 5: 4036
+in top 10: 4350
+ndcg@5: 0.6204520249953053
+map@5: 0.6087214124896325     — sliiightly better
+```
+
 ##### MAG specific notes
 query DB for citation contexts for English CS cited papers with at least 5 citing papers ()
 ```
@@ -2352,12 +2384,7 @@ map@5: 0.10685166666666744
         $ ls arxiv_test_2017_12_all_181110/all_text/ | grep json | wc -l
         8821
         ```
-* MAG entity test
-    * **idea**
-        * if annotated FoSs can be shown to be not more informative than FoS for the whole paper in MAG itself, then annotating FoS MAG *for the dataset* itself is not necessary
-            * user input→FoS annotate
-            * dataset contexts: just "annotate" with MAG paper FoS
-            * → evaluation of how informative FoS annotations are for a MAG paper can still be seen as a predictive measure of how informative the annotations on user input will be
+* MAG entity test 
     * 8808 citation contexts (100w)
         ```
         $ ls citcontxs | wc -l
@@ -2508,10 +2535,10 @@ map@5: 0.7850547153571877
 ```
 
 using only directly preceding FoS annot (... DBPedia [27] ... case)
-```
-not enough train/test overlap in a 5k citing doc sample
-```
-
+* lvl3-5 10k sample: 6,035 annotated contexts in 337,771 → 1.8%
+    * 0 predictable cases even with 50/50 split 
+* lvl2-5 1k sample: 3,718 annotated contexts in 35,117 → 10.6%
+    * 0 predictable cases even with 50/50 split 
 
 ##### ~~named entity recognition~~ (probably not so important)
 
@@ -2608,10 +2635,48 @@ $ time python3 predpatt_extend_contexts.py items_1ksample_wFoS_1s_5mindoc_5minco
 20000/31321 lines
 30000/31321 lines
 
-real    292m41.847s   -> 0.56s / 1s context
+real    292m41.847s   -> 0.56s / 1 sentence context
 user    317m16.292s
 sys     19m27.007s
 ```
+
+1k sample tests
+```
+~~ bow ~~
+
+- - - - - 5626/5626 - - - - -
+#1: 3166
+in top 5: 4218
+in top 10: 4566
+ndcg@5: 0.6485655663276514
+map@5: 0.6351078326815991
+
+
+~~ longest term variant only PP ~~
+
+PP when possible, otherwise bow   PP when higher similarity        PP alone
+- - - - - 5626/5626 - - - - -     - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
+#1: 1229                          #1: 1751                         #1: 252
+in top 5: 1857                    in top 5: 2343                   in top 5: 611
+in top 10: 2188                   in top 10: 2645                  in top 10: 843
+ndcg@5: 0.27101696276863824       ndcg@5: 0.3599450737236155       ndcg@5: 0.07534663859589673
+map@5: 0.2597701149425286         map@5: 0.35159082829719107       map@5: 0.0672265671288066
+(3904 times PP ranking used)      (3120 times PP ranking used)
+
+
+~~ all term variants PP ~~
+
+PP when possible, otherwise bow   PP when higher similarity        PP alone
+- - - - - 5626/5626 - - - - -     - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
+#1: 831                           #1: 1560                         #1: 723
+in top 5: 1535                    in top 5: 2145                   in top 5: 1400
+in top 10: 1934                   in top 10: 2446                  in top 10: 1789
+ndcg@5: 0.2072879022881365        ndcg@5: 0.3241964977424993       ndcg@5: 0.18610916635867294
+map@5: 0.19166666666666737        map@5: 0.3148477307737883        map@5: 0.17049709681241929
+(5393 times PP ranking used)      (4243 times PP ranking used)
+```  
+→ PP alone not feasible
+→ *longest term variant only* PP model probably better
 
 ### citation recommendation based on arguments
 

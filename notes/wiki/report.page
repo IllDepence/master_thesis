@@ -33,11 +33,11 @@ IMRaD (Introduction, Methods, Results and Discussion)
     * Problem setting  
         explicit semantic representations frequently seen in IR but no large body of work applying them for citation recommendation  
         therefore investigate how they can be applied to citation recommendation
-    * Method
+    * Method  
         generate a data set fit for investigation of citation recommendation employing named entities and claims  
         devise citation recommendation approach
         implement and evaluate
-    * structure of the thesis
+    * Structure of the thesis
 * Related work
     * `<insert paper.bib>` (state of the art citrec, use of explicit semantic representations in adjacent fields, ...)
 * Data set

@@ -258,11 +258,13 @@ def get_cont_ann(idx, edx, win_pre, win_post, annots, fosp_map, threshold=5.0):
     return context_annot, context_annot_ext
 
 
-def get_preceding_ann(idx, annots, fos_id_tup_map, conf_thr=5.0, level_thr=2):
+def get_preceding_ann(idx, pre, annots, fos_id_tup_map, conf_thr=5.0,
+                      level_thr=2):
     """ Get directly preceding FoS annotation.
     """
 
-    prec_annot = None
+    prec_annot = []
+    max_distance = clean_window_distance_words(pre, 3, backwards=True)
     for annot in annots:
         start = int(annot[2])
         end = int(annot[3])
@@ -277,16 +279,15 @@ def get_preceding_ann(idx, annots, fos_id_tup_map, conf_thr=5.0, level_thr=2):
             continue
         if level < level_thr:
             continue
-        if idx-end <= 5 and idx-end > 0:
-            prec_annot = fos_id
-            break
-    return prec_annot
+        if idx-end <= max_distance and idx-end > 0:
+            prec_annot.append(fos_id)
+    return list(set(prec_annot))
 
 
 def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
              min_contexts=5, min_citing_docs=5, with_placeholder=True,
-             sample_size=1000, restrict_fos_citing=False, fos_annot=True,
-             only_directly_preceding_fos_annot=False):
+             sample_size=10000, restrict_fos_citing=False, fos_annot=True,
+             only_directly_preceding_fos_annot=True):
     """ Generate a list of citation contexts, given criteria:
             context_size
             context_size_unit (s=setences, w=words)
@@ -444,9 +445,9 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
                         pre, post, context_size
                         )
                 elif context_size_unit == 'w':
-                    win_pre = clean_window_distance_words(pre, 50)
-                    win_post = clean_window_distance_words(post, 50,
-                                                           backwards=False)
+                    win_pre = clean_window_distance_words(pre, 50,
+                                                          backwards=True)
+                    win_post = clean_window_distance_words(post, 50)
                 else:
                     print('invalid context size unit')
                     return False
@@ -459,10 +460,10 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
                         idx, edx, win_pre, win_post, annots, fosp_map)
                     if only_directly_preceding_fos_annot:
                         prec_annot = get_preceding_ann(
-                            idx, annots, fos_id_tup_map)
+                            idx, pre, annots, fos_id_tup_map)
                         context_annot = []
-                        if prec_annot:
-                            context_annot = [prec_annot]
+                        if len(prec_annot) > 0:
+                            context_annot = prec_annot
                     cont_ann_str = '{}'.format(
                         '\u241F'.join(context_annot))  # TODO: try 2 steps ext
 
@@ -500,7 +501,7 @@ def generate(in_dir, db_uri=None, context_size=1, context_size_unit='s',
     print('number of contexts (Σ: {}): {}'.format(
         sum(nums_contexts), nums_contexts)
         )
-    with open('items_1ksample_wFoS_1s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
+    with open('items_dirPrecFoSannLvl2-5_1s_5mindoc_5mincont.csv', 'w') as f:  # TODO: PHYS
         for vals in contexts:
             line = '{}\n'.format('\u241E'.join(vals))
             f.write(line)

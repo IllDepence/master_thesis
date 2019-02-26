@@ -2535,10 +2535,30 @@ map@5: 0.7850547153571877
 ```
 
 using only directly preceding FoS annot (... DBPedia [27] ... case)
+
 * lvl3-5 10k sample: 6,035 annotated contexts in 337,771 → 1.8%
     * 0 predictable cases even with 50/50 split 
 * lvl2-5 1k sample: 3,718 annotated contexts in 35,117 → 10.6%
-    * 0 predictable cases even with 50/50 split 
+    * 0 predictable cases even with 50/50 split
+* lvl2-5 5k sample: 37,327 annotated contexts in 338,364 → 11%
+    * 40 predictable cases with 50/50 split
+    * ndcg/map@5: 0, ranks:
+        ```
+        [14, 19, 19, 20, 36, 46, 61, 62, 82, 83, 86, 87, 99, 115, 115, 120, 122, 145, 151, 193, 620, 1602, 2904,
+        2914, 3200, 3358, 3479, 3698, 3802, 4118, 4425, 5154, 5426, 6956, 7256, 7507, 7933, 8534, 8575, 8978]
+        
+        mean: 2552.85 (SD 3004)
+        ```
+* CSall 20mindoc (900k contexts)
+    ```
+    - - - - - 268/187843 - - - - -
+    #1: 0
+    in top 5: 0
+    in top 10: 3
+    ndcg@5: 0.0
+    map@5: 0.0
+    num_predictable: 268
+    ```
 
 ##### ~~named entity recognition~~ (probably not so important)
 

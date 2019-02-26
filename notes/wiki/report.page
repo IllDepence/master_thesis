@@ -29,6 +29,7 @@ IMRaD (Introduction, Methods, Results and Discussion)
 * Introduction
     * Background  
         this is citation recommendation and this is why it is relevant  
+        it's different from paper recommendation in its intention (paprec→toread, citrec→tocite)  
         also there's different approaches to it (collab.fil. / input=paper / input=sentence / …)
     * Problem setting  
         explicit semantic representations frequently seen in IR but no large body of work applying them for citation recommendation  
@@ -40,10 +41,14 @@ IMRaD (Introduction, Methods, Results and Discussion)
     * Structure of the thesis
 * Related work
     * `<insert paper.bib>` (state of the art citrec, use of explicit semantic representations in adjacent fields, ...)
+* Background  
+    fill as needed (citrec terminology, NEL/R, claim extraction)
 * Data set
     * Existing data sets  
         and why a new one was necessary
-    * The unarXive data set  
+    * Data set creation  
+        `<insert BIR paper here>`
+    * Data set evaluation  
         `<insert BIR paper here>`
 * Semantic approaches to citation recommendation  
         types of citations (naming an entity, backing up a claim, etc.)  
@@ -94,6 +99,7 @@ in part about claim based approach: *direct* usage of identified claims with com
 * *similarity search for mathematical expressions using MathML* (Yokoi2009)
 
 ### semi preference picks
+* [WikiCite](https://meta.wikimedia.org/wiki/WikiCite), [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Pagehttps://www.wikidata.org/wiki/Wikidata:Main_Page) and the [Initiative for Open Citations](https://i4oc.org/)
 * cold start problem: *"with every new publication, new citation links are added to older work. In studies depending solely on the citation network, cutting-edge work is marginalized as they do not have any citations yet; this is a kind of 'cold-start problem'"* (Sugiyama2013)
 * old citations being old: *"references and citations in a paper are static and never change, ..."* (Sugiyama2013)
 * *"cite rec by similar sentences: "exploits the implicit human relevance judgements found in existing scientific articles"* (Duma2014)

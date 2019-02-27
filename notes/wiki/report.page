@@ -30,7 +30,10 @@ IMRaD (Introduction, Methods, Results and Discussion)
     * Background  
         this is citation recommendation and this is why it is relevant  
         it's different from paper recommendation in its intention (paprec→toread, citrec→tocite)  
-        also there's different approaches to it (collab.fil. / input=paper / input=sentence / …)
+        also there's different approaches to it (collab.fil. / input=paper / input=sentence / …)  
+        ‌‌  
+        furthermore, there's these efforts for introducing explicit semantic representations into the scholarly discourse (ScholOnto, Kitamoto's Digital Criticism Platform, ...)  
+        wouldn't it be nice to combine the two
     * Problem setting  
         explicit semantic representations frequently seen in IR but no large body of work applying them for citation recommendation  
         therefore investigate how they can be applied to citation recommendation

@@ -57,7 +57,7 @@ IMRaD (Introduction, Methods, Results and Discussion)
         types of citations (naming an entity, backing up a claim, etc.)  
         how citations are embedded in sentences (integral/non-integral)
     * Fields of Study as names entities  
-        `<insert pain here>`
+        "fixed vocab" with hierarchy (考えてみればgoing up hierarchy is so not compatible with re-prediction eval)
     * Claims
         * Tools for extracting claims
         * A model of aboutness closely tied to claim structure  

@@ -2658,6 +2658,16 @@ $ time python3 predpatt_extend_contexts.py items_1ksample_wFoS_1s_5mindoc_5minco
 real    292m41.847s   -> 0.56s / 1 sentence context
 user    317m16.292s
 sys     19m27.007s
+```  
+```
+$ time python3 predpatt_extend_contexts.py items_dirPrecFoSannLvl2-5_1s_5mindoc_5mincont.csv
+0/338364 lines
+[...]
+330000/338364 lines
+
+real    3111m59.613s   -> 0.55s / 1 sentence context   => ~11d for CSall_5mindoc_5mincont
+user    3331m42.332s
+sys     184m40.383s
 ```
 
 1k sample tests
@@ -2697,6 +2707,27 @@ map@5: 0.19166666666666737        map@5: 0.3148477307737883        map@5: 0.1704
 ```  
 → PP alone not feasible
 → *longest term variant only* PP model probably better
+
+
+10k sample tests
+```
+~~ bow ~~
+- - - - - 61130/61130 - - - - -
+#1: 20749
+in top 5: 33206
+in top 10: 37862
+ndcg@5: 0.4286082831666747
+map@5: 0.4166772997437132
+
+~~ longest term variant only PP ~~
+- - - - - 61130/61130 - - - - -
+#1: 9164
+in top 5: 14532
+in top 10: 16720
+ndcg@5: 0.1879140639781441
+map@5: 0.18281476634494986
+(40533 times PP ranking used)
+```
 
 ### citation recommendation based on arguments
 

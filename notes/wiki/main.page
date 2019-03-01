@@ -19,6 +19,12 @@
 
 ### recent notes
 
+* test arXiv noun phrases compared to FoS/PP model
+* second examiner
+* somehow (?) preserve (simplified?) structure of claims for PP model
+
+---
+
 * when restricting test set to last X months of citing papers, how much of all possible cited papers are then covered in our dataset?
     * side thought: mby integrate time of publication of citing papers into learning  
         (=recent citations are more valid. rly true? possibly not necessarily)  
@@ -2685,13 +2691,13 @@ map@5: 0.6351078326815991
 ~~ longest term variant only PP ~~
 
 PP when possible, otherwise bow   PP when higher similarity        PP alone
-- - - - - 5626/5626 - - - - -     - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
-#1: 1229                          #1: 1751                         #1: 252
-in top 5: 1857                    in top 5: 2343                   in top 5: 611
-in top 10: 2188                   in top 10: 2645                  in top 10: 843
-ndcg@5: 0.27101696276863824       ndcg@5: 0.3599450737236155       ndcg@5: 0.07534663859589673
-map@5: 0.2597701149425286         map@5: 0.35159082829719107       map@5: 0.0672265671288066
-(3904 times PP ranking used)      (3120 times PP ranking used)
+- - - - - 5626/5626 - - - - --    - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
+#1: 1452                          #1: 2471                         #1: 1157
+in top 5: 2150                    in top 5: 3165                   in top 5: 1738
+in top 10: 2438                   in top 10: 3420                  in top 10: 1992
+ndcg@5: 0.3172454793581524        ndcg@5: 0.4952889822361036       ndcg@5: 0.25465782232598316
+map@5: 0.3049413437611088         map@5: 0.4874896314729232        map@5: 0.24422028676383462
+(4972 times PP ranking used)      (2491 times PP ranking used)
 
 
 ~~ all term variants PP ~~
@@ -2720,14 +2726,25 @@ ndcg@5: 0.4286082831666747
 map@5: 0.4166772997437132
 
 ~~ longest term variant only PP ~~
-- - - - - 61130/61130 - - - - -
-#1: 9164
-in top 5: 14532
-in top 10: 16720
-ndcg@5: 0.1879140639781441
-map@5: 0.18281476634494986
-(40533 times PP ranking used)
+PP when higher similarity               PP when possible, skip otherwise
+- - - - - 61130/61130 - - - - -         - - - - - 61130/61130 - - - - -
+#1: 15640                               #1: 7535
+in top 5: 23386                         in top 5: 11648
+in top 10: 26307                        in top 10: 13679
+ndcg@5: 0.3095544480586551              ndcg@5: 0.15971932334667177
+map@5: 0.303895523201927                map@5: 0.15862381735671047
+(31294 times PP ranking used)           (57146 times possible)
 ```
+
+**testing linear combinations of BOW, FoS and PP similarities**
+
+* ~~not helpful → only using BOW gives best results (i.e. mixing in FoS/PP always leads to worse overall results)~~
+* ~~details: see `notes/recomm_linear_weights`~~ probably still valid but tested with fautly PP model
+
+**finding cases in which FoS and PP are helpful**
+
+* 1ksample: FoS better rank in 187/5626 (~3.3%) of cases
+* 1ksample: PP better rank in 502/5626 (~8.9%) of cases
 
 ### citation recommendation based on arguments
 

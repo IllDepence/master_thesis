@@ -18,8 +18,42 @@ from gensim.models import LsiModel
 from gensim.matutils import corpus2csc, Sparse2Corpus
 from gensim.summarization.bm25 import BM25
 
+SILENT = False
 
-def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
+
+def prind(s):
+    if not SILENT:
+        print(s)
+
+
+def better_rank(sims_a, sims_b, train_mids, test_mid):
+    sims_list_a = list(enumerate(sims_a))
+    sims_list_a.sort(key=lambda tup: tup[1], reverse=True)
+    ranking_a = [s[0] for s in sims_list_a]
+    sims_list_b = list(enumerate(sims_b))
+    sims_list_b.sort(key=lambda tup: tup[1], reverse=True)
+    ranking_b = [s[0] for s in sims_list_b]
+
+    if sims_list_b[0][1] == 0:
+        return False, 0
+
+    rank_a = len(ranking_a)
+    for idx, doc_id in enumerate(ranking_a):
+        if train_mids[doc_id] == test_mid:
+            rank_a = idx+1
+            break
+    rank_b = len(ranking_b)
+    for idx, doc_id in enumerate(ranking_b):
+        if train_mids[doc_id] == test_mid:
+            rank_b = idx+1
+            break
+    if rank_a > rank_b:
+        return 1, rank_a - rank_b
+    else:
+        return 0, rank_b - rank_a
+
+
+def fos_boost_ranking(bow_ranking, fos_boost, top_dot_prod):
     if top_dot_prod < 1:
         return bow_ranking
     point_dic = {}
@@ -32,6 +66,24 @@ def combine_rankings(bow_ranking, fos_boost, top_dot_prod):
         point_dic[boost] += 1.1
     comb = sorted(point_dic.items(), key=operator.itemgetter(1), reverse=True)
     return [c[0] for c in comb]
+
+
+def combine_simlists(sl1, sl2, sl3, weights):
+    return sl3
+    sl = []
+    sims_list3 = list(enumerate(sl3))  # FIXME   just playing around
+    sims_list3.sort(key=lambda tup: tup[1], reverse=True)
+    for i in range(len(sl1)):
+        s = sl1[i]
+        if sims_list3[0][1] > sims_list3[3][1]*10 and sl3[i] == np.max(sl3):
+            s = (s+1)/2
+        sl.append(s)
+        # sl.append(
+        #     (sl1[i]*weights[0])+
+        #     (sl2[i]*weights[1])+
+        #     (sl3[i]*weights[2])
+        #     )
+    return sl
 
 
 def sum_weighted_term_lists(wtlist, dictionary):
@@ -51,8 +103,9 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
-def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
-              lda_preselect=False, combine_train_contexts=True):
+def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
+              lda_preselect=False, combine_train_contexts=True,
+              weights=[1, 1, 1]):
     """ - foo
     """
 
@@ -66,28 +119,28 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     adjacent_cit_map = {}
 
     if pp_dict_path:
-        print('loading predpatt dictionary')
+        prind('loading predpatt dictionary')
         pp_dictionary = corpora.Dictionary.load(pp_dict_path)
         pp_num_unique_tokens = len(pp_dictionary.keys())
         use_predpatt_model = True
         if not combine_train_contexts:
-            print(('usage of predpatt model is not implemented for not'
+            prind(('usage of predpatt model is not implemented for not'
                    'combining train contexts.\nexiting.'))
             sys.exit()
     else:
         use_predpatt_model = False
         pp_dictionary = None
 
-    print('checking file length')
+    prind('checking file length')
     num_lines = sum(1 for line in open(docs_path))
 
-    print('train/test splitting')
+    prind('train/test splitting')
     with open(docs_path) as f:
         for idx, line in enumerate(f):
             if idx == 0:
                 tmp_bag_current_mid = line.split('\u241E')[0]
             if idx%10000 == 0:
-                print('{}/{} lines'.format(idx, num_lines))
+                prind('{}/{} lines'.format(idx, num_lines))
             cntxt_foss = []
             cntxt_ppann = []
             # handle varying CSV formats
@@ -102,7 +155,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             elif len(vals) == 6:
                 mid, adjacent, in_doc, text, fos_annot, pp_annot_json = vals
             else:
-                print('input file format can not be parsed\nexiting')
+                prind('input file format can not be parsed\nexiting')
                 sys.exit()
             if len(vals) in [5, 6] and use_fos_annot:
                 cntxt_foss = [f.strip() for f in fos_annot.split('\u241F')
@@ -187,10 +240,10 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                 tmp_bag = []
                 tmp_bag_current_mid = mid
             tmp_bag.append([in_doc, text, cntxt_foss, cntxt_ppann])
-    print('loading dictionary')
+    prind('loading dictionary')
     dictionary = corpora.Dictionary.load(dict_path)
     num_unique_tokens = len(dictionary.keys())
-    print('building corpus')
+    prind('building corpus')
     corpus = [dictionary.doc2bow(text) for text in train_texts]
 
     # import console
@@ -198,13 +251,14 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
 
     # corpora.MmCorpus.serialize('3s5min5min_corpus.mm', corpus)
     if use_fos_annot:
-        print('preparing FoS model')
+        prind('preparing FoS model')
         mlb = MultiLabelBinarizer()
         mlb.fit([foss])
         train_foss_matrix = mlb.transform(train_foss)
-    print('generating TFIDF model')
+        train_foss_set_sizes = np.sum(train_foss_matrix, 1)
+    prind('generating TFIDF model')
     tfidf = models.TfidfModel(corpus)
-    print('preparing similarities')
+    prind('preparing similarities')
     index = similarities.SparseMatrixSimilarity(
                 tfidf[corpus],
                 num_features=num_unique_tokens)
@@ -218,18 +272,18 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     if lda_preselect:
         orig_index = index.index.copy()
 
-        print('generating LDA/LSI model')
+        prind('generating LDA/LSI model')
         lda = LsiModel(tfidf[corpus], id2word=dictionary, num_topics=100)
         # lda = LdaMulticore(tfidf[corpus], id2word=dictionary, num_topics=500)
         # lda = LdaModel(tfidf[corpus], id2word=dictionary, num_topics=10000)
-        print('preparing similarities')
+        prind('preparing similarities')
         lda_index = similarities.SparseMatrixSimilarity(
                     lda[tfidf[corpus]],
                     num_features=num_unique_tokens)
 
 
     if use_predpatt_model:
-        print('preparing similarities')
+        prind('preparing similarities')
         pp_index = similarities.SparseMatrixSimilarity(
             train_ppann,
             num_features=pp_num_unique_tokens)
@@ -240,24 +294,32 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     num_top_10 = 0
     ndcg_sum_5 = 0
     map_sum_5 = 0
-    print('test set size: {}\n- - - - - - - -'.format(len(test)))
+    prind('test set size: {}\n- - - - - - - -'.format(len(test)))
     foo = 0
     for tpl in test:
         test_mid = tpl[0]
         test_text = bow_preprocess_string(tpl[1])
         if use_fos_annot:
             test_foss_vec = mlb.transform([tpl[2]])
-            sorted_dot_prod_ids = train_foss_matrix.dot(
-                test_foss_vec.transpose()
-                ).transpose()[0].argsort()
-            sorted_dot_prods = train_foss_matrix.dot(
+            dot_prods = train_foss_matrix.dot(
                 test_foss_vec.transpose()
                 ).transpose()[0]
-            fos_ranking = sorted_dot_prod_ids[::-1].tolist()
-            fos_boost = np.where(
-                sorted_dot_prods >= sorted_dot_prods.max()-1
-                )[0].tolist()
-            top_dot_prod = sorted_dot_prods[-1]
+            with np.errstate(divide='ignore',invalid='ignore'):
+                fos_sims = np.nan_to_num(dot_prods/train_foss_set_sizes)
+            fos_sims_list = list(enumerate(fos_sims))
+            fos_sims_list.sort(key=lambda tup: tup[1], reverse=True)
+            fos_ranking = [s[0] for s in fos_sims_list]
+            # # v hand crafted sliiiiiiight improvement v
+            # sorted_dot_prod_ids = train_foss_matrix.dot(
+            #     test_foss_vec.transpose()
+            #     ).transpose()[0].argsort()
+            # fos_ranking = sorted_dot_prod_ids[::-1].tolist()
+            # non_zero_dot_prods = len([dp for dp in dot_prods if dp > 0])
+            # fos_ranking = fos_ranking[:non_zero_dot_prods]
+            # fos_boost = np.where(
+            #     dot_prods >= dot_prods.max()-1
+            #     )[0].tolist()
+            # top_dot_prod = dot_prods[-1]
         if use_predpatt_model:
             pp_sims = pp_index[tpl[3]]
             pp_sims_list = list(enumerate(pp_sims))
@@ -284,8 +346,9 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         if lda_preselect:
             # translate back from listing in LDA/LSI pick subset to global listing
             bow_ranking = [lda_picks[r] for r in bow_ranking]
-        if use_fos_annot:
-            final_ranking = combine_rankings(
+        if use_fos_annot and False:
+            # # v hand crafted sliiiiiiight improvement v
+            final_ranking = fos_boost_ranking(
                 bow_ranking, fos_boost, top_dot_prod)
         else:
             final_ranking = bow_ranking
@@ -294,19 +357,32 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             seen_add = seen.add
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
-        if use_predpatt_model:
+        if use_predpatt_model and False:
             # if pp_sims_list[0][1] == 0:
-            if pp_sims_list[0][1] < sims_list[0][1]:
-                final_ranking = bow_ranking
-            else:
-                foo += 1
-                final_ranking = pp_ranking
+            # if pp_sims_list[0][1] < sims_list[0][1]:
+            #     final_ranking = bow_ranking
+            # else:
+            #     foo += 1
+            #     final_ranking = pp_ranking
+            sims_comb = combine_simlists(sims, fos_sims, pp_sims, weights)
+            sims_list = list(enumerate(sims_comb))
+            sims_list.sort(key=lambda tup: tup[1], reverse=True)
+            final_ranking = [s[0] for s in sims_list]
 
         # if top_dot_prod < 1:                # FIXME just a test
         #     continue
         # else:
         #     foo += 1
         #     final_ranking = fos_ranking
+
+        br, delta = better_rank(sims, pp_sims, train_mids, test_mid)
+        if br == 1:
+            # import console
+            # console.copen(globals(), locals())
+            # sys.exit()
+            # with open('pp_superior.tsv', 'a') as f:
+            #    f.write('{}\t{}\t{}\t{}\n'.format(delta, tpl[1], train_text, tpl[3]))
+            foo += 1
 
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]
@@ -317,7 +393,8 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                 rank = idx+1
                 break
             if idx >= 10:
-                break
+               break
+        # prind('>>>>> rank: {}'.format(rank))  # FIXME remove
         dcg = 0
         idcg = 0
         num_rel = 1 + len(adjacent_cit_map[test_mid])
@@ -352,24 +429,46 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         if rank <= 10:
             num_top_10 += 1
         num_cur += 1
-        print('- - - - - {}/{} - - - - -'.format(num_cur, len(test)))
-        print('#1: {}'.format(num_top))
-        print('in top 5: {}'.format(num_top_5))
-        print('in top 10: {}'.format(num_top_10))
-        print('ndcg@5: {}'.format(ndcg_sum_5/num_cur))
-        print('map@5: {}'.format(map_sum_5/num_cur))
-        print('foo: {}'.format(foo))  # FIXME remove
+        prind('- - - - - {}/{} - - - - -'.format(num_cur, len(test)))
+        prind('#1: {}'.format(num_top))
+        prind('in top 5: {}'.format(num_top_5))
+        prind('in top 10: {}'.format(num_top_10))
+        prind('ndcg@5: {}'.format(ndcg_sum_5/num_cur))
+        prind('map@5: {}'.format(map_sum_5/num_cur))
+        prind('foo: {}'.format(foo))  # FIXME remove
+    return (ndcg_sum_5/num_cur), (map_sum_5/num_cur)
 
 
 if __name__ == '__main__':
     if len(sys.argv) not in [3, 4]:
-        print(('usage: python3 recommend.py </path/to/docs_file> </path/to/gen'
+        prind(('usage: python3 recommend.py </path/to/docs_file> </path/to/gen'
                'sim_dict>'))
         sys.exit()
     docs_path = sys.argv[1]
     dict_path = sys.argv[2]
     if len(sys.argv) == 4:
-        pp_dict_path = sys.argv[2]
+        pp_dict_path = sys.argv[3]
     else:
         pp_dict_path = None
-    recommend(docs_path, dict_path, pp_dict_path=pp_dict_path)
+
+    ndcg_a5, map_a5 = recommend( docs_path,
+        dict_path,
+        pp_dict_path=pp_dict_path,
+        )
+
+    # # linear weights
+    # results = []
+    # for a in range(0, 110, 15):
+    #     for b in range(0, 110, 15):
+    #         for c in range(0, 110, 15):
+    #             weights = [a/100, b/100, c/100]
+    #             ndcg_a5, map_a5 = recommend(
+    #                 docs_path,
+    #                 dict_path,
+    #                 pp_dict_path=pp_dict_path,
+    #                 weights=weights
+    #                 )
+    #             print('{}/{}/{}  ->  {:.5f} | {:.5f}'.format(a/100, b/100, c/100, ndcg_a5, map_a5))
+    #             results.append([a/100, b/100, c/100, ndcg_a5, map_a5])
+    # results.sort(key=lambda tup: tup[3])
+    # print(results)

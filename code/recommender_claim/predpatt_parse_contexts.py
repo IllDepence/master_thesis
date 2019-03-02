@@ -81,6 +81,12 @@ def compound_text_variations(node):
                     # TODO: this could be done in a way such that a copy of all
                     #       following modifiers is created with the conjunct
                     texts.append('{} {}'.format(dd.dep.text, texts[-2]))
+            # NOTE: apparently amods to compounds do not get directly attached
+            #       to the compound relation's gov node.
+            #       e.g. A-compound->B-amod->C instead of
+            #            A-compound->B
+            #             `-amod->C
+            #       in such cases the amod does not get picked up here.
     # adjective modifiers
     for d in node.dependents[::-1]:
         if d.rel == 'amod' and d.dep.tag not in tag_blacklist:

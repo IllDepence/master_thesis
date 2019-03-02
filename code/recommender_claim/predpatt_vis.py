@@ -164,10 +164,21 @@ def compound_text_variations(node):
                         texts.append('{} {}'.format(ddd.dep.text, texts[-2]))
 
     # clean
-    return texts
     # texts = [TOKEN_PATT.sub('', t).strip() for t in texts]
     # texts = [re.sub('\s+', ' ', t) for t in texts]
     # return [t for t in texts if len(t) > 0]
+
+    # experimental removal of substrings
+    long_texts = []
+    for t_outer in texts:
+        is_substr = False
+        for t_inner in texts:
+            if len(t_outer) < len(t_inner) and t_outer in t_inner:
+                is_substr = True
+                break
+        if not is_substr:
+            long_texts.append(t_outer)
+    return long_texts
 
 
 def is_example_for(node):
@@ -241,6 +252,10 @@ sentences.append('FIGURE Bayesian decision theory Loss and risk In Bayesian deci
 sentences.append('Object Recognition and Segmentation: The availability of large-scale, publicly available datasets such as ImageNet ( CIT ), PASCAL VOC ( CIT ), Microsoft COCO ( CIT ), Cityscapes ( MAINCIT ) and TorontoCity ( CIT ) have had a major impact on the success of deep learning in object classification, detection, and semantic segmentation tasks.')
 sentences.append('Beyond the correlation filter based method, extensive tracking approaches were proposed and achieved state-of-the-art performance, such as structural learning CIT , CIT , CIT , sparse and low-rank learning CIT , CIT , CIT , CIT , subspace learning CIT , CIT , CIT , and deep learning CIT , MAINCIT .')
 sentences.append('The idea of SVM is based on structural risk minimization ( MAINCIT ).')
+
+if len(sys.argv) == 2:
+    sentences = [sys.argv[1]]
+    print(sentences)
 
 for s in sentences:
     s = merge_citation_token_lists(s)

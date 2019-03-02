@@ -3,26 +3,43 @@
 Citations are a central building block of scholarly discourse. They are the means by which scholars relate their research to existing work---be it in backing up claims, criticising, naming examples or engaging in any other form. Citing in a meaningful way requires an author to be aware of publications relevant to their work.
 Here, the ever increasing amount of new reseach publications per year poses a serious challenge. Even with academic search engines like Goolge Scholar and CiteSeerX at our disposal, identifying publications that are worthwhile to examine and appropriate to reference remains a time consuming task.
 
-It is therefore not suprising that methods to aid researchers in these tasks have been and still are being actively researched. While diverse in nature, the common core of these efforts is the goal to utilize the automated processing of publications. This can be achieved by either extracting information from publications as they are today~\cite{Nasar2018,Beel2016}, or by introducing explicit semantic representations to facilitate automated processing~\cite{BuckinghamShum2000,Schneider2013,Kitamoto2015}. Once processed, a typical method is to harvest human made citations, analyze them~\cite{Abujbara2013,Teufel2006a,Teufel2006b} and use them for example to recommend papers~\cite{Beel2016} or aid in document exploration~\cite{Berger2016}. Although systems like this have existed for over 20 years~\cite{Bollacker1998,Beel2016}, there is not a lot of work looking into the use of explicit semantic representations for the recommendation of papers. This is why this thesis will investiage their application. More specifically, we will concentrate on the task of recommending papers for citation---as opposed to, for example, discovery. What this encompasses will be described in more detail in the following section.
+It is therefore not suprising that methods to aid researchers in these tasks have been and still are being actively researched. While diverse in nature, the common core of these efforts is the goal to utilize the automated processing of publications. This can be achieved by either extracting information from publications as they are~\cite{Nasar2018,Beel2016}, or by introducing explicit semantic representations of their content to facilitate automated processing~\cite{BuckinghamShum2000,Schneider2013,Kitamoto2015}. Once processed, a typical method is to harvest human made citations, analyze them~\cite{Abujbara2013,Teufel2006a} and use them for example to recommend papers~\cite{Beel2016} or aid in document exploration~\cite{Berger2016}. Although systems like this have existed for over 20 years~\cite{Bollacker1998,Beel2016}, there is not a lot of work looking into the use of explicit semantic representations for the recommendation of papers.
+% TODO: mby add sth about what the prospective benefits of semantic representations would be (e.g. if rather advanced model: search for citations for certain claims instead of just keyword based)
+This is why this thesis will investiage their application. More specifically, we will concentrate on the task of recommending papers for citation---as opposed to, for example, discovery. What this encompasses will be described in more detail in the following section.
+
+%Teufel2006b
 
 % Systems for recommending papers have existed since 1998~\cite{Bollacker1998,Beel2016}. The closely related field of citation analysis has an even longer history that spans multiple disciplices including applied linguistics, history and sociology of sience and information science~\cite{Swales1986,White2004}.
 
 % also there’s different approaches to it (collab.fil. / content based fil.(input=paper / input=sentence / input=sentence+one citation\cite{Kobayashi2018} / input=abstract\cite{Ayala-Gomez2018}) / graph based)
 
 \section{Problem setting}\label{sec:problemsetting}
-The goal of this thesis is to assess the viability of and requirements for employing explicit semantic representations for the task of citation recommendation.
+In the boradest sense, recommending papers for citation means given an input text, suggest publications that can be referred to from within that text. In scale this can vary from specific recommendations for a section of a sentence (\emph{local}), to general recommendations for a whole input document (\emph{global}). The task can also include deciding whether or not the input contains parts that would justify inserting a citation in the first place. In this thesis, we will focus on local citation recommendation with the assumption that the input always allows for/requires a citation to be put in.
+
+Another distinction to be made is between personalized and general citation recommendation. Some approaches make use of user specific information such as an author's prior citations. Collaborative filtering approaches by nature include a user model and therfore fall into this category. While personalization can improve recommendation, it limits the approach to users that are willing to share personal information. % also if prior own publications would be needed (to see what authors, venues, fields of study one cites) there would be an interesting version of the could start problem. worth mentioning?
+We therefore limit ourselves to purely content based filtering approaches.
+
+A last clarification has to be made concerning the term \emph{explicit semantic representations}. This is to be understood as a differentiation from the mere use of unstructured text. A most prominent example for explicit semantic representations would be the structure of the Semantic Web~\cite{Berners-Lee2001}. In the context of citation recommendation as briefly outlined above this means representing citations in a semantically meaningful way as opposed to just relying on syntactical information like n-grams or bag-of-words representations.
+
+The problem setting can be summarized as follows. To investigate is, the applicability of and requirements for the use of explicit semantic representations for content based, local citation recommendation. The following section will outline how this investigation is performed.
 
 \section{Method}\label{sec:method}
-generate a data set fit for investigation of citation recommendation employing named entities and claims
+In order to assess if and how explicit semantic representations can benefit citation recommendation we investigate the use of named entities as well as claim structures. For the evaluation of our models in a realistic setting we generate a large data set that allows for the extraction of precise citation marker positions. To ensure comparability with related work we also perform evaluations on existing data sets as far as possible.
 
-devise citation recommendation approach implement and evaluate
+Extend to mention offline and online eval
+
+Extend moar
 
 \section{Contributions}\label{sec:contributions}
+The data set
+
+Two models (even though they don't perform that well)
+
+Insights into open problems with building claim models around citations (b/c of non-integral citation styles)
 
 \section{Document structure}\label{sec:documentstructure}
 foo bar
 
-\section{Example Section}\label{sec:ex}
 Copypasta of useful stuff below.
 \begin{itemize}
     \item Put a tilde (nbsp) in front of citations~\cite{Moravcsik1975}.

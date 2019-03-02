@@ -2690,29 +2690,29 @@ map@5: 0.6351078326815991
 
 ~~ longest term variant only PP ~~
 
-PP when possible, otherwise bow   PP when higher similarity        PP alone
+PP when possible, otherwise bow   PP when higher similarity        PP when possible, skip otherwise
 - - - - - 5626/5626 - - - - --    - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
-#1: 1452                          #1: 2471                         #1: 1157
-in top 5: 2150                    in top 5: 3165                   in top 5: 1738
-in top 10: 2438                   in top 10: 3420                  in top 10: 1992
-ndcg@5: 0.3172454793581524        ndcg@5: 0.4952889822361036       ndcg@5: 0.25465782232598316
-map@5: 0.3049413437611088         map@5: 0.4874896314729232        map@5: 0.24422028676383462
-(4972 times PP ranking used)      (2491 times PP ranking used)
+#1: 1452                          #1: 2471                         #1: 1154
+in top 5: 2150                    in top 5: 3165                   in top 5: 1727
+in top 10: 2438                   in top 10: 3420                  in top 10: 1979
+ndcg@5: 0.3172454793581524        ndcg@5: 0.4952889822361036       ndcg@5: 0.286371471237163
+map@5: 0.3049413437611088         map@5: 0.4874896314729232        map@5: 0.27485104103903063
+(4972 times PP ranking used)      (2491 times PP ranking used)     (4979 times possible)
 
 
 ~~ all term variants PP ~~
 
-PP when possible, otherwise bow   PP when higher similarity        PP alone
-- - - - - 5626/5626 - - - - -     - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
-#1: 831                           #1: 1560                         #1: 723
-in top 5: 1535                    in top 5: 2145                   in top 5: 1400
-in top 10: 1934                   in top 10: 2446                  in top 10: 1789
-ndcg@5: 0.2072879022881365        ndcg@5: 0.3241964977424993       ndcg@5: 0.18610916635867294
-map@5: 0.19166666666666737        map@5: 0.3148477307737883        map@5: 0.17049709681241929
-(5393 times PP ranking used)      (4243 times PP ranking used)
+PP when possible, otherwise bow   PP when higher similarity        PP when possible, skip otherwise
+- - - - - 5626/5626 - - - - -     - - - - - 5626/5626 - - - -      - - - - - 5626/5626 - - - - -
+#1: 1314                          #1: 2341                         #1: 1245
+in top 5: 2088                    in top 5: 2960                   in top 5: 1996
+in top 10: 2467                   in top 10: 3221                  in top 10: 2367
+ndcg@5: 0.2988175240653653        ndcg@5: 0.46411134563661643      ndcg@5: 0.2931454555131843
+map@5: 0.2839969190662401         map@5: 0.458045977011494         map@5: 0.27817038935676813
+(5462 times PP ranking used)      (3321 times PP ranking used)     (5462 times possible)
 ```  
-→ PP alone not feasible
-→ *longest term variant only* PP model probably better
+→ *all term variant* PP model more widely applicable but closer to a BOW approach  
+→ *longest term variant only* PP model slightly more restrictive in applicability and sliightly worse general reprediction score but closer to a claim based model
 
 
 10k sample tests

@@ -1138,25 +1138,184 @@ also see
 }
 
 @Article{Middleton2004,
-  author        = {Middleton, Stuart E. and Shadbolt, Nigel R. and De Roure, David C.},
-  title         = {Ontological User Profiling in Recommender Systems},
-  journal       = {ACM Trans. Inf. Syst.},
-  year          = {2004},
-  volume        = {22},
-  number        = {1},
-  pages         = {54--88},
-  month         = jan,
-  issn          = {1046-8188},
-  __markedentry = {[tarek:]},
-  acmid         = {963773},
+  author     = {Middleton, Stuart E. and Shadbolt, Nigel R. and De Roure, David C.},
+  title      = {Ontological User Profiling in Recommender Systems},
+  journal    = {ACM Trans. Inf. Syst.},
+  year       = {2004},
+  volume     = {22},
+  number     = {1},
+  pages      = {54--88},
+  month      = jan,
+  issn       = {1046-8188},
+  acmid      = {963773},
+  address    = {New York, NY, USA},
+  doi        = {10.1145/963770.963773},
+  issue_date = {January 2004},
+  keywords   = {Agent, machine learning, ontology, personalization, recommender systems, user modelling, user profiling},
+  numpages   = {35},
+  publisher  = {ACM},
+  review     = {- related work},
+  url        = {http://doi.acm.org/10.1145/963770.963773},
+}
+
+@Article{Zarrinkalam2013,
+  author  = {Fattane Zarrinkalam and Mohsen Kahani},
+  title   = {SemCiR: A citation recommendation system based on a novel semantic distance measure},
+  journal = {Program: Electronic Library and Information Systems},
+  year    = {2013},
+  volume  = {47},
+  pages   = {92-112},
+  review  = {- related work
+- define a measure of semantic similarity based on combining
+    - relative text similarity between input text and a fixed size set of textually similar papers
+    - a similarity measure based on 6 "relational" features (overlapping authors, same venue, citing same works, being cited by same works, citing each other) *between papers* (candidate paper and a fixed size set of papers *textually similar* to input text)
+- paper similarity measure is close to modeling (A,cites,B), (z,authorOf,A), type semantic info
+-> combined similarity measure somewhat convoluted
+
+input text -> [fixed size set of textually similar papers] -> semantically similar papers     (<- wouldn't this just always be the highest for the fixed size set papers themselves? mby not b/c of weighted averaging over all fixed size set papers)
+                         ^
+     these now represent the input text (weighted by their relative similarity to the input text)},
+}
+
+@InProceedings{Zarrinkalam2012,
+  author       = {Zarrinkalam, Fattane and Kahani, Mohsen},
+  title        = {A multi-criteria hybrid citation recommendation system based on linked data},
+  booktitle    = {2012 2nd International eConference on Computer and Knowledge Engineering (ICCKE)},
+  year         = {2012},
+  pages        = {283--288},
+  organization = {IEEE},
+  review       = {- related work
+- enriching paper metadata with LOD
+- input most likely a whole document (with title, authors, etc. (metadata) as opposed to just a citation context)},
+}
+
+@InProceedings{DiNoia2012,
+  author    = {Di Noia, Tommaso and Mirizzi, Roberto and Ostuni, Vito Claudio and Romito, Davide and Zanker, Markus},
+  title     = {Linked Open Data to Support Content-based Recommender Systems},
+  booktitle = {Proceedings of the 8th International Conference on Semantic Systems},
+  year      = {2012},
+  series    = {I-SEMANTICS '12},
+  pages     = {1--8},
+  address   = {New York, NY, USA},
+  publisher = {ACM},
+  acmid     = {2362501},
+  doi       = {10.1145/2362499.2362501},
+  isbn      = {978-1-4503-1112-0},
+  keywords  = {DBpedia, LinkedMDB, content-based recommender systems, freebase, linked data, movielens, precision, recall, semantic web, vector space model},
+  location  = {Graz, Austria},
+  numpages  = {8},
+  review    = {- related work
+- content based recomm. (but with user model) using LOD for movie domain},
+  url       = {http://doi.acm.org/10.1145/2362499.2362501},
+}
+
+@InProceedings{Zhang2008,
+  author    = {Zhang, Ming and Wang, Weichun and Li, Xiaoming},
+  title     = {A Paper Recommender for Scientific Literatures Based on Semantic Concept Similarity},
+  booktitle = {Digital Libraries: Universal and Ubiquitous Access to Information},
+  year      = {2008},
+  editor    = {Buchanan, George and Masoodian, Masood and Cunningham, Sally Jo},
+  pages     = {359--362},
+  address   = {Berlin, Heidelberg},
+  publisher = {Springer Berlin Heidelberg},
+  abstract  = {Recently, collaborative tagging has become more and more popular in the Web2.0 community, since tags in these Web2.0 systems reflect the specific content features of the resources. This paper presents a recommender for scientific literatures based on semantic concept similarity computed from the collaborative tags. User profiles and item profiles are presented by these semantic concepts, and neighbor users are selected using collaborative filtering. Then, content-based filtering approach is used to generate recommendation list from the papers these neighbor users tagged. The evaluation is carried out on a dataset crawled from CiteULike, with satisfied experiment results.},
+  isbn      = {978-3-540-89533-6},
+  review    = {- related work
+- use citeulike tags to derive semantic concepts
+- collab. fil. approach},
+}
+
+@InProceedings{He2010,
+  author    = {He, Qi and Pei, Jian and Kifer, Daniel and Mitra, Prasenjit and Giles, Lee},
+  title     = {Context-aware Citation Recommendation},
+  booktitle = {Proceedings of the 19th International Conference on World Wide Web},
+  year      = {2010},
+  series    = {WWW '10},
+  pages     = {421--430},
+  address   = {New York, NY, USA},
+  publisher = {ACM},
+  acmid     = {1772734},
+  doi       = {10.1145/1772690.1772734},
+  isbn      = {978-1-60558-799-8},
+  keywords  = {bibliometrics, context, gleason's theorem, recommender systems},
+  location  = {Raleigh, North Carolina, USA},
+  numpages  = {10},
+  review    = {- "Perhaps the seminal piece of work" in the area of *local* citation recommendation (Duma2016)
+- prototype of RefSeer (Huang2014)},
+  url       = {http://doi.acm.org/10.1145/1772690.1772734},
+}
+
+@InProceedings{Huang2014,
+  author    = {W. {Huang} and and P. {Mitra} and C. L. {Giles}},
+  title     = {RefSeer: A citation recommendation system},
+  booktitle = {IEEE/ACM Joint Conference on Digital Libraries},
+  year      = {2014},
+  pages     = {371-374},
+  month     = {Sep.},
+  doi       = {10.1109/JCDL.2014.6970192},
+  keywords  = {citation analysis;recommender systems;citation recommendation system;RefSeer;topic based global recommendation;citation-context based local recommendation;Context;Computational modeling;Training;Complexity theory;Context modeling;Bibliographies;Search engines;Citation recommendation;RefSeer},
+  review    = {- related work
+- local citation recommendation
+- (in part same people from penn state as He2010 <- prototype of RefSeer)},
+}
+
+@InProceedings{Huang2015,
+  author    = {Huang, Wenyi and Wu, Zhaohui and Liang, Chen and Mitra, Prasenjit and Giles, C. Lee},
+  title     = {A Neural Probabilistic Model for Context Based Citation Recommendation},
+  booktitle = {Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence},
+  year      = {2015},
+  series    = {AAAI'15},
+  pages     = {2404--2410},
+  publisher = {AAAI Press},
+  acmid     = {2886655},
+  isbn      = {0-262-51129-0},
+  location  = {Austin, Texas},
+  numpages  = {7},
+  review    = {- related work
+- local citation recommendation
+- builds on Hunag2014},
+  url       = {http://dl.acm.org/citation.cfm?id=2886521.2886655},
+}
+
+@InProceedings{He2011,
+  author    = {He, Qi and Kifer, Daniel and Pei, Jian and Mitra, Prasenjit and Giles, C. Lee},
+  title     = {Citation Recommendation Without Author Supervision},
+  booktitle = {Proceedings of the Fourth ACM International Conference on Web Search and Data Mining},
+  year      = {2011},
+  series    = {WSDM '11},
+  pages     = {755--764},
+  address   = {New York, NY, USA},
+  publisher = {ACM},
+  acmid     = {1935926},
+  doi       = {10.1145/1935826.1935926},
+  isbn      = {978-1-4503-0493-1},
+  keywords  = {bibliometrics, context, extraction, recommender systems},
+  location  = {Hong Kong, China},
+  numpages  = {10},
+  review    = {- related work
+- local citation recommendation},
+  url       = {http://doi.acm.org/10.1145/1935826.1935926},
+}
+
+@InProceedings{Ebesu2017,
+  author        = {Ebesu, Travis and Fang, Yi},
+  title         = {Neural Citation Network for Context-Aware Citation Recommendation},
+  booktitle     = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  year          = {2017},
+  series        = {SIGIR '17},
+  pages         = {1093--1096},
   address       = {New York, NY, USA},
-  doi           = {10.1145/963770.963773},
-  issue_date    = {January 2004},
-  keywords      = {Agent, machine learning, ontology, personalization, recommender systems, user modelling, user profiling},
-  numpages      = {35},
   publisher     = {ACM},
-  review        = {- related work},
-  url           = {http://doi.acm.org/10.1145/963770.963773},
+  __markedentry = {[tarek:]},
+  acmid         = {3080730},
+  doi           = {10.1145/3077136.3080730},
+  isbn          = {978-1-4503-5022-8},
+  keywords      = {citation recommendation, deep learning, neural machine translation},
+  location      = {Shinjuku, Tokyo, Japan},
+  numpages      = {4},
+  review        = {- related work
+- local citation recommendation},
+  url           = {http://doi.acm.org/10.1145/3077136.3080730},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

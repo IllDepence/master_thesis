@@ -1124,8 +1124,9 @@ also see
   doi     = {10.1145/2365952.2366004},
   review  = {- related work
 - use tags found on citeulike for a topic model "We leverage social tagging resources to define academic terms by extracting users’ tagging information from citeulike"
-- tag = "academic concept'
+- tag = "academic concept"
 - academic concepts search for in paper abstract
+- also split abstract into problem and solution part
 - evaluate with user judgement from 0 to 3; test set 30 papers, training 350k},
 }
 
@@ -1134,6 +1135,13 @@ also see
   title     = {Capturing knowledge of user preferences: ontologies in recommender systems},
   booktitle = {K-CAP},
   year      = {2001},
+  abstract  = {- related work
+- system that tracks and classifies URLs a researcher borwses
+- probably limits above step to direct links to PDF or PS documents (HTML content said to be ignored "at the expense of HTML format papers")
+- classifies papers into topics based on "dmoz open directory project hierarchy" (discontinued in 2017 and archived at http://dmoztools.net/), more specifically its taxonomy of computer science topics
+- does hybrid content-based + collab. fil. recommendation of papers
+- evaluate ontology labelling strategy vs. a flat list labelling strategy
+- evaluate in 2 user studies and report that ontology based labellig gives better results (103 papers covering 17 topics, 135 papers covering 23 topics)},
   review    = {- related work},
 }
 
@@ -1154,7 +1162,8 @@ also see
   keywords   = {Agent, machine learning, ontology, personalization, recommender systems, user modelling, user profiling},
   numpages   = {35},
   publisher  = {ACM},
-  review     = {- related work},
+  review     = {- related work
+- new/extended Middleton2001 system; eval somewhat convoluted though},
   url        = {http://doi.acm.org/10.1145/963770.963773},
 }
 
@@ -1174,7 +1183,9 @@ also see
 
 input text -> [fixed size set of textually similar papers] -> semantically similar papers     (<- wouldn't this just always be the highest for the fixed size set papers themselves? mby not b/c of weighted averaging over all fixed size set papers)
                          ^
-     these now represent the input text (weighted by their relative similarity to the input text)},
+     these now represent the input text (weighted by their relative similarity to the input text)
+
+- represent test set papers by title, abstract and citation context*s*},
 }
 
 @InProceedings{Zarrinkalam2012,
@@ -1221,8 +1232,10 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   abstract  = {Recently, collaborative tagging has become more and more popular in the Web2.0 community, since tags in these Web2.0 systems reflect the specific content features of the resources. This paper presents a recommender for scientific literatures based on semantic concept similarity computed from the collaborative tags. User profiles and item profiles are presented by these semantic concepts, and neighbor users are selected using collaborative filtering. Then, content-based filtering approach is used to generate recommendation list from the papers these neighbor users tagged. The evaluation is carried out on a dataset crawled from CiteULike, with satisfied experiment results.},
   isbn      = {978-3-540-89533-6},
   review    = {- related work
-- use citeulike tags to derive semantic concepts
-- collab. fil. approach},
+- use citeulike tags to derive semantic concepts (concepts are comprised of tags)
+- semantic similarity between two concepts is given by cosine similarity of tags in a vector space
+- associate each paper to each *tag* (not concept) with a certain degree
+- hybrid approach},
 }
 
 @InProceedings{He2010,
@@ -1256,7 +1269,10 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   keywords  = {citation analysis;recommender systems;citation recommendation system;RefSeer;topic based global recommendation;citation-context based local recommendation;Context;Computational modeling;Training;Complexity theory;Context modeling;Bibliographies;Search engines;Citation recommendation;RefSeer},
   review    = {- related work
 - local citation recommendation
-- (in part same people from penn state as He2010 <- prototype of RefSeer)},
+- (in part same people from penn state as He2010 <- prototype of RefSeer)
+- do golbal and local citrec
+- 3 sentence citation context
+- for 3 sentence query, use each as a separate query},
 }
 
 @InProceedings{Huang2015,
@@ -1298,24 +1314,38 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 }
 
 @InProceedings{Ebesu2017,
-  author        = {Ebesu, Travis and Fang, Yi},
-  title         = {Neural Citation Network for Context-Aware Citation Recommendation},
-  booktitle     = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
-  year          = {2017},
-  series        = {SIGIR '17},
-  pages         = {1093--1096},
-  address       = {New York, NY, USA},
-  publisher     = {ACM},
-  __markedentry = {[tarek:]},
-  acmid         = {3080730},
-  doi           = {10.1145/3077136.3080730},
-  isbn          = {978-1-4503-5022-8},
-  keywords      = {citation recommendation, deep learning, neural machine translation},
-  location      = {Shinjuku, Tokyo, Japan},
-  numpages      = {4},
-  review        = {- related work
+  author    = {Ebesu, Travis and Fang, Yi},
+  title     = {Neural Citation Network for Context-Aware Citation Recommendation},
+  booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  year      = {2017},
+  series    = {SIGIR '17},
+  pages     = {1093--1096},
+  address   = {New York, NY, USA},
+  publisher = {ACM},
+  acmid     = {3080730},
+  doi       = {10.1145/3077136.3080730},
+  isbn      = {978-1-4503-5022-8},
+  keywords  = {citation recommendation, deep learning, neural machine translation},
+  location  = {Shinjuku, Tokyo, Japan},
+  numpages  = {4},
+  review    = {- related work
 - local citation recommendation},
-  url           = {http://doi.acm.org/10.1145/3077136.3080730},
+  url       = {http://doi.acm.org/10.1145/3077136.3080730},
+}
+
+@InProceedings{Caragea2014,
+  author        = {Caragea, Cornelia and Wu, Jian and Ciobanu, Alina and Williams, Kyle and Fern{\'a}ndez-Ram{\'i}rez, Juan and Chen, Hung-Hsuan and Wu, Zhaohui and Giles, Lee},
+  title         = {CiteSeerx: A Scholarly Big Dataset},
+  booktitle     = {Advances in Information Retrieval},
+  year          = {2014},
+  editor        = {de Rijke, Maarten and Kenter, Tom and de Vries, Arjen P. and Zhai, ChengXiang and de Jong, Franciska and Radinsky, Kira and Hofmann, Katja},
+  pages         = {311--322},
+  address       = {Cham},
+  publisher     = {Springer International Publishing},
+  __markedentry = {[tarek:]},
+  abstract      = {The CiteSeerxdigital library stores and indexes research articles in Computer Science and related fields. Although its main purpose is to make it easier for researchers to search for scientific information, CiteSeerxhas been proven as a powerful resource in many data mining, machine learning and information retrieval applications that use rich metadata, e.g., titles, abstracts, authors, venues, references lists, etc. The metadata extraction in CiteSeerxis done using automated techniques. Although fairly accurate, these techniques still result in noisy metadata. Since the performance of models trained on these data highly depends on the quality of the data, we propose an approach to CiteSeerxmetadata cleaning that incorporates information from an external data source. The result is a subset of CiteSeerx, which is substantially cleaner than the entire set. Our goal is to make the new dataset available to the research community to facilitate future work in Information Retrieval.},
+  isbn          = {978-3-319-06028-6},
+  review        = {- citeseer x citation},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -1,32 +1,36 @@
 \chapter{Related Work}\label{chap:relatedwork}
-lots. pick wisely.
 
 \section{Semantic approaches to recommendation}
 
-Leveraging Semantic Annotations to Link Wikipedia and News Archives\cite{Mishra2016}
+At a point in time where publishing research papers online was an emerging trend, Middleton et al.~\cite{Middleton2001} propose a system for paper recommendation making use of a topic ontology. Based on classifying papers into topics and recording which papers a researcher would access on the web, they employ content-based filtering, collaborative filtering and a feedback mechanism to suggest papers from new topics to users. Comparing the topic ontology to a flat list of topics in two user studies, they report 7--15\% more user satisfaction for the ontology case.
+% \cite{Middleton2004} reports on new/extended system using CORA as ontology base (evaluation is somewhat convoluted though)
 
-Using NEL + dependency trees for music recommendation\cite{Sordo2015}
+In a similar vein, Zhang et al.~\cite{Zhang2008} propose a hybrid recommender system for papers based on semantic concept similarity. They derive concepts from CiteULike\footnote{See \url{http://citeulike.org/}.} tags and use these to measure the semantic similarity of papers and users' interest. In their evaluation they compare different settings of the approach but do not compare to other work or alternative techniques.
 
-use citeulike tags as "academic concepts" for paper recommendation\cite{Jiang2012}
+Jiang et al.~\cite{Jiang2012} use CiteULike tags as academic concepts to build a topic model applied to paper abstracts. In a content-based recommendation setting they let volunteers judge the relevance of recommendations for a test set of 30 papers. The evaluation includes a TFIDF baseline, latent Dirichlet allocation (LDA) and an approach combining LDA with their concept model. The reported MAP@5 and NDCG@5 values are best for the LDA+concept method.
 
-Capturing knowledge of user preferences: ontologies in recommender systems\cite{Middleton2001,Middleton2004}
+In \cite{Zarrinkalam2012} Zarrinkalam et al. enrich their metadata on research papers using multiple Linked Open Data (LOD) sources to drive a hybrid recommender system. They compare a purely content-based method using only text similarity with a second method additionally utilizing collaborative filtering and a third method furthermore using the LOD enriched data. They report recall, co-cited probability and NDCG values for various cut-off values for which the LOD enriched method consistently achieves the best performance.
 
-A multi-criteria hybrid citation recommendation system based on linked data\cite{Zarrinkalam2012}
+With SemCiR~\cite{Zarrinkalam2013} Zarrinkalam et al. introduce a content-based, global citation recommendation approach that utilizes a semantic distance measure between papers. They furthermore introcude a method for extending the measure to determine the semantic distance between an input text and a paper, which is achieved by representing the input by textually similar papers. The distance measure suggested builds on six different relational features including shared authors, venue, and overlapping in- and outgoing citations. The approach is evaluated on a 12,500 paper subset of CiteSeerX~\cite{Caragea2014} in a citation re-prediction setting, using as input a paper's title, abstract and contexts in other papers where it was referred to. An evaluation of different scenarios measuring recall, co-cited probability and NDCG leads the authors to conclude that recommendation results can be improved by using their semantic distance measure and including citation contexts in the measurement textual similarity.
 
-SemCiR: A Citation Recommendation System Based on a Novel Semantic Distance Measure\cite{Zarrinkalam2013}
+% non paper/cit:
 
-DiNoia\cite{DiNoia2012}
+% Using NEL + dependency trees for music recommendation\cite{Sordo2015}
 
-A Paper Recommender for Scientific Literatures Based on Semantic Concept Similarity\cite{Zhang2008}
+% Leveraging Semantic Annotations to Link Wikipedia and News Archives\cite{Mishra2016}
+
+% DiNoia\cite{DiNoia2012}
 
 \section{Local citation recommendation}
 
-penn state: \cite{He2010} was prototype of \cite{Huang2014}, improved (multi-layered neural network) \cite{Huang2015}, and there's also \cite{He2011}
+Probably one of the first investigations into local citation recommendation is the work of He et al.~\cite{He2010}. They propose a two-step system that first identifies recommendation candidates and then re-ranks them by concept similarity. While also discussing global citation recommendation in detail, they compare the local problem settings of recommending for a single context and recommending for all contexts within a document simultaneously. In an evaluation on the CiteSeerX data set measured by recall, co-cited probability and NDCG they find that the former problem is harder, but also, that their approach to the latter setting achieves results comparable to and even better than some global citation recommendation methods.
 
-\cite{Zarrinkalam2012} (also in section above)
+In a follow-up work Huang et al.~\cite{Huang2014} improve on above work by swapping out the computationally complex concept based re-ranking method with a translational model. The system resulting system, RefSeer, is evaluated on two smaller data sets (CiteULike and a CiteSeer subset) and one large one (all of CiteSeer). TODO extend
 
-\cite{Duma2014,Duma2016}
+same guy, now a multi-layered neural network~\cite{Huang2015}
 
-\cite{Ebesu2017}
+Duma~\cite{Duma2014,Duma2016}
 
-\cite{Kobayashi2018}
+Ebesu~\cite{Ebesu2017}
+
+Kobayashi~\cite{Kobayashi2018}

@@ -20,7 +20,7 @@ def build(docs_path, dict_path):
 
     total = sum(1 for line in open(docs_path))
     orig_n = os.path.splitext(docs_path)[0]
-    ext_path = '{}_wNP_fast.csv'.format(orig_n)
+    ext_path = '{}_wNP.csv'.format(orig_n)
     with open(docs_path) as fi:
         with open(ext_path, 'w') as fo:
             for idx, line in enumerate(fi):
@@ -74,7 +74,7 @@ def build(docs_path, dict_path):
                 # for np in np_dictionary.values():
                 #     if ' {} '.format(np) in ' {} '.format(text):
                 #         cntxt_nps.append(np)
-                nprep = '\u241E'.join(cntxt_nps)
+                nprep = '\u241F'.join(cntxt_nps)
                 if w_pp:
                     new_vals = [aid, adjacent, in_doc, text, fos_annot, pprep, nprep]
                 elif w_fos:

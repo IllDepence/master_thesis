@@ -35,7 +35,7 @@ def better_rank(sims_a, sims_b, train_mids, test_mid):
     ranking_b = [s[0] for s in sims_list_b]
 
     if sims_list_b[0][1] == 0:
-        return False, 0
+        return False, -1, -1
 
     rank_a = len(ranking_a)
     for idx, doc_id in enumerate(ranking_a):
@@ -48,9 +48,9 @@ def better_rank(sims_a, sims_b, train_mids, test_mid):
             rank_b = idx+1
             break
     if rank_a > rank_b:
-        return 1, rank_a - rank_b
+        return 1, rank_a, rank_b
     else:
-        return 0, rank_b - rank_a
+        return 0, rank_a, rank_b
 
 
 def fos_boost_ranking(bow_ranking, fos_boost, top_dot_prod):
@@ -69,20 +69,13 @@ def fos_boost_ranking(bow_ranking, fos_boost, top_dot_prod):
 
 
 def combine_simlists(sl1, sl2, sl3, weights):
-    return sl3
     sl = []
-    sims_list3 = list(enumerate(sl3))  # FIXME   just playing around
-    sims_list3.sort(key=lambda tup: tup[1], reverse=True)
     for i in range(len(sl1)):
-        s = sl1[i]
-        if sims_list3[0][1] > sims_list3[3][1]*10 and sl3[i] == np.max(sl3):
-            s = (s+1)/2
-        sl.append(s)
-        # sl.append(
-        #     (sl1[i]*weights[0])+
-        #     (sl2[i]*weights[1])+
-        #     (sl3[i]*weights[2])
-        #     )
+        sl.append(
+            (sl1[i]*weights[0])+
+            (sl2[i]*weights[1])+
+            (sl3[i]*weights[2])
+            )
     return sl
 
 
@@ -104,8 +97,8 @@ def sum_weighted_term_lists(wtlist, dictionary):
 
 
 def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
-              lda_preselect=False, combine_train_contexts=True,
-              weights=[1, 1, 1]):
+              np_dict_path=None, lda_preselect=False,
+              combine_train_contexts=True, weights=[1, 1, 1]):
     """ - foo
     """
 
@@ -114,6 +107,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
     train_texts = []
     train_foss = []
     train_ppann = []
+    train_nps = []
     foss = []
     tmp_bag = []
     adjacent_cit_map = {}
@@ -131,6 +125,15 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         use_predpatt_model = False
         pp_dictionary = None
 
+    if np_dict_path:
+        prind('loading noun phrase dictionary')
+        np_dictionary = corpora.Dictionary.load(np_dict_path)
+        np_num_unique_tokens = len(np_dictionary.keys())
+        use_noun_phrase_model = True
+    else:
+        use_noun_phrase_model = False
+        np_dictionary = None
+
     prind('checking file length')
     num_lines = sum(1 for line in open(docs_path))
 
@@ -143,8 +146,12 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                 prind('{}/{} lines'.format(idx, num_lines))
             cntxt_foss = []
             cntxt_ppann = []
+            cntxt_nps = []
             # handle varying CSV formats
             vals = line.split('\u241E')
+            if use_noun_phrase_model:
+                cntxt_nps = [np for np in vals[-1].strip().split('\u241F')]
+                vals = vals[:-1]
             if len(vals) == 4:
                 mid, adjacent, in_doc, text = vals
             elif len(vals) == 5:
@@ -182,10 +189,11 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                     item_text = item[1]
                     item_foss = item[2]
                     item_ppann = item[3]
+                    item_nps = item[4]
                     if item_in_doc not in sub_bags_dict:
                         sub_bags_dict[item_in_doc] = []
                     sub_bags_dict[item_in_doc].append(
-                        [item_text, item_foss, item_ppann]
+                        [item_text, item_foss, item_ppann, item_nps]
                         )
                 if len(sub_bags_dict) < 2:
                     # can't split, reset bag, next
@@ -212,13 +220,16 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                         train_tups.extend(sb_tup)
                 test.extend(
                     [
-                        [tmp_bag_current_mid, tup[0], tup[1],
-                         sum_weighted_term_lists(tup[2], pp_dictionary)
+                        [tmp_bag_current_mid,                            # mid
+                         tup[0],                                         # text
+                         tup[1],                                         # fos
+                         sum_weighted_term_lists(tup[2], pp_dictionary), # pp
+                         tup[3]                                          # nps
                         ]
                     for tup in test_tups
                     ])
-                # because we use BOW we can just combine train docs here
                 if combine_train_contexts:
+                    # combine train contexts per cited doc
                     train_text_combined = ' '.join(tup[0] for tup in train_tups)
                     train_mids.append(tmp_bag_current_mid)
                     train_texts.append(train_text_combined.split())
@@ -231,15 +242,20 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                             pp_dictionary
                             )
                         )
+                    train_nps.append(
+                        [np for tup in train_tups for np in tup[3]]
+                        )
                 else:
+                    # don't combine train contexts per cited doc
                     for tup in train_tups:
                         train_mids.append(tmp_bag_current_mid)
                         train_texts.append(tup[0].split())
                         train_foss.append([fos for fos in tup[1]])
+                        train_nps.append([np for np in tup[1]])
                 # reset bag
                 tmp_bag = []
                 tmp_bag_current_mid = mid
-            tmp_bag.append([in_doc, text, cntxt_foss, cntxt_ppann])
+            tmp_bag.append([in_doc, text, cntxt_foss, cntxt_ppann, cntxt_nps])
     prind('loading dictionary')
     dictionary = corpora.Dictionary.load(dict_path)
     num_unique_tokens = len(dictionary.keys())
@@ -248,6 +264,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
 
     # import console
     # console.copen(globals(), locals())
+    # sys.exit()
 
     # corpora.MmCorpus.serialize('3s5min5min_corpus.mm', corpus)
     if use_fos_annot:
@@ -281,12 +298,18 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                     lda[tfidf[corpus]],
                     num_features=num_unique_tokens)
 
-
     if use_predpatt_model:
-        prind('preparing similarities')
+        prind('preparing claim similarities')
         pp_index = similarities.SparseMatrixSimilarity(
             train_ppann,
             num_features=pp_num_unique_tokens)
+
+    if use_noun_phrase_model:
+        prind('preparing noun phrase similarities')
+        np_corpus = [np_dictionary.doc2bow(nps) for nps in train_nps]
+        np_index = similarities.SparseMatrixSimilarity(
+            np_corpus,
+            num_features=np_num_unique_tokens)
 
     num_cur = 0
     num_top = 0
@@ -325,6 +348,11 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             pp_sims_list = list(enumerate(pp_sims))
             pp_sims_list.sort(key=lambda tup: tup[1], reverse=True)
             pp_ranking = [s[0] for s in pp_sims_list]
+        if use_noun_phrase_model:
+            np_sims = np_index[np_dictionary.doc2bow(tpl[4])]
+            np_sims_list = list(enumerate(np_sims))
+            np_sims_list.sort(key=lambda tup: tup[1], reverse=True)
+            np_ranking = [s[0] for s in np_sims_list]
         test_bow = dictionary.doc2bow(test_text)
         if lda_preselect:
             # pre select in LDA/LSI space
@@ -358,12 +386,6 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
         if use_predpatt_model and False:
-            # if pp_sims_list[0][1] == 0:
-            # if pp_sims_list[0][1] < sims_list[0][1]:
-            #     final_ranking = bow_ranking
-            # else:
-            #     foo += 1
-            #     final_ranking = pp_ranking
             sims_comb = combine_simlists(sims, fos_sims, pp_sims, weights)
             sims_list = list(enumerate(sims_comb))
             sims_list.sort(key=lambda tup: tup[1], reverse=True)
@@ -375,14 +397,26 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         #     foo += 1
         #     final_ranking = fos_ranking
 
-        br, delta = better_rank(sims, pp_sims, train_mids, test_mid)
-        if br == 1:
-            # import console
-            # console.copen(globals(), locals())
-            # sys.exit()
-            # with open('pp_superior.tsv', 'a') as f:
-            #    f.write('{}\t{}\t{}\t{}\n'.format(delta, tpl[1], train_text, tpl[3]))
-            foo += 1
+        # if pp_sims_list[0][1] == 0:
+        #     continue
+        #     final_ranking = bow_ranking
+        # else:
+        #     foo += 1
+        #     final_ranking = pp_ranking
+
+        # br, r_a, r_b = better_rank(sims, pp_sims, train_mids, test_mid)
+        # if br == 1:
+        #     delta = np.abs(r_a - r_b)
+        #     with open('pp_superior.tsv', 'a') as f:
+        #         f.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(
+        #             delta,
+        #             r_a,
+        #             r_b,
+        #             tpl[1],
+        #             test_text,
+        #             [pp_dictionary[t[0]] for t in tpl[3]]
+        #             ))
+        #     foo += 1
 
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]
@@ -440,20 +474,23 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
 
 
 if __name__ == '__main__':
-    if len(sys.argv) not in [3, 4]:
+    if len(sys.argv) not in [3, 4, 5]:
         prind(('usage: python3 recommend.py </path/to/docs_file> </path/to/gen'
-               'sim_dict>'))
+               'sim_dict> [<pp_dict>] [<np_dict>]'))
         sys.exit()
     docs_path = sys.argv[1]
     dict_path = sys.argv[2]
-    if len(sys.argv) == 4:
+    pp_dict_path = None
+    np_dict_path = None
+    if len(sys.argv) >= 4:
         pp_dict_path = sys.argv[3]
-    else:
-        pp_dict_path = None
+    if len(sys.argv) == 5:
+        np_dict_path = sys.argv[4]
 
     ndcg_a5, map_a5 = recommend( docs_path,
         dict_path,
         pp_dict_path=pp_dict_path,
+        np_dict_path=np_dict_path,
         )
 
     # # linear weights

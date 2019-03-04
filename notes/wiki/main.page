@@ -2710,6 +2710,15 @@ in top 10: 2467                   in top 10: 3221                  in top 10: 23
 ndcg@5: 0.2988175240653653        ndcg@5: 0.46411134563661643      ndcg@5: 0.2931454555131843
 map@5: 0.2839969190662401         map@5: 0.458045977011494         map@5: 0.27817038935676813
 (5462 times PP ranking used)      (3321 times PP ranking used)     (5462 times possible)
+
+
+~~ noun phrase model ~~
+- - - - - 5626/5626 - - - - -
+#1: 1656
+in top 5: 2480
+in top 10: 2855
+ndcg@5: 0.3638279497913392
+map@5: 0.3501718213058417
 ```  
 → *all term variant* PP model more widely applicable but closer to a BOW approach  
 → *longest term variant only* PP model slightly more restrictive in applicability and sliightly worse general reprediction score but closer to a claim based model

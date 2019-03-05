@@ -5,7 +5,7 @@ import zlib
 import numpy as np
 from operator import itemgetter
 from predpatt import PredPatt
-from nltk.stem.snowball import SnowballStemmer
+from nltk.stem import WordNetLemmatizer
 
 MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
 CITS_PATT = re.compile(r'(((?<!MAIN)CIT , )*(?<!MAIN)CIT( , (?<!MAIN)CIT)*)')
@@ -13,6 +13,7 @@ TOKEN_PATT = re.compile(r'(MAINCIT|CIT|FORMULA|REF|TABLE|FIGURE)')
 QUOTMRK_PATT = re.compile(r'[“”„"«»‹›《》〈〉]')
 
 INCLUDE_PREDICATE = True
+CIT_BASED = False
 
 
 def signal_handler(signum, frame):
@@ -194,6 +195,16 @@ def build_tree_representation(e):
     return depth, list(set(representation))
 
 
+def get_predicate(root_node):
+    """ Resolve copula "predicates".
+    """
+
+    for dep in root_node.dependents:
+        if dep.rel == 'cop':
+            return dep.dep.text
+    return root_node.text
+
+
 def build_fallback_representation(e):
     """ Just build compound_text_variations of all nodes tagged NOUN in the
         tree.
@@ -218,7 +229,7 @@ def build_fallback_representation(e):
     return list(set(phrases))
 
 
-def normalize_rep_lists(lists, stemmer):
+def normalize_rep_lists(lists, lemmatizer):
     """ Put terms in lower case
         remove non alphanumeric characters
         replace multiple whitespaces with one
@@ -227,7 +238,7 @@ def normalize_rep_lists(lists, stemmer):
     def _norm(term):
         if INCLUDE_PREDICATE:
             pred, term = term.split(':')
-            pred = stemmer.stem(pred)
+            pred = lemmatizer.lemmatize(pred, 'v')
         term = re.sub('[^A-Za-z0-9]', ' ', term)
         term = term.lower()
         term = re.sub('\s+', ' ', term)
@@ -250,28 +261,40 @@ def build_sentence_representation(s):
 
     s = merge_citation_token_lists(s)
     s = remove_qutation_marks(s)
-    stemmer = SnowballStemmer('english')
+    lemmatizer = WordNetLemmatizer()
     pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
     raw_lists = []
     if len(pp.events) == 0:
         return []
-    for e in pp.events:
-        depth, rep = build_tree_representation(e)
-        if INCLUDE_PREDICATE:
-            rep = ['{}:{}'.format(e.root.text, r) for r in rep]
-        if len(rep) > 0:
-            raw_lists.append([depth, rep])
-    weight = 1
-    rep_lists = []
-    for rl in sorted(raw_lists, key=itemgetter(0)):
-        rep_lists.append([weight, rl[1]])
-        weight *= .5
-    if len(rep_lists) == 0:
-        fallback = build_fallback_representation(pp.events[0])
-        if INCLUDE_PREDICATE:
-            fallback = ['{}:{}'.format(pp.events[0].root.text, f)
-                for f in fallback]
-        if len(fallback) > 0:
-            rep_lists = [[.25, fallback]]
+    if CIT_BASED:
+        for e in pp.events:
+            depth, rep = build_tree_representation(e)
+            if INCLUDE_PREDICATE:
+                pred = get_predicate(e.root)
+                rep = ['{}:{}'.format(pred, r) for r in rep]
+            if len(rep) > 0:
+                raw_lists.append([depth, rep])
+        weight = 1
+        rep_lists = []
+        for rl in sorted(raw_lists, key=itemgetter(0)):
+            rep_lists.append([weight, rl[1]])
+            weight *= .5
+        if len(rep_lists) == 0:
+            fallback = build_fallback_representation(pp.events[0])
+            if INCLUDE_PREDICATE:
+                pred = get_predicate(pp.events[0].root)
+                fallback = ['{}:{}'.format(pred, f) for f in fallback]
+            if len(fallback) > 0:
+                rep_lists = [[.25, fallback]]
+    else:
+        reps = []
+        for e in pp.events:
+            rep = build_fallback_representation(e)
+            if INCLUDE_PREDICATE:
+                pred = get_predicate(e.root)
+                rep = ['{}:{}'.format(pred, f) for f in rep]
+            reps.extend(rep)
+        if len(reps) > 0:
+            rep_lists = [[1, reps]]
 
-    return normalize_rep_lists(rep_lists, stemmer)
+    return normalize_rep_lists(rep_lists, lemmatizer)

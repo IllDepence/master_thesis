@@ -5,11 +5,14 @@ import zlib
 import numpy as np
 from operator import itemgetter
 from predpatt import PredPatt
+from nltk.stem.snowball import SnowballStemmer
 
 MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
 CITS_PATT = re.compile(r'(((?<!MAIN)CIT , )*(?<!MAIN)CIT( , (?<!MAIN)CIT)*)')
 TOKEN_PATT = re.compile(r'(MAINCIT|CIT|FORMULA|REF|TABLE|FIGURE)')
 QUOTMRK_PATT = re.compile(r'[“”„"«»‹›《》〈〉]')
+
+INCLUDE_PREDICATE = True
 
 
 def signal_handler(signum, frame):
@@ -215,17 +218,23 @@ def build_fallback_representation(e):
     return list(set(phrases))
 
 
-def normalize_rep_lists(lists):
+def normalize_rep_lists(lists, stemmer):
     """ Put terms in lower case
         remove non alphanumeric characters
         replace multiple whitespaces with one
     """
 
     def _norm(term):
+        if INCLUDE_PREDICATE:
+            pred, term = term.split(':')
+            pred = stemmer.stem(pred)
         term = re.sub('[^A-Za-z0-9]', ' ', term)
         term = term.lower()
         term = re.sub('\s+', ' ', term)
-        return term
+        if INCLUDE_PREDICATE:
+            return '{}:{}'.format(pred, term)
+        else:
+            return term
 
     norm_lists = []
     for weight, terms in lists:
@@ -241,12 +250,15 @@ def build_sentence_representation(s):
 
     s = merge_citation_token_lists(s)
     s = remove_qutation_marks(s)
+    stemmer = SnowballStemmer('english')
     pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
     raw_lists = []
     if len(pp.events) == 0:
         return []
     for e in pp.events:
         depth, rep = build_tree_representation(e)
+        if INCLUDE_PREDICATE:
+            rep = ['{}:{}'.format(e.root.text, r) for r in rep]
         if len(rep) > 0:
             raw_lists.append([depth, rep])
     weight = 1
@@ -256,7 +268,10 @@ def build_sentence_representation(s):
         weight *= .5
     if len(rep_lists) == 0:
         fallback = build_fallback_representation(pp.events[0])
+        if INCLUDE_PREDICATE:
+            fallback = ['{}:{}'.format(pp.events[0].root.text, f)
+                for f in fallback]
         if len(fallback) > 0:
             rep_lists = [[.25, fallback]]
 
-    return normalize_rep_lists(rep_lists)
+    return normalize_rep_lists(rep_lists, stemmer)

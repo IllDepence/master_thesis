@@ -237,7 +237,7 @@ def normalize_rep_lists(lists, lemmatizer):
 
     def _norm(term):
         if INCLUDE_PREDICATE:
-            pred, term = term.split(':')
+            pred, term = term.split(':', maxsplit=1)
             pred = lemmatizer.lemmatize(pred, 'v')
         term = re.sub('[^A-Za-z0-9]', ' ', term)
         term = term.lower()

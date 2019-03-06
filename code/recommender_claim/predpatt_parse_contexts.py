@@ -264,8 +264,9 @@ def build_sentence_representation(s):
     lemmatizer = WordNetLemmatizer()
     pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
     raw_lists = []
+    rep_lists = []
     if len(pp.events) == 0:
-        return []
+        return rep_lists
     if CIT_BASED:
         for e in pp.events:
             depth, rep = build_tree_representation(e)
@@ -275,7 +276,6 @@ def build_sentence_representation(s):
             if len(rep) > 0:
                 raw_lists.append([depth, rep])
         weight = 1
-        rep_lists = []
         for rl in sorted(raw_lists, key=itemgetter(0)):
             rep_lists.append([weight, rl[1]])
             weight *= .5

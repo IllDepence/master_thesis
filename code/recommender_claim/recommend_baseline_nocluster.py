@@ -73,7 +73,6 @@ def combine_simlists(sl1, sl2, sl3, weights):
     for i in range(len(sl1)):
         sl.append(
             (sl1[i]*weights[0])+
-            (sl2[i]*weights[1])+
             (sl3[i]*weights[2])
             )
     return sl
@@ -300,8 +299,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
 
     if use_predpatt_model:
         prind('preparing claim similarities')
+        pp_tfidf = models.TfidfModel(train_ppann)
         pp_index = similarities.SparseMatrixSimilarity(
-            train_ppann,
+            pp_tfidf[train_ppann],
             num_features=pp_num_unique_tokens)
 
     if use_noun_phrase_model:
@@ -344,7 +344,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             #     )[0].tolist()
             # top_dot_prod = dot_prods[-1]
         if use_predpatt_model:
-            pp_sims = pp_index[tpl[3]]
+            pp_sims = pp_index[pp_tfidf[tpl[3]]]
             pp_sims_list = list(enumerate(pp_sims))
             pp_sims_list.sort(key=lambda tup: tup[1], reverse=True)
             pp_ranking = [s[0] for s in pp_sims_list]
@@ -385,7 +385,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             seen_add = seen.add
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
-        if use_predpatt_model and False:
+        if use_predpatt_model:
             sims_comb = combine_simlists(sims, fos_sims, pp_sims, weights)
             sims_list = list(enumerate(sims_comb))
             sims_list.sort(key=lambda tup: tup[1], reverse=True)
@@ -405,9 +405,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         #     final_ranking = pp_ranking
 
         # br, r_a, r_b = better_rank(sims, pp_sims, train_mids, test_mid)
-        # if br == 1:
+        # if r_b > 0 and r_b <= 10:
         #     delta = np.abs(r_a - r_b)
-        #     with open('pp_superior.tsv', 'a') as f:
+        #     with open('pp2_top.tsv', 'a') as f:
         #         f.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(
         #             delta,
         #             r_a,

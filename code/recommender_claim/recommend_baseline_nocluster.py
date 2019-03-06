@@ -7,6 +7,7 @@ import operator
 import os
 import random
 import sys
+import time
 import numpy as np
 from gensim import corpora, models, similarities
 from util import bow_preprocess_string
@@ -19,6 +20,7 @@ from gensim.matutils import corpus2csc, Sparse2Corpus
 from gensim.summarization.bm25 import BM25
 
 SILENT = False
+AT_K = 10
 
 
 def prind(s):
@@ -95,7 +97,7 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
-def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
+def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
               np_dict_path=None, lda_preselect=False,
               combine_train_contexts=True, weights=[1, 1, 1]):
     """ - foo
@@ -204,15 +206,12 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                                reverse=True)
                 # ↑ keys for sub_bags_dict, ordered for largest bag to smallest
 
-                # min_num_train = math.floor(num_contexts)  # FIXME just a test
-                #            FIXME should give 1~few test items per cited doc
-
                 min_num_train = math.floor(num_contexts * 0.8)
                 train_tups = []
                 test_tups = []
-                # TODO: how to do k-fold cross val with this?
                 for jdx, sub_bag_key in enumerate(order):
                     sb_tup = sub_bags_dict[sub_bag_key]
+                    # if sub_bag_key[:2] == '17':  # FIXME time split
                     if len(train_tups) > min_num_train or jdx == len(order)-1:
                         test_tups.extend(sb_tup)
                     else:
@@ -315,8 +314,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
     num_top = 0
     num_top_5 = 0
     num_top_10 = 0
-    ndcg_sum_5 = 0
-    map_sum_5 = 0
+    ndcg_sums = [0]*AT_K
+    map_sums = [0]*AT_K
+    mrr_sums = [0]*AT_K
     prind('test set size: {}\n- - - - - - - -'.format(len(test)))
     foo = 0
     for tpl in test:
@@ -385,7 +385,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             seen_add = seen.add
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
-        if use_predpatt_model:
+        if use_predpatt_model and False:
             sims_comb = combine_simlists(sims, fos_sims, pp_sims, weights)
             sims_list = list(enumerate(sims_comb))
             sims_list.sort(key=lambda tup: tup[1], reverse=True)
@@ -428,38 +428,50 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                 break
             if idx >= 10:
                break
-        # prind('>>>>> rank: {}'.format(rank))  # FIXME remove
-        dcg = 0
-        idcg = 0
+        dcgs = [0]*AT_K
+        idcgs = [0]*AT_K
+        precs = [0]*AT_K
         num_rel = 1 + len(adjacent_cit_map[test_mid])
-        for i in range(5):
+        num_rel_at_k = 0
+        for i in range(AT_K):
+            relevant = False
             placement = i+1
             doc_id = final_ranking[i]
             result_mid = train_mids[doc_id]
             if result_mid == test_mid:
                 relevance = 1
+                num_rel_at_k += 1
+                relevant = True
             elif result_mid in adjacent_cit_map[test_mid]:
-                relevance = .5  # FIXME: set to 1
+                relevance = .5
+                num_rel_at_k += 1
+                relevant = True
             else:
                 relevance = 0
             denom = math.log2(placement + 1)
             dcg_numer = math.pow(2, relevance) - 1
-            dcg += dcg_numer / denom
+            for j in range(i, AT_K):
+                dcgs[j] += dcg_numer / denom
             if placement == 1:
                 ideal_rel = 1
             elif placement <= num_rel:
-                ideal_rel = .5  # FIXME: set to 1
+                ideal_rel = .5
             else:
                 ideal_rel = 0
             idcg_numer = math.pow(2, ideal_rel) - 1
-            idcg += idcg_numer / denom
-        ndcg = dcg / idcg
+            for j in range(i, AT_K):
+                idcgs[j] += idcg_numer / denom
+                if relevant:
+                    precs[j] = num_rel_at_k / placement
+        for i in range(AT_K):
+            ndcg_sums[i] += dcgs[i] / idcgs[i]
+            map_sums[i] += precs[i] / num_rel
+            if rank <= i+1:
+                mrr_sums[i] += 1 / rank
         if rank == 1:
             num_top += 1
         if rank <= 5:
             num_top_5 += 1
-            map_sum_5 += 1 / rank
-            ndcg_sum_5 += ndcg
         if rank <= 10:
             num_top_10 += 1
         num_cur += 1
@@ -467,10 +479,14 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         prind('#1: {}'.format(num_top))
         prind('in top 5: {}'.format(num_top_5))
         prind('in top 10: {}'.format(num_top_10))
-        prind('ndcg@5: {}'.format(ndcg_sum_5/num_cur))
-        prind('map@5: {}'.format(map_sum_5/num_cur))
+        prind('ndcg@5: {}'.format(ndcg_sums[4]/num_cur))
+        prind('map@5: {}'.format(map_sums[4]/num_cur))
+        prind('mrr@5: {}'.format(mrr_sums[4]/num_cur))
         prind('foo: {}'.format(foo))  # FIXME remove
-    return (ndcg_sum_5/num_cur), (map_sum_5/num_cur)
+    ndcg_results = [sm/num_cur for sm in ndcg_sums]
+    map_results = [sm/num_cur for sm in map_sums]
+    mrr_results = [sm/num_cur for sm in mrr_sums]
+    return ndcg_results, map_results, mrr_results, num_lines, len(test)
 
 
 if __name__ == '__main__':
@@ -487,11 +503,35 @@ if __name__ == '__main__':
     if len(sys.argv) == 5:
         np_dict_path = sys.argv[4]
 
-    ndcg_a5, map_a5 = recommend( docs_path,
+    ndcg_results, map_results, mrr_results, num_lines, num_test = recommend(
+        docs_path,
         dict_path,
         pp_dict_path=pp_dict_path,
         np_dict_path=np_dict_path,
+        # weights = [2, 0, 1]
         )
+
+    print('@\tNDCG\tMAP\tMRR')
+    for i in range(AT_K):
+        print('{}\t{:.3f}\t{:.3f}\t{:.3f}'.format(
+            i+1,
+            ndcg_results[i],
+            map_results[i],
+            mrr_results[i]
+            ))
+
+    timestamp = int(time.time())
+    result_file_name = 'eval_results_{}.json'.format(timestamp)
+    result_data = {
+        'data': docs_path,
+        'num_lines': num_lines,
+        'num_test': num_test,
+        'ndcg': ndcg_results,
+        'map': map_results,
+        'mrr': mrr_results
+        }
+    with open(result_file_name, 'w') as f:
+        f.write(json.dumps(result_data))
 
     # # linear weights
     # results = []

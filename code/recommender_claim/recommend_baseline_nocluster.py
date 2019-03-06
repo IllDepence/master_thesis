@@ -75,6 +75,7 @@ def combine_simlists(sl1, sl2, sl3, weights):
     for i in range(len(sl1)):
         sl.append(
             (sl1[i]*weights[0])+
+            (sl1[i]*weights[1])+
             (sl3[i]*weights[2])
             )
     return sl
@@ -170,6 +171,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                               if len(f.strip()) > 0]
                 foss.extend(cntxt_foss)
             if use_predpatt_model:
+                if '\u241F' in pp_annot_json:  # includes alternative version
+                    ppann, ppann_alt = pp_annot_json.split('\u241F')
+                    pp_annot_json = ppann  # TODO: mby use both for final eval
                 cntxt_ppann = json.loads(pp_annot_json)
             # create adjacent map for later use in eval
             if mid not in adjacent_cit_map:
@@ -310,6 +314,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
+    # TODO eval all the models agreen upon in one go
     num_cur = 0
     num_top = 0
     num_top_5 = 0
@@ -338,7 +343,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             #     test_foss_vec.transpose()
             #     ).transpose()[0].argsort()
             # fos_ranking = sorted_dot_prod_ids[::-1].tolist()
-            # non_zero_dot_prods = len([dp for dp in dot_prods if dp > 0])
+            non_zero_dot_prods = len([dp for dp in dot_prods if dp > 0])
             # fos_ranking = fos_ranking[:non_zero_dot_prods]
             # fos_boost = np.where(
             #     dot_prods >= dot_prods.max()-1
@@ -392,7 +397,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             sims_list.sort(key=lambda tup: tup[1], reverse=True)
             final_ranking = [s[0] for s in sims_list]
 
-        # if top_dot_prod < 1:                # FIXME just a test
+        # if non_zero_dot_prods < 10:                # FIXME just a test
         #     continue
         # else:
         #     foo += 1

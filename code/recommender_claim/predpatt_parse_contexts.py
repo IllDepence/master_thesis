@@ -205,14 +205,15 @@ def get_predicate(root_node):
     return root_node.text
 
 
-def build_fallback_representation(e):
-    """ Just build compound_text_variations of all nodes tagged NOUN in the
+def build_noun_representation(e, global_root=False):
+    """ Build compound_text_variations of all nodes tagged NOUN in the
         tree.
     """
 
     real_root = e.root
-    while real_root.gov:
-        real_root = real_root.gov
+    if global_root:
+        while real_root.gov:
+            real_root = real_root.gov
 
     def _collect_phrases(node):
         cur_phrss = []
@@ -265,8 +266,9 @@ def build_sentence_representation(s):
     pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
     raw_lists = []
     rep_lists = []
+    rep_lists_alt = []  # to be consistent with double annotating for 3 and 3.1
     if len(pp.events) == 0:
-        return rep_lists
+        return rep_lists, rep_lists_alt
     if CIT_BASED:
         for e in pp.events:
             depth, rep = build_tree_representation(e)
@@ -280,21 +282,37 @@ def build_sentence_representation(s):
             rep_lists.append([weight, rl[1]])
             weight *= .5
         if len(rep_lists) == 0:
-            fallback = build_fallback_representation(pp.events[0])
+            fallback = build_noun_representation(
+                pp.events[0], global_root=True
+                )
             if INCLUDE_PREDICATE:
                 pred = get_predicate(pp.events[0].root)
                 fallback = ['{}:{}'.format(pred, f) for f in fallback]
             if len(fallback) > 0:
                 rep_lists = [[.25, fallback]]
     else:
+        # make a PPv3 and a PPv3.1 representation
+        # - - - 3.1 - - -
         reps = []
         for e in pp.events:
-            rep = build_fallback_representation(e)
+            rep = build_noun_representation(e)  # 3.1
             if INCLUDE_PREDICATE:
                 pred = get_predicate(e.root)
                 rep = ['{}:{}'.format(pred, f) for f in rep]
             reps.extend(rep)
         if len(reps) > 0:
             rep_lists = [[1, reps]]
+        # - - - 3 - - -
+        reps_alt = []
+        for e in pp.events:
+            rep = build_noun_representation(e, global_root=True)  # 3
+            if INCLUDE_PREDICATE:
+                pred = get_predicate(e.root)
+                rep = ['{}:{}'.format(pred, f) for f in rep]
+            reps_alt.extend(rep)
+        if len(reps) > 0:
+            rep_lists_alt = [[1, reps_alt]]
 
-    return normalize_rep_lists(rep_lists, lemmatizer)
+    rep_lists = normalize_rep_lists(rep_lists, lemmatizer)
+    rep_lists_alt = normalize_rep_lists(rep_lists_alt, lemmatizer)
+    return rep_lists, rep_lists_alt

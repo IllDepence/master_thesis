@@ -2607,6 +2607,8 @@ PredPatt works with [dependency grammar](https://en.wikipedia.org/wiki/Dependenc
 
 using identified claims directly resulted in not enough overlap. therefore:
 
+**VERSION 1**
+
 * for each claim identified by PredPatt for a given sentence
     * starting from the root predicate of the claim, traverse the dependency tree sentence downwards and locate the MAINCIT token (if not found, no output)
     * from the MAINCIT token, traverse one step downward, then upwards until the predicate and from there one step downward — while doing this, pick up descriptive tokens
@@ -2640,6 +2642,8 @@ raw:
    'data',
    'community']]]
 
+**VERSION 1.1**
+
 only longest:
 1       sparql queries, linked data
 0.5     algorithms, linked data
@@ -2651,6 +2655,15 @@ interpret as:
 <MAINCIT> is about <linked data>
 ...
 ```
+
+**VERSION 2**
+
+* like 1.1 but attach lemmatized predicate to noun phrases as &lt;pred&gt;:&lt;np&gt;
+
+**VERSION 3**
+
+* for every claim detected by predpatt
+    * add &lt;pred&gt;:&lt;np&gt; to representation with the lemmatized predicate and all longest NPs from the dependency tree
 
 ##### PredPatt annotation
 
@@ -2688,19 +2701,7 @@ ndcg@5: 0.6485655663276514
 map@5: 0.6351078326815991
 
 
-~~ longest term variant only PP ~~
-
-PP when possible, otherwise bow   PP when higher similarity        PP when possible, skip otherwise
-- - - - - 5626/5626 - - - - --    - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
-#1: 1452                          #1: 2471                         #1: 1154
-in top 5: 2150                    in top 5: 3165                   in top 5: 1727
-in top 10: 2438                   in top 10: 3420                  in top 10: 1979
-ndcg@5: 0.3172454793581524        ndcg@5: 0.4952889822361036       ndcg@5: 0.286371471237163
-map@5: 0.3049413437611088         map@5: 0.4874896314729232        map@5: 0.27485104103903063
-(4972 times PP ranking used)      (2491 times PP ranking used)     (4979 times possible)
-
-
-~~ all term variants PP ~~
+~~ PPv1 ~~
 
 PP when possible, otherwise bow   PP when higher similarity        PP when possible, skip otherwise
 - - - - - 5626/5626 - - - - -     - - - - - 5626/5626 - - - -      - - - - - 5626/5626 - - - - -
@@ -2712,6 +2713,18 @@ map@5: 0.2839969190662401         map@5: 0.458045977011494         map@5: 0.2781
 (5462 times PP ranking used)      (3321 times PP ranking used)     (5462 times possible)
 
 
+~~ PPv1.1 ~~
+
+PP when possible, otherwise bow   PP when higher similarity        PP when possible, skip otherwise
+- - - - - 5626/5626 - - - - --    - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
+#1: 1452                          #1: 2471                         #1: 1154
+in top 5: 2150                    in top 5: 3165                   in top 5: 1727
+in top 10: 2438                   in top 10: 3420                  in top 10: 1979
+ndcg@5: 0.3172454793581524        ndcg@5: 0.4952889822361036       ndcg@5: 0.286371471237163
+map@5: 0.3049413437611088         map@5: 0.4874896314729232        map@5: 0.27485104103903063
+(4972 times PP ranking used)      (2491 times PP ranking used)     (4979 times possible)
+
+
 ~~ noun phrase model ~~
 - - - - - 5626/5626 - - - - -
 #1: 1656
@@ -2719,10 +2732,18 @@ in top 5: 2480
 in top 10: 2855
 ndcg@5: 0.3638279497913392
 map@5: 0.3501718213058417
-```  
-→ *all term variant* PP model more widely applicable but closer to a BOW approach  
-→ *longest term variant only* PP model slightly more restrictive in applicability and sliightly worse general reprediction score but closer to a claim based model
 
+
+~~ PPv3 ~~
+PP when possible, skip otherwise  linearly combined 1×BOW+1×PP     linearly combined 1×BOW+.5×PP
+- - - - - 5626/5626 - - - - --    - - - - - 5626/5626 - - - - -    - - - - - 5626/5626 - - - - -
+#1: 1598                          #1: 3262                         #1: 3272
+in top 5: 2367                    in top 5: 4257                   in top 5: 4281
+in top 10: 2674                   in top 10: 4575                  in top 10: 4592
+ndcg@5: 0.3847948769125888        ndcg@5: 0.6599592330599735       ndcg@5: 0.6628890298754714
+map@5: 0.37037511496518133        map@5: 0.6482314255243522        map@5: 0.6506932100959839
+(5074 times possible)
+```
 
 10k sample tests
 ```
@@ -2734,7 +2755,7 @@ in top 10: 37862
 ndcg@5: 0.4286082831666747
 map@5: 0.4166772997437132
 
-~~ longest term variant only PP ~~
+~~ PPv1.1 ~~
 PP when higher similarity               PP when possible, skip otherwise
 - - - - - 61130/61130 - - - - -         - - - - - 61130/61130 - - - - -
 #1: 15640                               #1: 7535

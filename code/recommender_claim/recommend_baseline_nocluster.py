@@ -97,7 +97,7 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
-def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
+def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
               np_dict_path=None, lda_preselect=False,
               combine_train_contexts=True, weights=[1, 1, 1]):
     """ - foo
@@ -317,6 +317,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     ndcg_sums = [0]*AT_K
     map_sums = [0]*AT_K
     mrr_sums = [0]*AT_K
+    recall_sums = [0]*AT_K
     prind('test set size: {}\n- - - - - - - -'.format(len(test)))
     foo = 0
     for tpl in test:
@@ -385,7 +386,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             seen_add = seen.add
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
-        if use_predpatt_model and False:
+        if use_predpatt_model:
             sims_comb = combine_simlists(sims, fos_sims, pp_sims, weights)
             sims_list = list(enumerate(sims_comb))
             sims_list.sort(key=lambda tup: tup[1], reverse=True)
@@ -468,6 +469,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             map_sums[i] += precs[i] / num_rel
             if rank <= i+1:
                 mrr_sums[i] += 1 / rank
+                recall_sums[i] += 1
         if rank == 1:
             num_top += 1
         if rank <= 5:
@@ -482,11 +484,15 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         prind('ndcg@5: {}'.format(ndcg_sums[4]/num_cur))
         prind('map@5: {}'.format(map_sums[4]/num_cur))
         prind('mrr@5: {}'.format(mrr_sums[4]/num_cur))
-        prind('foo: {}'.format(foo))  # FIXME remove
+        prind('recall@5: {}'.format(recall_sums[4]/num_cur))
+        # prind('foo: {}'.format(foo))  # FIXME remove
     ndcg_results = [sm/num_cur for sm in ndcg_sums]
     map_results = [sm/num_cur for sm in map_sums]
     mrr_results = [sm/num_cur for sm in mrr_sums]
-    return ndcg_results, map_results, mrr_results, num_lines, len(test)
+    recall_results = [sm/num_cur for sm in recall_sums]
+
+    metrics = [ndcg_results, map_results, mrr_results, recall_results]
+    return metrics, num_lines, len(test)
 
 
 if __name__ == '__main__':
@@ -503,21 +509,26 @@ if __name__ == '__main__':
     if len(sys.argv) == 5:
         np_dict_path = sys.argv[4]
 
-    ndcg_results, map_results, mrr_results, num_lines, num_test = recommend(
+    weights = [2, 0, 1]
+
+    metrics, num_lines, num_test = recommend(
         docs_path,
         dict_path,
         pp_dict_path=pp_dict_path,
         np_dict_path=np_dict_path,
-        # weights = [2, 0, 1]
+        weights=weights
         )
 
-    print('@\tNDCG\tMAP\tMRR')
+    ndcg_results, map_results, mrr_results, recall_results = metrics
+
+    print('@\tNDCG\tMAP\tMRR\tRecall')
     for i in range(AT_K):
-        print('{}\t{:.3f}\t{:.3f}\t{:.3f}'.format(
+        print('{}\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}'.format(
             i+1,
             ndcg_results[i],
             map_results[i],
-            mrr_results[i]
+            mrr_results[i],
+            recall_results[i],
             ))
 
     timestamp = int(time.time())
@@ -526,9 +537,11 @@ if __name__ == '__main__':
         'data': docs_path,
         'num_lines': num_lines,
         'num_test': num_test,
+        'weights': weights,
         'ndcg': ndcg_results,
         'map': map_results,
-        'mrr': mrr_results
+        'mrr': mrr_results,
+        'recall': recall_results
         }
     with open(result_file_name, 'w') as f:
         f.write(json.dumps(result_data))

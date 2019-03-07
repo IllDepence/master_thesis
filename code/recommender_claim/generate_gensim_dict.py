@@ -17,6 +17,7 @@ def build(docs_path):
 
     texts = []
     pp_terms = []
+    pp_terms_alt = []
     total = sum(1 for line in open(docs_path))
     with open(docs_path) as f:
         for idx, line in enumerate(f):
@@ -24,6 +25,7 @@ def build(docs_path):
                 print('{}/{} lines'.format(idx, total))
             vals = line.split('\u241E')
             with_predpatt_rep = False
+            with_predpatt_alt = False
             one_word_per_line_mode = False
             if len(vals) == 1:
                 # to conveniently build gensim dicts from NP lists etc.
@@ -45,6 +47,12 @@ def build(docs_path):
                 preprocessed_text = bow_preprocess_string(text)
                 texts.append(preprocessed_text)
             if with_predpatt_rep:
+                if '\u241F' in pp_rep:  # includes alternative version
+                    with_predpatt_alt = True
+                    pp_rep, pp_rep_alt = pp_rep.split('\u241F')
+                    pp_lists_alt = json.loads(pp_rep_alt)
+                    for weight, terms in pp_lists_alt:
+                        pp_terms_alt.append(terms)
                 pp_lists = json.loads(pp_rep)
                 for weight, terms in pp_lists:
                     pp_terms.append(terms)
@@ -52,6 +60,8 @@ def build(docs_path):
     dict_tasks = [[texts, '{}.dict'.format(docs_n)]]
     if with_predpatt_rep:
         dict_tasks.append([pp_terms, '{}_PPterms.dict'.format(docs_n)])
+        if with_predpatt_alt:
+            dict_tasks.append([pp_terms_alt, '{}_PPterms_alt.dict'.format(docs_n)])
     # import console
     # console.copen(globals(), locals())
     # sys.exit()

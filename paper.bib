@@ -770,8 +770,12 @@
   volume    = {2},
   pages     = {358--363},
   review    = {- cite rec by similar sentences: "exploits  the implicit human relevance judgements found in existing scientific articles"
-
-- citation recommendation by re-prediction, but candidates are only the set of cited docs of the paper},
+- citation recommendation by re-prediction, but candidates are only the set of cited docs of the paper
+- use ~9K papers from ACL as data set, 278 test documents; 5446 resolvable citations
+- use VSM TFIDF
+- compare, for document representation, doc content, cit. contexts and doc content+cit. contexts
+- test citation contexts of 5~30 words
+- report "accuracy" (details?)},
 }
 
 @Article{Nasar2018,
@@ -1289,7 +1293,9 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   numpages  = {7},
   review    = {- related work
 - local citation recommendation
-- builds on Hunag2014},
+- builds on Hunag2014
+- neural probabilistic model
+- use stochastic gradient descent},
   url       = {http://dl.acm.org/citation.cfm?id=2886521.2886655},
 }
 
@@ -1334,18 +1340,41 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 }
 
 @InProceedings{Caragea2014,
-  author        = {Caragea, Cornelia and Wu, Jian and Ciobanu, Alina and Williams, Kyle and Fern{\'a}ndez-Ram{\'i}rez, Juan and Chen, Hung-Hsuan and Wu, Zhaohui and Giles, Lee},
-  title         = {CiteSeerx: A Scholarly Big Dataset},
-  booktitle     = {Advances in Information Retrieval},
-  year          = {2014},
-  editor        = {de Rijke, Maarten and Kenter, Tom and de Vries, Arjen P. and Zhai, ChengXiang and de Jong, Franciska and Radinsky, Kira and Hofmann, Katja},
-  pages         = {311--322},
-  address       = {Cham},
-  publisher     = {Springer International Publishing},
+  author    = {Caragea, Cornelia and Wu, Jian and Ciobanu, Alina and Williams, Kyle and Fern{\'a}ndez-Ram{\'i}rez, Juan and Chen, Hung-Hsuan and Wu, Zhaohui and Giles, Lee},
+  title     = {CiteSeerx: A Scholarly Big Dataset},
+  booktitle = {Advances in Information Retrieval},
+  year      = {2014},
+  editor    = {de Rijke, Maarten and Kenter, Tom and de Vries, Arjen P. and Zhai, ChengXiang and de Jong, Franciska and Radinsky, Kira and Hofmann, Katja},
+  pages     = {311--322},
+  address   = {Cham},
+  publisher = {Springer International Publishing},
+  abstract  = {The CiteSeerxdigital library stores and indexes research articles in Computer Science and related fields. Although its main purpose is to make it easier for researchers to search for scientific information, CiteSeerxhas been proven as a powerful resource in many data mining, machine learning and information retrieval applications that use rich metadata, e.g., titles, abstracts, authors, venues, references lists, etc. The metadata extraction in CiteSeerxis done using automated techniques. Although fairly accurate, these techniques still result in noisy metadata. Since the performance of models trained on these data highly depends on the quality of the data, we propose an approach to CiteSeerxmetadata cleaning that incorporates information from an external data source. The result is a subset of CiteSeerx, which is substantially cleaner than the entire set. Our goal is to make the new dataset available to the research community to facilitate future work in Information Retrieval.},
+  isbn      = {978-3-319-06028-6},
+  review    = {- citeseer x citation},
+}
+
+@InProceedings{Gabor2018,
+  author    = {G{\'a}bor, Kata and Buscaldi, Davide and Schumann, Anne-Kathrin and QasemiZadeh, Behrang and Zargayouna, Haifa and Charnois, Thierry},
+  title     = {SemEval-2018 Task 7: Semantic Relation Extraction and Classification in Scientific Papers},
+  booktitle = {Proceedings of The 12th International Workshop on Semantic Evaluation},
+  year      = {2018},
+  pages     = {679--688},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/S18-1111},
+  location  = {New Orleans, Louisiana},
+  review    = {- related work
+- relation extraction},
+  url       = {http://aclweb.org/anthology/S18-1111},
+}
+
+@InProceedings{Faerber2018a,
+  author        = {Michael F{\"{a}}rber and Alexander Thiemann and Adam Jatowt},
+  title         = {{To Cite, or Not to Cite? Detecting Citation Contexts in Text}},
+  booktitle     = {{Proceedings of the 40th European Conference on Information Retrieval}},
+  year          = {2018},
+  series        = {{{ECIR} 2018}},
   __markedentry = {[tarek:]},
-  abstract      = {The CiteSeerxdigital library stores and indexes research articles in Computer Science and related fields. Although its main purpose is to make it easier for researchers to search for scientific information, CiteSeerxhas been proven as a powerful resource in many data mining, machine learning and information retrieval applications that use rich metadata, e.g., titles, abstracts, authors, venues, references lists, etc. The metadata extraction in CiteSeerxis done using automated techniques. Although fairly accurate, these techniques still result in noisy metadata. Since the performance of models trained on these data highly depends on the quality of the data, we propose an approach to CiteSeerxmetadata cleaning that incorporates information from an external data source. The result is a subset of CiteSeerx, which is substantially cleaner than the entire set. Our goal is to make the new dataset available to the research community to facilitate future work in Information Retrieval.},
-  isbn          = {978-3-319-06028-6},
-  review        = {- citeseer x citation},
+  review        = {- used ACL data from here},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -7,6 +7,18 @@ import re
 import sys
 from gensim import corpora
 
+MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
+CITS_PATT = re.compile(r'(((?<!MAIN)CIT , )*(?<!MAIN)CIT( , (?<!MAIN)CIT)*)')
+
+ONLY_DIR_PRECEEDING = True
+
+
+def merge_citation_token_lists(s):
+    s = MAINCITS_PATT.sub('MAINCIT', s)
+    s = CITS_PATT.sub('CIT', s)
+    return s
+
+
 def build(docs_path, dict_path):
     """ - foo
     """
@@ -47,15 +59,17 @@ def build(docs_path, dict_path):
                     sys.exit()
                 cntxt_nps = []
                 # find NPs fast
-                words = [re.sub('[^a-zA-Z0-9-]', ' ', w).strip() for w in text.split()]
-                words = [w for w in words if len(w) > 0]
-                for i in range(max_np_len):
-                    chunk_size = max_np_len - i  # counting down
-                    if len(words) < chunk_size:
-                        continue
-                    shift = 0
-                    while chunk_size + shift <= len(words):
-                        chunk = ' '.join(words[shift:shift+chunk_size])
+                if ONLY_DIR_PRECEEDING:
+                    text = merge_citation_token_lists(text)
+                    pre, post = text.split('MAINCIT')
+                    words = [re.sub('[^a-zA-Z0-9-]', ' ', w).strip()
+                             for w in pre.split()]
+                    # fixed position to only go through sizes
+                    for i in range(max_np_len):
+                        chunk_size = max_np_len - i  # counting down
+                        if len(words) < chunk_size:
+                            continue
+                        chunk = ' '.join(words[-chunk_size:])
                         try:
                             np_dictionary.token2id[chunk]
                             in_dict = True
@@ -69,11 +83,37 @@ def build(docs_path, dict_path):
                                     break
                             if not redundant:
                                 cntxt_nps.append(chunk)
-                        shift += 1
-                # # find NPs slow
-                # for np in np_dictionary.values():
-                #     if ' {} '.format(np) in ' {} '.format(text):
-                #         cntxt_nps.append(np)
+                else:
+                    words = [re.sub('[^a-zA-Z0-9-]', ' ', w).strip()
+                             for w in text.split()]
+                    words = [w for w in words if len(w) > 0]
+                    # for all lengths
+                    for i in range(max_np_len):
+                        chunk_size = max_np_len - i  # counting down
+                        if len(words) < chunk_size:
+                            continue
+                        shift = 0
+                        # comb through
+                        while chunk_size + shift <= len(words):
+                            chunk = ' '.join(words[shift:shift+chunk_size])
+                            try:
+                                np_dictionary.token2id[chunk]
+                                in_dict = True
+                            except KeyError:
+                                in_dict = False
+                            if in_dict:
+                                redundant = False
+                                for already_in in cntxt_nps:
+                                    if chunk in already_in:
+                                        redundant = True
+                                        break
+                                if not redundant:
+                                    cntxt_nps.append(chunk)
+                            shift += 1
+                    # # find NPs slow
+                    # for np in np_dictionary.values():
+                    #     if ' {} '.format(np) in ' {} '.format(text):
+                    #         cntxt_nps.append(np)
                 nprep = '\u241F'.join(cntxt_nps)
                 if w_pp:
                     new_vals = [aid, adjacent, in_doc, text, fos_annot, pprep, nprep]

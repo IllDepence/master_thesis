@@ -1509,7 +1509,157 @@ false positives: 188
     * pipleline output: 131,877 (95.9%)
     * with citations: 120,814 (-11,063) (87.8%) (79.4% incl. PDFs)
 * matching
-    * ...
+    * 10 parallel processes
+        ```
+        $ time python3 match_bibitems_mag.py path /home/saiert/arxiv-txt-data_2018 10
+        [batch #0]: - - - - - - - - - - - - - - - - -
+        [batch #0]: 463907/464075
+        [batch #0]: matches: 275600
+        [batch #0]: Phys. Rev.: 33081
+        [batch #0]: no title: 82497
+        [batch #0]: by arXiv ID: 46170
+        [batch #0]: by arXiv ID fail: 0
+        [batch #0]: by doi: 45796
+        [batch #0]: by doi fail: 0
+        [batch #0]: APS doi rebound: 16071
+        [batch #0]: >>> avg time aID: 0.13
+        [batch #0]: >>> avg time DOI: 0.60
+        [batch #0]: >>> avg time ParsCit: 0.02
+        [batch #0]: >>> avg time MAGDB: 0.00
+        [batch #0]: >>> avg time DB r: 0.00
+        [batch #0]: >>> avg time DB w: 0.00
+        [batch #7]: - - - - - - - - - - - - - - - - -
+        [batch #7]: 463935/464075
+        [batch #7]: matches: 276000
+        [batch #7]: Phys. Rev.: 32731
+        [batch #7]: no title: 82385
+        [batch #7]: by arXiv ID: 47615
+        [batch #7]: by arXiv ID fail: 0
+        [batch #7]: by doi: 46319
+        [batch #7]: by doi fail: 0
+        [batch #7]: APS doi rebound: 16738
+        [batch #7]: >>> avg time aID: 0.13
+        [batch #7]: >>> avg time DOI: 0.60
+        [batch #7]: >>> avg time ParsCit: 0.02
+        [batch #7]: >>> avg time MAGDB: 0.00
+        [batch #7]: >>> avg time DB r: 0.00
+        [batch #7]: >>> avg time DB w: 0.00
+        [batch #8]: - - - - - - - - - - - - - - - - -
+        [batch #8]: 463926/464075
+        [batch #8]: matches: 278100
+        [batch #8]: Phys. Rev.: 32429
+        [batch #8]: no title: 80026
+        [batch #8]: by arXiv ID: 46809
+        [batch #8]: by arXiv ID fail: 0
+        [batch #8]: by doi: 44869
+        [batch #8]: by doi fail: 0
+        [batch #8]: APS doi rebound: 16929
+        [batch #8]: >>> avg time aID: 0.13
+        [batch #8]: >>> avg time DOI: 0.60
+        [batch #8]: >>> avg time ParsCit: 0.03
+        [batch #8]: >>> avg time MAGDB: 0.00
+        [batch #8]: >>> avg time DB r: 0.00
+        [batch #8]: >>> avg time DB w: 0.00
+        ------[ 0 ]------
+        >>> time aID: 6060.48
+        >>> time DOI: 27795.11
+        >>> time ParsCit: 9299.60
+        >>> time MAGDB: 1108.01
+        >>> time DB r: 7.39
+        >>> time DB w: 780.57
+        ------[ 1 ]------
+        >>> time aID: 5951.31
+        >>> time DOI: 27437.86
+        >>> time ParsCit: 9386.71
+        >>> time MAGDB: 1117.65
+        >>> time DB r: 7.59
+        >>> time DB w: 788.15
+        ------[ 2 ]------
+        >>> time aID: 5723.33
+        >>> time DOI: 26086.10
+        >>> time ParsCit: 9317.05
+        >>> time MAGDB: 1108.39
+        >>> time DB r: 7.61
+        >>> time DB w: 775.47
+        ------[ 3 ]------
+        >>> time aID: 5657.09
+        >>> time DOI: 28013.29
+        >>> time ParsCit: 9379.65
+        >>> time MAGDB: 1117.84
+        >>> time DB r: 7.61
+        >>> time DB w: 788.60
+        ------[ 4 ]------
+        >>> time aID: 5647.64
+        >>> time DOI: 25178.70
+        >>> time ParsCit: 9528.54
+        >>> time MAGDB: 1116.88
+        >>> time DB r: 7.58
+        >>> time DB w: 782.88
+        ------[ 5 ]------
+        >>> time aID: 6108.82
+        >>> time DOI: 26895.87
+        >>> time ParsCit: 9241.26
+        >>> time MAGDB: 1086.00
+        >>> time DB r: 7.65
+        >>> time DB w: 767.93
+        ------[ 6 ]------
+        >>> time aID: 6081.86
+        >>> time DOI: 27641.64
+        >>> time ParsCit: 9280.85
+        >>> time MAGDB: 1104.47
+        >>> time DB r: 7.56
+        >>> time DB w: 785.04
+        ------[ 7 ]------
+        >>> time aID: 6101.96
+        >>> time DOI: 28126.37
+        >>> time ParsCit: 9175.60
+        >>> time MAGDB: 1103.03
+        >>> time DB r: 7.53
+        >>> time DB w: 776.84
+        ------[ 8 ]------
+        >>> time aID: 6178.41
+        >>> time DOI: 27101.21
+        >>> time ParsCit: 9342.09
+        >>> time MAGDB: 1127.14
+        >>> time DB r: 7.79
+        >>> time DB w: 790.95
+        ------[ 9 ]------
+        >>> time aID: 6108.95
+        >>> time DOI: 26776.68
+        >>> time ParsCit: 9284.48
+        >>> time MAGDB: 1097.23
+        >>> time DB r: 7.60
+        >>> time DB w: 775.57
+
+        real    949m23.722s      -> 15.8 h
+        user    1346m27.872s
+        sys     411m38.880s
+        ```
+        *number of matched bibitems*  
+        ```
+        sqlite> select count(*) from bibitemmagidmap;
+        2756259        -> 59.39% 
+        ```
+        *number of unique cited docs*  
+        ```
+        sqlite> select count(distinct mag_id) from bibitemmagidmap;
+        1096757
+        ```
+        *number of unique cited docs usable for evaluation*  
+        ```
+        sqlite> select count(*) from (select count(distinct in_doc) from bibitemmagidmap join bibitem on bibitemmagidmap.uuid = bibitem.uuid group by mag_id having count(distinct in_doc) > 1);
+        414904
+        ```
+        *number of bibitems usable for evaluation*  
+        ```
+        sqlite> select count(uuid) from bibitemmagidmap where mag_id in (select mid from (select count(distinct in_doc), mag_id as mid from bibitemmagidmap join bibitem on bibitemmagidmap.uuid = bibitem.uuid group by mag_id having count(distinct in_doc) > 1));
+        2070732
+        ```
+        *↑ simplified (by assuming a paper doesn't have 2 distinct bibitems referencing the same cited doc) (0.1% change likely due to matching errors)*
+        ```
+        sqlite> select count(uuid) from bibitemmagidmap where mag_id in (select mag_id from bibitemmagidmap group by mag_id having count(uuid) > 1);
+        2077763
+        ```
 
 ### citation recommendation baseline
 
@@ -1870,7 +2020,7 @@ map@5: 0.6087214124896325     — sliiightly better
 ```
 
 ##### MAG specific notes
-query DB for citation contexts for English CS cited papers with at least 5 citing papers ()
+query DB for citation contexts for English CS cited papers with at least 5 citing papers
 ```
 select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select cont.paperreferenceid from papercitationcontexts as cont join (select fos.paperid from paperfieldsofstudy as fos join paperlanguages as lang on fos.paperid = lang.paperid where fieldofstudyid = 41008148 and languagecode = 'en') as foslang on cont.paperreferenceid = foslang.paperid group by cont.paperreferenceid having count(cont.paperid) > 4) order by paperreferenceid;
 
@@ -1902,13 +2052,39 @@ MAG=> select count(*) from papercitationcontexts where paperreferenceid in (sele
  21955013       / 47410586 when filtering for citing papers
 ```
 
+##### RefSeer specific notes
+
+query DB for citation contexts starting from a given year (citing papers)  
+```
+spool "/home/tarek/refseer2011onward.dsv";
+select /*csv*/ pc.cited_id, pc.cited_year, pc.citing_id, pc.citing_year, pc.citing_title, cc.context
+    from citationcontexts cc
+    join
+    (select p.citing_id, p.citing_title, p.citing_year, c.acluster cited_id, c.year cited_year, c.id reference_item_id
+        from citations c
+        join
+        (select id citing_id, title citing_title, year citing_year from papers where year > 2010) p
+        on c.paperid = p.citing_id) pc
+    on cc.citationid = pc.reference_item_id
+    order by pc.cited_id;
+spool off;
+```
+
+RefSeer marker fail  
+```
+As usual, X (1) = minj≤nXj stands for the smallest Xj, and X (k) for the k-th smallest. Algorithm. Set MIN=-=[1]-=-=MIN[2]=...=MIN[k]=1 For j=1 to n, Compare Xj := h(yj) with MIN[1:k]
+```
+
 ### notes on evaluation
 
 * thoughts on exact re-recommendation
     * exact re-recommendation would imply the assumption, that for a given context only this very citation is acceptable
     * including direct co-citations (`\cite{a,b}`) acknowledges, that either of the cited docs is relevant
-        * a performance drop of nDCG is due to a more realistic shift in expectation: ideal is *not* to have a relevant doc somewhere in the top 5 but to have 5 relevant docs to choose from
-        * in the same vein, "indirect co-citation" (in the same context) could very well be considered somewhat relevant
+        * a performance drop of nDCG is due to a more realistic shift in expectation: ideal is *not* to have a relevant doc somewhere in the top 5 but to have (up to) 5 relevant docs to choose from
+        * in the same vein, "indirect co-citation" (in the same context) could also be considered *somewhat* relevant
+        * **relevant detail**: a distinction could be made between
+            * a co-citation that appeared at least once in the train set as `\cite{a,b}` (mby only half relevant b/c could be a list of examples) and
+            * a co-citation in the current test set item (mby only half relevant b/c could be a list of examples and then expecting all mentioned could be deemed unrealistic)
 * considerations when train/test splitting
     * always ensure a "stratified" split (i.e. don't just split 80/20 along all items in some order, split each *grouped per cited doc*-mini-package 80/20)
     * because an author's word choice and a paper's content can be a strong signal, it would be ideal to not have citations from one paper split (some in test, some in training)
@@ -2663,7 +2839,12 @@ interpret as:
 **VERSION 3**
 
 * for every claim detected by predpatt
-    * add &lt;pred&gt;:&lt;np&gt; to representation with the lemmatized predicate and all longest NPs from the dependency tree
+    * add &lt;pred&gt;:&lt;np&gt; to representation with the lemmatized predicate and all longest NPs from the contexts whole dependency tree
+* also apply TFIDF to resulting VSM
+
+**VERSION 3.1**
+
+* like 3 but only take NPs from a claim's sub-tree
 
 ##### PredPatt annotation
 
@@ -2743,6 +2924,17 @@ in top 10: 2674                   in top 10: 4575                  in top 10: 45
 ndcg@5: 0.3847948769125888        ndcg@5: 0.6599592330599735       ndcg@5: 0.6628890298754714
 map@5: 0.37037511496518133        map@5: 0.6482314255243522        map@5: 0.6506932100959839
 (5074 times possible)
+
+
+~~ PPv3.1 ~~
+PP when possible, skip otherwise
+- - - - - 5626/5626 - - - - -                                      - - - - - 5626/5626 - - - - -
+#1: 1314                                                           #1: 3250
+in top 5: 2058                                                     in top 5: 4265
+in top 10: 2349                                                    in top 10: 4603
+ndcg@5: 0.3424555655553774                                         ndcg@5: 0.6603219288941184
+map@5: 0.3271047579871109                                          map@5: 0.647947031638821
+(4862 times possible)
 ```
 
 10k sample tests

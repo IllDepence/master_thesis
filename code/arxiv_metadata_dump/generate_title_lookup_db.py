@@ -3,6 +3,7 @@
 
 import os
 import json
+import sys
 from lxml import etree
 from random import shuffle
 from sqlalchemy import create_engine
@@ -33,7 +34,8 @@ ns = {'oai':'http://www.openarchives.org/OAI/2.0/',
       'xsi':'http://www.w3.org/2001/XMLSchema-instance'}
 
 parser = etree.XMLParser()
-dump_dir = '/vol1/arxiv/metadata/newArxivMetaHarvesting201712'
+#dump_dir = '/vol1/arxiv/metadata/newArxivMetaHarvesting201712'
+dump_dir = sys.argv[1]
 
 month_field_docs = {}
 for idx, fn in enumerate(os.listdir(dump_dir)):

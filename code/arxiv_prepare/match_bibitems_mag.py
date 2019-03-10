@@ -322,7 +322,7 @@ def match_batch(arg_tuple):
     # set up MAG DB
     MAGBase = declarative_base()
 
-    mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG'
+    mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG19'
     mag_engine = create_engine(mag_db_uri,
         connect_args={'options': '-c statement_timeout=60000'}
         )

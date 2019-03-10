@@ -263,10 +263,16 @@ def build_sentence_representation(s):
     s = merge_citation_token_lists(s)
     s = remove_qutation_marks(s)
     lemmatizer = WordNetLemmatizer()
-    pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
     raw_lists = []
     rep_lists = []
     rep_lists_alt = []  # to be consistent with double annotating for 3 and 3.1
+    try:
+        pp = PredPatt.from_sentence(s, cacheable=False)  # for speed tests
+    except Exception as e:
+        print('= = = PredPatt exception = = =')
+        print('input:\n{}'.format(s))
+        print('exception:\n{}'.format(e))
+        return rep_lists, rep_lists_alt
     if len(pp.events) == 0:
         return rep_lists, rep_lists_alt
     if CIT_BASED:

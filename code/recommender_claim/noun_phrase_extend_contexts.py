@@ -11,6 +11,8 @@ MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
 CITS_PATT = re.compile(r'(((?<!MAIN)CIT , )*(?<!MAIN)CIT( , (?<!MAIN)CIT)*)')
 
 ONLY_DIR_PRECEEDING = True
+BOTH = True
+PRECEEDING_MIN_LEN_2 = True
 
 
 def merge_citation_token_lists(s):
@@ -32,7 +34,7 @@ def build(docs_path, dict_path):
 
     total = sum(1 for line in open(docs_path))
     orig_n = os.path.splitext(docs_path)[0]
-    ext_path = '{}_wNP.csv'.format(orig_n)
+    ext_path = '{}_wNP_both.csv'.format(orig_n)
     with open(docs_path) as fi:
         with open(ext_path, 'w') as fo:
             for idx, line in enumerate(fi):
@@ -52,21 +54,29 @@ def build(docs_path, dict_path):
                 elif len(vals) == 6:
                     aid, adjacent, in_doc, text, fos_annot, pprep = vals
                     pprep = pprep.strip()
-                    w_fos = False
+                    w_fos = True
                     w_pp = True
                 else:
                     print('input file format can not be parsed\nexiting')
                     sys.exit()
                 cntxt_nps = []
+                cntxt_nps_prec = []
                 # find NPs fast
                 if ONLY_DIR_PRECEEDING:
                     text = merge_citation_token_lists(text)
-                    pre, post = text.split('MAINCIT')
+                    try:
+                        pre, post = text.split('MAINCIT')
+                    except ValueError:
+                        # data with no MAINCIT in context, assume sentence end
+                        pre = text
+                        post = ''
                     words = [re.sub('[^a-zA-Z0-9-]', ' ', w).strip()
                              for w in pre.split()]
-                    # fixed position to only go through sizes
+                    # fixed position, so only go through sizes
                     for i in range(max_np_len):
                         chunk_size = max_np_len - i  # counting down
+                        if chunk_size < 2 and PRECEEDING_MIN_LEN_2:
+                            break
                         if len(words) < chunk_size:
                             continue
                         chunk = ' '.join(words[-chunk_size:])
@@ -77,13 +87,13 @@ def build(docs_path, dict_path):
                             in_dict = False
                         if in_dict:
                             redundant = False
-                            for already_in in cntxt_nps:
+                            for already_in in cntxt_nps_prec:
                                 if chunk in already_in:
                                     redundant = True
                                     break
                             if not redundant:
-                                cntxt_nps.append(chunk)
-                else:
+                                cntxt_nps_prec.append(chunk)
+                if not ONLY_DIR_PRECEEDING or (ONLY_DIR_PRECEEDING and BOTH):
                     words = [re.sub('[^a-zA-Z0-9-]', ' ', w).strip()
                              for w in text.split()]
                     words = [w for w in words if len(w) > 0]
@@ -114,10 +124,20 @@ def build(docs_path, dict_path):
                     # for np in np_dictionary.values():
                     #     if ' {} '.format(np) in ' {} '.format(text):
                     #         cntxt_nps.append(np)
-                nprep = '\u241F'.join(cntxt_nps)
-                if w_pp:
+                if ONLY_DIR_PRECEEDING and not BOTH:
+                    cntxt_nps = cntxt_nps_prec
+                if not BOTH:
+                    nprep = '\u241F'.join(cntxt_nps)
+                if ONLY_DIR_PRECEEDING and BOTH:
+                    rep_all = '\u241F'.join(cntxt_nps)
+                    rep_prec = '\u241F'.join(cntxt_nps_prec)
+                    # group seperator \u241D conceptually above record and unit
+                    # seperator in hierarchy -- used here to avoid changing all
+                    # existing code working just with record and unit seperator
+                    nprep = '\u241D'.join([rep_all, rep_prec])
+                if w_pp and w_fos:
                     new_vals = [aid, adjacent, in_doc, text, fos_annot, pprep, nprep]
-                elif w_fos:
+                elif w_fos and not w_pp:
                     new_vals = [aid, adjacent, in_doc, text, fos_annot, nprep]
                 else:
                     new_vals = [aid, adjacent, in_doc, text, nprep]

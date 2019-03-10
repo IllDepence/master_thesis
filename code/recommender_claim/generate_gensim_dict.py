@@ -38,6 +38,9 @@ def build(docs_path):
             elif len(vals) == 6:
                 aid, adjacent, in_doc, text, fos_annot, pp_rep = vals
                 with_predpatt_rep = True
+            elif len(vals) == 7:
+                aid, adjacent, in_doc, text, fos_annot, pp_rep, np_rep = vals
+                with_predpatt_rep = True
             else:
                 print('input file format can not be parsed\nexiting')
                 sys.exit()

@@ -1660,6 +1660,19 @@ false positives: 188
         sqlite> select count(uuid) from bibitemmagidmap where mag_id in (select mag_id from bibitemmagidmap group by mag_id having count(uuid) > 1);
         2077763
         ```
+* merging DBs
+    ```
+    attach database '/home/saiert/arxiv-txt-data_2018/metadata.db' as newdata;
+    insert into bibitem select uuid, in_doc, bibitem_string from newdata.bibitem;
+    insert into bibitemmagidmap (uuid, mag_id) select uuid, mag_id from newdata.bibitemmagidmap;
+    insert into bibitemlinkmap (uuid, link) select uuid, link from newdata.bibitemlinkmap;
+    insert into bibitemarxividmap (uuid, arxiv_id) select uuid, arxiv_id from newdata.bibitemarxividmap;
+    ```
+* merging txts
+    ```
+    find arxiv-txt-data_2018/no_cit -name '*.txt' -exec mv {} arxiv-txt-data_1991-2018/no_cit \;
+    find arxiv-txt-data_2018 -name '*.txt' -exec mv {} arxiv-txt-data_1991-2018 \;
+    ```
 
 ### citation recommendation baseline
 

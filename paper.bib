@@ -1368,13 +1368,67 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 }
 
 @InProceedings{Faerber2018a,
-  author        = {Michael F{\"{a}}rber and Alexander Thiemann and Adam Jatowt},
-  title         = {{To Cite, or Not to Cite? Detecting Citation Contexts in Text}},
-  booktitle     = {{Proceedings of the 40th European Conference on Information Retrieval}},
-  year          = {2018},
-  series        = {{{ECIR} 2018}},
+  author    = {Michael F{\"{a}}rber and Alexander Thiemann and Adam Jatowt},
+  title     = {{To Cite, or Not to Cite? Detecting Citation Contexts in Text}},
+  booktitle = {{Proceedings of the 40th European Conference on Information Retrieval}},
+  year      = {2018},
+  series    = {{{ECIR} 2018}},
+  review    = {- used ACL data from here},
+}
+
+@Article{Ginsparg1994,
+  author     = {Ginsparg, Paul},
+  title      = {First Steps Towards Electronic Research Communication},
+  journal    = {Computers in Physics},
+  year       = {1994},
+  volume     = {8},
+  number     = {4},
+  pages      = {390--396},
+  month      = jul,
+  issn       = {0894-1866},
+  acmid      = {187185},
+  address    = {Woodbury, NY, USA},
+  doi        = {10.1063/1.4823313},
+  issue_date = {July/Aug. 1994},
+  numpages   = {7},
+  publisher  = {American Institute of Physics Inc.},
+  review     = {- citation for arxiv.org starting 1991},
+  url        = {http://dx.doi.org/10.1063/1.4823313},
+}
+
+@Article{Nanba1999,
+  author        = {Hidetsugu Nanba and Manabu Okumura},
+  title         = {Towards Multi-paper Summarization Using Reference Information},
+  journal       = {Journal of Natural Language Processing},
+  year          = {1999},
+  volume        = {6},
+  number        = {5},
+  pages         = {43-62},
   __markedentry = {[tarek:]},
-  review        = {- used ACL data from here},
+  doi           = {10.5715/jnlp.6.5_43},
+  review        = {- based on master's thesis of first author (Nanba1998)},
+}
+
+@MastersThesis{Nanba1998,
+  author        = {Hidetsugu Nanba},
+  title         = {Towards Multi-paper Summarization Using Reference Information},
+  school        = {Japan Advanced Institute of Science and Technology},
+  year          = {1998},
+  month         = {2},
+  note          = {(in Japanese)},
+  __markedentry = {[tarek:]},
+  review        = {- very early example of using arXiv sources for getting citation data
+- used LaTeX files from arXiv (xxx.lanl.gov at the time) to analyse citations
+- use 450 articles from "Computation and Language" cs.CL  (cmp-lg at the time)
+- describe problem of matching bibitem string to a publication
+- introduce paper serach system PRESRI (Paper REtrieval System Using Reference Information) that takes citation interlinking into account
+- analyze citation contexts and citation function
+
+- note on having used the *small size* data source arXiv and that using more data automatically crawled from the web is future work
+
+- original title: 論文間の参照情報を考慮した 学術論文要約システムの開発
+- title template from publication one year later with original title: 論文間の参照情報を考慮した サーベイ論文作成支援 システムの開発},
+  url           = {http://www.ls.info.hiroshima-cu.ac.jp/~nanba/pdf/master_thesis.pdf},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

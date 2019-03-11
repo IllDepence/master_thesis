@@ -26,6 +26,12 @@ y_recall = []
 model_names = []
 for i, model in enumerate(results['models']):
     model_names.append(model['name'])
+    if 'ndcg_results' not in model:
+        for j in range(10):
+            model['ndcg_results'] = [sm/model['num_cur'] for sm in model['ndcg_sums']]
+            model['map_results'] = [sm/model['num_cur'] for sm in model['map_sums']]
+            model['mrr_results'] = [sm/model['num_cur'] for sm in model['mrr_sums']]
+            model['recall_results'] = [sm/model['num_cur'] for sm in model['recall_sums']]
     y_ndcg.append(model['ndcg_results'])
     y_map.append(model['map_results'])
     y_mrr.append(model['mrr_results'])

@@ -70,13 +70,12 @@ def fos_boost_ranking(bow_ranking, fos_boost, top_dot_prod):
     return [c[0] for c in comb]
 
 
-def combine_simlists(sl1, sl2, sl3, weights):
+def combine_simlists(sl1, sl2, weights):
     sl = []
     for i in range(len(sl1)):
         sl.append(
             (sl1[i]*weights[0])+
-            (sl1[i]*weights[1])+
-            (sl3[i]*weights[2])
+            (sl2[i]*weights[1])
             )
     return sl
 
@@ -98,9 +97,9 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
-def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
+def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
               np_dict_path=None, lda_preselect=False,
-              combine_train_contexts=True, weights=[1, 1, 1]):
+              combine_train_contexts=True):
     """ - foo
     """
 
@@ -152,7 +151,11 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             # handle varying CSV formats
             vals = line.split('\u241E')
             if use_noun_phrase_model:
-                cntxt_nps = [np for np in vals[-1].strip().split('\u241F')]
+                cntxt_nps = vals[-1]
+                if '\u241D' in cntxt_nps:  # includes NP<marker> variant
+                    np_all, np_marker = cntxt_nps.split('\u241D')
+                    cntxt_nps = np_all  # mby use both for final eval
+                cntxt_nps = [np for np in cntxt_nps.strip().split('\u241F')]
                 vals = vals[:-1]
             if len(vals) == 4:
                 mid, adjacent, in_doc, text = vals
@@ -184,7 +187,6 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                     if adj_cit not in adjacent_cit_map[mid]:
                         adjacent_cit_map[mid].append(adj_cit)
             # fill texts
-            text = text.replace('[]', '')
             if mid != tmp_bag_current_mid or idx == num_lines-1:
                 # tmp_bag now contains all lines sharing ID tmp_bag_current_mid
                 num_contexts = len(tmp_bag)
@@ -215,8 +217,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                 test_tups = []
                 for jdx, sub_bag_key in enumerate(order):
                     sb_tup = sub_bags_dict[sub_bag_key]
-                    # if sub_bag_key[:2] == '17':  # FIXME time split
-                    if len(train_tups) > min_num_train or jdx == len(order)-1:
+                    # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
+                    # if len(train_tups) > min_num_train or jdx == len(order)-1:
+                    if sub_bag_key[1:3] == '06':  # FIXME time split ACL
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -314,18 +317,29 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
-    # TODO eval all the models agreen upon in one go
-    num_cur = 0
-    num_top = 0
-    num_top_5 = 0
-    num_top_10 = 0
-    ndcg_sums = [0]*AT_K
-    map_sums = [0]*AT_K
-    mrr_sums = [0]*AT_K
-    recall_sums = [0]*AT_K
+    # ACL eval
+    # models: BoW, NP, PP, 3BoW1PP
+    eval_models = [
+        {'name':'bow'},
+        {'name':'np'},
+        {'name':'pp'},
+        {'name':'pp+bow'}
+        ]
+    for mi in range(len(eval_models)):
+        eval_models[mi]['num_cur'] = 0
+        eval_models[mi]['num_top'] = 0
+        eval_models[mi]['num_top_5'] = 0
+        eval_models[mi]['num_top_10'] = 0
+        eval_models[mi]['ndcg_sums'] = [0]*AT_K
+        eval_models[mi]['map_sums'] = [0]*AT_K
+        eval_models[mi]['mrr_sums'] = [0]*AT_K
+        eval_models[mi]['recall_sums'] = [0]*AT_K
     prind('test set size: {}\n- - - - - - - -'.format(len(test)))
-    foo = 0
-    for tpl in test:
+    for test_item_idx, tpl in enumerate(test):
+        if test_item_idx > 0 and test_item_idx%10000 == 0:
+            save_results(
+                docs_path, num_lines, num_test, eval_models, suffix='_tmp'
+                )
         test_mid = tpl[0]
         test_text = bow_preprocess_string(tpl[1])
         if use_fos_annot:
@@ -384,18 +398,22 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             # # v hand crafted sliiiiiiight improvement v
             final_ranking = fos_boost_ranking(
                 bow_ranking, fos_boost, top_dot_prod)
-        else:
-            final_ranking = bow_ranking
+        # else:
+        #     final_ranking = bow_ranking
         if not combine_train_contexts:
             seen = set()
             seen_add = seen.add
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
         if use_predpatt_model:
-            sims_comb = combine_simlists(sims, fos_sims, pp_sims, weights)
-            sims_list = list(enumerate(sims_comb))
-            sims_list.sort(key=lambda tup: tup[1], reverse=True)
-            final_ranking = [s[0] for s in sims_list]
+            sims_comb = combine_simlists(sims, pp_sims, [3, 1])
+            comb_sims_list = list(enumerate(sims_comb))
+            comb_sims_list.sort(key=lambda tup: tup[1], reverse=True)
+            comb_ranking = [s[0] for s in comb_sims_list]
+
+        # # filter random rankings where model is not applicable
+        # if sims_list[0][1] == 0:
+        #     continue
 
         # if non_zero_dot_prods < 10:                # FIXME just a test
         #     continue
@@ -427,77 +445,118 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]
 
-        rank = len(bow_ranking)  # assign worst possible
-        for idx, doc_id in enumerate(final_ranking):
-            if train_mids[doc_id] == test_mid:
-                rank = idx+1
-                break
-            if idx >= 10:
-               break
-        dcgs = [0]*AT_K
-        idcgs = [0]*AT_K
-        precs = [0]*AT_K
-        num_rel = 1 + len(adjacent_cit_map[test_mid])
-        num_rel_at_k = 0
-        for i in range(AT_K):
-            relevant = False
-            placement = i+1
-            doc_id = final_ranking[i]
-            result_mid = train_mids[doc_id]
-            if result_mid == test_mid:
-                relevance = 1
-                num_rel_at_k += 1
-                relevant = True
-            elif result_mid in adjacent_cit_map[test_mid]:
-                relevance = .5
-                num_rel_at_k += 1
-                relevant = True
-            else:
-                relevance = 0
-            denom = math.log2(placement + 1)
-            dcg_numer = math.pow(2, relevance) - 1
-            for j in range(i, AT_K):
-                dcgs[j] += dcg_numer / denom
-            if placement == 1:
-                ideal_rel = 1
-            elif placement <= num_rel:
-                ideal_rel = .5
-            else:
-                ideal_rel = 0
-            idcg_numer = math.pow(2, ideal_rel) - 1
-            for j in range(i, AT_K):
-                idcgs[j] += idcg_numer / denom
-                if relevant:
-                    precs[j] = num_rel_at_k / placement
-        for i in range(AT_K):
-            ndcg_sums[i] += dcgs[i] / idcgs[i]
-            map_sums[i] += precs[i] / num_rel
-            if rank <= i+1:
-                mrr_sums[i] += 1 / rank
-                recall_sums[i] += 1
-        if rank == 1:
-            num_top += 1
-        if rank <= 5:
-            num_top_5 += 1
-        if rank <= 10:
-            num_top_10 += 1
-        num_cur += 1
-        prind('- - - - - {}/{} - - - - -'.format(num_cur, len(test)))
-        prind('#1: {}'.format(num_top))
-        prind('in top 5: {}'.format(num_top_5))
-        prind('in top 10: {}'.format(num_top_10))
-        prind('ndcg@5: {}'.format(ndcg_sums[4]/num_cur))
-        prind('map@5: {}'.format(map_sums[4]/num_cur))
-        prind('mrr@5: {}'.format(mrr_sums[4]/num_cur))
-        prind('recall@5: {}'.format(recall_sums[4]/num_cur))
-        # prind('foo: {}'.format(foo))  # FIXME remove
-    ndcg_results = [sm/num_cur for sm in ndcg_sums]
-    map_results = [sm/num_cur for sm in map_sums]
-    mrr_results = [sm/num_cur for sm in mrr_sums]
-    recall_results = [sm/num_cur for sm in recall_sums]
+        for mi in range(len(eval_models)):
+            if mi == 0:
+                final_ranking = bow_ranking
+            elif mi == 1:
+                final_ranking = np_ranking
+            elif mi == 2:
+                final_ranking = pp_ranking
+            elif mi == 3:
+                final_ranking = comb_ranking
+            rank = len(bow_ranking)  # assign worst possible
+            for idx, doc_id in enumerate(final_ranking):
+                if train_mids[doc_id] == test_mid:
+                    rank = idx+1
+                    break
+                if idx >= 10:
+                   break
+            dcgs = [0]*AT_K
+            idcgs = [0]*AT_K
+            precs = [0]*AT_K
+            num_rel = 1 + len(adjacent_cit_map[test_mid])
+            num_rel_at_k = 0
+            for i in range(AT_K):
+                relevant = False
+                placement = i+1
+                doc_id = final_ranking[i]
+                result_mid = train_mids[doc_id]
+                if result_mid == test_mid:
+                    relevance = 1
+                    num_rel_at_k += 1
+                    relevant = True
+                elif result_mid in adjacent_cit_map[test_mid]:
+                    relevance = .5
+                    num_rel_at_k += 1
+                    relevant = True
+                else:
+                    relevance = 0
+                denom = math.log2(placement + 1)
+                dcg_numer = math.pow(2, relevance) - 1
+                for j in range(i, AT_K):
+                    dcgs[j] += dcg_numer / denom
+                if placement == 1:
+                    ideal_rel = 1
+                elif placement <= num_rel:
+                    ideal_rel = .5
+                else:
+                    ideal_rel = 0
+                idcg_numer = math.pow(2, ideal_rel) - 1
+                for j in range(i, AT_K):
+                    idcgs[j] += idcg_numer / denom
+                    if relevant:
+                        precs[j] = num_rel_at_k / placement
+            for i in range(AT_K):
+                eval_models[mi]['ndcg_sums'][i] += dcgs[i] / idcgs[i]
+                eval_models[mi]['map_sums'][i] += precs[i] / num_rel
+                if rank <= i+1:
+                    eval_models[mi]['mrr_sums'][i] += 1 / rank
+                    eval_models[mi]['recall_sums'][i] += 1
+            if rank == 1:
+                eval_models[mi]['num_top'] += 1
+            if rank <= 5:
+                eval_models[mi]['num_top_5'] += 1
+            if rank <= 10:
+                eval_models[mi]['num_top_10'] += 1
+            eval_models[mi]['num_cur'] += 1
+            prind('- - - - - {}/{} - - - - -'.format(
+                eval_models[0]['num_cur'], len(test))
+                )
+            prind('#1: {}'.format(eval_models[0]['num_top']))
+            prind('in top 5: {}'.format(eval_models[0]['num_top_5']))
+            prind('in top 10: {}'.format(eval_models[0]['num_top_10']))
+            prind('ndcg@5: {}'.format(
+                eval_models[0]['ndcg_sums'][4]/eval_models[0]['num_cur'])
+                )
+            prind('map@5: {}'.format(
+                eval_models[0]['map_sums'][4]/eval_models[0]['num_cur'])
+                )
+            prind('mrr@5: {}'.format(
+                eval_models[0]['mrr_sums'][4]/eval_models[0]['num_cur'])
+                )
+            prind('recall@5: {}'.format(
+                eval_models[0]['recall_sums'][4]/eval_models[0]['num_cur'])
+                )
 
-    metrics = [ndcg_results, map_results, mrr_results, recall_results]
-    return metrics, num_lines, len(test)
+    for mi in range(len(eval_models)):
+        eval_models[mi]['num_applicable'] = eval_models[mi]['num_cur']
+        eval_models[mi]['ndcg_results'] = [
+            sm/eval_models[mi]['num_cur'] for sm in eval_models[mi]['ndcg_sums']
+            ]
+        eval_models[mi]['map_results'] = [
+            sm/eval_models[mi]['num_cur'] for sm in eval_models[mi]['map_sums']
+            ]
+        eval_models[mi]['mrr_results'] = [
+            sm/eval_models[mi]['num_cur'] for sm in eval_models[mi]['mrr_sums']
+            ]
+        eval_models[mi]['recall_results'] = [
+            sm/eval_models[mi]['num_cur'] for sm in eval_models[mi]['recall_sums']
+            ]
+
+    return eval_models, num_lines, len(test)
+
+
+def save_results(docs_path, num_lines, num_test, eval_models, suffix=''):
+    timestamp = int(time.time())
+    result_file_name = 'eval_results_{}{}.json'.format(timestamp, suffix)
+    result_data = {
+        'data': docs_path,
+        'num_contexts': num_lines,
+        'num_test_set_items': num_test,
+        'models': eval_models,
+        }
+    with open(result_file_name, 'w') as f:
+        f.write(json.dumps(result_data))
 
 
 if __name__ == '__main__':
@@ -514,56 +573,21 @@ if __name__ == '__main__':
     if len(sys.argv) == 5:
         np_dict_path = sys.argv[4]
 
-    weights = [2, 0, 1]
-
-    metrics, num_lines, num_test = recommend(
+    eval_models, num_lines, num_test = recommend(
         docs_path,
         dict_path,
         pp_dict_path=pp_dict_path,
         np_dict_path=np_dict_path,
-        weights=weights
         )
 
-    ndcg_results, map_results, mrr_results, recall_results = metrics
+    # print('@\tNDCG\tMAP\tMRR\tRecall')
+    # for i in range(AT_K):
+    #     print('{}\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}'.format(
+    #         i+1,
+    #         ndcg_results[i],
+    #         map_results[i],
+    #         mrr_results[i],
+    #         recall_results[i],
+    #         ))
 
-    print('@\tNDCG\tMAP\tMRR\tRecall')
-    for i in range(AT_K):
-        print('{}\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}'.format(
-            i+1,
-            ndcg_results[i],
-            map_results[i],
-            mrr_results[i],
-            recall_results[i],
-            ))
-
-    timestamp = int(time.time())
-    result_file_name = 'eval_results_{}.json'.format(timestamp)
-    result_data = {
-        'data': docs_path,
-        'num_lines': num_lines,
-        'num_test': num_test,
-        'weights': weights,
-        'ndcg': ndcg_results,
-        'map': map_results,
-        'mrr': mrr_results,
-        'recall': recall_results
-        }
-    with open(result_file_name, 'w') as f:
-        f.write(json.dumps(result_data))
-
-    # # linear weights
-    # results = []
-    # for a in range(0, 110, 15):
-    #     for b in range(0, 110, 15):
-    #         for c in range(0, 110, 15):
-    #             weights = [a/100, b/100, c/100]
-    #             ndcg_a5, map_a5 = recommend(
-    #                 docs_path,
-    #                 dict_path,
-    #                 pp_dict_path=pp_dict_path,
-    #                 weights=weights
-    #                 )
-    #             print('{}/{}/{}  ->  {:.5f} | {:.5f}'.format(a/100, b/100, c/100, ndcg_a5, map_a5))
-    #             results.append([a/100, b/100, c/100, ndcg_a5, map_a5])
-    # results.sort(key=lambda tup: tup[3])
-    # print(results)
+    save_results(docs_path, num_lines, num_test, eval_models)

@@ -56,7 +56,8 @@ for i in range(len(subplots)):
         subplots[i].xaxis.grid(True)
         subplots[i].yaxis.grid(True)
 
-plt.figlegend(label_lines, model_names, loc='lower center', ncol=50, labelspacing=1)
-
-f.subplots_adjust(hspace=0.3)
+plt.figlegend(label_lines, model_names, loc='lower center', ncol=50,
+    labelspacing=1)
+f.subplots_adjust(hspace=0.35)
+plt.gcf().subplots_adjust(bottom=0.15)
 plt.show()

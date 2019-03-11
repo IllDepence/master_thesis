@@ -260,6 +260,7 @@
   year    = {2016},
   volume  = {22},
   review  = {- annotate citation contexts with CoreSC classes (hypothesis, motivation, background, result, conclusion, etc.)
+- "Core Scientific Concepts (CoreSC) scheme"
 
 - uses PubMed Open Access Subset (https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/)
 
@@ -1335,7 +1336,16 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   location  = {Shinjuku, Tokyo, Japan},
   numpages  = {4},
   review    = {- related work
-- local citation recommendation},
+- local citation recommendation
+
+- "Neural Citation Network"
+- inspired by Neural Translation Models
+- use attention
+- learn author representation
+- use title
+
+- eval on RefSeer
+- after filtering have "4,549,267 context pairs" (given RefSeer contains 105 M contexts quite the filtering)},
   url       = {http://doi.acm.org/10.1145/3077136.3080730},
 }
 

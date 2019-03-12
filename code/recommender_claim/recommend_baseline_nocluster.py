@@ -217,9 +217,9 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                 test_tups = []
                 for jdx, sub_bag_key in enumerate(order):
                     sb_tup = sub_bags_dict[sub_bag_key]
-                    # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
                     # if len(train_tups) > min_num_train or jdx == len(order)-1:
-                    if sub_bag_key[1:3] == '06':  # FIXME time split ACL
+                    # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
+                    if sub_bag_key[:2] == '17':  # FIXME time split arXiv
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -317,8 +317,8 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
-    # ACL eval
-    # models: BoW, NP, PP, 3BoW1PP
+    # arXiv CS eval
+    # models: BoW, NP, PP, 3BoW1PP (others manually)
     eval_models = [
         {'name':'bow'},
         {'name':'np'},
@@ -338,9 +338,12 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     for test_item_idx, tpl in enumerate(test):
         if test_item_idx > 0 and test_item_idx%10000 == 0:
             save_results(
-                docs_path, num_lines, num_test, eval_models, suffix='_tmp'
+                docs_path, num_lines, len(test), eval_models, suffix='_tmp'
                 )
         test_mid = tpl[0]
+        # if test_mid not in train_mids:
+        #     # not testable
+        #     continue
         test_text = bow_preprocess_string(tpl[1])
         if use_fos_annot:
             test_foss_vec = mlb.transform([tpl[2]])
@@ -406,7 +409,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
         if use_predpatt_model:
-            sims_comb = combine_simlists(sims, pp_sims, [3, 1])
+            sims_comb = combine_simlists(sims, pp_sims, [2, 1])
             comb_sims_list = list(enumerate(sims_comb))
             comb_sims_list.sort(key=lambda tup: tup[1], reverse=True)
             comb_ranking = [s[0] for s in comb_sims_list]
@@ -499,6 +502,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             for i in range(AT_K):
                 eval_models[mi]['ndcg_sums'][i] += dcgs[i] / idcgs[i]
                 eval_models[mi]['map_sums'][i] += precs[i] / num_rel
+                # NOTE: mby min(num_rel, (i+1)) would be better?
                 if rank <= i+1:
                     eval_models[mi]['mrr_sums'][i] += 1 / rank
                     eval_models[mi]['recall_sums'][i] += 1

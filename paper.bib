@@ -292,7 +292,8 @@
   keywords  = {co-citation analysis, discourse facet, natural language processing, representation learning, scientific article},
   location  = {Fort Worth, Texas, USA},
   numpages  = {9},
-  review    = {- only recommend "co-citations": given context *AND ONE CITATION*, recommend more appropriate citations
+  review    = {- focus on "co-citations": given context *AND ONE CITATION*, recommend more appropriate citations (in eval: only take [1,2,...] cases, show one, repredict rest)
+- vector representations per discourse facet objective/method/results
 - "the Citation Function Corpus [33]"},
   url       = {http://doi.acm.org/10.1145/3197026.3197059},
 }
@@ -1339,13 +1340,15 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 - local citation recommendation
 
 - "Neural Citation Network"
-- inspired by Neural Translation Models
+- inspired by neural machine translation
+- can generalize to new papers not present in the training set
 - use attention
 - learn author representation
 - use title
 
 - eval on RefSeer
-- after filtering have "4,549,267 context pairs" (given RefSeer contains 105 M contexts quite the filtering)},
+- after filtering have "4,549,267 context pairs" (given RefSeer contains 105 M contexts quite the filtering)
+- report NDCG, MAP, MRR, recall},
   url       = {http://doi.acm.org/10.1145/3077136.3080730},
 }
 
@@ -1440,13 +1443,33 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 }
 
 @Unknown{Jeong2019,
-  author        = {Jeong, Chanwoo and Sion, Jang and Shin, Hyuna and Park, Eunjeong and Choi, Sungchul},
-  title         = {A Context-Aware Citation Recommendation Model with BERT and Graph Convolutional Networks},
-  month         = {02},
-  year          = {2019},
+  author = {Jeong, Chanwoo and Sion, Jang and Shin, Hyuna and Park, Eunjeong and Choi, Sungchul},
+  title  = {A Context-Aware Citation Recommendation Model with BERT and Graph Convolutional Networks},
+  month  = {02},
+  year   = {2019},
+  review = {- related work},
+  url    = {https://www.researchgate.net/publication/331346718_A_Context-Aware_Citation_Recommendation_Model_with_BERT_and_Graph_Convolutional_Networks},
+}
+
+@Article{Prasad2018,
+  author    = {Prasad, Animesh and Kaur, Manpreet and Kan, Min-Yen},
+  title     = {Neural ParsCit: A Deep Learning Based Reference String Parser},
+  journal   = {International Journal on Digital Libraries},
+  year      = {2018},
+  volume    = {19},
+  pages     = {323-337},
+  publisher = {Springer},
+  review    = {- neural parscit citation},
+  url       = {https://link.springer.com/article/10.1007/s00799-018-0242-1},
+}
+
+@InProceedings{Roy2016,
+  author        = {Dwaipayan Roy and Kunal Ray and Mandar Mitra},
+  title         = {{From a Scholarly Big Dataset to a Test Collection for Bibliographic Citation Recommendation}},
+  year          = {2016},
+  series        = {{SBD'16}},
   __markedentry = {[tarek:]},
-  review        = {- related work},
-  url           = {https://www.researchgate.net/publication/331346718_A_Context-Aware_Citation_Recommendation_Model_with_BERT_and_Graph_Convolutional_Networks},
+  review        = {- CiteSeerX problems},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

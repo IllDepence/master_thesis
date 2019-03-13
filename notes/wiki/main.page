@@ -2065,6 +2065,32 @@ MAG=> select count(*) from papercitationcontexts where paperreferenceid in (sele
  21955013       / 47410586 when filtering for citing papers
 ```
 
+CS English papers
+```
+MAG19=> select count(distinct(fos.paperid)) from ((select paperid from paperfieldsofstudy where fieldofstudyid = 41008148) as fos join (select paperid from paperlanguages where languagecode = 'en') as lang on fos.paperid = lang.paperid);
+  count  
+---------
+ 8028554
+```
+
+CS English papers with abstract
+```
+MAG19=> select count(distinct(fos.paperid)) from (((select paperid from paperfieldsofstudy where fieldofstudyid = 41008148) as fos join (select paperid from paperlanguages where languagecode = 'en') as lang on fos.paperid = lang.paperid) join (select paperid from paperabstracts) as abstr on fos.paperid = abstr.paperid);
+  count  
+---------
+ 5949025
+```
+
+citations between CS English papers with abstract with at least x citing papers per cited paper
+
+* 10: 13,443,261 (423k cited)
+* 50: 8,602,490 (81k cited)
+* 100: 6,310,408 (34k cited)
+
+```
+select paperreferenceid, paperid, citationcontext from papercitationcontexts where paperreferenceid in (select paperreferenceid from papercitationcontexts group by paperreferenceid having count(paperid) > 9) and paperreferenceid in (select fos.paperid from (((select paperid from paperfieldsofstudy where fieldofstudyid = 41008148) as fos join (select paperid from paperlanguages where languagecode = 'en') as lang on fos.paperid = lang.paperid) join (select paperid from paperabstracts) as abstr on fos.paperid = abstr.paperid)) and paperid in (select fos.paperid from (((select paperid from paperfieldsofstudy where fieldofstudyid = 41008148) as fos join (select paperid from paperlanguages where languagecode = 'en') as lang on fos.paperid = lang.paperid) join (select paperid from paperabstracts) as abstr on fos.paperid = abstr.paperid))
+```
+
 ##### RefSeer specific notes
 
 query DB for citation contexts starting from a given year (citing papers)  

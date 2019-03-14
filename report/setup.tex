@@ -81,6 +81,15 @@
     \usepackage{footnote}
     \makesavenoteenv{tabular}
     \makesavenoteenv{table}
+    % enable listings
+    \usepackage{listings}
+    \lstset{literate=
+      {Ş}{{\c{S}}}1 {ğ}{{\v{g}}}1,
+      frame=top,frame=bottom,
+      breaklines=true,
+      basicstyle=\linespread{1}\footnotesize\ttfamily,
+      escapeinside={(*}{*)}
+    }
 
 %------------------------------------------------------------------------------
 %       (re)new commands / settings
@@ -138,7 +147,6 @@
 
     % ------------------- Tikz styles -------------------
     % \tikzset{>=latex}  % arrow style
-
 
     % ------------------- algorithm ---------------------
     % Command to align comments in algorithm

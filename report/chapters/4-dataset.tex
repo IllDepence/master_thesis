@@ -1,5 +1,5 @@
 \chapter{Data set}\label{chap:dataset}
-Recommender systems rely on data for their development, training and evaluation. It is therefore important to properly assess potential data sets in terms of their strengths and shortcomings---especially with regards to the task at hand. In citation recommendation, the goal is to identify papers relevant to a user input. Because of the large amount of available research, this means a recommender has to be able to find relevant publications in a large set of possible candidates in order to be considered fit for the task. As a comsequence, evaluation results are likely to be more meaningful when a large data set is used. Apart from the size, the quality of data is also crucial. For local citation recommendation this means that a clean citation context, precise position of citaiton markers and valid citation information are desirable. With these criteria in mind we assessed existing data sets, leading us to the conclusion that---for the relatively new task of local citation recommendation---it would be worth the effort to create a new data set.
+Recommender systems rely on data for their development, training and evaluation. It is therefore important to properly assess potential data sets in terms of their strengths and shortcomings---especially with regards to the task at hand. In citation recommendation, the goal is to identify papers relevant to a user input. Because of the large amount of available research, this means a recommender has to be able to find relevant publications in a large set of possible candidates in order to be considered fit for the task. As a comsequence, evaluation results are likely to be more meaningful when a large data set is used. Apart from the size, the quality of data is also crucial. For local citation recommendation this means that a clean citation context, precise position of citaiton markers and valid citation information are desirable. With these criteria in mind we assessed existing data sets and come to the conclusion that, for the relatively new task of local citation recommendation, the creation of a dedicated data set will bring considerable benefits.
 
 The following sections describe the details of our assessment as well as the creation process and evaluation of our new data set.
 
@@ -19,9 +19,9 @@ The following sections describe the details of our assessment as well as the cre
     CiteSeerX~\cite{Caragea2014} / RefSeer~\cite{Huang2014} & 5M & 400 chars & (unrestricted) & internal \\
     PubMed Central OAS\footnote{\url{https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/}} & 2.3M & extractable & Biomed./Life Sci. & mixed \\
     arXiv CS~\cite{Faerber2018} &  90K & 1 sentence & CS & DBLP \\
-    Scholarly~\cite{Sugiyama2013}  & 100K & extractable* & CS & no \\
-    ACL-AAN  & 18K & extractable* & CS/Comp. Ling. & no  \\ % \cite{Radev2013}
-    ACL-ARC  & 11K & extractable* & CS/Comp. Ling. & no \\ % \cite{Bird2008ACLARC}
+    Scholarly~\cite{Sugiyama2013}  & 100K & extractable* & CS & - \\
+    ACL-AAN  & 18K & extractable* & CS/Comp. Ling. & -  \\ % \cite{Radev2013}
+    ACL-ARC  & 11K & extractable* & CS/Comp. Ling. & - \\ % \cite{Bird2008ACLARC}
     \bottomrule
     \end{tabular}
 \end{center}
@@ -29,26 +29,26 @@ The following sections describe the details of our assessment as well as the cre
 
 Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While various recommendation domains have established quasi standard data sets, this is not yet the case in citation recommendation. CiteSeerX is currently the most used in the field~\cite{Beel2016}. It is comparatively large, but many approaches only use subsets and generate them with varying filtering criteria. It includes pre-extracted citation contexts of 400 characters in length, whereby references are resolved to an internal set of identifiers. Unfortunately there are several quality issues with the data set. The main ones being inaccurate citaion information, noisy citation contexts and cut off words at the borders of citation contexts~\cite{Roy2016}.
 
-The PubMed Central Open Access Subset is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \texttt{\url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}}}~\cite{Gipp2015}.
+The PubMed Central Open Access Subset (PMC-OAS) is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \texttt{\url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}}}~\cite{Gipp2015}.
 
 Consistent global reference identifiers are given in the arXiv CS data set in the form of DBLP IDs. Linking to an existing repository of publication (meta) data has the advantage that information about cited papers in readily available. The choice of DBLP restricts resolved references to the field of computer science though. Citations to, for example, publications in maths or statistics can not be resolved to a DBLP ID. A strength of the data set is that it was generated from \LaTeX{} source files, which makes it possible to get very clean data.
 
-For the remainig the data sets---Scholarly, ACL-AAn and ACL-ARC---citing papers are only available in PDF format and references are not resolved. The two ACL sets have the additional drawback of being very small.
+For the remainig the data sets---Scholarly, ACL-AAN and ACL-ARC---citing papers are only available in PDF format and references are not resolved. The two ACL sets have the additional drawback of being very small.
 
-Above observations lead us to the conclusion that it would be worthwhile to tackle the creation of a data set that is large (in the order of CiteSeerX/RefSeer/PubMed Central OAS), clean (like the PubMed Central OAS and arXiv CS) and also offers consitent global reference IDs that don't restrict the data set to citations within the same discipline. The creation and evaluation of this data set is described in the following sections.
+Above observations lead us to the conclusion that it would be worthwhile to tackle the creation of a data set that is large (in the order of CiteSeerX/RefSeer/PMC-OAS), clean (like the PMC-OAS and arXiv CS) and also offers consitent global reference IDs that don't restrict the data set to citations within the same discipline. The creation and evaluation of this data set is described in the following sections.
 
 % TODO: mby add MAG use/analysis: \cite{Herrmannova2016,Paszcza2016,Hug2017}
 
 % TODO: add: evaluation of reference string parsers\cite{Tkaczyk2018}, a dataset for reference string parsing\cite{Anzaroot2013}
 
-\section{Data Set Creation}\label{sec:data-set-creation}
-Scientific publications are usually distributed in formats targeted at human consumption (e.g. PDF) or, in cases like arXiv.org, also as source files \emph{for} the aforementioned (e.g. \LaTeX{} sources for generating PDFs). Citation-based tasks, such as context-dependent citation recommendation, in contrast, require automated processing of the publications' textual contents as well as the documents' interlinking through citations. The creation of a data set for such tasks therefore encompasses two main steps: extraction of plain text and resolution of references. In the following we will describe how we approached these two steps using arXiv publication sources and the Microsoft Academic Graph (MAG)~\cite{Sinha2015}.
+\section{Data set creation}\label{sec:data-set-creation}
+Scientific publications are usually distributed in formats targeted at human consumption (e.g. PDF) or, in cases like arXiv.org, also as source files \emph{for} the aforementioned (e.g. \LaTeX{} sources for generating PDFs). Citation-based tasks, such as local citation recommendation, in contrast, require automated processing of the publications' textual contents as well as the documents' interlinking through citations. The creation of a data set for such tasks therefore encompasses two main steps: extraction of plain text and resolution of references. In the following we will describe how we approached these two steps using arXiv publication sources and the Microsoft Academic Graph (MAG)~\cite{Sinha2015}.
 
-\subsection{Used Data Sets}
+\subsection{Used data sets}
 
 The following two resources are the basis of the data set creation process.
 
-\paragraph{arXiv.org} hosts over 1.4 million submissions from August 1991 onward~\cite{Ginsparg1994}. They are available not only as PDF, but (in most cases) also as \LaTeX{} source files. The discipline most prominently represented is physics, followed by mathematics, with computer science seeing a continued increase in percentage of submissions ranking third (see Fig.~\ref{fig:sankey}). The availability of \LaTeX{} sources makes arXiv submissions particularly well suited for extracting high quality plain text and accurate citation information. So much so, that it has been used to generate ground truths for the evaluation of PDF to text conversion tools~\cite{Bast2017}. Approaches to automatically extract citation interlinks from arXiv sources by parsing \LaTeX{} files have existed for over 20 years \cite{Nanba1998}. Nevertheless we are not aware of any data sets for citation based tasks generated from the whole of arXiv.
+\paragraph{arXiv.org} hosts over 1.4 million submissions from August 1991 onward~\cite{Ginsparg1994}. They are available not only as PDF, but (in most cases) also as \LaTeX{} source files. The discipline most prominently represented is physics, followed by mathematics, with computer science seeing a continued increase in percentage of submissions ranking third (see Fig.~\ref{fig:sankey}). The availability of \LaTeX{} sources makes arXiv submissions particularly well suited for extracting high quality plain text and accurate citation information. So much so, that it has been used to generate ground truths for the evaluation of PDF to text conversion tools~\cite{Bast2017}. Approaches to automatically extract citation interlinks from arXiv sources by parsing \LaTeX{} files have existed for over 20 years \cite{Nanba1998}. Nevertheless we are not aware of any existing data sets for citation based tasks generated from the whole of arXiv.
 
 \paragraph{Microsoft Academic Graph (MAG)} is a very large\footnote{At the time of writing the MAG contains data on over 200 million publications.}, automatically generated data set on publications, related entities (authors, venues, etc.) and their interconnections through citation. While citation contexts are available to some degree, full text documents are not. The size of the MAG makes it a good target for matching reference items against it, especially given that arXiv spans several fields of study.
 
@@ -89,18 +89,15 @@ In the following we will describe the tools considered for parsing \LaTeX{}, the
 We took several tools for the conversion from \LaTeX{} to plain text or to intermediate formats into consideration and evaluated them. Table \ref{tbl:tools} gives an overview of our results. Half of the tools failed to produce any output for a large amount of arXiv submissions we used as test input and were therefore deemed not robust enough. \textit{GrabCite} is able to parse 78.5\% of arXiv CS submissions but integrates resolving references against DBLP into the parsing process and therefore would require significant modification to fit our system architecture. \textit{LaTeXML} and \textit{Tralics} are both robust and can be used as \LaTeX{} conversion tools as is. On subsequent tests we note that \textit{LaTeXML} needs on average 7.7 seconds (3.3 if formula environments are heuristically removed beforehand) to parse an arXiv submission while \textit{Tralics} needs 0.09. Because the quality of their output seemed comparable we chose to use \textit{Tralics}.
 
 \subsubsection{Challenges}
-Apart from the general difficulty of parsing \LaTeX{} due to its feature richness and people's free-spirited use of it, we especially note difficulty in dealing with extra packages not included in submissions' sources\footnote{arXiv.org specifically suggest the omission of such (see \texttt{\url{https://arxiv.org/help/submit\_tex\#wegotem}})}. While \textit{Tralics} is supposed to for example deal with \textit{natbib} citations,\footnote{See \texttt{\url{https://www-sop.inria.fr/marelle/tralics/packages.html\#natbib}}} normalization of such citations lead to a decrease of citation markers not being able to be matched to their reference item from 30\% to 5\% in a sample of 565,613 citations we tested.
+Apart from the general difficulty of parsing \LaTeX{} due to its feature richness and people's free-spirited use of it, we especially note difficulty in dealing with extra packages not included in submissions' sources\footnote{arXiv.org specifically suggest the omission of such (see \texttt{\url{https://arxiv.org/help/submit\_tex\#wegotem}})}. While \textit{Tralics} is supposed to for example deal with \textit{natbib} citations\footnote{See \texttt{\url{https://www-sop.inria.fr/marelle/tralics/packages.html\#natbib}}}, normalization of such citations lead to a decrease of citation markers not being able to be matched to their reference item from 30\% to 5\% in a sample of 565,613 citations we tested.
 
 \subsubsection{Resulting approach}
 Our \LaTeX{} parsing solution consists of two steps. First, we flatten each arXiv submission's sources to a single \LaTeX{} file using \textit{latexpand}\footnote{See \url{https://ctan.org/pkg/latexpand}}\textsuperscript{,}\footnote{We also tested flatex (\url{https://ctan.org/pkg/flatex}) and flap (\url{https://github.com/fchauvel/flap}) but got the best results with \texttt{latexpand}.} and normalize \texttt{\textbackslash cite} commands to prevent parsing problems later on. In the second step, we then generate an XML representation of the \LaTeX{} document using \textit{Tralics}, replace formulas, figures, tables and non citation references with replacement tokens and extract the plain text. Furthermore, each reference item is assigned a unique identifier, its text is stored in a database and corresponding citation markers are placed in the plain text.
 
-\subsection{Reference resolution}
-A single publication's reference section follows a coherent style, many publications can follow many different bibliography styles though. Furthermore, the amount of information included in a reference item is variable and can range from the inclusion of unique identifiers like a DOI up to the omission of the cited work's title. This makes the automated identification of cited documents based on reference items a challenging and still unsolved task\cite{Nasar2018}.
+\subsection{Reference resolution}\label{sec:refresol}
+Resolving references to globally consistent identifiers (e.g. detecting that the references (1), (2), and (3) in Listing~\ref{lst:refitems} all reference the same document) is a challenging and still unsolved task~\cite{Nasar2018}. Given it is, by itself, the most distinctive part of a publication, we base our reference resolution on the title of the cited work and use other pieces of information (e.g., authors' names) only in secondary steps. In the following we will describe the challenges we faced, matching arXiv.org submissions' reference items against MAG paper records and how we approached the task.
 
-
-%\label{lst:refitems}
-% \ttfamily
-\begin{lstlisting}[caption={Examples of reference items.}]
+\begin{lstlisting}[caption={Examples of reference items.},label={lst:refitems}]
 (1) V. N. Senoguz and Q. Shafi, arXiv:hep-ph/0412102
 (2) V.N. Senoguz and Q. Shafi, Phys. Rev. D 71 (2005) 043514.
 (3) V. N. Şenoğuz and Q. Shafi, ``Reheat temperature in supersymmetric hybrid inflation models,'' Phys. Rev. D 71, 043514 (2005) [hep-ph/0412102].
@@ -109,28 +106,38 @@ A single publication's reference section follows a coherent style, many publicat
 (6) According to the numerous discussions with my colleagues <removed> and <removed> an experimental verification of our theoretical predictions is feasible.
 \end{lstlisting} % (*$B^{0}_{s} \to \eta^{\prime}\phi$*)
 
-Given it is, by itself, the most distinctive part of a publication, we base our reference resolution on the title of the cited work and use other pieces of information (e.g. authors' names) only in secondary steps. In the following we will describe the challenges we faced, matching arXiv.org submissions' reference items against MAG paper records and how we approached the task.
 \subsubsection{Challenges}
-The reference resolution process depends on three pieces. Both data records (arXiv side and MAG side) and the matching procedure. Considering the arXiv side, reference items can be problematic when they do not contain a title or contain formulas in the title. Citing by only authors, journal name, volume and article number was often observed by us in physics papers. Formulas can become problematic because of inconsistent ways of transcribing them as plain text. One also comes across reference items that are mere comments (and would have probably better been included as footnotes) or ones that refer to non publications. These cases are less problematic because they just fail to match. The most significant challenge on the MAG side is noise. This can either prevent matches or lead to false matches.
+Reference resolution can be challenging when reference items contain only minimal amounts of information, when formulas are used in titles or when they refer to non publications (e.g., Listing~\ref{lst:refitems} (4)-(6)). A further problem we encountered was noise in the MAG. Our mechanism matched 13,041 reference items like \texttt{K. Kondo, hep-th/0303251.} and \texttt{T. Heinzl, hep-th/9812190.} to a MAG paper with the title \textit{``hep-th.''} with one of the author's names being \textit{``He''} (paper ID \texttt{2811252340}).
 
-The matching procedure ideally has a certain tolerance for minor inconsistencies (abbreviations or typos for example) while remaining accurate. Another requirement, because of the amount of data, is again speed. As every citing document can have many reference items, the number of reference items to process can easily be an order of magnitude higher than the number of citing documents. This circumstance required us to implement the matching procedure in a parallelized fashion which brought its own set of technical challenges.
+\subsubsection{Resulting approach}
+Our reference resolution procedure can be broken down in two steps: title identification and matching. If possible, title identification is done by arXiv ID or DOI (where we retrieve the title from an arXiv metadata dump or via crossref.org\footnote{See \url{https://www.crossref.org/}}); otherwise we use Neural ParsCit~\cite{Animesh2018}. The identified title is matched against the normalized titles of all publications in the MAG. Resulting candidates are considered, if at least one of the author's names is present in the reference string. If multiple candidates remain, we judge by the citation count given in the MAG. The last step particularly helped mitigate rouge almost-duplicate entries in the MAG that often have few to no citations.
 
-\subsubsection{Detailed description}
-Our reference resolution approach can be broken down in two steps: title identification and matching. For identification of the title we first look for arXiv IDs and DOIs within the reference item. If such an ID is present we obtain the cited work's title from an arXiv metadata dump or via crossref.org\footnote{https://www.crossref.org/} respectively. Otherwise we use Neural ParsCit\cite{Animesh2018} to identify the portion of the item that makes up the title. Because there are cases where the identified range is just slightly off, we identify several title candidates, beginning with the one identified by Neural ParsCit and then varying the range by a few words. For the matching we then normalize the title the same way the MAG's normalized titles are generated. This means replacing everything not matching the regex word character class \texttt{\textbackslash w} with a space, normalizing modified alphabet characters like umlauts (ö$\rightarrow$o) and finally replacing multiple spaces with single ones. The normalized title is matched against all MAG papers. The resulting match candidates are then checked by author names. A candidate is considered good, if at least of of the author's normalized names in the MAG appears in the normalized reference item string. If, after this, still multiple candidates are left, we order them by the citation count given in the MAG and choose the first one. The last step particularly helps to mitigate rouge almost-duplicate entries in the MAG that often have few to no citations.
+\subsection{Result format}
+Listing \ref{lst:formatall} shows some example content from the data set. While the data set in and of itself consists of plain text files and a references database, citation contexts of successfully resolved references are straightforward to extract and use as input for a recommender. The bottom part of Listing~\ref{lst:formatall} shows an example of a 3 sentence context with \texttt{cited doc MAG ID},\hphantom{n}\texttt{MAG IDs of adjacent citations},\hphantom{n}\texttt{citing doc arXiv ID} and \texttt{text} in a CSV format.
 
-\section{Key figures}
-\subsection{Creation process}
-We used an arXiv.org source dump containing all submissions up until the end of 2017 (1,340,770 documents). 100,240 of these were only available in PDF format, leaving 1,240,530 sources. Our pipeline output 1,151,707 (92.8\%) plain text files, 1,018,976 (82.1\%) of which contained citation markers (for the missing 10\% the parsing of \texttt{\textbackslash cite} and \texttt{\textbackslash bibitem} commands most likely failed). The number of reference items identified is 35,053,329, for which 56,077,906 citation markers were placed within the plain text files. This first part of the process took 59 hours to run, unparallalized on a 8 core Intel Core i7-7700 3.60GHz machine with 60 GB of memory.
+\begin{lstlisting}[caption={Excerpts from (top to bottom) a plain text file, corresponding data base entries in the references DB, entries in the MAG and extracted citation context CSV.},label={lst:formatall}]
+It has over 79 million images stored at the resolution of FORMULA . Each image is labeled with one of the 75,062 non-abstract nouns in English, as listed in the Wordnet{{cite:9ad20b7d-87d1-47f5-aeed-10a1cf89a2e2}}{{cite: 298db7f5-9ebb-4e98-9ecf-0bdda28a42cb}} lexical database.
 
-Of the 35.053.329 reference items, we were able to match 14,046,239 (40.07\%). For 33.14\% of the reference items we could neither find an arXiv ID or DOI, nor was Neural ParsCit able to identify a title. For the remaining 26.79\% a title was identified but could not be matched with the MAG. Of the matched 14 million items' titles, 50.67\% were identified via Neural ParsCit. 29.67\% by DOI and 19.66\% by arXiv ID. Of the identified DOIs 26.8\% were found as is while 73.2\% were heuristically determined\footnote{This was possible because the DOIs of articles in journals of the American Physical Society follow predictable patterns.}. The matching process took 103 hours, run in 10 parallel processes on a 64 core Intel Xeon Gold 6130 @ 2.10GHz machine with 500 GB of memory.
+[uuid]         [in_doc]   [mag_id]    [reference_string]
+9ad20b7d-87d1  1412.3684  2081580037  George A. Miller (1995). WordNe
+-47f5-aeed-..                         t: A Lexical Database for Eng..
+298db7f5-9ebb  1412.3684  2038721957  Christiane Fellbaum (1998), ""W
+-4e98-9ecf-..                         ordNet: An Electronic Lexical..
 
-\subsubsection{Quality assessment of matches} To test the quality of our matches we take a random sample of 300 matched reference items and manually check if the correct record in the MAG was identified. For 300 items we note 3 errors, giving us an accuracy estimate of 96\% at the worst, as shown in table \ref{tbl:confvals}.
+[paperid]   [originaltitle]                           [publisher]  ...
+2038721957  WordNet : an electronic lexical database  MIT Press    ...
+2081580037  WordNet: a lexical database for English   ACM          ...
 
-\begin{table}
+2038721957|2081580037|1412.3684|It has over 79 million images stored at the resolution of FORMULA . Each image is labeled with one of the 75,062 non-abstract nouns in English, as listed in the Wordnet CIT MAINCIT lexical database. It has been noted that many of the labels are not reliable CIT .
+\end{lstlisting}
+
+\section{Evaluation of reference resolution}
+To evaluate the quality of our reference resolution results, we take a random sample of 300 matched reference items and manually check if the correct record in the MAG was identified by our method. Given the 300 items, we obtained 3 errors, giving us an accuracy estimate of 96\% at the worst, as shown in Table~\ref{tbl:confvals}.
+
+\begin{table}[h]
   \caption[Confidence intervals for a sample size of 300 with 297 positive results.]{Confidence intervals for a sample size of 300 with 297 positive results as given by Wilson score interval and Jeffreys interval \cite{Brown2001}.}
   \label{tbl:confvals}
   \centering
-  \begin{small}
 \begin{tabular}{c@{\hspace{0.1in}}c@{\hspace{0.1in}}c@{\hspace{0.1in}}c}
 \toprule
     Confidence level & Method & Lower limit & Upper limit \\\noalign{\smallskip}
@@ -141,8 +148,7 @@ Of the 35.053.329 reference items, we were able to match 14,046,239 (40.07\%). F
     0.95 & Wilson & 0.9710 & 0.9966 \\\noalign{\smallskip}
     \ & Jeffreys & 0.9736 & 0.9972 \\\noalign{\smallskip}
     \bottomrule
-\end{tabular} 
-\end{small}
+\end{tabular}
 \end{table}
 
 The three incorrectly identified references were as follows (MAG IDs in square brackets):
@@ -163,26 +169,36 @@ The three incorrectly identified references were as follows (MAG IDs in square b
         \item correct: [\texttt{1977410206}]\\\emph{''The putative liquid-liquid transition is a liquid-solid transition in atomistic models of water. II''} (David T. Limmer, David Chandler; 2011)
     \end{itemize}
 \end{enumerate}
+
+The full details of the evaluation can be found in Appendix~\ref{chap:matcheval}.
+
+\section{Statistics and key figures}
+
+\subsection{Creation process}
+We used an arXiv source dump containing all submissions up until the end of 2017 (1,340,770 documents). 100,240 of these were only available in PDF format, leaving 1,240,530 sources. Our pipeline output 1,151,707 (92.8\%) plain text files, 1,018,976 (82.1\%) of which contained citation markers. The number of reference items identified is 35,053,329, for which 56,077,906 citation markers were placed within the plain text files. This first part of the process took 59 hours to run, unparallalized on a 8 core Intel Core i7-7700 3.60GHz machine with 60 GB of memory.
+
+Of the 35,053,329 reference items, we were able to match 14,046,239 (40.07\%). For 33.14\% of the reference items we could neither find an arXiv ID or DOI, nor was Neural ParsCit able to identify a title. For the remaining 26.79\% a title was identified but could not be matched with the MAG. Of the matched 14 million items' titles, 50.67\% were identified via Neural ParsCit, 29.67\% by DOI and 19.66\% by arXiv ID. Of the identified DOIs 26.8\% were found as is while 73.2\% were heuristically determined\footnote{This was possible because the DOIs of articles in journals of the American Physical Society follow predictable patterns.}. The matching process took 103 hours, run in 10 parallel processes on a 64 core Intel Xeon Gold 6130 2.10GHz machine with 500 GB of memory.
+
 \subsection{Resulting data set}
-% change For the resulting data set we first report the number of cited papers, citing papers, references and citation contexts. Figure \ref{fig:fournumbers} illustrates these four types of numbers in a small toy example for ease of understanding. For our data set we ended up with 2,343,585 cited papers, 926.644 citing papers, 13,303,373 references and 24,558,560 citation contexts. Note that these numbers do not reflect the ones reported for the generation process exactly. This is because references can end up with no associated citation contexts due to parsing problems. Such cases are not counted for the data set.
+The resulting data set consists of \emph{2,343,585 cited papers, 926.644 citing papers, 13,303,373 references and 24,558,560 citation contexts}. Note that references with no citation markers (due to parsing errors) are not counted here.
 
-Figure \ref{fig:numcitdoc} shows the number of citing documents for all cited documents. There is one document with close to 10,000 citations, another 3 with more than 5,000 and another 10 with more than 3,000. 1,262,861 (53.89\%) of the documents have at least 2 citations, 547,036 (23.34\%) have at least 5. The mean number of citations is 5.68 (SD 26.82). Figure \ref{fig:numcontref} shows the number of citation context per reference. 8,722,795 (65.57\%) references have only one citation context, the maximum is 278, the mean 1.85 (SD 2.02). This means a cited document is described by on average $1.85 \times 5.68 \approx 10.5$ citation contexts.
+Figure \ref{fig:numcitdoc} shows the number of citing documents for all cited documents. There is one document with close to 10,000 citations, another three with more than 5,000 and another ten with more than 3,000. 1,262,861 (53.89\%) of the documents have at least two citations, 547,036 (23.34\%) have at least five. The mean number of citations is 5.68 (SD 26.82). Figure \ref{fig:numcontref} shows the number of citation context per reference. 8,722,795 (65.57\%) references have only one citation context, the maximum is 278, the mean 1.85 (SD 2.02). This means a cited document is described by on average $1.85 \times 5.68 \approx 10.5$ citation contexts.
 
-\begin{figure}[tb]
+\begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/dataset/citing_docs_per_cited_doc.pdf}
   \caption{Number of citing documents per cited document.}
   \label{fig:numcitdoc}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}
   \centering
   \includegraphics[width=\linewidth]{figures/dataset/citation_contexts_per_reference.pdf}
   \caption{Number of citation contexts per reference.}
   \label{fig:numcontref}
 \end{figure}
 
-Figure \ref{fig:sankey} shows the flow of citations by field of study for all 13.3 million matched reference items. Fields of study with very small numbers of references are combined to \emph{other} for legibility reasons. For the citing document's side, these are economics, electrical engineering and systems science, quantitative biology, quantitative finance and statistics. Combined on the cited document's side are chemistry, biology, engineering, materials science, economics, geology, psychology, medicine, business, geography, sociology, political science, philosophy, environmental science and art. In rare cases\footnote{Exact numbers for the whole MAG are as follows: physics 8,682,931; math 6,701,038; cs 14,225,297; cs+math 2,254; math+phys 1,737; phys+cs 287.} papers in the MAG (cited document's side) can have multiple main fields of study assigned. In such an event we assigned the first one we retrieved from the MAG.
+Figure \ref{fig:sankey} depicts the flow of citations by field of study for all 13.3 million matched reference items. Fields of study with very small numbers of references are combined to \emph{other} for legibility reasons. For the citing document's side, these are economics, electrical engineering and systems science, quantitative biology, quantitative finance and statistics. Combined on the cited document's side are chemistry, biology, engineering, materials science, economics, geology, psychology, medicine, business, geography, sociology, political science, philosophy, environmental science and art. To no surprise, publications in each field are cited the most from within the field itself. Notable is, however, that the incoming citations in mathematics are the most varied (physics and computer science combined make up 38\% of the citations).
 
 \begin{figure}
   \centering
@@ -191,4 +207,4 @@ Figure \ref{fig:sankey} shows the flow of citations by field of study for all 13
   \label{fig:sankey}
 \end{figure}
 
-To no surprise, publications in each field are cited the most from within the field itself. Notable is, however, that the incoming citations in mathematics are the most varied (physics and computer science combined make up 38\% of the citations).
+By generating our data set from \LaTeX{} sources we were able to ensure clean text output as well as accurate citation information and exact citation marker positions. In terms of size it is closer to CiteSeerX and PMC-OAS than the smaller data sets available. The fact that the data set spans multiple disciplines also allows for comparisons in citing behaviour. Because references are already resolved to MAG IDs, the data set is readily usable for recommendation tasks and allows for the use of rich metadata on both the citing and cited document side. Lastly, the embedding of citation markers in the full plain text of papers instead of pre-extraction enables users of the data set to choose and compare citation context lenghts and variations at will.

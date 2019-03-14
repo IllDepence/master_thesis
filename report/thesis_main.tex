@@ -75,6 +75,14 @@
 
     \bibliographystyle{ieeetr}
     \bibliography{bib/paper}
+
+    \newpage  % makes Appendices page start at A1 instead of A3
+    \pagenumbering{arabic}  % resets `page` counter to 1
+    \renewcommand*{\thepage}{A\arabic{page}}
+    \begin{appendices}
+    \input{chapters/9-appendices}
+    \end{appendices}
+
     \newpage
     \thispagestyle{empty}
     \mbox{}

@@ -1,0 +1,328 @@
+\chapter{Evaluation of reference resolution}\label{chap:matcheval}
+
+The sample of 300 matched reference items was acquired from the reference data base as shown in Listing~\ref{lst:matchevalsql}. The table \texttt{bibitem} holds most of the information on reference items. The table \texttt{bibitemmagidmap} contains per row the UUID of a reference item and the MAG ID it was matched to.
+
+\begin{lstlisting}[caption={SQL query used to acquire the sample},label={lst:matchevalsql}]
+select b.bibitem_string, m.mag_id
+    from bibitem as b
+        join
+         (select *
+            from bibitemmagidmap
+                order by random()
+                limit 300
+         ) as m
+        on b.uuid = m.uuid;
+\end{lstlisting}
+
+Table~\ref{tbl:matcheval} shows the full evaluation. Wrongly matched items are {\color{UniRed}highlited in red}. Note that there are seven cases where the reference item refers to more than one publication. In such cases our method only captures the first one and is cosequetually evaluated on the first one. Note further that in one case a reference item named a PhD thesis while the match was for the very same thesis published two years later. This was deemed a correct match. Lastly, there was one case where a book was cited with the date indicating its second edition while the matched record in the MAG has a date indiciating the books thrid edition. This also was deemed a correct match.
+\newpage
+
+\tiny
+\begin{longtable}{m{11.4cm}@{\hspace{0.2in}}c@{\hspace{0.2in}}c}
+\caption{Evaluation}\label{tbl:matcheval}\\
+\toprule
+    Reference item & MAG ID & \hphantom{ }\\
+\midrule
+    V. N. Senoguz and Q. Shafi, “Reheat temperature in supersymmetric hybrid inflation models,” Phys. Rev. D 71, 043514 (2005) [hep-ph/0412102]. & 2075392245 & \checkmark \\
+    Keiding, N. and Nielsen, J.E. (1975) Branching processes with varying and random geometric offspring distributions. J. Appl. Prob. 12, 135–141. & 2332540167 & \checkmark \\
+    H. Izeki and S. Nayatani, Combinatorial harmonic maps and discrete-group actions on Hadamard spaces, Geom. Dedicata 114 (2005), 147–188. & 2017711173 & \checkmark \\
+    T. Adamo, M. Bullimore, L. Mason and D. Skinner, “Scattering Amplitudes and Wilson Loops in Twistor Space,” J. Phys. A 44 (2011) 454008 [arXiv:1104.2890 [hep-th]]. & 2002091616 & \checkmark \\
+    Eren Mehmet Kıral and Matthew Young, The fifth moment of modular FORMULA -functions, arXiv preprint arXiv:1701.07507 (2017). & 2582886839 & \checkmark \\
+    T. Baumgarte and S. Shapiro, Numerical Relativity: Solving Einstein's Equations on the Computer. Cambridge University Press, 2010. http://books.google.co.uk/books?id=dxU1OEinvRUC. & 2566410267 & \checkmark \\
+    R.E. Renfordt, D. Schall, R. Bock, R. Brockmann, J.W. Harris, A. Sandoval, R. Stock, H. Ströbele, D. Bangert, W. Rauch, G. Odyniec, H.G. Pugh, and L.S. Schroeder, Phys. Rev. Lett. 53 (1984) 763. & 2001418221 & \checkmark \\
+    T. A. Porter, I. V. Moskalenko, A. W. Strong, E. Orlando and L. Bouchet, arXiv:0804.1774 [astro-ph]. & 2129746122 & \checkmark \\
+    Jon Kleinberg, Sendhil Mullainathan, and Manish Raghavan. Inherent trade-offs in the fair determination of risk scores. arXiv preprint arXiv:1609.05807, 2016. & 2522104760 & \checkmark \\
+    R.M. Fernandes, L. H. VanBebber, S. Bhattacharya, P. Chandra, V. Keppens, D. Mandrus, M.A. McGuire, B.C. Sales, A.S. Sefat, and J. Schmalian, Phys. Rev. Lett. 105, 157003 (2010) & 2143202785 & \checkmark \\
+    Fomin, S., Wei, P., Chugunov, V., 1995. Contact melting by a non-isothermal heating surface of arbitrary shape. Int. J. Heat Mass Transfer 38 (17), 3275–3284. & 2030656707 & \checkmark \\
+    R.F. Lebed, arXiv:1507.05867v1 [hep-ph]. & 1844403609 & \checkmark \\
+    R. Billinton, R. Karki, Y. Gao, D. Huang, P. Hu, and W. Wangdee, “Adequacy Assessment Considerations in Wind Integrated Power Systems,” IEEE Trans. Power Syst., vol. 27, no. 4, pp. 2297–2305, 2012. & 2024825567 & \checkmark \\
+    C. Morningstar and M. Peardon, Phys. Rev. D 56, 4043 (1997). & 2109255696 & \checkmark \\
+    I. B. S. Passi, M. Singh and M. K. Yadav, Automorphisms of abelian group extensions, J. Algebra 324 (2010), 820–830. & 2051680489 & \checkmark \\
+    S. Dimopoulos, P. W. Graham, J. M. Hogan, M. A. Kasevich, and S. Rajendran, Phys. Rev. D 78, 122002 (2008). & 2749889157 & \checkmark \\
+    P.Jaworski, Value at Risk in the presence of the power laws, Acta Physica Polonica B 36 (2005) 2575-2587. & 2566822874 & \checkmark \\
+    L. L. Chau, M. L. Ge and Y. S. Wu, Phys. Rev. D 25, 1086 (1982); L. L. Chau and Wu Yong-Shi, Phys. Rev. D 26, 3581 (1982); L. L. Chau, M. L. Ge, A. Sinha and Y. S. Wu, Phys. Lett. B 121, 391 (1983). & 2075757391 & \checkmark \\
+    E. C. Blomberg, M. a. Tanatar, R. M. Fernandes, I. I. Mazin, B. Shen, H.-H. Wen, M. D. Johannes, J. Schmalian, and R. Prozorov, Nat. Commun. 4, 1914 (2013). & 2081425933 & \checkmark \\
+    A. Arenas, A. Díaz-Guilera, C. J. Pérez-Vicente, Synchronization reveals topological scales in complex networks, Phys. Rev. Lett. 96 (11) (2006) 114102. & 2100240966 & \checkmark \\
+    M. Alizadeh, A. Greenberg, D. A. Maltz, J. Padhye, P. Patel, B. Prabhakar, S. Sengupta, and M. Sridharan. Data Center TCP (DCTCP). ACM SIGCOMM, 2010. & 2164740236 & \checkmark \\
+    M. Nishiyama, T. Okabe, Y. Sato, and I. Sato. Sensation-based photo cropping. In ACM Multimedia, pages 669–672, 2009. & 2013339738 & \checkmark \\
+    L. Landau and E. Lifchitz, Classical theory of fields, Butterworth-Heinemann, Oxford, 1994, p. 87. & 119088996 & \checkmark \\
+    Peregrine, D., 2003. Water-wave impact on walls. Annu. Rev. Fluid Mech. 35, 23--43. & 2118259172 & \checkmark \\
+    M. S. Khalil, S. Gladchenko, M. J. A. Stoutimore, F. C. Wellstood, A. L. Burin, and K. D. Osborn, Phys. Rev. B 90, 100201 (2014). & 1998393159 & \checkmark \\
+    F. Gabbiani, E. Gabrielli, A. Masiero and L. Silvestrini, Nucl. Phys. B 477, 321 (1996) [arXiv:hep-ph/9604387]. & 2133327165 & \checkmark \\
+    Abramowitz, M. and Stegun, I. A., Handbook of Mathematical Functions, (Dover, New York, 1965). & 2120062331 & \checkmark \\
+    N. V. Chawla, K. W. Bowyer, L. O. Hall, and W. P. Kegelmeyer. Smote: synthetic minority over-sampling technique. Journal of artificial intelligence research, 16(1):321–357, 2002. & 2148143831 & \checkmark \\
+    B. H. Lee, W. Lee, R. MacKenzie, M. B. Paranjape, U. A. Yajnik and D. h. Yeom, Phys. Rev. D 88, 085031 (2013). & 2074315988 & \checkmark \\
+    D. Nishiguchi, K. H. Nagai, H. Chaté, and M. Sano, Long-range nematic order and anomalous fluctuations in suspensions of swimming filamentous bacteria. arXiv preprint arXiv:1604.04247 (2016). & 2336881770 & \checkmark \\
+    Huelga, S. F. et al., Improvement of frequency standards with quantum entanglement. Phys. Rev. Lett. 79, 3865 (1997). & 2015876000 & \checkmark \\
+    M. Henneaux and C. Teitelboim, Asymptotically anti-de Sitter spaces, Comm. Math. Phys. 98, 391 (1985). & 2134856726 & \checkmark \\
+    D. Boucher, W. Geiselmann, and F. Ulmer, Skew-cyclic codes, Applicable Algebra in Engineering, Communication and computing, (18) (4), (2007), 379-389. & 2151359594 & \checkmark \\
+    R. C. Brower, H. Nastase, H. J. Schnitzer and C.-I. Tan, arXiv:0801.3891 [hep-th]. & 1995185450 & \checkmark \\
+    S. Sarkar, Big bang nucleosynthesis and physics beyond the standard model, Rept. Prog. Phys. 59 (1996) 1493–1610, [hep-ph/9602260]. & 2013442457 & \checkmark \\
+    M. Iskin and J. K. Freericks, Phys. Rev. A 80, 053623 (2009). & 2076979008 & \checkmark \\
+    M. L. Skoge \& T. W. Baumgarte, Phys. Rev. D 66 107501 (2002). & 2016175541 & \checkmark \\
+    A. Lozano, A. M. Tulino, and S. Verdú, “Optimum power allocation for parallel Gaussian channels with arbitrary input distributions,” IEEE Trans. Inf. Theory, vol. 52, no. 7, pp. 3033–3051, Jul. 2006. & 2097695636 & \checkmark \\
+    F. Paci, A. Gruppuso, F. Finelli, A. De Rosa, N. Mandolesi, and P. Natoli, MNRAS 434, 3071 (Oct. 2013), arXiv:1301.5195 & 1976439668 & \checkmark \\
+    Samuel Brody and Noemie Elhadad. 2010. An unsupervised aspect-sentiment model for online reviews. In Human Language Technologies: The 2010 Annual Conference of the North American Chapter of the Association for Computational Linguistics, pages 804–812. Association for Computational Linguistics. & 2113786470 & \checkmark \\
+    R. Islam, C. Senko, W. C. Campbell, S. Korenblit, J. Smith, A. Lee, E. E. Edwards, C.-C. J. Wang, J. K. Freericks, and C. Monroe, Emergence and frustration of magnetism with variable-range interactions in a quantum simulator, Science 340, 583 (2013). & 1606923443 & \checkmark \\
+    I. Ermolli, K. Matthes, T. Dudok de Wit, N.A. Krivova, K. Tourpali, M. Weber, Y.C. Unruh, L. Gray, U. Langematz, P. Pilewskie, E. Rozanov, W. Schmutz, A. Shapiro, S.K. Solanki, T.N. Woods, Recent variability of the solar spectral irradiance and its impact on climate modelling. Atmos. Chem. Phys. 13, 3945–3977 (2013). doi:10.5194/acp-13-3945-2013 & 2158950390 & \checkmark \\
+    Tauchen G. and Zhou, H. (2011), “Realized Jumps on Financial Markets and Predicting Credit Spreads,” Journal of Econometrics, 160, 102–118 & 2113380547 & \checkmark \\
+    S. Yoon, W. Ye, J. Heidemann, B. Littlefield, and C. Shahabi. Swats: Wireless sensor networks for steamflood and waterflood pipeline monitoring. Network, IEEE, 25(1):50–56, January 2011. & 2054094122 & \checkmark \\
+    J.Y. Vaishnav and C.W. Clark, Phys. Rev. Lett. 100, 153002 (2008). & 2752272568 & \checkmark \\
+    L. J. Hall, T. Moroi and H. Murayama, Phys. Lett. B 424, 305 (1998). [arXiv:hep-ph/9712515]. & 2078593377 & \checkmark \\
+    Movassaghi, Samaneh and Abolhasan, Mehran and Smith, David, Smart spectrum allocation for interference mitigation in Wireless Body Area Networks, IEEE International Conference on Communications (ICC), pages 5688-5693, 2014 & 2083602816 & \checkmark \\
+    M. Apollonio et al. [CHOOZ Collaboration], Phys. Lett. B 466, 415 (1999) [arXiv:hep-ex/9907037]. & 1571701324 & \checkmark \\
+    G. 't Hooft, “Magnetic Monopoles in Unified Gauge Theories,” Nucl.Phys. B79 (1974) 276–284. & 2027710569 & \checkmark \\
+    D. C. Cabra, M. D. Grynberg, P. C. W. Holdsworth, A. Honecker, P. Pujol, J. Richter, D. Schmalfß, and J. Schulenburg, Phys. Rev. B 71, 144420 (2005). & 2032654705 & \checkmark \\
+    V.A. Dolgushev, Erratum to: ""A Proof of Tsygan's Formality Conjecture for an Arbitrary Smooth Manifold"", arXiv:math/0703113. & 132267651 & \checkmark \\
+    {\color{UniRed}Eddy, J.A.: 1983, The maunder minimum - a reappraisal. Solar Phys. 89, 195. ADS.} & {\color{UniRed}2024069573} & {\color{UniRed}$\times$} \\
+    Bouliotis, G. and Billingham, L. (2011) Crossing survival curves: alternatives to the log-rank test. Trials, 12, 1. & 2136058878 & \checkmark \\
+    I. Peschel and V. Eisler, Reduced density matrices and entanglement entropy in free lattice models, J. Phys. A 42 504003 (2009). & 2141130841 & \checkmark \\
+    C. Gundlach, Critical phenomena in gravitational collapse, submitted to Adv. Theor. Math. Phys., preprint gr-qc/9712084. & 2103342599 & \checkmark \\
+    A. Blumen, G. Zumofen, and J. Klafter, Target annihilation by random walkers, Phys. Rev. B 30, 5379 (1984). & 2060897997 & \checkmark \\
+    M. Alidoust, K. Halterman, and J. Linder, Phys. Rev. B 89, 054508 (2014). & 2012436162 & \checkmark \\
+    G. Ciavola, L. Celona, S. Gammino, M. Presti, L. Ando, S. Passarello, X.Zh. Zhang, F. Consoli, F. Chines, C. Percolla, V. Calzona and M. Winkler, A version of the Trasco Intense Proton Source optimized for accelerator driven system purposes. Rev. Sci. Instrum. 75 (2004) 1453–1456,. & 2075428341 & \checkmark \\
+    D.Litim Phys. Rev. Lett. 92 (2004) 201301, hep-th/0312114 & 2000661521 & \checkmark \\
+    P.K. Kovtun, D.T. Son, and A.O. Starinets, Phys. Rev. Lett. 94, 111601 (2005). & 2097909025 & \checkmark \\
+    Jones, J. A. et al. Magnetic Field Sensing Beyond the Standard Quantum Limit Using 10-Spin NOON States. Science 324, 1166–1168 (2009). & 2022149792 & \checkmark \\
+    G.E.Brown and M.Rho, Phys.Rev.Lett. 66, (1991) 2720; & 1971702030 & \checkmark \\
+    K. Banaszek and K. Wódkiewicz, “Operational theory of homodyne detection,” Phys. Rev. A 55, 3117 (1997). & 1985850877 & \checkmark \\
+    Barbara Di Eugenio, Pamela W. Jordan, and Liina Pylkkänen. 1998. The COCONUT project: Dialogue annotation manual. Technical Report 98-1, University of Pittsburgh, Intelligent Systems Program. [www.isp.pitt.edu/intgen/coconut.html]. & 116082719 & \checkmark \\
+    Beirlant, J., Y. Goegebeur, J. Segers, and J. Teugels (2004). Statistics of extremes: Theory and Applications. Wiley Series in Probability and Statistics. Chichester: John Wiley \& Sons Ltd. & 1598342322 & \checkmark \\
+    Guillaumin, M., Mensink, T., Verbeek, J.J., Schmid, C.: Tagprop: Discriminative metric learning in nearest neighbor models for image auto-annotation. In: IEEE 12th International Conference on Computer Vision, ICCV 2009, Kyoto, Japan, September 27 - October 4, 2009. (2009) 309–316 & 2536305071 & \checkmark \\
+    T. Faulkner et al., “Gravitation from entanglement in holographic CFTs,” (2013), arXiv:1312.7856v1. & 2102970467 & \checkmark \\
+    René Thom, Quelques propriétés globales des variétés différentiables, Comment. Math. Helv. 28 (1954), 17–86. & 1989427081 & \checkmark \\
+    A. Schikorra. Regularity of n/2-harmonic maps into spheres. PhD-Thesis, arXiv:1003.0646v1, 2010. & 2029831933 & \checkmark \\
+    M. J. Simpson, J. A. Sharp, and R. E. Baker. Survival probability for a diffusive process on a growing domain. Phys. Rev. E 91, 042701 (2015). & 1988447698 & \checkmark \\
+    D. Bergamini, N. Descoubes, C. Joubert \& R. Mateescu (2005): Bisimulator: A Modular Tool for On-the-Fly Equivalence Checking. In: Proc. of TACAS'05, Lecture Notes in Computer Science 3440, Springer-Verlag, pp. 581–585. & 1503429725 & \checkmark \\
+    J. A. Baldwin, O. Plamenevskaya, Khovanov homology, open books, and tight contact structures. math.GT/0808.2336 & 2054234174 & \checkmark \\
+    Eisenberger, P., et al., 1972, Phys. Rev. B 6, 3671. & 1980522055 & \checkmark \\
+    O. Viehmann, C. Eltschka, and J. Siewert, Appl. Phys. B 106, 533 (2012). & 2076107066 & \checkmark \\
+    A. Rényi. Representations for real numbers and their ergodic properties. Acta Math. Acad. Sci. Hungar 8 (1957), 477–493. & 2089164015 & \checkmark \\
+    D. Chicharro and R. G. Andrzejak, Phys. Rev. E 80, 026217 (2009). & 2078979753 & \checkmark \\
+    Kenward, M. G., Jones, B., 1992. Alternative approaches to the analysis of binary and categorical repeated measurements. Journal of Biopharmaceutical Statistics 2 (2), 137–170. & 1967449535 & \checkmark \\
+    J. Nešetřil and V. Rödl. The partite construction and Ramsey set systems. Discrete Mathematics, 75(1-3):327–334, 1989. & 2062861878 & \checkmark \\
+    E. Seiler, Gauge Theories as a Problem of Constructive Quantum Field Theory and Statistical Mechanics, Lecture Notes in Physics Vol. 159 (Springer, Berlin, 1982). & 1608098855 & \checkmark \\
+    M. Gaye, Y. Chitour, and P. Mason. Properties of barabanov norms and extremal trajectories associated with continuous-time linear switched systems. In Proceedings of the 52nd IEEE Conference on Decision and Control, pages 716–721, Florence, Italie, 2013. & 2090302562 & \checkmark \\
+    Kováčik R. and Ederer C., Phys. Rev. B 80 (2009) 140411; Kim M. et al., Phys. Rev. B 81 (2010) 100409. & 1758648405 & \checkmark \\
+    Morandi, G., Ferrario, C., Lo Vecchio, G., Marmo, G. and Rubano, C. (1990). The inverse problem in the calculus of variations and the geometry of the tangent bundle, Phys. Rep. 188, 147. & 2026992500 & \checkmark \\
+    G. Da Prato and J. Zabczyk, Ergodicity for infinite dimensional systems, London Mathematical Society Lecture Note Series, 229, Cambridge University Press, 1996. & 1530927473 & \checkmark \\
+    R. Trotta, Bayes in the sky: Bayesian inference and model selection in cosmology, Contemp. Phys. 49 (2008) 71–104, [arXiv:0803.4089]. & 2021748112 & \checkmark \\
+    Christof, J., M. Gebhardt, A. E.-M. Clemen, J. Jaud, , and M. Rief, 2006. Myosin-V is a mechanical ratchet. Proc. Natl. Acad. Sci. U.S.A. 103:8680–8685. & 2095633207 & \checkmark \\
+    G.M. Molchan: Burgers equation with self-similar Gaussian initial data: tail probabilities. J. of Stat. Phys. 88 (1997) 1139–1150. & 2000957076 & \checkmark \\
+    Arata, I., Y. Ohno, F. Matsukura, and H. Ohno, 2001, “Temperature dependence of electroluminescence and I-V characteristics of ferromagnetic/non-magnetic semiconductor pn junctions,” Physica E 10, 288–291. & 1987870048 & \checkmark \\
+    I. Zlatev, L. Wang and P.J. Steinhardt, Phys. Rev. Lett. 82, 896 (1999); Phys. Rev. D 59, 123504 (1999). & 2032901690 & \checkmark \\
+    A. Valentini, in: Bohmian Mechanics and Quantum Theory: an Appraisal, eds. J. T. Cushing et al. (Kluwer, Dordrecht, 1996). & 207861407 & \checkmark \\
+    R. Killip, S. Kwon, S. Shao, and M. Visan. On the mass-critical generalized KdV equation. Discrete Contin. Dyn. Syst., 32(1):191–221, 2012. & 1975802612 & \checkmark \\
+    Danilo Jimenez Rezende and Shakir Mohamed. Variational inference with normalizing flows. arXiv preprint arXiv:1505.05770, 2015. & 299440670 & \checkmark \\
+    D. Rossi and G. Rossini, “On sizing CCN content stores by exploiting topological information,” in Proc. IEEE NOMEN, 2012. & 1985355206 & \checkmark \\
+    F. Bezrukov, A. Magnin, M. Shaposhnikov and S. Sibiryakov, JHEP 1101 (2011) 016 [arXiv:1008.5157]. & 2064410211 & \checkmark \\
+    M. Horodecki, P. Horodecki, and R. Horodecki. Separability of mixed quantum states: linear contractions approach. preprint archiv quant-ph/0206008. & 1668368460 & \checkmark \\
+    S. White, Phys. Rev. B 48, 10345 (1993). & 2016407890 & \checkmark \\
+    A. Brandt et al., [UA8 Collaboration], Evidence for a Super-Hard Pomeron Structure, submitted to Phys. Lett. 1992. & 1983143801 & \checkmark \\
+    Fan, T.-H. \& Berger, J. O. (2000). Robust Bayesian displays for standard inferences concerning a normal mean. Computational Statistics \& Data Analysis 33 381–399. & 2030654698 & \checkmark \\
+    S. Ryu, J. E. Moore, and A. W. W. Ludwig, Phys. Rev. B 85, 045104 (2012), arXiv:1010.0936. & 2083123179 & \checkmark \\
+    P. Balaz, V. K. Dugaev, and J. Barnaś Phys. Rev. B 85, 024416 (2012) & 2322343165 & \checkmark \\
+    T. Giamarchi and A. Tsvelik, Phys. Rev. B 59, 11398 (1999). & 2069018114 & \checkmark \\
+    M. Molloy and B. Reed. The size of the giant component of a random graph with a given degree sequence. Combin. Probab. Comput., 7(3):295–305, (1998). & 2129918926 & \checkmark \\
+    D. W. Sivers, Phys. Rev. D 41, 83 (1990); Phys. Rev. D 43, 261 (1991). & 2174029682 & \checkmark \\
+    J. Boronat and J. Casulleras, Phys. Rev. B 49, 8920 (1994). & 1982967539 & \checkmark \\
+    J. N. Bandyopadhyay and A. Lakshminarayan, Phys. Rev. E 69, 016201 (2004). & 1977839735 & \checkmark \\
+    Priest ER, Forbes TG (2002) The magnetic nature of solar flares. 10:313–377, DOI 10.1007/s001590100013 & 2014209718 & \checkmark \\
+    W. Woerndl, C. Schueller, and R. Wojtech. A hybrid recommender system for context-aware recommendations of mobile applications. In Proceedings of ICDEW '07, pages 871–878, Washington, DC, USA, 2007. IEEE Computer Society. & 2112166834 & \checkmark \\
+    {[auto:STB|2013/06/05|13:45:01]} Worsley, K. J.K. J., Liao, C. H.C. H., Aston, J.J., Petre, V.V., Duncan, G. H.G. H., Morales, F.F. Evans, A. C.A. C. (2002). A general statistical analysis for fMRI data. NeuroImage 15 1–15. imsref & 1975938737 & \checkmark \\
+    L.H. Ford and N.F. Svaiter, Phys. Rev. D 58, 065007 (1998), quant-ph/9804056. & 1963985219 & \checkmark \\
+    H. Häffner, S. Gulde, M. Riebe, G. Lancaster, C. Becher, J. Eschner, F. Schmidt-Kaler, R. Blatt, Precision measurement and compensation of optical Stark shifts for an ion-trap quantum processor, Phys. Rev. Lett. 90 (2003) 143602. & 2129198554 & \checkmark \\
+    I. Jeon, K. Lee, J.-H. Park, and Y. Suh, Stringy Unification of Type IIA and IIB Supergravities under N=2 D=10 Supersymmetric Double Field Theory, Phys.Lett. B723 (2013) 245–250, [arXiv:1210.5078]. & 1967998606 & \checkmark \\
+    Z.A. Anastassi and T.E. Simos: A Trigonometrically-Fitted Runge-Kutta Method for the Numerical Solution of Orbital Problems, New Astronomy, 10, 301-309 (2005) & 2024993485 & \checkmark \\
+    Fletcher, A. 2010, in Astronomical Society of the Pacific Conference Series, Vol. 438, The Dynamic Interstellar Medium: A Celebration of the Canadian Galactic Plane Survey, ed. R. Kothes, T. L. Landecker, \& A. G. Willis, 197 & 1671679100 & \checkmark \\
+    V. A. Belinsky, I. M. Khalatnikov, and E. M. Lifshitz. Oscillatory approach to a singular point in the relativistic cosmology. Adv. Phys., 19:525–573, 1970. & 2048737175 & \checkmark \\
+    Allen, D. A. et al., 1993. IRIS – an Infrared Imager and Spectrometer for the Anglo-Australian Telescope. Proceedings of the Astronomical Society of Australia 10, 298. & 91162570 & \checkmark \\
+    D. Cooper, Automorphisms of free groups have finitely generated fixed point sets. J. Algebra, 111 (1987), no. 2 453–456 & 2076181847 & \checkmark \\
+    J.-L. Lehners and P. J. Steinhardt, “Intuitive understanding of non-gaussianity in ekpyrotic and cyclic models,” Phys.Rev. D78 (2008) 023506, arXiv:0804.1293 [hep-th]. & 2592352904 & \checkmark \\
+    Z.-B. Wu, Global transposable characteristics in the complete DNA sequence of the yeast. Physica A 389 (2010) 5698. & 1548592618 & \checkmark \\
+    E. Nowak, F. Jurie, and B. Triggs. Sampling strategies for bag-of-features image classification. In Computer Vision–ECCV 2006, pages 490–503. Springer, 2006. & 2171896402 & \checkmark \\
+    Benjamin C. Pierce. Types and programming languages: The next generation. LICS'03, 2003. & 1951034176 & \checkmark \\
+    G. Tardos and G. Tóth. Multiple coverings of the plane with triangles. Discrete \& Computational Geometry, 38(2):443–450, 2007. & 2043718124 & \checkmark \\
+    T. Rivière, Analysis aspects of Willmore surfaces, Invent. Math., Vol. 174, (2008), 1–45. & 1606077524 & \checkmark \\
+    H. Mabuchi, Phys. Rev. A 85, 015806 (2012). & 1620088716 & \checkmark \\
+    I. Schienbein, J. Y. Yu, K. Kovarik, C. Keppel, J. G. Morfin, F. Olness and J. F. Owens, Phys. Rev. D 80, 094004 (2009) & 2050053974 & \checkmark \\
+    D.Q. Goldin, S.A. Smolka, P.C. Attie, E.L. Sonderegger, Turing machines, transition systems and interaction, manuscript, 2003. & 2048671682 & \checkmark \\
+    P. Collet and J.P. Eckmann, Iterated Maps on the Interval as Dynamical Systems, (Birkhäuser, Basel, 1980). & 1573241742 & \checkmark \\
+    M. F. Maghrebi, R. L. Jaffe, and M. Kardar, Phys. Rev. Lett. 108, 230403 (2012). & 2025571896 & \checkmark \\
+    A. Minami and A. Onuki, Phys. Rev. B 70, 184114 (2004); Acta Mater. 55, 2375 (2007). & 1514590689 & \checkmark \\
+    Kfir Blum, Anson Hook, and Kohta Murase, “High energy neutrino telescopes as a probe of the neutrino mass mechanism,” (2014), arXiv:1408.3799 [hep-ph] . & 1628049864 & \checkmark \\
+    O. E. Buryak, Phys. Rev. D 53 (1996) 1763 [gr-qc/9502032]. & 2069968655 & \checkmark \\
+    Kolb, E. W.; Turner, M. S. The Early Universe, AddisonWesley Publishing Company: California, USA, 1990. & 2595419339 & \checkmark \\
+    G. Binasch, P. Grünberg, F. Saurenbach, and W. Zinn, Phys. Rev. B 39, 4828 (1989). & 2043072234 & \checkmark \\
+    JC Baygents and DA Saville. The circulation produced in a drop by an electric field: a high field strength electrokinetic model. In AIP Conference Proceedings, volume 197, pages 7–17. AIP, 1990. & 1612371284 & \checkmark \\
+    E. Altman and R. Vosk, Annual Review of Condensed Matter Physics 6, 383 (2015). & 2166587989 & \checkmark \\
+    J.-M. Souriau, Structure des systèmes dynamiques (Dunod, 1970). & 108534386 & \checkmark \\
+    F. Horn. Explicit Muller games are PTIME. In Proc. 28th Conference on Foundations of Software Technology and Theoretical Computer Science (FSTTCS'08), LIPIcs 2, p. 235–243. Leibniz-Zentrum für Informatik, 2008. & 2240543079 & \checkmark \\
+    A. G. Izergin and V. E. Korepin, “The Inverse Scattering Method Approach To The Quantum Shabat-Mikhailov Model,” Commun. Math. Phys. 79 (1981) 303. & 1977168974 & \checkmark \\
+    Balzano, V. A. 1983 Star-burst Galactic Nuclei. ApJ 268, 602–627. & 2059760395 & \checkmark \\
+    M. Ishak, A. Upadhye, D. N. Spergel, Phys. Rev. D 74, 043513 (2006) [arXiv:astro-ph/0507184]. & 2044422425 & \checkmark \\
+    M. Lynker and R. Schimmrigk, Landau–Ginzburg theories as orbifolds, Phys. Lett. B249 (1990) 237 & 2030907161 & \checkmark \\
+    S. T. Petcov, T. Shindou and Y. Takanishi, Nucl. Phys. B 738, 219 (2006) [arXiv:hep-ph/0508243]. & 2007551251 & \checkmark \\
+    J. E. Lye, L. Fallani, C. Fort, V. Guarrera, M. Modugno, D. S. Wiersma, and M. Inguscio, Phys. Rev. A 75, 061603(R) (2007). & 2015993116 & \checkmark \\
+    J. P. Perdew, K. Burke, and M. Ernzerhof, Phys. Rev. Lett. 77, 3865 (1996). & 1981368803 & \checkmark \\
+    J. F. Clauser, M. A. Horne, A. Shimony, and R. A. Holt, Physical Review Letters 23, 880 (1969), URL http://doi.org/10.1103/PhysRevLett.23.880. & 2028815089 & \checkmark \\
+    M. Horodecki and P. Horodecki, Phys. Rev. A 59, 4206 (1999). & 2000407553 & \checkmark \\
+    B. Mazur, Rational isogenies of prime degree. Invent. Math. 44 (1978), 129–162. & 2011844852 & \checkmark \\
+    Arnold, B.C, Balakrishnan, N., Nagaraja H.N., (1992), A First course in order statistics, Wiley and sons. & 2318245334 & \checkmark \\
+    K. Bamba and S. D. Odintsov, JCAP 0804, 024 (2008) [arXiv:0801.0954 [astro-ph]]. & 2065428968 & \checkmark \\
+    Mujherjee N. P. and Bhattacharya, P., Fuzzy Groups Some Group-Theoretic Analogs, Information Science39,247-268 (1986). & 1999360086 & \checkmark \\
+    Karen Suzanne Oberhauser, M. J. S. The monarch butterfly: biology and conservation. Cornell university press, 2004. & 570971783 & \checkmark \\
+    A. Belloni, V. Chernozhukov, and C. Hansen. Inference for high-dimensional sparse econometric models. Advances in Economics and Econometrics: The 2010 World Congress of the Econometric Society, 3:245–295, 2013. & 1720842782 & \checkmark \\
+    M. I. Aroyo, A. Kirov, C. Capillas, J. M. Perez-Mato, and H. Wondratschek, Acta Cryst. A 62, 115 (2006b). & 1996820002 & \checkmark \\
+    V. Del Duca and C. R. Schmidt, Dijet Production At Large Rapidity Intervals, 4919944510 [9311290]. & 2003427747 & \checkmark \\
+    G. F. Giudice and A. Strumia, Nucl. Phys. B 858 (2012) 63 [arXiv:1108.6077 [hep-ph]]. & 2015208992 & \checkmark \\
+    C. D. Herrera, J. Kannala, P. Sturm, and J. Heikkila. A learned joint depth and intensity prior using markov random fields. In 3DTV-Conference, 2013 International Conference on, pages 17–24. IEEE, 2013. & 1994295411 & \checkmark \\
+    {\color{UniRed}J. Zhu, S. Rosset, T. Hastie, and R. Tibshirani. 1-norm support vector machines. In Advances in Neural Information Processing Systems (NIPS), volume 16, pages 49–56, 2004.} & {\color{UniRed}2249237221} & {\color{UniRed}$\times$} \\
+    M. Beynon, B. Curry, and P. Morgan, ""The Dempster-Shafer theory of evidence:an alternative approach to multicriteria decision modelling"", Omega, vol. 28, no. 1, pp. 37–50, 2000. & 2121042048 & \checkmark \\
+    S. Flach, M. V. Ivanchenko, and O. I. Kanakov, Phys. Rev. Lett. 95, 064102/1-4 (2005). & 2004622729 & \checkmark \\
+    P. Carrasco, A. M. Cegarra, and A. R. Garzon. Nerves and classifying spaces for bicategories, 2010. & 2108966476 & \checkmark \\
+    R. Sandhu, S. Dambreville, A. Tannenbaum, Particle Filtering for Registration of 2D and 3D Point Sets with Stochastic Dynamics. Pro. of IEEE Conference on Computer Vision and Pattern Recognition, 2008, pp. 1-8. & 2146847221 & \checkmark \\
+    S. Ji, Y. Xue and L. Carin, “Bayesian compressive sensing,” IEEE Trans. Signal Process., vol. 56, no. 6, pp. 2346–2356, 2008. & 2071284784 & \checkmark \\
+    Jun Li. A degeneration formula of GW-invariants. J. Differential Geom., 60(2):199–293, 2002. & 1484479264 & \checkmark \\
+    J. Milnor, Dynamics in One Complex Variable, Vieweg, Göttingen, 2000. & 1603977374 & \checkmark \\
+    Marcheselli, M., Baccini, A. and Barabesi, L.  (2008). Parameter estimation for the discrete stable family. Communications in Statistics - Theory and Methods 37 815–830. & 2035009392 & \checkmark \\
+    A. Chantasri, J. Dressel, and A. N. Jordan, Action principle for continuous quantum measurement, Phys. Rev. A 88, 042110 (2013). & 2025224750 & \checkmark \\
+    A. Strominger, Black hole entropy from near horizon microstates, JHEP 9802 (1998) 009, [hep-th/9712251]. & 2058588165 & \checkmark \\
+    C. I. Lazaroiu, “On the structure of open-closed topological field theory in two dimensions,” Nucl. Phys. B 603, 497 (2001) arXiv:hep-th/0010269. & 2033747261 & \checkmark \\
+    Liao, L. Z., Qi, H., \& Qi, L. (2004). Neurodynamical optimization. Journal of Global Optimization, 28(2), 175-195. & 2340554656 & \checkmark \\
+    J. L. Lions, Quelques méthodes de résolution des problèmes aux limites non linéaires, Dunod, Paris, 1969. & 1519031678 & \checkmark \\
+    M. Scully and W. E. Lamb, Jr. Quantum theory of an optical maser. Phys. Rev. Lett., 16(19):853–855, 1966. & 2015518403 & \checkmark \\
+    G. Lanckriet, M. Deng, N. Cristianini, M. Jordan, W. Noble, Kernel-based data fusion and its application to protein function prediction in yeast, in: Proceedings of the Pacific Symposium on Biocomputing, Vol. 9, 2004, pp. 300–311. & 2013502943 & \checkmark \\
+    Aharonson, O., Hayes, A. G., Lunine, J. I., Lorenz, R. D., Allison, M. D., Elachi, C., Dec. 2009. An asymmetric distribution of lakes on Titan as a possible consequence of orbital forcing. Nature Geoscience 2, 851–854. & 2083408367 & \checkmark \\
+    K. Ito and S. S. Ravindran. A reduced-order method for simulation and control of fluid flows. Journal of Computational Physics, 143(2):403–425, 1998. & 2045627558 & \checkmark \\
+    P. You, Y. Sun, J. Pang, S. Low, and M. Chen, “Battery swapping assignment for electric vehicles: A bipartite matching approach,” SIGMETRICS Performance Evaluation Review, vol. 45, no. 2, pp. 85–87, 2017. & 2762188191 & \checkmark \\
+    Panjer H. (1981). Recursive evaluation of a family of compound distributions. ASTIN Bulletin 12, 22-26. & 2156812602 & \checkmark \\
+    M. Ibrahim, S. Muralidharan, Z. Deng, A. Vahdat, and G. Mori. A hierarchical deep temporal model for group activity recognition. In Computer Vision and Pattern Recognition, 2016. & 2259801182 & \checkmark \\
+    B. G. Saar, C. W. Freudiger, J. Reichman, C. M. Stanley, G. R. Holtom, and X. S. Xie, “Video-rate molecular imaging in vivo with stimulated raman scattering,” Science 330, 1368–1370 (2010). & 2096138335 & \checkmark \\
+    J. L. Feng, C. F. Kolda and N. Polonsky, Nucl. Phys. B 546, 3 (1999) [arXiv:hep-ph/9810500]; J. Bagger, J. L. Feng and N. Polonsky, Nucl. Phys. B 563, 3 (1999) [arXiv:hep-ph/9905292]; J. A. Bagger, J. L. Feng, N. Polonsky and R. J. Zhang, Phys. Lett. B 473, 264 (2000) [arXiv:hep-ph/9911255]; H. Baer, C. Balazs, M. Brhlik, P. Mercadante, X. Tata and Y. Wang, Phys. Rev. D 64, 015002 (2001) [arXiv:hep-ph/0102156]. & 1997759872 & \checkmark \\
+    R. Fei, V. Tran, and L. Yang, Phys. Rev. B 91, 195319 (2015). & 1590844150 & \checkmark \\
+    G. Thalhammer et al., Phys. Rev. Lett. 100, 210402 (2008) & 1601643666 & \checkmark \\
+    D. S. Petrov, G. V. Shlyapnikov, and J. T. M. Walraven, Phys. Rev. Lett. 87, 050404 (2001). & 2072707005 & \checkmark \\
+    Z. Bern, L. J. Dixon, D. C. Dunbar and D. A. Kosower, “Fusing gauge theory tree amplitudes into loop amplitudes,” Nucl. Phys. B 435, 59 (1995) [hep-ph/9409265]. & 2021404114 & \checkmark \\
+    D. Telnov and S.-I. Chu, Phys. Rev. A 79, 041401(R) (2009). & 2046622440 & \checkmark \\
+    S. Gupta, Phys. Rev. D 64 (2001) 034507 [hep-lat/0010011]. & 2616732687 & \checkmark \\
+    T. Alazard, J.M. Delort, Global solutions and asymptotic behavior for two dimensional gravity water waves, Preprint, 2013. & 1585883756 & \checkmark \\
+    M. Gastpar and M. Vetterli, “On the capacity of wireless networks: the relay case,” in Proc. IEEE Infocom, June 2002. & 2097463269 & \checkmark \\
+    G. Vidal, “Efficient classical simulation of slightly entangled quantum computations,” Phys. Rev. Lett. 91 (2003). & 2036604884 & \checkmark \\
+    I. Frank and J. Friedman. A statistical view of some chemometrics regression tools (with discussion). Technometrics, 35:109–148, 1993. & 2079775628 & \checkmark \\
+    S. Rajagopalan and V. Vazirani. Primal-dual rnc approximation algorithms for set cover and covering integer programs. SIAM Journal of Computing, 28(2):525–540, 1998. & 1988837529 & \checkmark \\
+    E. N. Parker: Cosmical Magnetic Fields: Their Origin and Their Activity, (Clarendon, Oxford 1979) & 1661725509 & \checkmark \\
+    Li, J., Xin, Z.: Some uniform estimates and blowup behavior of global strong solutions to the Stokes approximation equations for two-dimensional compressible flows. J. Differ. Eqs. 221(2), 275-308 (2006). & 2012319434 & \checkmark \\
+    L. Visinelli, Observational Constraints on Monomial Warm Inflation, JCAP 07 (2016) 054. & 2403695403 & \checkmark \\
+    T. Kimura and V. Pestun, arXiv:1608.04651 & 2513775828 & \checkmark \\
+    S. Benvegn{\`u}, L. D\k{a}browski: Relativistic point interaction, Lett. Math. Phys. 30 (1994), 159–167. & 2053324072 & \checkmark \\
+    M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions (Dover, New York, 1970). & 2120062331 & \checkmark \\
+    A. Korobeinikov, P. K. Maini, A Lyapunov function and global properties for SIR and SEIR epidemiological models with nonlinear incidence, Math. Biosci. Eng. 1 (1) (2004) 57–60. & 2160057076 & \checkmark \\
+    S. J. Weidenschilling and F. Marzari. Gravitational scattering as a possible origin for giant planets at small stellar distances. , 384:619–621, December 1996. & 2068108425 & \checkmark \\
+    I. Carusotto, D. Gerace, H. E. Tureci, S. De Liberato, C. Ciuti, and A. Imamoglu, Fermionized Photons in an Array of Driven Dissipative Nonlinear Cavities, Phys. Rev. Lett. 103, 033601 (2009). & 2100065221 & \checkmark \\
+    I.Ya. Aref'eva, P.B. Medvedev, A.P. Zubarev, “New representation for string field solves the consistency problem for open superstring field theory,"" Nuclear Physics B, Volume 341, Issue 2. & 2098143658 & \checkmark \\
+    H. Baer and X. Tata, Weak scale supersymmetry: From superfields to scattering events, . Cambridge, UK: Univ. Pr. (2006) 537 p. & 1575963702 & \checkmark \\
+    Ron Kimmel and Nahum Kiryati. Finding shortest paths on surfaces by fast global approximation and precise local refinement. International Journal of Pattern Recognition and Artificial Intelligence, 10(6):643–656, 1996. & 2019758632 & \checkmark \\
+    W.B. Kilgore, One-Loop Single-Real-Emission Contributions to FORMULA at Next-to-Next-to-Next-to-Leading Order, Phys. Rev. D89 (2014) 073008 [arXiv:1312.1296]. & 2057405276 & \checkmark \\
+    Kielpinski D Phys. Rev. A. 73 063407 (2006) & 2039261148 & \checkmark \\
+    Gavrilov,L.A. FORMULA Gavrilova N.S (1991) , The Biology of life span: a quantitative approach, N.Y.:Harwood Academic Publisher. & 1979363640 & \checkmark \\
+    M. Scadron, Phys. Rev. D 26, 239 (1982). & 2141883609 & \checkmark \\
+    Y. Aoki, Z. Fodor, S. Katz, and K. Szabo, Phys.Lett. B643, 46 (2006), arXiv:hep-lat/0609068 [hep-lat] . & 2020173052 & \checkmark \\
+    M. Glück, E. Reya, M. Stratmann, and W. Vogelsang, Phys. Rev. D 53 4775 (1996). & 1550005211 & \checkmark \\
+    J.-Y. Courtois, G. Grynberg, B. Lounis and P. Verkerk, Phys. Rev. Lett. 72, 3017 (1994). & 2074496196 & \checkmark \\
+    U. Leonhardt, ""Measuring the quantum state of light"", Cambridge University press, Cambridge, 1997. & 1996720084 & \checkmark \\
+    M. T. Glossop and K. Ingersent, Phys. Rev. Lett. 95, 067202 (2005); Phys. Rev. B 75, 104410 (2007). & 2013030742 & \checkmark \\
+    A. Giveon, A. Konechny, A. Pakman, and A. Sever, Type 0 strings in a 2-d black hole, JHEP 10 (2003) 025, [hep-th/0309056]. & 2070010107 & \checkmark \\
+    Hubbard, P. M., 1996. “Approximating polyhedra with spheres for time-critical collision detection”. ACM Transac, 15(3), pp. 179–210. & 2053212688 & \checkmark \\
+    T. Xu, L. Ma and G. Sternberg, “Practical interference alignment and cancellation for MIMO underlay cognitive radio networks with multiple secondary users,” IEEE GLOBECOM, pp. 1031–1036, Dec. 2013. & 2073404794 & \checkmark \\
+    T. S. Han and K. Kobayashi, “Exponential-type error probabilities for multiterminal hypothesis testing,” IEEE Trans. Inform. Theory, vol. 35, no. 1, pp. 2–14, January 1989. & 2071851353 & \checkmark \\
+    P. Fendley, F. Lesage, and H. Saleur, Journal of Statistical Physics 85, 211 (1996). & 2007477100 & \checkmark \\
+    Akimasa Miyake and Miki Wadati. Geometric strategy for the optimal quantum search. Phys. Rev. A, 64:042317, Sep 2001. & 2145249001 & \checkmark \\
+    Griffiths, G.A., Estimation of landform life expectancy, Geology, 21, 403-406, 1993. & 1983389789 & \checkmark \\
+    J.-P. Kahane, Random coverings and multiplicative processes, In Fractal geometry and stochastics, II (Greifswald/Koserow, 1998), Progr. Probab. 46, 125–146, Birkhäuser, 2000. & 2125142036 & \checkmark \\
+    D. C. Cox, “Antenna diversity performance in mitigating the effects of portable radiotelephone orientation and multipath propagation,” IEEE Trans. Commun., vol. 31, pp. 620–628, May 1983. & 2120721514 & \checkmark \\
+    Doron Zeilberger, The algebra of linear partial difference operators and its applications, SIAM J. Math. Anal. 11 (1980), no. 6, 919–932. & 1991175354 & \checkmark \\
+    {\color{UniRed}D. T. Limmer and D. Chandler. The putative liquid-liquid transition is a liquid-solid transition in atomistic models of water. The Journal of Chemical Physics, 135(13):134503, 2011.} & {\color{UniRed}2599889364} & {\color{UniRed}$\times$} \\
+    M. G. Santos et al., “Cosmology with a SKA HI intensity mapping survey,” PoS AASKA14 (2015) 019 [arXiv:1501.03989 [astro-ph.CO]]. & 1596200123 & \checkmark \\
+    L. Castillejo, R.H. Dalitz and F.J. Dyson, Low's Scattering Equation for the Charged and Neutral Scalar Theories, Phys. Rev. 101 (1956) 453-458. & 2028108845 & \checkmark \\
+    S. Jennewein, M. Besbes, N. J. Schilder, S. D. Jenkins, C. Sauvan, J. Ruostekoski, J.-J. Greffet, Y. R. P. Sortais, and A. Browaeys, Phys. Rev. Lett. 116, 233601 (2016). & 2345644887 & \checkmark \\
+    M. Chernicoff, J. A. Garcia, A. Guijosa and J. F. Pedraza, “Holographic Lessons for Quark Dynamics,” J. Phys. G 39, 054002 (2012) [arXiv:1111.0872 [hep-th]]. & 2106350856 & \checkmark \\
+    C. E. Antoniak. Mixtures of Dirichlet processes with applications to Bayesian nonparametric problems. The Annals of Statistics, 2(6):1152–1174, 1974. & 1967687583 & \checkmark \\
+    R.D. Astumian : Symmetry relations for trajectories of a brownian motor, Phys. Rev. E 76, 020102 (2007). & 2066644069 & \checkmark \\
+    Forest, S., Micromorphic approach for gradient elasticity, viscoplasticity, and damage. Journal of Engineering Mechanics, 135, 117-131 (2009). & 2157979983 & \checkmark \\
+    L. Sironi and A. Spitkovsky, Astrophys. J. 726, 75 (2011) [arXiv:1009.0024 [astro-ph.HE]]. & 2032048508 & \checkmark \\
+    T. L. Barklow, arXiv:hep-ph/0312268. & 2142208316 & \checkmark \\
+    M. Sharir and J. Solymosi, Distinct distances from three points, to appear in Combinatorics, Probability and Computing. Also in arXiv:1308.0814. & 2100718844 & \checkmark \\
+    Ferrari, A. C., et al. Raman spectrum of graphene and graphene layers. Phys. Rev. Lett. 97, 187401 (2006). & 2136334331 & \checkmark \\
+    M. Grützmann, T. Strobl, General Yang-Mills type gauge theories for p-form gauge fields: From physics-based ideas to a mathematical framework OR From Bianchi identities to twisted Courant algebroids, arXiv:1407.6759. & 2107310943 & \checkmark \\
+    K. Maeda, M. Natsuume and T. Okamura, Vortex lattice for a holographic superconductor, Phys. Rev. D 81 (2010) 026002. & 2111816020 & \checkmark \\
+    Y. Lai and T. Tél, Transient Chaos - Complex Dynamics on Finite-Time Scales (Springer, 2011). & 654916661 & \checkmark \\
+    T. Gehrmann, Nucl. Phys. B 534, 21 (1998) [arXiv:hep-ph/9710508]. & 2073871748 & \checkmark \\
+    J. W. Fisher and S. Montgomery, Semiprime skew group rings, J. Algebra, 52, (1978), no. 1, 241-247 & 1977258644 & \checkmark \\
+    CMS Collaboration, “Search for new physics in events with same-sign dileptons and b-tagged jets in pp collisions at FORMULA TeV”,  JHEP  08 (2012) 110, doi:tt10.1007/JHEP08(2012)110, arXiv:1205.3933. & 2790162885 & \checkmark \\
+    Oded Goldreich and Madhu Sudan. Locally testable codes and pcps of almost-linear length. J. ACM, 53(4):558–655, 2006. & 2022381972 & \checkmark \\
+    J.-P. Serre, Algebraic groups and class fields, vol. 117 of Graduate Texts in Mathematics, Springer-Verlag, New York, 1988. Translated from the French. & 1572771201 & \checkmark \\
+    H. Cheung and E. K. Riedel, “Energy spectrum and persistent current in one-dimensional rings,” Physical Review B, vol. 40, no. 14, pp. 9498–9501, Nov. 1989. & 2006367954 & \checkmark \\
+    G.-B. Huang, Q.-Y. Zhu, K. Mao, C.-K. Siew, P. Saratchandran, and N. Sundararajan, “Can threshold networks be trained directly?” IEEE Transactions on Circuits and Systems II: Express Briefs, vol. 53, no. 3, pp. 187–191, 2006. & 2161055889 & \checkmark \\
+    Hauser, Oliver P, Rand, David G, Peysakhovich, Alexander, and Nowak, Martin A. Cooperating with the future. Nature, 511(7508):220–223, 2014. & 2072455842 & \checkmark \\
+    P. Arnoux, C. Mauduit, I. Shiokawa, and J. Tamura. Complexity of sequences defined by billiard in the cube. Bull. Soc. Math. France, 122(1):1–12, 1994. & 2089093075 & \checkmark \\
+    C. Klix, F. Ebert, F. Weysser, M. Fuchs, G. Maret, and P. Keim, Phys. Rev. Lett. 109, 178301 (2012). & 2163069494 & \checkmark \\
+    M. Srednicki, “Entropy and area,” Phys. Rev. Lett. 71, 666 (1993) [hep-th/9303048]. & 2053387157 & \checkmark \\
+    Hughes, I.G. Velocity selection in a Doppler-broadened ensemble of atoms interacting with a monochromatic laser beam, J. Mod. Opt. 2017. & 2617563275 & \checkmark \\
+    A. B. Aceves, J. V. Moloney , and A. C. Newell, Phys. Rev. A. 39 (1989) 1809. & 2005701305 & \checkmark \\
+    H. Yabuki, “Feynman path integrals in the young double-slit experiment,” International Journal of Theoretical Physics 25, 159–174 (1986). & 2028663815 & \checkmark \\
+    L. F. Santos and M. Rigol, Phys. Rev. E 81, 036206 (2010). & 2000628151 & \checkmark \\
+    W. H. Kleiner, L. M. Roth, and S. H. Autler, Phys. Rev. 133, A1226 (1964). & 2047723053 & \checkmark \\
+    H.G. Bock, M. Diehl, E.A. Kostina, and J.P. Schlöder. Constrained optimal feedback control of systems governed by large differential algebraic equations. In L. Biegler, O. Ghattas, M. Heikenschloss, D. Keyes, and B. Bloemen Waanders, editors, Real-Time PDE-Constrained Optimization, pages 3–22. SIAM, 2007. & 2477791619 & \checkmark \\
+    D. Larson et. al., Seven-Year Wilkinson Microwave Anisotropy Probe (WMAP) Observations: Power Spectra and WMAP-Derived Parameters, Astrophys. J. Suppl. 192 (2011) 16, [arXiv:1001.4635]. & 2105687315 & \checkmark \\
+    G. Leon, Y. Leyva and J. Socorro, Quintom phase-space: beyond the exponential potential, Phys. Lett. B732 (2014) 285–297, [1208.0061]. & 2015773494 & \checkmark \\
+    Jennings E., Baugh C. M., Li B., Zhao G.-B., Koyama K., 2012, ArXiv:1205.2698 [astro-ph.CO] & 1836372023 & \checkmark \\
+    P. Hu and D. Ramanan. Bottom-up and top-down reasoning with hierarchical rectified gaussians. In Proc. IEEE Conf. Comp. Vis. Patt. Recogn., pages 5600–5609, 2016. & 2346846221 & \checkmark \\
+    Whitall MWG, Gehring GA. Path integral approach to methyl group rotation. J Phys C 1987;20:1619-1639. & 2084791981 & \checkmark \\
+    S.S. Gubser and I.R. Klebanov, “Absorption by Branes and Schwinger Terms in the World Volume Theory”, Phys. Lett. B413 (1997) 41, hep-th/9708005. & 2064448358 & \checkmark \\
+    R. Ferraro and F. Fiorini, Phys. Lett. B702, 75 (2011); R. Ferraro and F. Fiorini, arXiv:1106.6349 [gr-qc]. & 2052693432 & \checkmark \\
+    Gert Almkvist and George E. Andrews, A Hardy-Ramanujan formula for restricted partitions, Journal of Number Theory 38 (1991), no. 2, 135 – 144, Dedicated to the Memory of S. Ramanujan. & 2016968046 & \checkmark \\
+    D. H. Lyth and D. Wands, Phys. Lett. B 524, 5 (2002) [arXiv:hep-ph/0110002]. & 1979147028 & \checkmark \\
+    Rapoport A, Chammah A M (1966) The game of chicken, American Behavioral Scientist 10:10-14 & 2050880379 & \checkmark \\
+    M. Proebster, M. Kaschub, T. Werthmann and S. Valentin, “Context-aware resource allocation for cellular wireless networks,” EURASIP Journal on Wireless Communications and Networking, DOI: 10.1186/1687-1499-2012-216, Jul 2012. & 2123032963 & \checkmark \\
+    Audinot, M., Pinchinat, S., Kordy, B.: Is my attack tree correct? In: ESORICS. LNCS, Springer (2017), (to appear) & 2744888375 & \checkmark \\
+    A. Kuhn, M. Hennrich, and G. Rempe, Phys. Rev. Lett. 89, 067901 (2002). & 2001597879 & \checkmark \\
+    I. F. Blake, Codes over certain rings, Inform. Control 20(1972), 396-404. & 2016367126 & \checkmark \\
+    E. Braaten and H. W. Hammer, Phys. Rev. Lett. 91, 102002 (2003) [arXiv:nucl-th/0303038]. & 2157831165 & \checkmark \\
+    J. Dai, Y. Li, K. He, and J. Sun. R-FCN: Object detection via region-based fully convolutional networks. In NIPS, 2016. & 2407521645 & \checkmark \\
+    Theano Development Team. 2016. Theano: A Python framework for fast computation of mathematical expressions. arXiv e-prints, abs/1605.02688. & 2384495648 & \checkmark \\
+    C.W.J. Granger. Investigating causal relations by econometric models and cross-spectral methods. Econometrica: Journal of the Econometric Society, pages 424–438, 1969. & 2178225550 & \checkmark \\
+    M. Eckstein and P. Werner, Phys. Rev. B 82, 115115 (2010). & 2075658311 & \checkmark \\
+    H. Halpern, V. Kaftal and G. Weiss, The Relative Dixmier Property in Discrete Crossed Products, J. Functional Anal. 68(1986), & 1993094219 & \checkmark \\
+    H. Li and F. D. M. Haldane, Phys. Rev. Lett. 101, 010504 (2008). & 2082257352 & \checkmark \\
+    Bouchaud J.-P., Potters M., Meyer M. Apparent multifractality in financial time series Eur. Phys. J. B  13 (2000) 595-599 & 2110077303 & \checkmark \\
+    H Nakada, Phys Rev C 68, 014316 (2003) & 2005421586 & \checkmark \\
+    P. D. B. Collins, An Introduction to Regge Theory and High-Energy Physics, . Cambridge 1977, 445p. & 2054027276 & \checkmark \\
+    G. Schütz, S. Sandow, Non–Abelian symmetries of stochastic processes: Derivation of correlation functions for random–vertex models and disordered–interacting–particle systems, Phys. Rev. E 49, 2726 (1994) DOI:10.1103/PhysRevE.49.2726 & 2012762389 & \checkmark \\
+    Waxman, E. 2010, arXiv:1010.5007 & 2134348647 & \checkmark \\
+    W. Wang, S. G. Hanson, Y. Miyamoto, and M. Takeda, Phys. Rev. Lett. 94, 103902 (2005). & 2066919669 & \checkmark \\
+    W. Schoutens. Lévy Processes in Finance: Pricing Financial Derivatives. Wiley series in probability and statistics, Wiley, Chichester, 2003. & 2002530172 & \checkmark \\
+    K. K. Kwong, Some sharp Hodge Laplacian and Steklov eigenvalue estimates for differential forms, Calc. Var. Partial Differential Equations 55 (2016), no. 2, Art. 38, 14. MR 3478292 & 2309623648 & \checkmark \\
+    T. Iwashyna, J. Christie, J. Kahn, and D. Asch. Uncharted paths: hospital networks in critical care. CHEST, 135(3):827–833, 2009. & 2101874017 & \checkmark \\
+    A. Demir, A. Mehrotra, and J. Roychowdhury, “Phase noise in oscillators: A unifying theory and numerical methods for characterization,” IEEE Transactions on Circuits and Systems I: Fundamental Theory and Applications 47, 655–674 (2000). & 2111079473 & \checkmark \\
+    ]csiszar78a Csiszár, I. and J. Körner, 1978, Broadcast Channels with Confidential Messages, IEEE Trans. Inf. Theory IT-24, 339. & 2144007657 & \checkmark \\
+    F. Beaudoin, J. M. Gambetta, and A. Blais, Phys. Rev. A 84, 043832 (2011). & 2074456944 & \checkmark \\
+    R. Ablamowicz, B. Fauser, On the transposition anti-involution in real Clifford algebras III: The automorphism group of the transposition scalar product on spinor spaces, Linear and Multilinear algebra, 60(6), 2012, 621-644. & 2080980639 & \checkmark \\
+    H. Kanao, S. Tanaka, S. Oka, M. Hirata, S. Yoshida, K. Chayama, Narrow-band imaging magnification predicts the histology and invasion depth of colorectal tumors., Gastrointest Endosc 69 (3 Pt 2) (2009) 631–636. & 2038420951 & \checkmark \\
+    S.Q. Murphy et al., Phys. Rev. Lett. 72, 728 (1994). & 2088746433 & \checkmark \\
+    Y. Kubo, C. Grezes, A. Dewes, T. Umeda, J. Isoya, H. Sumiya, N. Morishita, H. Abe, S. Onoda, T. Ohshima, V. Jacques, A. Dréau, J. -F. Roch, I. Diniz, A. Auffeves, D. Vion, D. Esteve, and P. Bertet. Phys. Rev. Lett. 107, 220501 (2011). & 2064756338 & \checkmark \\
+    Uriel Frisch, Turbulence: The Legacy of A.N. Kolmogorov. (Cambridge University Press, Cambridge, 1995). & 1611318213 & \checkmark \\
+    Joe, H. (1997), Multivariate Models and Multivariate Dependence Concepts, Boca Raton, FL: CRC Press. & 2507039649 & \checkmark \\
+    A. Hanke, F. Schlesener, E. Eisenriegler, and S. Dietrich, Phys. Rev. Lett. 81, 1885 (1998b). & 2054116307 & \checkmark \\
+    O. Hohm, D. Lüst and B. Zwiebach, Fortsch. Phys. 61 (2013) 926 [arXiv:1309.2977 [hep-th]]. & 2139390505 & \checkmark \\
+    F. Karsch and E. Laermann, Phys. Rev. D 50, 6954 (1994) . & 2132089715 & \checkmark \\
+    Lev Kapitanski. Global and unique weak solutions of nonlinear wave equations. Math. Res. Lett., 1(2):211–223, 1994. & 2060831697 & \checkmark \\
+    S.-W. Wei snd Y.-X. Liu, Critical phenomena and thermodynamic geometry of charged Gauss-Bonnet AdS black holes, Phys. Rev. D 87 044014 (2013). arXiv:1209.1707 [gr-qc]. & 2095004813 & \checkmark \\
+    S. A. Haine and J. J. Hope, Phys. Rev. A 72, 033601 (2005). & 2092020630 & \checkmark \\
+    T. Cochran, A. Gerges, and K. Orr, Dehn surgery equivalence relations on 3-manifolds, Math. Proc. Camb. Phil. Soc. 131 (2001) 97-127. & 2163237620 & \checkmark \\
+    K. Chou and X.-J. Wang, The Lp-Minkowski problem and the Minkowski problem in centroaffine geometry, Adv. Math. 205 (2006), 33–-83. & 2082611711 & \checkmark \\
+    C. S. O'Hern, D. A. Egolf, and H. S. Greenside, Phys. Rev. E 53, 3374 (1996). & 2002846857 & \checkmark \\
+    Vincent, O.; Szenicer, A.; Stroock, A. D. Capillarity-driven flows at the continuum limit. Soft Matter 2016, 12, 6656–6661. & 2191910464 & \checkmark \\
+    \bottomrule
+\end{longtable}
+\normalsize

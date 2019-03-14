@@ -88,8 +88,14 @@
       frame=top,frame=bottom,
       breaklines=true,
       basicstyle=\linespread{1}\footnotesize\ttfamily,
-      escapeinside={(*}{*)}
+      escapeinside={(*}{*)},
+      title=\lstname
     }
+    % enable appenix
+    \usepackage[toc,page]{appendix}
+    \noappendicestocpagenum
+    % long table for appendix
+    \usepackage{longtable}
 
 %------------------------------------------------------------------------------
 %       (re)new commands / settings

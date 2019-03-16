@@ -1,0 +1,59 @@
+$ time python3 data_stats.py /vol2/unarXive/arxiv-txt-data_1991-2018
+
+16802498/16802498
+num_reference_items_total: 15954664
+num_citing_docs_total: 1043126
+num_cited_docs_total: 2746288
+num_contexts_total: 29203190
+cited_docs_per_fos:
+  computer science: 425860
+  mathematics: 906301
+  physics: 921852
+  materials science: 47112
+  biology: 98081
+  business: 6823
+  engineering: 57955
+  psychology: 32008
+  medicine: 29253
+  geography: 7025
+  history: 1351
+  economics: 38355
+  chemistry: 121356
+  political science: 4207
+  sociology: 5399
+  environmental science: 2694
+  other: 6580
+  philosophy: 3220
+  geology: 29999
+  art: 1405
+reference_items_per_fos:
+  cs: 2526656
+  math: 3426117
+  physics:math-ph: 172226
+  physics: 5074840
+  physics:cond-mat: 1124963
+  physics:physics: 491615
+  stat: 208845
+  physics:nucl-th: 139029
+  physics:hep-ex: 80696
+  physics:astro-ph: 446937
+  physics:hep-ph: 509441
+  physics:gr-qc: 243617
+  physics:hep-th: 462386
+  physics:hep-lat: 60804
+  other: 371015
+  eess: 44514
+  physics:nlin: 56771
+  q-bio: 53881
+  physics:quant-ph: 402951
+  q-fin: 19292
+  physics:nucl-ex: 34300
+  econ: 3768
+citing_docs_cs: 111694
+citing_docs_math: 237422
+citing_docs_phys: 662894
+citing_docs_other: 31116
+
+real    696m40.676s
+user    154m56.872s
+sys     27m8.914s

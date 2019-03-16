@@ -3037,6 +3037,28 @@ gg b/c time
         * "Similar  to  the  identification  of  argumentation structures,  discourse  analysis  aims  at identifying elementary discourse units and discourse relations between them. Existing approaches on discourse analysis mainly differ in the employed discourse theory." [https://arxiv.org/pdf/1604.07370.pdf](https://arxiv.org/pdf/1604.07370.pdf)
     * Argumentation theory
 
+### evaluation
+
+* arXiv CS (BoW, NP, PP, BoW+PP)
+    * 1991-2016 train / 2017 test
+    * 1,835,797 contexts; 63,240 cited; 81,583 citing
+        ```
+        $ time python3 recommend_baseline_nocluster.py items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both.csv items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both.dict items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both_PPterms.dict arxiv_allNPs_until20180830_countGt2_cleaned.dict
+        
+        - - - - - 490018/490018 - - - - -
+        #1: 55229
+        in top 5: 118646
+        in top 10: 149409
+        ndcg@5: 0.2076313291287033
+        map@5: 0.030989529232354755
+        mrr@5: 0.15988174584060083
+        recall@5: 0.24212579946042798
+        
+        real    5295m54.303s  (88h / 3.7d)
+        user    5257m8.089s
+        sys     37m13.485s
+        ```
+
 # misc notes
 
 * the English *"(to) cite"* describes both the *"referring to existing work"* part as well as the *"inserting (such) a reference into one's current work"* part of citation

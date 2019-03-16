@@ -17,7 +17,7 @@ font = {'family' : 'normal',
 
 plt.rc('font', **font)
 
-with open('citing_docs_per_cited_doc.json') as f:
+with open('contexts_per_referece_2018.json') as f:
     citing_counts = json.load(f)
 
 # with open('contexts_per_reference.json') as f:
@@ -47,14 +47,14 @@ y = sorted(citing_counts, reverse=True)[1:]
 x = list(range(len(citing_counts)))[1:]
 plt.plot(x, y, '-', markersize=1)
 ax.grid(color='lightgray', linestyle='--', linewidth=0.5)
-# ax.set_xlabel('reference ID')
-# ax.set_ylabel('citation contexts')
-ax.set_xlabel('document ID')
-ax.set_ylabel('citing documents')
+ax.set_xlabel('reference ID')
+ax.set_ylabel('citation contexts')
+# ax.set_xlabel('document ID')
+# ax.set_ylabel('citing documents')
 
 # manual edits
-# plt.xticks(np.arange(0, 12000001, 6000000))
-plt.xticks(np.arange(0, 2000001, 1000000))
+plt.xticks(np.arange(0, 15000001, 5000000))
+# plt.xticks(np.arange(0, 2000001, 1000000))
 fmt = '{x:,.0f}'
 tick = mtick.StrMethodFormatter(fmt)
 ax.xaxis.set_major_formatter(tick)

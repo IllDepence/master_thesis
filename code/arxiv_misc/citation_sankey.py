@@ -2,7 +2,7 @@ import json
 import plotly
 import matplotlib as mpl
 
-with open('citation_fos_pairs_fixed_fixed.json') as f:
+with open('citation_fos_pairs_fixed_fixed_2018.json') as f:
     tups = json.load(f)
 
 from_to_map = {}
@@ -12,6 +12,8 @@ arx_remap = {
     'math': 'mathematics',
     'eess': 'other',
     'q-bio': 'other',
+    'stat': 'other',
+    'q-fin': 'other',
     'econ': 'other'
     }
 # arx_remap = {

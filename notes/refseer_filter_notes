@@ -11,4 +11,19 @@ select /*csv*/ pc.cited_id, pc.cited_year, pc.citing_id, pc.citing_year, pc.citi
 -> 10,227,046
 
 select /*csv*/ pc.cited_id, pc.cited_year, pc.citing_id, pc.citing_year, pc.citing_title, cc.contextfrom citationcontexts ccjoin(select p.citing_id, p.citing_title, p.citing_year, c.acluster cited_id, c.year cited_year, c.id reference_item_idfrom citations cjoin(select id citing_id, title citing_title, year citing_year from papers where title is not null and venuetype is not null and abstract is not null and venue is not null and acluster is not null and year is not null) pon c.paperid = p.citing_id where c.acluster is not null and c.year is not null and c.id is not null and c.acluster is not null and c.acluster > 0 and c.authors is not null and c.paperid is not null and c.venuetype is not null and c.title is not null and c.venue is not null and p.citing_year >= c.year and p.citing_year > 1950 and c.year > 1800 and c.year < 2018and c.acluster in (select acluster from papers where title is not null and venuetype is not null and abstract is not null and venue is not null and acluster is not null and year is not null)) pcon cc.citationid = pc.reference_item_idorder by pc.cited_id;
--> ...
+-> 2,852,544
+
+spool "/home/tarek/refseerCleanTest4.dsv";
+select /*csv*/ pc.cited_id, pc.cited_year, pc.citing_id, pc.citing_year, pc.citing_title, cc.context
+    from citationcontexts cc
+    join
+    (select p.citing_id, p.citing_title, p.citing_year, c.acluster cited_id, c.year cited_year, c.id reference_item_id
+        from citations c
+        join
+        (select id citing_id, title citing_title, year citing_year from papers where title is not null and venuetype is not null and abstract is not null and venue is not null and acluster is not null and year is not null) p
+        on c.paperid = p.citing_id where c.acluster is not null and c.id is not null and c.acluster is not null and c.acluster > 0 and c.paperid is not null
+        and c.acluster in (select acluster from papers where title is not null and venuetype is not null and abstract is not null and venue is not null and acluster is not null and year is not null)) pc
+    on cc.citationid = pc.reference_item_id
+    order by pc.cited_id;
+spool off;
+-> 3,588,160  (3,585,013 unique) (436,146 citing, 273,115 cited) (60,371 where citing 2012 onward)

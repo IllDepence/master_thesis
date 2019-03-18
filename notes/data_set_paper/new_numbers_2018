@@ -31,4 +31,6 @@ update process comparison
 extract: 92.8% → 95.9% / 82.1% → 87.8% (8h)
 match: 40.07% → 59.39% (16h)
 
-TODO: # sentences
+#sentences: 269,375,193
+
+13,143 matches for MAG ID 2811252340 ("hep-th")

@@ -153,24 +153,24 @@ To evaluate the quality of our reference resolution results, we take a random sa
 
 The three incorrectly identified references were as follows (MAG IDs in square brackets):
 \begin{enumerate}
-    \item \emph{''Eddy, J.A.: 1983, The maunder minimum - a reappraisal. Solar Phys. 89, 195. ADS.''}
+    \item \emph{``Eddy, J.A.: 1983, The maunder minimum - a reappraisal. Solar Phys. 89, 195. ADS.''}
     \begin{itemize}
-        \item matched: [\texttt{2024069573}]\\\emph{''The Maunder Minimum''} (John A. Eddy; 1976)
-        \item correct: [\texttt{2080336740}]\\\emph{''The Maunder Minimum: A reappraisal''} (John A. Eddy; 1983)
+        \item matched: [\texttt{2024069573}]\\\emph{``The Maunder Minimum''} (John A. Eddy; 1976)
+        \item correct: [\texttt{2080336740}]\\\emph{``The Maunder Minimum: A reappraisal''} (John A. Eddy; 1983)
     \end{itemize}
-    \item \emph{''J. Zhu, S. Rosset, T. Hastie, and R. Tibshirani. 1-norm support vector machines. In Advances in Neural Information Processing Systems (NIPS), volume 16, pages 49–56, 2004.''}
+    \item \emph{``J. Zhu, S. Rosset, T. Hastie, and R. Tibshirani. 1-norm support vector machines. In Advances in Neural Information Processing Systems (NIPS), volume 16, pages 49–56, 2004.''}
     \begin{itemize}
-        \item matched: [\texttt{2249237221}]\\\emph{''Support Vector Machines''} (Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani; 2013)
-        \item correct: [\texttt{2130698119}]\\\emph{''1-norm Support Vector Machines''} (Ji Zhu, Saharon Rosset, Robert Tibshirani, Trevor J. Hastie; 2003)
+        \item matched: [\texttt{2249237221}]\\\emph{``Support Vector Machines''} (Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani; 2013)
+        \item correct: [\texttt{2130698119}]\\\emph{``1-norm Support Vector Machines''} (Ji Zhu, Saharon Rosset, Robert Tibshirani, Trevor J. Hastie; 2003)
     \end{itemize}
-    \item \emph{''D. T. Limmer and D. Chandler. The putative liquid-liquid transition is a liquid-solid transition in atomistic models of water. The Journal of Chemical Physics, 135(13):134503, 2011.''}
+    \item \emph{``D. T. Limmer and D. Chandler. The putative liquid-liquid transition is a liquid-solid transition in atomistic models of water. The Journal of Chemical Physics, 135(13):134503, 2011.''}
     \begin{itemize}
-        \item matched: [\texttt{2599889364}]\\\emph{''The Putative Liquid-Liquid Transition is a Liquid-Solid Transition in Atomistic Models of Water''} (David Chandler, David Limmer; 2013)
-        \item correct: [\texttt{1977410206}]\\\emph{''The putative liquid-liquid transition is a liquid-solid transition in atomistic models of water. II''} (David T. Limmer, David Chandler; 2011)
+        \item matched: [\texttt{2599889364}]\\\emph{``The Putative Liquid-Liquid Transition is a Liquid-Solid Transition in Atomistic Models of Water''} (David Chandler, David Limmer; 2013)
+        \item correct: [\texttt{1977410206}]\\\emph{``The putative liquid-liquid transition is a liquid-solid transition in atomistic models of water. II''} (David T. Limmer, David Chandler; 2011)
     \end{itemize}
 \end{enumerate}
 
-The full details of the evaluation can be found in Appendix~\ref{chap:matcheval}.
+In all three cases the misidentified document’s title is contained in the correct document’s title, and there is a large or complete author overlap between correct and actual match. This shows that authors sometimes title follow-up work very similarly, which leads to hard to distinguish cases. Another observation that can be made, is that longer titles are more distincitive. As certain publication titles might be sub-strings of of other publication's title, a matching mechanic should always try to first match a long title before trying shorter candidates. The full details of the evaluation can be found in Appendix~\ref{chap:matcheval}.
 
 \section{Statistics and key figures}
 
@@ -207,4 +207,4 @@ Figure \ref{fig:sankey} depicts the flow of citations by field of study for all 
   \label{fig:sankey}
 \end{figure}
 
-By generating our data set from \LaTeX{} sources we were able to ensure clean text output as well as accurate citation information and exact citation marker positions. In terms of size it is closer to CiteSeerX and PMC-OAS than the smaller data sets available. The fact that the data set spans multiple disciplines also allows for comparisons in citing behaviour. Because references are already resolved to MAG IDs, the data set is readily usable for recommendation tasks and allows for the use of rich metadata on both the citing and cited document side. Lastly, the embedding of citation markers in the full plain text of papers instead of pre-extraction enables users of the data set to choose and compare citation context lenghts and variations at will.
+By generating our data set from \LaTeX{} sources we were able to ensure clean text output as well as accurate citation information and exact citation marker positions. In terms of size it is closer to CiteSeerX and PMC-OAS than the smaller data sets available. The fact that the data set spans multiple disciplines also allows for comparisons in citing behaviour between these disciplices. Because references are already resolved to MAG IDs, the data set is readily usable for recommendation tasks and allows for the use of rich metadata on both the citing and cited document side. Lastly, the embedding of citation markers in the full plain text of papers instead of pre-extraction enables users of the data set to choose and compare citation context lenghts and variations at will.

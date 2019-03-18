@@ -1,12 +1,21 @@
-\chapter{Semantic approaches to citation recommendation}\label{chap:approach}
-types of citations (naming an entity, backing up a claim, etc.)
+\chapter{Approach}\label{chap:approach}
+In order to investigate explicit semantic representations for the task of local citation recommendation we first need to decide which kinds of semantic constructs we want to model. As a starting point for this we looked into the field of citation context analysis~\cite{HERNANDEZ-ALVAREZ2016}. A common task in this area is the classification of citation contexts by their polarity (positive/neutral/negative) and function (often based on the four dimensions identified by Moravcsik et al.~\cite{Moravcsik1975}, conceptual/operational, evolutionary/juxtapositional, organic/perfunctory, conformative/negational). Such approaches are primarily concerned with the \emph{intent} of the author rather than the \emph{content} of what is being cited. We nevertheless can loosely base our selection of semantic constructs on previous work in this area. Teufel et al.~\cite{Teufel2006b} suggest an annotation scheme of eleven categories for citation function. The primary focus is on the type of relation between citing and cited work (e.g. similarity or contrast), but two of the categories ``author uses tools/algorithms/data'' and ``author's work and cited work [...] provide support for each other'' can be translated into types of semantic constructs. If a researcher uses a tool/algorithm/data that they refer to with a citation, it is likely they \emph{name} the \emph{entity} they are referring to. In other words, there is a high probability that the citation will be accompanied by a named entitiy. An example for this would be \emph{``We use CiteSeerX~\cite{Caragea2014} for our evaluation.''}. In the second case, where a publication is cited to support what is being said, the \emph{what is being said} can be understood as a statement or claim. A very simple example for such a case would be \emph{``arXiv started in 1991~\cite{Ginsparg1994}.''}.
+
+The following sections will describe our investigation of entity based and claim based models for local citation recommendation.
+
+\section{Entity based recommendation}
+The intuition behind an entity based approach is, that there exists a reference publication for a named entity. Examples would be a data set (``CiteSeerX~\cite{Caragea2014}''), a tool (``Neural ParsCit~\cite{Animesh2018}'') or a concept (``Semantic Web~\cite{Berners-Lee2001}''). In a more loose sense this can also include publications being referred to as examples (``approaches to local citation recommendation~\cite{He2010,Huang2014,Huang2015,Duma2014,Duma2016,Ebesu2017,Kobayashi2018,Jeong2019}'').
+
+first DBpedia Spotlight (only mention in passing), then MAG FoS, then NPs
+
+\subsection{Fields of study in the MAG}
+
+\subsection{Noun phrases}
+
+\section{Claim based recommendation}
 
 how citations are embedded in sentences (integral/non-integral\cite{Swales1990,Hyland1999,Thompson2001,Okamura2008,Lamers2018})
 
-\section{Fields of Study as names entities}
-name name
-
-\section{Claims}
 \subsection{Tools for extracting claims}
 tools tools
 
@@ -15,7 +24,7 @@ also: Survey on open information extraction\cite{Niklaus2018}
 context specific claim detection\cite{Levy2014}
 
 if only papers where semantically annotated as proposed in \cite{BuckinghamShum2000}
-\subsection{A model of aboutness closely tied to claim structure}
+\subsection{A predicate-argument model}
 predpatt\cite{White2016,Zhang2017}
 
 unfeasibility of use of PredPatt output as is

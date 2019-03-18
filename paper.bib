@@ -294,7 +294,7 @@
   numpages  = {9},
   review    = {- focus on "co-citations": given context *AND ONE CITATION*, recommend more appropriate citations (in eval: only take [1,2,...] cases, show one, repredict rest)
 - vector representations per discourse facet objective/method/results
-- "the Citation Function Corpus [33]"},
+- "the Citation Function Corpus [33]" (Teufel 2006)},
   url       = {http://doi.acm.org/10.1145/3197026.3197059},
 }
 
@@ -369,7 +369,7 @@
 - standard citation for citation function
 - Teufel 2006: "A plethora of manual annotation schemes for citation motivation have been invented over the years. One of the best-known of these studies (Moravcsik and Murugesan, 1975) divides citations in running text into four dimensions: 
     - conceptual or operational use (i.e., use of theory vs. use of technical method)
-    - evolutionary or juxtapositional (i.e., own work is based on the cited work vs. own work is analternative to it)
+    - evolutionary or juxtapositional (i.e., own work is based on the cited work vs. own work is an alternative to it)
     - organic or perfunctory (i.e., work is crucially needed for understanding of citing article or just a general acknowledgement)
     - conformative vs.negational (i.e., is the correctness of the findings disputed?)
 -> according to Petric2007 above categories are not all applicaple in all fields of research
@@ -1464,12 +1464,25 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 }
 
 @InProceedings{Roy2016,
-  author        = {Dwaipayan Roy and Kunal Ray and Mandar Mitra},
-  title         = {{From a Scholarly Big Dataset to a Test Collection for Bibliographic Citation Recommendation}},
-  year          = {2016},
-  series        = {{SBD'16}},
+  author = {Dwaipayan Roy and Kunal Ray and Mandar Mitra},
+  title  = {{From a Scholarly Big Dataset to a Test Collection for Bibliographic Citation Recommendation}},
+  year   = {2016},
+  series = {{SBD'16}},
+  review = {- CiteSeerX problems},
+}
+
+@InProceedings{Bertin2018,
+  author        = {Bertin, Marc and Atanassova, Iana},
+  title         = {{InTeReC: In-text Reference Corpus for Applying Natural Language Processing to Bibliometrics}},
+  booktitle     = {{7th International Workshop on Bibliometric-enhanced Information Retrieval (BIR 2018) to be held as part of the 40th European Conference on Information Retrieval (ECIR)}},
+  year          = {2018},
+  address       = {Grenoble, France},
+  month         = Mar,
   __markedentry = {[tarek:]},
-  review        = {- CiteSeerX problems},
+  hal_id        = {hal-01742178},
+  hal_version   = {v1},
+  review        = {- verbs in citation contexts are important (check references)},
+  url           = {https://hal.archives-ouvertes.fr/hal-01742178},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

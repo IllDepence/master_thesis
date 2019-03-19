@@ -20,8 +20,10 @@ class Paper(Base):
     id = Column(Integer(), autoincrement=True, primary_key=True)
     aid = Column(String(36))
     title = Column(UnicodeText())
+    # fos = Column(String(36))
 
 db_uri = 'sqlite:///aid_title.db'
+# db_uri = 'sqlite:///aid_fos.db'
 engine = create_engine(db_uri)
 Base.metadata.create_all(engine)
 Base.metadata.bind = engine
@@ -58,6 +60,7 @@ for idx, fn in enumerate(os.listdir(dump_dir)):
             continue
 
         paper_db = Paper(aid=aid, title=title)
+        # paper_db = Paper(aid=aid, fos=field)
         session.add(paper_db)
         session.flush()
     if idx % 100 == 0:

@@ -7,4 +7,5 @@ psycopg2-binary==2.7.6.1
 lxml==4.2.5
 scikit-learn==0.20.2
 pydot==1.4.1
-regex==2.5.3
+regex==2019.3.12
+timeout_decorator==0.4.1

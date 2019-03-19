@@ -16,6 +16,9 @@ with open(in_file) as f:
     with open(out_file, 'w') as fo:
         csvreader = csv.reader(f, delimiter=',', quotechar='"')
         for row in csvreader:
+            if len(row) < 6:
+                print(row)
+                sys.exit()
             # cited_id, cited_year, citing_id, citing_year, citing_title, context
             row = row[0:5] + [','.join(row[5:])]
             # can't use 200 character offset b/c csv.reader strips trailing

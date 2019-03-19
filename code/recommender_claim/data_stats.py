@@ -71,7 +71,7 @@ def generate(in_dir, db_uri=None):
         db_uri = 'sqlite:///{}'.format(os.path.abspath(db_path))
     engine = create_engine(db_uri)
 
-    mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG'
+    mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG19'
     mag_engine = create_engine(mag_db_uri,
         connect_args={'options': '-c statement_timeout=60000'}
         )
@@ -119,7 +119,7 @@ def generate(in_dir, db_uri=None):
                 print('{}/{}'.format(tuple_idx, len(tuples)))
                 print('num_reference_items_total: {}'.format(num_reference_items_total))
                 print('num_citing_docs_total: {}'.format(len(citing_docs)))
-                # print('num_cited_docs_total: {}'.format(len(cited_docs)))
+                print('num_cited_docs_total: {}'.format(len(cited_docs)))
                 print('num_contexts_total: {}'.format(num_contexts_total))
                 print('cited_docs_per_fos:')
                 for k, v in cited_docs_per_fos.items():
@@ -151,8 +151,8 @@ def generate(in_dir, db_uri=None):
                 tuple_idx += 1
                 continue
             # everything in order, do stats from here
-            # cited_docs.add(mag_id)
-            # citing_docs.add(in_doc)
+            cited_docs.add(mag_id)
+            citing_docs.add(in_doc)
             num_reference_items_total += 1
             num_contexts_total += num_contexts
             num_reference_items += 1
@@ -204,11 +204,11 @@ def generate(in_dir, db_uri=None):
     print('citing_docs_math: {}'.format(len(citing_docs_math)))
     print('citing_docs_phys: {}'.format(len(citing_docs_phys)))
     print('citing_docs_other: {}'.format(len(citing_docs_other)))
-    # with open('contexts_per_referece.json', 'w') as f:
-    #     f.write(json.dumps(nums_contexts_per_referece))
-    # with open('reference_items_per_cited_doc.json', 'w') as f:
-    #     f.write(json.dumps(nums_reference_items_per_cited_doc))
-    with open('citation_fos_pairs_fixed_fixed.json', 'w') as f:
+    with open('contexts_per_referece_2018.json', 'w') as f:
+        f.write(json.dumps(nums_contexts_per_referece))
+    with open('reference_items_per_cited_doc_2018.json', 'w') as f:
+        f.write(json.dumps(nums_reference_items_per_cited_doc))
+    with open('citation_fos_pairs_fixed_fixed_2018.json', 'w') as f:
         f.write(json.dumps(citation_fos_pairs))
 
 if __name__ == '__main__':

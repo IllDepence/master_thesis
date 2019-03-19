@@ -10,9 +10,9 @@ from gensim import corpora
 MAINCITS_PATT = re.compile(r'((CIT , )*MAINCIT( , CIT)*)')
 CITS_PATT = re.compile(r'(((?<!MAIN)CIT , )*(?<!MAIN)CIT( , (?<!MAIN)CIT)*)')
 
-ONLY_DIR_PRECEEDING = True
-BOTH = True
-PRECEEDING_MIN_LEN_2 = True
+ONLY_DIR_PRECEEDING = False
+BOTH = False
+PRECEEDING_MIN_LEN_2 = False
 
 
 def merge_citation_token_lists(s):
@@ -34,7 +34,7 @@ def build(docs_path, dict_path):
 
     total = sum(1 for line in open(docs_path))
     orig_n = os.path.splitext(docs_path)[0]
-    ext_path = '{}_wNP_both.csv'.format(orig_n)
+    ext_path = '{}_wNP.csv'.format(orig_n)
     with open(docs_path) as fi:
         with open(ext_path, 'w') as fo:
             for idx, line in enumerate(fi):

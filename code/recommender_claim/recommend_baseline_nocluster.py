@@ -138,13 +138,13 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     prind('checking file length')
     num_lines = sum(1 for line in open(docs_path))
 
-    # for MAG eval
-    mag_id2year = {}
-    with open('MAG_CS_en_year_map.csv') as f:
-        for line in f:
-            pid, year = line.strip().split(',')
-            mag_id2year[pid] = int(year)
-    # /for MAG eval
+    # # for MAG eval
+    # mag_id2year = {}
+    # with open('MAG_CS_en_year_map.csv') as f:
+    #     for line in f:
+    #         pid, year = line.strip().split(',')
+    #         mag_id2year[pid] = int(year)
+    # # /for MAG eval
 
     prind('train/test splitting')
     with open(docs_path) as f:
@@ -227,8 +227,8 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                     sb_tup = sub_bags_dict[sub_bag_key]
                     # if len(train_tups) > min_num_train or jdx == len(order)-1:
                     # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
-                    # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
-                    if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
+                    # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
+                    if sub_bag_key[:2] == '17':  # FIXME time split arXiv
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -326,8 +326,8 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
-    # MAG CS en wAbs 50mindoch 3M sample eval
-    # models: BoW, NP, PP, 2BoW1PP
+    # arXiv CS eval
+    # models: BoW, NP, PP, 3BoW1PP (others later)
     eval_models = [
         {'name':'bow'},
         {'name':'np'},
@@ -476,6 +476,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             dcgs = [0]*AT_K
             idcgs = [0]*AT_K
             precs = [0]*AT_K
+            num_rel_at = [0]*AT_K
             num_rel = 1 + len(adjacent_cit_map[test_mid])
             num_rel_at_k = 0
             for i in range(AT_K):
@@ -493,6 +494,9 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                     relevant = True
                 else:
                     relevance = 0
+                num_rel_at[i] = num_rel_at_k
+                if relevant:
+                    precs[i] = num_rel_at_k / placement
                 denom = math.log2(placement + 1)
                 dcg_numer = math.pow(2, relevance) - 1
                 for j in range(i, AT_K):
@@ -507,11 +511,10 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                 for j in range(i, AT_K):
                     # note this^    we go 0~9, 1~9, 2~9, ..., 9
                     idcgs[j] += idcg_numer / denom
-                    if relevant:
-                        precs[j] = num_rel_at_k / placement
             for i in range(AT_K):
                 eval_models[mi]['ndcg_sums'][i] += dcgs[i] / idcgs[i]
                 eval_models[mi]['map_sums'][i] += precs[i] / num_rel
+                eval_models[mi]['map_sums'][i] += sum(precs[:i+1])/max(num_rel_at[i], 1)
                 # NOTE: mby min(num_rel, (i+1)) would be better?
                 if rank <= i+1:
                     eval_models[mi]['mrr_sums'][i] += 1 / rank

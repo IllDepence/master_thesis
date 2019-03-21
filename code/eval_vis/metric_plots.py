@@ -48,8 +48,8 @@ def ploteval(fn, multiple):
         y = [y_ndcg, y_map, y_mrr, y_recall][i]
         subplots[i].set_title(['NDCG','MAP','MRR','Recall'][i])
         # visual hot fix
-        if i == 1:
-            subplots[i].yaxis.set_tick_params(labelsize=8)
+        # if i == 1:
+        #     subplots[i].yaxis.set_tick_params(labelsize=8)
         label_lines = []
         for j in range(len(model_names)):
             color = list(mpl.rcParams['axes.prop_cycle'])[j]['color']

@@ -600,7 +600,11 @@
   isbn      = {978-1-937284-20-6},
   location  = {Montreal, Canada},
   numpages  = {11},
-  review    = {- get best results for sentence segment classification approach},
+  review    = {- get best results for sentence segment classification approach
+
+- call integral / non-integral citations syntactic / non-syntactic
+- provide algorithm for detection based on pattern matching and POS tags
+- when non-integral, remove marker and use head of closest noun phrase as substitute marker},
   url       = {http://dl.acm.org/citation.cfm?id=2382029.2382041},
 }
 
@@ -1495,21 +1499,44 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 }
 
 @Article{Radev2013,
-  author        = {Radev, Dragomir R. and Muthukrishnan, Pradeep and Qazvinian, Vahed and Abu-Jbara, Amjad},
-  title         = {The ACL anthology network corpus},
-  journal       = {Language Resources and Evaluation},
-  year          = {2013},
-  volume        = {47},
-  number        = {4},
-  pages         = {919--944},
-  month         = {Dec},
-  issn          = {1574-0218},
+  author   = {Radev, Dragomir R. and Muthukrishnan, Pradeep and Qazvinian, Vahed and Abu-Jbara, Amjad},
+  title    = {The ACL anthology network corpus},
+  journal  = {Language Resources and Evaluation},
+  year     = {2013},
+  volume   = {47},
+  number   = {4},
+  pages    = {919--944},
+  month    = {Dec},
+  issn     = {1574-0218},
+  abstract = {We introduce the ACL Anthology Network (AAN), a comprehensive manually curated networked database of citations, collaborations, and summaries in the field of Computational Linguistics. We also present a number of statistics about the network including the most cited authors, the most central collaborators, as well as network statistics about the paper citation, author citation, and author collaboration networks.},
+  day      = {01},
+  doi      = {10.1007/s10579-012-9211-2},
+  review   = {- citation for ACL-AAN},
+  url      = {https://doi.org/10.1007/s10579-012-9211-2},
+}
+
+@Article{Jaradeh2019,
+  author        = {Mohamad Yaser Jaradeh and S{\"{o}}ren Auer and Manuel Prinz and Viktor Kovtun and G{\'{a}}bor Kismih{\'{o}}k and Markus Stocker},
+  title         = {Open Research Knowledge Graph: Towards Machine Actionability in Scholarly Communication},
+  journal       = {CoRR},
+  year          = {2019},
+  volume        = {abs/1901.10816},
+  archiveprefix = {arXiv},
+  bibsource     = {dblp computer science bibliography, https://dblp.org},
+  biburl        = {https://dblp.org/rec/bib/journals/corr/abs-1901-10816},
+  eprint        = {1901.10816},
+  review        = {- citation for making scholarly discourse more easily machine processable by semantic annotation (cf. ScholOnto)},
+  timestamp     = {Sun, 03 Feb 2019 14:23:05 +0100},
+  url           = {http://arxiv.org/abs/1901.10816},
+}
+
+@TechReport{Whidby2011,
+  author        = {Whidby, Michael and Zajic, David and Dorr, Bonnie},
+  title         = {Citation handling for improved summarization of scientific documents},
+  year          = {2011},
   __markedentry = {[tarek:]},
-  abstract      = {We introduce the ACL Anthology Network (AAN), a comprehensive manually curated networked database of citations, collaborations, and summaries in the field of Computational Linguistics. We also present a number of statistics about the network including the most cited authors, the most central collaborators, as well as network statistics about the paper citation, author citation, and author collaboration networks.},
-  day           = {01},
-  doi           = {10.1007/s10579-012-9211-2},
-  review        = {- citation for ACL-AAN},
-  url           = {https://doi.org/10.1007/s10579-012-9211-2},
+  review        = {- extend a trimmer tool to be able to "handle" integral and non-integral citations (integral: replace marker with token, non-integral: remove marker and place token at end of sentence ("better solution = future work"))
+- specifically state that non-integral citations cause problems in generating parse trees (the constituency kind, not dependency trees)},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

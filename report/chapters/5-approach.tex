@@ -26,22 +26,40 @@ In order to investigate the use of explicit semantic representations for the tas
 \end{center}
 \end{table}
 
-Table~\ref{tab:citfunctions} lists categories of citation functions along with the kinds of semantic constructs that can be found in such citation contexts. The list of citation functions is taken from \cite{Petric2007} (and therein built upon \cite{Thompson2001}). This study was selected because it gives an overview of previous attempts to classify citations and presents their new typology with extensive explanation as well as example contexts. Examining contexts from each of the eight functions we identify two types of semantic constructs: named entities (NE) and claims (or statements). The rationale behind these two is as follows. Named entities can identify reference publications for a certain data set/tool/concept (see \emph{Attribution}, \emph{Statement of use} and \emph{Application} in Table~\ref{tab:citfunctions}) as well as a method/field of study common to a selection of publications (see \emph{Exemplification} in Table~\ref{tab:citfunctions}). Claims can identify publications that can be cited to back or support the very claim contained in a citation context. Note that, considering a larger citation context, argumentative structures could also be considered viable semantic constructs for local citation recommendation. To keep the scope of this thesis at a reasonable level we will limit our investigation to named entities and claims.
+Table~\ref{tab:citfunctions} lists categories of citation functions along with the kinds of semantic constructs that can be found in such citation contexts. The list of citation functions is taken from \cite{Petric2007} (and therein built upon \cite{Thompson2001}). This study was selected because it gives an overview of previous attempts to classify citations, presents their new typology with extensive explanation as well as example contexts, and does not mix polarity into its function categories. Examining contexts from each of the eight functions we identify two types of semantic constructs: named entities (NE) and claims (or statements). The rationale behind these two is as follows. Named entities can identify reference publications for a certain data set/tool/concept (see \emph{Attribution}, \emph{Statement of use} and \emph{Application} in Table~\ref{tab:citfunctions}) as well as a method/field of study common to a selection of publications (see \emph{Exemplification} in Table~\ref{tab:citfunctions}). Claims can identify publications that can be cited to back or support the very claim contained in a citation context. Note that the example contexts listed to have no construct (``-'' in the \emph{Construct} column) may contain named entities and claims as well (e.g. ``DBLP'' or ``Lamers et al. base their definition of the author's name''), but these are (in the case of NEs) not representative of the cited work or (in the case of claims) just statements \emph{about} a publication rather than statements being backed by the cited work.
+A third semantic construct that can be considered, but would require considering a larger citation context, is argumentative structures. To keep the scope of this thesis at a reasonable level we will, however, limit our investigation to named entities and claims.
 
 The following sections will describe our investigation of entity based and claim based models for local citation recommendation.
 
 \section{Entity based recommendation}
 The intuition behind an entity based approach is, that there exists a reference publication for a named entity. Examples would be a data set (``CiteSeerX~\cite{Caragea2014}''), a tool (``Neural ParsCit~\cite{Animesh2018}'') or a concept (``Semantic Web~\cite{Berners-Lee2001}''). In a more loose sense this can also include publications being referred to as examples (``approaches to local citation recommendation~\cite{He2010,Huang2014,Huang2015,Duma2014,Duma2016,Ebesu2017,Kobayashi2018,Jeong2019}'').
-
-first DBpedia Spotlight (only mention in passing), then MAG FoS, then NPs
+% mention DBpedia Spotlight tests? (sufficient data available?)
+For the identification of such named entities we take two approaches. A more strict one based on the fields of study given in the MAG, and a more loose one based on noun phrases.
 
 \subsection{Fields of study in the MAG}
+Along with papers, authors, venues etc. the MAG data schema also includes fields of study (FoS) that are associated with papers and interlinked in a child-parent manner. At the time of writing there are 229,716 FoS at 6 levels of granularity. They range from the most coarse level 0 (example entries being \emph{mathematics}, \emph{sociology},  \emph{computer science}) to more and more fine grained entities (\emph{theoretical computer science}(1)→\emph{encryption}(2)→\emph{on-the-fly encryption}(3)→\emph{filesystem-level encryption}(4)→\emph{FileVault}(5)). The levels of granularity don't seem to follow a globally consistent pattern though. \emph{WordNet}, for example, being a particular piece of data in the same way \emph{FileVault} is a particular piece of software, is not at level 5 but level 2 (\emph{computer science}(0)→\emph{artificial intelligence}(1)→\emph{WordNet}(2)). Another noteworthy aspect is that a FoS can have multiple parents (\emph{FileVault} for example also has the parent \emph{multiple encryption}).
+
+annotated whole data set
+
+experimented a lot
+
+did a small manual evaluation and realized that seemingly normal terms can be specialized vocab in a particular field (e.g. motivation in psychology)
+
+experimented more
+
+tried directly in front of the citation marker
+
+use jaccard similarity btw.
+
+ended up with bow+superminifosboost model that does consistently improve eval score but not much
 
 \subsection{Noun phrases}
 
 \section{Claim based recommendation}
 
 how citations are embedded in sentences (integral/non-integral\cite{Swales1990,Hyland1999,Thompson2001,Okamura2008,Lamers2018})
+
+actually look into automatic classification \cite{Whidby2011,Abujbara2012}
 
 \subsection{Tools for extracting claims}
 tools tools

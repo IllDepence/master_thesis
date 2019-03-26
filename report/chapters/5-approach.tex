@@ -54,27 +54,31 @@ and $t_{i,j}$ is a non-negative integer representing a quantity with regards to 
 \section{Claim based recommendation}
 For the introduction of a claim based model we first need to make a few observations on how citations interact with the text they're placed in. By convention, citations are constructed by placing a type of marker, which identifies an entry in the document's reference section, in the text. These markers can, depending on discipline, journal, etc. take different forms. Some examples are numbers in square brackets (``In [27] ...''), alphanumeric identifiers in square brackets (``In [Bol98] ...''), a year in parentheses succeeding an author's name (``Swales (1990) has argued ...'') and an author's name with a year in parentheses (``It has been argued (Swaled, 1990) ...''). Named entities can stand in a grammatical relation to such a marker. In ``By using CiteSeer, [Bol98], we ...'', for example, the named entitiy \emph{CiteSeer} and the citation marker \emph{[Bol98]} are in a grammatical relation called \emph{apposition}. A citation marker can, however, reasonably assumend to never be \emph{part of} the named entity. This is different in the case of the statements within a citaiton context. Looking at the sentence ``In \cite{Bollacker1998} Bollacker et al. introduce Citeseer.'' we can see that the marker itself is part of what is being said, while this is not the case in for example ``Bollacker et al. introduced Citeseer in 1998~\cite{Bollacker1998}.''. This distiction will briefly be explained in the following section.
 
-\subsection{Integral and non-integral citations}
-The term ``integral''---in the adjectival sense close in meaning to ``essential'' or ``inherent'', not what we denote in caluclus with $\int$---is used to describe citation markers that are part of a sentence. There seems to be no consensus on the exact definition of \emph{``part of''} though. While some \cite{} others \cite{}
+\subsection{``Integral'' and ``syntactic''}
+The term ``integral''---in the adjectival sense close in meaning to ``essential'' or ``inherent'', not what we denote in caluclus with $\int$---is used in discourse analysis to describe forms of citation that give prominence to the auhtor. The distinction between integral and non-integral citations was introduced by Swales~\cite{Swales1990} in 1990 and is being applied frequently~\cite{Hyland1999,Thompson2001,Okamura2008,Lamers2018}. A citation is deemed integral if the author's name of the cited work is an integral part of the citing sentence
 
-how citations are embedded in sentences (integral/non-integral\cite{Swales1990,Hyland1999,Thompson2001,Okamura2008,Lamers2018})
+ (integral/non-integral\cite{Swales1990,Hyland1999,Thompson2001,Okamura2008,Lamers2018})
 
 actually look into automatic classification \cite{Whidby2011,Abujbara2012}
 
 \begin{table}[]
 \centering
-    \caption[Differences in definition of integral and non-integral citations.]{Differences in definition of integral and non-integral citations. i=integral, n=non~integral.}
+    \caption{Examples of citations and their categorization into integral/non-integral as well as syntactical/non-syntactical.}
     \label{tab:integral}
 \begin{center}
-    \begin{tabular}{llllllll}%m{8cm}
+    \begin{tabular}{llllll|ll}%m{8cm}
     \toprule
-    Citation type & \rotatebox{90}{Swales~\cite{Swales1990}} & \rotatebox{90}{Hyland~\cite{Hyland1999}} & \rotatebox{90}{Thompson~\cite{Thompson2001}} & \rotatebox{90}{Okamura~\cite{Okamura2008}} & \rotatebox{90}{Whidby et al.~\cite{Whidby2011}} & \rotatebox{90}{Abujbara et al.~\cite{Abujbara2012}} & \rotatebox{90}{Lamers et al.~\cite{Lamers2018}} \\
+    Context excerpt (citation marker {\color{UniBlue}highlighted}) & \rotatebox{90}{Swales~\cite{Swales1990}} & \rotatebox{90}{Hyland~\cite{Hyland1999}} & \rotatebox{90}{Thompson~\cite{Thompson2001}} & \rotatebox{90}{Okamura~\cite{Okamura2008}} & \rotatebox{90}{Lamers et al.~\cite{Lamers2018}} & \rotatebox{90}{Whidby et al.~\cite{Whidby2011}} & \rotatebox{90}{Abujbara et al.~\cite{Abujbara2012}} \\
     \midrule
-    ``Swales has argued that ... [42].''          & x & x & ? & x & x & x & x \\
-    ``Swales (1990) has argued that ...''         & x & x & i & x & x & x & x \\
-    ``It has been argued (Swales 1990) that ...'' & x & x & n & x & x & x & x \\
-    ``[42] argues that ...''                      & x & x & i & x & x & x & x \\
-    ``foo [42]''                                  & x & x & x & x & x & x & x \\
+    ``Swales {\color{UniBlue}(1990)} has argued that ...''                 & i & i & i & i & i & n & - \\
+    ``{\color{UniBlue}Swales (1990)} has argued that ...''                 & i & i & i & i & n & s & s \\
+    ``Swales {\color{UniBlue}[42]} has argued that ...''                   & i & i & i & i & i & n & n \\
+    ``Swales has argued that ... {\color{UniBlue}[42]}''                   & ? & ? & ? & ? & i & n & n \\
+    ``It has been argued {\color{UniBlue}(Swales 1990)} that ...''         & n & n & n & n & n & n & n \\
+    ``It has been argued {\color{UniBlue}[42]} that ...''                  & n & n & n & n & n & n & n \\
+    ``Some approaches, like {\color{UniBlue}(Swales 1990)}, focus on ...'' & ? & ? & ? & ? & n & s & s \\
+    ``Some approaches, like {\color{UniBlue}[42]}, focus on ...''          & n & n & n & n & n & s & s \\
+    ``... has been shown (see {\color{UniBlue}Swales (1990)}).''           & n & n & n & n & n & s & n \\
     \bottomrule
     \end{tabular}
 \end{center}

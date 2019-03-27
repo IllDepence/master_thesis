@@ -97,7 +97,7 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
-def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
+def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
               np_dict_path=None, lda_preselect=False,
               combine_train_contexts=True):
     """ - foo
@@ -113,7 +113,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
     tmp_bag = []
     adjacent_cit_map = {}
 
-    if pp_dict_path and False:
+    if pp_dict_path:
         prind('loading predpatt dictionary')
         pp_dictionary = corpora.Dictionary.load(pp_dict_path)
         pp_num_unique_tokens = len(pp_dictionary.keys())
@@ -162,7 +162,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                 cntxt_nps = vals[-1]
                 if '\u241D' in cntxt_nps:  # includes NP<marker> variant
                     np_all, np_marker = cntxt_nps.split('\u241D')
-                    cntxt_nps = np_marker  # mby use both for final eval
+                    cntxt_nps = np_all  # mby use both for final eval
                 cntxt_nps = [np for np in cntxt_nps.strip().split('\u241F')]
                 vals = vals[:-1]
             if len(vals) == 4:
@@ -228,7 +228,13 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                     # if len(train_tups) > min_num_train or jdx == len(order)-1:
                     # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
                     # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
-                    if sub_bag_key[:2] == '17':  # FIXME time split arXiv
+                    # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
+                    try:
+                        refseer_year = int(sub_bag_key.split('_')[0])
+                    except ValueError:
+                        print('unexpected citing doc year for {}'.format(sub_bag_key))
+                        refseer_year = 0
+                    if refseer_year > 2011:  # FIXME time split refseer
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -326,13 +332,13 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
-    # arXiv CS bonus eval
-    # models: BoW, NP<marker>, FoS, BoW+FoSboost
+    # refseer eval
+    # models: BoW, NP, PP, 2BoW1PP
     eval_models = [
         {'name':'bow'},
-        {'name':'npmarker'},
-        {'name':'fos'},
-        {'name':'bow+fosboost'}
+        {'name':'np'},
+        {'name':'pp'},
+        {'name':'pp+bow'}
         ]
     for mi in range(len(eval_models)):
         eval_models[mi]['num_cur'] = 0
@@ -371,10 +377,10 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             # fos_ranking = sorted_dot_prod_ids[::-1].tolist()
             # non_zero_dot_prods = len([dp for dp in dot_prods if dp > 0])
             # fos_ranking = fos_ranking[:non_zero_dot_prods]
-            fos_boost = np.where(
-                dot_prods >= dot_prods.max()-1
-                )[0].tolist()
-            top_dot_prod = dot_prods[-1]
+            # fos_boost = np.where(
+            #     dot_prods >= dot_prods.max()-1
+            #     )[0].tolist()
+            # top_dot_prod = dot_prods[-1]
         if use_predpatt_model:
             pp_sims = pp_index[pp_tfidf[tpl[3]]]
             pp_sims_list = list(enumerate(pp_sims))
@@ -406,9 +412,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         if lda_preselect:
             # translate back from listing in LDA/LSI pick subset to global listing
             bow_ranking = [lda_picks[r] for r in bow_ranking]
-        if use_fos_annot:
+        if use_fos_annot and False:
             # # v hand crafted sliiiiiiight improvement v
-            boost_ranking = fos_boost_ranking(
+            final_ranking = fos_boost_ranking(
                 bow_ranking, fos_boost, top_dot_prod)
         # else:
         #     final_ranking = bow_ranking
@@ -418,7 +424,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
         if use_predpatt_model:
-            sims_comb = combine_simlists(sims, np_sims, [2, 1])
+            sims_comb = combine_simlists(sims, pp_sims, [2, 1])
             comb_sims_list = list(enumerate(sims_comb))
             comb_sims_list.sort(key=lambda tup: tup[1], reverse=True)
             comb_ranking = [s[0] for s in comb_sims_list]
@@ -461,15 +467,11 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             if mi == 0:
                 final_ranking = bow_ranking
             elif mi == 1:
-                if np_sims_list[0][1] == 0:
-                    continue
                 final_ranking = np_ranking
             elif mi == 2:
-                if fos_sims_list[0][1] == 0:
-                    continue
-                final_ranking = fos_ranking
+                final_ranking = pp_ranking
             elif mi == 3:
-                final_ranking = boost_ranking
+                final_ranking = comb_ranking
             rank = len(bow_ranking)  # assign worst possible
             for idx, doc_id in enumerate(final_ranking):
                 if train_mids[doc_id] == test_mid:

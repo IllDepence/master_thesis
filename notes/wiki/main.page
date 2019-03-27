@@ -1414,7 +1414,7 @@ false positives: 188
                 * interpolated ((1380100+1430200)/2)*(35053329/3505218) = 14051960,6
                 * → 0.0407% error
             * inerpolations:
-                * Phys. Rev.: ((497904+501365)/2)*(35053329/3505218) = 4996508,8 → 35.57% (of matches)
+                * Phys. Rev.: ((497904+501365)/2)*(35053329/3505218) = 4996508,8 (not DOI or aID identified items with 'Phys. Rev.' in them)
                 * no title: ((1192683+1130708)/2)*(35053329/3505218) = 11617335,8 → 33.14% (of all bibitems)
                 * by arXiv ID: ((268239+284149)/2)*(35053329/3505218) = 2762030,5 → 19.66% (of matches)
                 * by doi: ((113952+110068)/2)*(35053329/3505218) = 1120136,7 → 7.97% (of matches)
@@ -1660,6 +1660,55 @@ false positives: 188
         sqlite> select count(uuid) from bibitemmagidmap where mag_id in (select mag_id from bibitemmagidmap group by mag_id having count(uuid) > 1);
         2077763
         ```
+        * **combining output of process #0, #7 and #8**
+            * last print at: (463907+463935+463926)/3 = 463922.7
+            * percentage of total: 463922.7/4640754 = 0.09996708868142260216
+            * check with result size:
+                * real 2756259
+                * interpolated ((275600+276000+278100)/3)*(4640754/463922.7) = 2766577.0
+                * → 0.0037% error
+            * inerpolations:
+                * Phys. Rev.: ((33081+32731+32429)/3)*(4640754/463922.7) = 327577.8 (not DOI or aID identified items with 'Phys. Rev.' in them)
+                * no title: ((82497+82385+80026)/3)*(4640754/463922.7) = 816628.7 → 17.60% (of all bibitems)
+                * by arXiv ID: ((46170+47615+46809)/3)*(4640754/463922.7) = 468800.92 → 17.01% (of matches)
+                * by doi: ((45796+46319+44869)/3)*(4640754/463922.7) = 456763.63 → 16.57% (of matches)
+                * APS doi rebound: ((16071+16738+16929)/3)*(4640754/463922.7) = 165847.90 → 6.01% (of matches)
+            * of all bibitems:
+                * 17.60% no arXiv ID, DOI, DOI deducable pattern & Neural ParsCit can’t identify a title
+                * 59.39% matched
+                * 23.01% some (/wrong) title identified by Neural ParsCit; unable to match with MAG
+            * of all matches:
+                * 60.41 via Neural ParsCit
+                * 22.58% by DOI
+                    * 16.57% directly
+                    * 6.01% heuristically
+                * 17.01% by arXiv ID
+        * **combining numbers for 1991~2017 with 2018**
+            * 100% → 1,340,770+152,153 = 1,492,923
+            * minus 100,240+14,587=114,827 PDFs → 1,355,357
+            * pipleline output: 1,151,707+131,877=1,283,584 (94.7%)
+            * with citations: 1,018,976+120,814=1,139,790 (143,794 lost) (84.1%) (76.3% incl. PDFs)
+            * bibitems total: 35,053,329+4,640,754=39,694,083
+            * matches total: 14,169,900+2,756,259=16,926,159
+            * citation markers total: 63,633,427
+            * details:
+                * Phys. Rev.: 4,996,508.8+327,577.8=5,324,086.6 (not DOI or aID identified items with 'Phys. Rev.' in them)
+                * no title: 11,617,335.8+816,628.7=12,433,964.5 → 31.32% (of all bibitems)
+                * by arXiv ID: 2,762,030.5+468,800.92=3,230,831.42 → 19.09% (of matches)
+                * by doi: 1,120,136.7+456,763.63=1,576,900.33 → 9.32% (of matches)
+                * APS doi rebound: 3,048,214.9+165,847.90=3,214,062.8 → 18.99% (of matches)
+            * of all bibitems:
+                * 31.32% no arXiv ID, DOI, DOI deducable pattern & Neural ParsCit can’t identify a title
+                * 42.64% matched
+                * 26.04% some (/wrong) title identified by Neural ParsCit; unable to match with MAG
+            * of all matches:
+                * 52.6 via Neural ParsCit
+                * 28.31% by DOI
+                    * 9.32% directly
+                    * 18.99% heuristically
+                * 19.09% by arXiv ID
+            * step 1 duration 59+8=67h
+            * step 2 duration 103+16=119h
 * merging DBs
     ```
     attach database '/home/saiert/arxiv-txt-data_2018/metadata.db' as newdata;

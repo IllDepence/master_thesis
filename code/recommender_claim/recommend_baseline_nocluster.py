@@ -519,7 +519,6 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                     idcgs[j] += idcg_numer / denom
             for i in range(AT_K):
                 eval_models[mi]['ndcg_sums'][i] += dcgs[i] / idcgs[i]
-                eval_models[mi]['map_sums'][i] += precs[i] / num_rel
                 eval_models[mi]['map_sums'][i] += sum(precs[:i+1])/max(num_rel_at[i], 1)
                 # NOTE: mby min(num_rel, (i+1)) would be better?
                 if rank <= i+1:

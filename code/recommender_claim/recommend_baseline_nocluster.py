@@ -228,13 +228,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                     # if len(train_tups) > min_num_train or jdx == len(order)-1:
                     # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
                     # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
-                    # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
-                    try:
-                        refseer_year = int(sub_bag_key.split('_')[0])
-                    except ValueError:
-                        print('unexpected citing doc year for {}'.format(sub_bag_key))
-                        refseer_year = 0
-                    if refseer_year > 2011:  # FIXME time split refseer
+                    if sub_bag_key[:2] == '17':  # FIXME time split arXiv
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -332,8 +326,8 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
-    # refseer eval
-    # models: BoW, NP, PP, 2BoW1PP
+    # arXiv CS eval
+    # models: BoW, NP, PP, 3BoW1PP (others later)
     eval_models = [
         {'name':'bow'},
         {'name':'np'},

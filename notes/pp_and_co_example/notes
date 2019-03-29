@@ -1,0 +1,32 @@
+# Sentence
+The paper shows that context-based methods can outperform global approaches.
+
+# Tools
+
+## PredPatt
+    ?a shows ?b
+        ?a: The paper
+        ?b: SOMETHING := context-based methods can outperform global approaches
+    ?a can outperform ?b
+        ?a: context-based methods
+        ?b: global approaches
+
+## Open IE 5.0
+0.90 Context(The paper shows,List([0, 15))):(context-based methods; can outperform; global approaches)
+0.78 (The paper; shows; that context-based methods can outperform global approaches)
+
+## ClausIE
+"The paper" "shows" "that context-based methods can outperform global approaches"
+"context-based methods" "can outperform" "global approaches"
+
+## OLLIE
+0.659: (context-based methods; can outperform; global approaches)[attrib=The paper shows]
+
+# Model
+[
+ 'show:paper',
+ 'show:context based methods',
+ 'show:global approaches',
+ 'outperform:context based methods'
+ 'outperform:global approaches',
+]

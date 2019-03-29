@@ -58,19 +58,38 @@ For the introduction of a claim based model we first need to make a few observat
 The following sections will describe our evaluation of tools for extracting claims from citation contexts and the model we developed for recommendation.
 
 \subsection{Tools for extracting claims}
-tools tools
+For the extraction of claims we consider a total of four state of the art \cite{Zhang2017} information extraction tools: PredPatt~\cite{White2016}, Open IE 5.0~\cite{Mausam2016}, ClausIE~\cite{DelCorro2013} and Ollie~\cite{Mausam2012}. All of these can identify information in unformatted text, which they output in some form of predicate-argument tuples. Listing~\ref{lst:ietools} shows the output of all four tools for the simple sentence \emph{``The paper shows that context-based methods can outperform global approaches.''}.
 
-also: Survey on open information extraction\cite{Niklaus2018}
+\begin{lstlisting}[caption={Information extraction tool output examples.},label={lst:ietools}]
+# PredPatt
+?a shows ?b
+    ?a: The paper
+    ?b: SOMETHING := context-based methods can outperform global approaches
+?a can outperform ?b
+    ?a: context-based methods
+    ?b: global approaches
 
-context specific claim detection\cite{Levy2014}
+# Open IE 5.0
+0.90 Context(The paper shows,List([0, 15))):(context-based methods; can outperform; global approaches)
+0.78 (The paper; shows; that context-based methods can outperform global approaches)
 
-if only papers where semantically annotated as proposed in \cite{BuckinghamShum2000}
-\subsection{A predicate:parameter model}
-predpatt\cite{White2016,Zhang2017}
+# ClausIE
+"The paper" "shows" "that context-based methods can outperform global approaches"
+"context-based methods" "can outperform" "global approaches"
 
-unfeasibility of use of PredPatt output as is
+# OLLIE
+0.659: (context-based methods; can outperform; global approaches)[attrib=The paper shows]
+\end{lstlisting}
 
-loosened predicate:parameter model
+Because the output for simple sentences is comarable for all of the tools, we tested them on 5 non trivial citation contexts, each consisting of 3 sentences. Based on this evaluation---the details of which are given in Appendix~\ref{chap:claimextooleval}---we deem PredPatt to perform the best, which is consistent with the observations in \cite{Zhang2017}.
+
+% also: Survey on open information extraction\cite{Niklaus2018}
+
+% context specific claim detection\cite{Levy2014}
+
+% if only papers where semantically annotated as proposed in \cite{BuckinghamShum2000}
+\subsection{A predicate-argument model}
+see Listing~\ref{lst:ietools}; predicates and arguments can be too long to feasibly use them as is; even test; therefore come up with loosened predicate-argument model; show some trees; explain model; explain prediction
 
 predicates could be grouped/clustered to represent functions as in \cite{Gabor2018}
 

@@ -1,0 +1,23 @@
+train on ~2011, test on 2012~
+
+filter criteria:
+    citing and cited paper need to have:
+        - a title
+        - a venuetype
+        - a venue
+        - an abstract
+        - a year
+    (roughly emulating https://github.com/tebesu/NeuralCitationNetwork/issues/4#issuecomment-470373293 to get somewhat clean data)
+    (note though that Ebesu probably did more preprocessing: https://github.com/harrywy/NPM/tree/master/data_prep)
+
+select pc.cited_id, pc.cited_year, pc.citing_id, pc.citing_year, pc.citing_title, cc.context
+    from citationcontexts cc
+    join
+    (select p.citing_id, p.citing_title, p.citing_year, c.acluster cited_id, c.year cited_year, c.id reference_item_id
+        from citations c
+        join
+        (select id citing_id, title citing_title, year citing_year from papers where title is not null and venuetype is not null and abstract is not null and venue is not null and acluster is not null and year is not null) p
+        on c.paperid = p.citing_id where c.acluster is not null and c.id is not null and c.acluster is not null and c.acluster > 0 and c.paperid is not null
+        and c.acluster in (select acluster from papers where title is not null and venuetype is not null and abstract is not null and venue is not null and acluster is not null and year is not null)) pc
+    on cc.citationid = pc.reference_item_id
+    order by pc.cited_id;

@@ -1,0 +1,26 @@
+train on ~2017, test on 2018~
+
+filter criteria:
+    cited and citing paper need to:
+        - be CS
+        - be in English
+        - have an Abstract
+    cited papers need to have at least 50 citing papers
+
+select paperreferenceid, paperid, citationcontext from
+    papercitationcontexts where
+        paperreferenceid in (select paperreferenceid from papercitationcontexts group by paperreferenceid having count(paperid) > a9) and
+        paperreferenceid in (select fos.paperid from
+            (((select paperid from paperfieldsofstudy where fieldofstudyid = 41008148) as fos
+              join
+              (select paperid from paperlanguages where languagecode = 'en') as lang
+              on fos.paperid = lang.paperid)
+             join (select paperid from paperabstracts) as abstr
+             on fos.paperid = abstr.paperid))
+        and paperid in (select fos.paperid from
+            (((select paperid from paperfieldsofstudy where fieldofstudyid = 41008148) as fos
+              join
+              (select paperid from paperlanguages where languagecode = 'en') as lang
+              on fos.paperid = lang.paperid)
+             join (select paperid from paperabstracts) as abstr
+             on fos.paperid = abstr.paperid))

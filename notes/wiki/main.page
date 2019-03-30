@@ -1685,9 +1685,9 @@ false positives: 188
                 * 17.01% by arXiv ID
         * **combining numbers for 1991~2017 with 2018**
             * 100% → 1,340,770+152,153 = 1,492,923
-            * minus 100,240+14,587=114,827 PDFs → 1,355,357
-            * pipleline output: 1,151,707+131,877=1,283,584 (94.7%)
-            * with citations: 1,018,976+120,814=1,139,790 (143,794 lost) (84.1%) (76.3% incl. PDFs)
+            * minus 100,240+14,587=114,827 PDFs → 1,378,096
+            * pipleline output: 1,151,707+131,877=1,283,584 (93.1%)
+            * with citations: 1,018,976+120,814=1,139,790 (143,794 lost) (82.7%) (76.3% incl. PDFs)
             * bibitems total: 35,053,329+4,640,754=39,694,083
             * matches total: 14,169,900+2,756,259=16,926,159
             * citation markers total: 63,633,427

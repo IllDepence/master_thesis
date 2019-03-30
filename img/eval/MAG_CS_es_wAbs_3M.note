@@ -1,5 +1,16 @@
 train on ~2017, test on 2018~
 
+number of candidates to rank: 45580
+number of test set items: 53151
+trained for 45580 cited docs
+will test for 45521 of those
+
+citation contexts per candidate:
+    min: 1
+    max: 6861
+    mean: 69.19836998308473
+    STD: 137.2818498273542
+
 filter criteria:
     cited and citing paper need to:
         - be CS

@@ -1,1 +1,12 @@
 train on ~2016, test on 2017
+
+number of candidates to rank: 63239
+number of test set items: 490018
+trained for 63239 cited docs
+will test for 61903 of those
+
+citation contexts per candidate:
+    min: 1
+    max: 4035
+    mean: 21.74
+    SD:  51.2

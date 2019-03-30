@@ -1,5 +1,16 @@
 train on ~2011, test on 2012~
 
+number of candidates to rank: 184539
+number of test set items: 53401
+trained for 184539 cited docs
+will test for 183462 of those
+
+citation contexts per candidate:
+    min: 1
+    max: 3379
+    mean: 18.17319117855469
+    STD: 46.987543513375485
+
 filter criteria:
     citing and cited paper need to have:
         - a title

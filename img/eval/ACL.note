@@ -1,3 +1,14 @@
 used ACL citation contexts from
 http://citation-recommendation.org/publications/#To_Cite_or_Not_to_Cite
 train on ~2005, test on 2006
+
+number of candidates to rank: 2431
+number of test set items: 3881
+trained for 2431 cited docs
+will test for 2304 of those
+
+citation contexts per candidate:
+    min: 1
+    max: 158
+    mean: 6.758246527777778
+    STD: 9.513202250778864

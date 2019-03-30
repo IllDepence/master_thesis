@@ -97,7 +97,7 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
-def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
+def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
               np_dict_path=None, lda_preselect=False,
               combine_train_contexts=True):
     """ - foo
@@ -113,7 +113,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
     tmp_bag = []
     adjacent_cit_map = {}
 
-    if pp_dict_path and False:
+    if pp_dict_path:
         prind('loading predpatt dictionary')
         pp_dictionary = corpora.Dictionary.load(pp_dict_path)
         pp_num_unique_tokens = len(pp_dictionary.keys())
@@ -145,6 +145,13 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
     #         pid, year = line.strip().split(',')
     #         mag_id2year[pid] = int(year)
     # # /for MAG eval
+
+    # # for "online" eval
+    # sample = []
+    # with open('ir_sample_25') as f:
+    #     for line in f:
+    #         sample.append(line.strip())
+    # # /for "online" eval
 
     prind('train/test splitting')
     with open(docs_path) as f:
@@ -228,7 +235,8 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                     # if len(train_tups) > min_num_train or jdx == len(order)-1:
                     # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
                     # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
-                    if sub_bag_key[:2] == '17':  # FIXME time split arXiv
+                    # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
+                    if sub_bag_key in sample:  # FIXME online eval sample split
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -326,13 +334,13 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
             np_corpus,
             num_features=np_num_unique_tokens)
 
-    # arXiv CS bonus eval
-    # models: BoW, NP<marker>, FoS, BoW+FoSboost
+    # online eval
+    # models: BoW, NP<marker>, BoW+PP
     eval_models = [
         {'name':'bow'},
         {'name':'npmarker'},
-        {'name':'fos'},
-        {'name':'bow+fosboost'}
+        {'name':'bow+pp'},
+        {'name':'-'}
         ]
     for mi in range(len(eval_models)):
         eval_models[mi]['num_cur'] = 0
@@ -344,6 +352,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         eval_models[mi]['mrr_sums'] = [0]*AT_K
         eval_models[mi]['recall_sums'] = [0]*AT_K
     prind('test set size: {}\n- - - - - - - -'.format(len(test)))
+    # recomms = []
     for test_item_idx, tpl in enumerate(test):
         if test_item_idx > 0 and test_item_idx%10000 == 0:
             save_results(
@@ -457,6 +466,15 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
         # rank by fos only:
         # sims_list = [[i, 0] for i in fos_top_10]
 
+        # recomm = {}
+        # recomm['context'] = tpl[1]
+        # recomm['bow'] = [train_mids[r] for r in bow_ranking[:5]]
+        # recomm['pp'] = [train_mids[r] for r in comb_ranking[:5]]
+        # if np_sims_list[0][1] != 0:
+        #     recomm['np'] = [train_mids[r] for r in np_ranking[:5]]
+        # recomms.append(recomm)
+        # continue
+
         for mi in range(len(eval_models)):
             if mi == 0:
                 final_ranking = bow_ranking
@@ -548,6 +566,9 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
                 eval_models[0]['recall_sums'][4]/eval_models[0]['num_cur'])
                 )
 
+    # with open('online_eval_recomms.json', 'w') as f:
+    #     f.write(json.dumps(recomms))
+    # sys.exit()
     for mi in range(len(eval_models)):
         eval_models[mi]['num_applicable'] = eval_models[mi]['num_cur']
         eval_models[mi]['ndcg_results'] = [
@@ -567,6 +588,7 @@ def recommend(docs_path, dict_path, use_fos_annot=True, pp_dict_path=None,
 
 
 def save_results(docs_path, num_lines, num_test, eval_models, suffix=''):
+    # return
     timestamp = int(time.time())
     result_file_name = 'eval_results_{}{}.json'.format(timestamp, suffix)
     result_data = {

@@ -22,6 +22,7 @@ class Paper(Base):
     title = Column(UnicodeText())
     # fos = Column(String(36))
 
+# db_uri = 'sqlite://'
 db_uri = 'sqlite:///aid_title.db'
 # db_uri = 'sqlite:///aid_fos.db'
 engine = create_engine(db_uri)
@@ -58,12 +59,22 @@ for idx, fn in enumerate(os.listdir(dump_dir)):
             title = meta.getchildren()[0].find('dc:title', namespaces=ns).text
         except AttributeError:
             continue
+        # try:
+        #     subj = meta.getchildren()[0].find('dc:subject', namespaces=ns).text
+        # except AttributeError:
+        #     continue
+        # if subj == 'Computer Science - Information Retrieval':
+        #     with open('2018_ir_ids', 'a') as f:
+        #         f.write('{}\n'.format(aid))
+        # continue
 
         paper_db = Paper(aid=aid, title=title)
         # paper_db = Paper(aid=aid, fos=field)
         session.add(paper_db)
         session.flush()
+    # continue
     if idx % 100 == 0:
         print(idx)
         session.commit()
+# sys.exit()
 session.commit()

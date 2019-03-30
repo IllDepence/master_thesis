@@ -3099,7 +3099,7 @@ gg b/c time
         in top 5: 118646
         in top 10: 149409
         ndcg@5: 0.2076313291287033
-        map@5: 0.030989529232354755
+        map@5: 0.030989529232354755 --- implementation wrong
         mrr@5: 0.15988174584060083
         recall@5: 0.24212579946042798
         
@@ -3107,6 +3107,19 @@ gg b/c time
         user    5257m8.089s
         sys     37m13.485s
         ```
+* rest + details see `img/eval/*`
+
+##### online eval
+
+* problems with free text
+    * probably tendency to certain types of context (e.g. NP&lt;marker&gt;)
+    * no data about decidability of contexts used in offline eval
+* controlled "online eval"
+    * random sample of real contexts
+    * arXiv, 1991-2017, first topic listed in metadata = Information Retrieval: 2437 papers (side note: 2018 alone is 1072)
+        * of these contained in offline eval citing docs:  
+        * random sample:
+    * let ppl judge whether
 
 # misc notes
 

@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    a { text-decoration: none; }
+    li { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+<br>
+<div style="width: 800px; margin: 0 auto;">
+<form action="/{{ n }}/rate" method="POST">
+<table>
+    <tr>
+        <td colspan="3"><p style="color: #999; text-align: center;">{{ n }}/{{ num_items - 1 }}</p><p style="text-align: center;">&ldquo;{{ context|safe }}&rdquo;</p></td>
+    </tr>
+    <tr>
+        <td colspan="3"><p style="text-align: center;"><a href="/{{ n }}/undecidable">definitely not enough information in context</a></p>
+        <p style="text-align: center;"><a href="/{{ n }}/pass">pass (can't decide)</a></p>
+        <p><strong>check all relevant:</strong></p></td>
+    </tr>
+    <tr>
+        <td><p>model 1</p></td>
+        <td><p>model 2</p></td>
+        <td><p>model 3</p></td>
+    </tr>
+    <tr>
+        <td>
+            <ol>
+                {% for rec in recs_bow %}
+                <li><input type="checkbox" name="bow{{ loop.index }}">
+                <a href="https://academic.microsoft.com/paper/{{ rec[0] }}/">{{ rec[1] }}</a></li>
+                {% endfor %}
+            </ol>
+        </td>
+        <td>
+            <ol>
+                {% for rec in recs_pp %}
+                <li><input type="checkbox" name="pp{{ loop.index }}">
+                <a href="https://academic.microsoft.com/paper/{{ rec[0] }}/">{{ rec[1] }}</a></li>
+                {% endfor %}
+            </ol>
+        </td>
+        <td>
+            <ol>
+                {% for rec in recs_np %}
+                <li><input type="checkbox" name="np{{ loop.index }}">
+                <a href="https://academic.microsoft.com/paper/{{ rec[0] }}/">{{ rec[1] }}</a></li>
+                {% endfor %}
+                {% if recs_np|length == 0 %}
+                <p>Model not applicable</p>
+                {% endif %}
+            </ol>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3"><p style="text-align: center;"><input style="width: 100%" type="submit" value="Submit"></p>
+    </tr>
+    <tr>
+        <td colspan="3"><p style="text-align: center;"><a style="color: #bbb;" href="/{{ [n - 1,0]|max }}/">← prev</a>&emsp;<a style="color: #bbb;" href="/{{ [n + 1,num_items - 1]|min }}/">next →</a></p>
+    </tr>
+    <tr>
+        <td colspan="3"><p style="text-align: center;"><a style="color: #999;" href="/0/showmyratings">show my evaluation log</a></p>
+    </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

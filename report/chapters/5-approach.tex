@@ -89,7 +89,43 @@ Because the output for simple sentences is comarable for all of the tools, we te
 
 % if only papers where semantically annotated as proposed in \cite{BuckinghamShum2000}
 \subsection{A predicate-argument model}
-see Listing~\ref{lst:ietools}; predicates and arguments can be too long to feasibly use them as is; even test; therefore come up with loosened predicate-argument model; show some trees; explain model; explain prediction
+Starting out with the predicate-argument tuples as PredPatt outputs them, we tested if there was enough of an overlap betweeen the components among citation contexts to facilitate recommendation. Taking the example from Listing~\ref{lst:ietools}, we would note the predicates \emph{``show''} and \emph{``can outperform''} as well as the arguments \emph{``The paper''}, \emph{``context-based methods can outperform global approaches''}, \emph{``context-based methods''} and \emph{``global approaches''}. Even when not preserving the associations between predicates and their arguments we---i.e. just looking for other contexts where \emph{``global approaches''} was identified, without requiring it to be in conjunction with \emph{``can outperform''}---, we note very little overlap between citation contexts. We believe this to be the case because the predicates and especially arguments that PredPatt identifies can get very long, like \emph{``can outperform''} (including the auxilliary verb \emph{``can''}) and \emph{``context-based methods can outperform global approaches''} (unlikely to appear in another citation context with the exact same wording).
+
+\begin{figure}
+  \centering
+    \subfloat[Main clause.]{{\includegraphics[width=.55\textwidth]{figures/approach/pp_tree0.pdf}}\label{fig:pptrees0}}
+    \subfloat[Sub clause.]{{\includegraphics[width=.45\textwidth]{figures/approach/pp_tree1.pdf}}\label{fig:pptrees1}}
+  \caption{PredPatt trees.}
+  \label{fig:pptrees}
+\end{figure}
+
+To overcome this problem we develop a derivate model based on PredPatt's internal representation of sentences. Internally, PredPatt represents sentences in a tree structure based on Universal Dependencies~\cite{Nivre2016} (i.e. a dependency grammar as opposed to a constituency grammar). This means words are connected by directed edges where the source is referred to as \emph{governor}, the target as \emph{dependant} and the edge itself is associated with a type of \emph{relation}. Looking at Figure~\ref{fig:pptrees}, depicting PredPatt's internal view on the example sentence given in Listing~\ref{lst:ietools}, we can, for example, see that the \emph{``can''} is a dependant to and governed by \emph{``outperform''} in an auxilliary relation.
+
+From this tree representation our model is generated as follows.
+
+merge citation tokens
+remove quotation marks
+get pp representations
+for each identified statement
+take predicate
+from there go down the tree and for all nouns
+resolve name, goeswith, mwe, compound, conj, amod, advmod relations
+make predicate:resolved noun thingy tuples
+done
+
+for recommendation VSM + TFIDF
+
+also do linear combination of similarity scores with bow to beat baseline--thehe
+
+\begin{lstlisting}[caption={Model.},label={lst:ppmodel}]
+[
+ 'show:paper',
+ 'show:context based methods',
+ 'show:global approaches',
+ 'outperform:context based methods'
+ 'outperform:global approaches',
+]
+\end{lstlisting}
 
 predicates could be grouped/clustered to represent functions as in \cite{Gabor2018}
 

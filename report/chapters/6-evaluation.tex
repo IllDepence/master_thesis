@@ -1,9 +1,7 @@
 \chapter{Evaluation}\label{chap:evaluation}
-evaluate evaluate
+To evaluate the effectiveness of our models we evaluate them in offline and online settings. The details of these can be found in Section~\ref{sec:offeval} and \ref{sec:oneval} respectively. Be fore that, we will discuss the peculiarities of evaluating approaches to citation recommendation in Section~\ref{sec:citrecspecial}.
 
-implemetation pain and bad evaluation scores\cite{Beel2017}
-
-\section{Special considerations for citation recommendation}
+\section{Special considerations for citation recommendation}\label{sec:citrecspecial}
 train/test splitting (per cited doc, temporal, ...), re-recommendation, number of contexts describing a recommendation item, ...
 
 a cited doc's role (how it is cited) can develop over time\cite{Swales1986,He2018}
@@ -12,14 +10,16 @@ relevance of time\cite{Beel2017a}
 
 candidates are only citations within current paper\cite{Duma2014}
 
-\section{Offline evaluation}
-pre-filtering experiments (knn\cite{Bhagavatula2018}, lsi, lda, fos, ...)
+\section{Offline evaluation}\label{sec:offeval}
 
-different evaluation settings (all, CSonly, comparison to MAG, ACL (data from \cite{Faerber2018b})...)
+FoS doesn't really work, can bring miiinimal plus to bow
 
-FoS alone, restrictively combined w/ BOW, only directly preceeding, ...
+count adjacent cits for arXiv, info not available for other data sets
 
-PP model alone, combined, ...
+% pre-filtering experiments (knn\cite{Bhagavatula2018}, lsi, lda, fos, ...)
+% different evaluation settings (all, CSonly, comparison to MAG, ACL (data from \cite{Faerber2018b})...)
+% FoS alone, restrictively combined w/ BOW, only directly preceeding, ...
+% PP model alone, combined, ...
 
 % -> not \emph{generally} applicable/beneficial but for certain citation types ...
 
@@ -27,12 +27,19 @@ PP model alone, combined, ...
 
 \begin{figure}
   \centering
-    \includegraphics[width=.9\textwidth]{figures/evaluation/arXiv_CS_select.pdf}
-  \label{fig:evalarxiv}
-  \caption{Evaluation using arXiv.}
+    \includegraphics[width=.8\textwidth]{figures/evaluation/comparison_contexts_per_cited_doc.pdf}
+  \label{fig:evalcomp}
+  \caption{Number of citation contexts per recommendation candidate.}
 \end{figure}
 
 \begin{figure}
+  \centering
+    \includegraphics[width=.9\textwidth]{figures/evaluation/arXiv_CS_select.pdf}
+  \label{fig:evalarxiv}
+  \caption{Evaluation using arXiv.}
+%\end{figure}
+
+%\begin{figure}
   \centering
     \includegraphics[width=.9\textwidth]{figures/evaluation/MAG_CS_es_wAbs_3M.pdf}
   \label{fig:evalmag}
@@ -44,21 +51,16 @@ PP model alone, combined, ...
     \includegraphics[width=.9\textwidth]{figures/evaluation/RefSeer.pdf}
   \label{fig:evalrefseer}
   \caption{Evaluation using RefSeer.}
-\end{figure}
+%\end{figure}
 
-\begin{figure}
+%\begin{figure}
   \centering
     \includegraphics[width=.9\textwidth]{figures/evaluation/ACL.pdf}
   \label{fig:evalacl}
   \caption{Evaluation using ACL-ARC.}
 \end{figure}
 
-\begin{figure}
-  \centering
-    \includegraphics[width=.8\textwidth]{figures/evaluation/comparison_contexts_per_cited_doc.pdf}
-  \label{fig:evalcomp}
-  \caption{Comparison of datasets.}
-\end{figure}
+TFIDF baseline being hard to beat is consitent with observation in \cite{Beel2017}
 
-\section{Online evaluation}
+\section{Online evaluation}\label{sec:oneval}
 online online

@@ -26,7 +26,6 @@ def bow_preprocess_string(s):
         - remove punctuation
         - remove multiple whitespaces
         (- lemmatize   too time consuming for full dataset in given time)
-        - lowercase
         - remove stopwords
     """
 

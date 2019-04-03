@@ -2,10 +2,18 @@ import json
 import sys
 from sqlalchemy import create_engine
 
-def get_title(mid, db_engine):
+def get_paper_info(mid, db_engine):
     tuples = db_engine.execute(
-        ('select originaltitle from papers where paperid = {}').format(mid)
+        ('select originaltitle, publishedyear, citationcount from papers where paperid = {}').format(mid)
         ).fetchall()
+    return tuples[0]
+
+def get_abstract(mid, db_engine):
+    tuples = db_engine.execute(
+        ('select abstract from paperabstracts where paperid = {}').format(mid)
+        ).fetchall()
+    if len(tuples) == 0:
+        return ''
     return tuples[0][0]
 
 mag_db_uri = 'postgresql+psycopg2://mag:1maG$@localhost:5432/MAG'
@@ -26,9 +34,10 @@ for item in lisd:
     for name, ranking in methods:
         new_item[name] = []
         for mid in ranking:
-            title = get_title(mid, mag_engine)
-            new_item[name].append([mid, title])
+            title, year, citcount = get_paper_info(mid, mag_engine)
+            abstract = get_abstract(mid, mag_engine)
+            new_item[name].append([mid, title, year, citcount, abstract])
     new_list.append(new_item)
 
-with open('extended_online_eval_recomms.json', 'w') as f:
+with open('more_extended_online_eval_recomms.json', 'w') as f:
     f.write(json.dumps(new_list))

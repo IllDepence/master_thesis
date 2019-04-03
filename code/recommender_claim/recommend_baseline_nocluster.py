@@ -232,11 +232,12 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
                 test_tups = []
                 for jdx, sub_bag_key in enumerate(order):
                     sb_tup = sub_bags_dict[sub_bag_key]
-                    # if len(train_tups) > min_num_train or jdx == len(order)-1:
                     # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
                     # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
                     # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
-                    if sub_bag_key in sample:  # FIXME online eval sample split
+                    # if sub_bag_key in sample:  # FIXME online eval sample split
+                    # if False:  # FIXME demo sytem "split"
+                    if len(train_tups) > min_num_train or jdx == len(order)-1:
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
@@ -301,6 +302,12 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     index = similarities.SparseMatrixSimilarity(
                 tfidf[corpus],
                 num_features=num_unique_tokens)
+    # prind('Saving BoW TFIDF model.')
+    # tfidf.save('arXivCS_bow_model.tfidf')
+    # prind('Done.')
+    # prind('Saving BoW index.')
+    # index.save('arXivCS_bow_index.idx')
+    # prind('Done.')
 
     # bm25 = BM25(corpus)
     # average_idf = sum(
@@ -326,6 +333,12 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         pp_index = similarities.SparseMatrixSimilarity(
             pp_tfidf[train_ppann],
             num_features=pp_num_unique_tokens)
+    # prind('Saving PP TFIDF model.')
+    # pp_tfidf.save('arXivCS_pp_model.tfidf')
+    # prind('Done.')
+    # prind('Saving PP index.')
+    # pp_index.save('arXivCS_pp_index.idx')
+    # prind('Done.')
 
     if use_noun_phrase_model:
         prind('preparing noun phrase similarities')
@@ -333,6 +346,15 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         np_index = similarities.SparseMatrixSimilarity(
             np_corpus,
             num_features=np_num_unique_tokens)
+    # prind('Saving NP index.')
+    # np_index.save('arXivCS_npmarker_index.idx')
+    # prind('Done.')
+    # prind('Saving doc ID list.')
+    # with open('arXivCS_ID_list.json', 'w') as f:
+    #     f.write(json.dumps(train_mids))
+    # prind('Done.')
+
+    # sys.exit()
 
     # online eval
     # models: BoW, NP<marker>, BoW+PP

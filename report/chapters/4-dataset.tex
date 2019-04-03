@@ -18,8 +18,9 @@ The following sections describe the details of our assessment as well as the cre
     \midrule
     CiteSeerX~\cite{Caragea2014} / RefSeer~\cite{Huang2014} & 5M & 400 chars & (unrestricted) & internal \\
     PubMed Central OAS\footnote{\url{https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/}} & 2.3M & extractable & Biomed./Life Sci. & mixed \\
+    Public Library of Science\footnote{\url{https://www.plos.org/text-and-data-mining}} & 200k & extractable & mostly Biol./Med. & - \\
     arXiv CS~\cite{Faerber2018} &  90K & 1 sentence & CS & DBLP \\
-    Scholarly~\cite{Sugiyama2013}  & 100K & extractable* & CS & - \\
+    Scholarly~\cite{Sugiyama2013}  & 100k & extractable* & CS & - \\
     ACL-AAN~\cite{Radev2013} & 18K & extractable* & CS/Comp. Ling. & -  \\
     ACL-ARC~\cite{Bird2008} & 11K & extractable* & CS/Comp. Ling. & - \\
     \bottomrule
@@ -30,6 +31,8 @@ The following sections describe the details of our assessment as well as the cre
 Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While various recommendation domains have established quasi standard data sets, this is not yet the case in citation recommendation. CiteSeerX is currently the most used in the field~\cite{Beel2016}. It is comparatively large, but many approaches only use subsets and generate them with varying filtering criteria. It includes pre-extracted citation contexts of 400 characters in length, whereby references are resolved to an internal set of identifiers. Unfortunately there are several quality issues with the data set. The main ones being inaccurate citaion information, noisy citation contexts and cut off words at the borders of citation contexts~\cite{Roy2016}.
 
 The PubMed Central Open Access Subset (PMC-OAS) is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \texttt{\url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}}}~\cite{Gipp2015}.
+
+Similar to the PMC-OAS, albeit smaller, the Public Library of Science (PLOS) offers publications in XML format and has seen application for citation based tasks~\cite{Bertin2016,Bertin2018}. In contrast to the the PMC-OAS, references are in general not resolved to any global identifier.
 
 Consistent global reference identifiers are given in the arXiv CS data set in the form of DBLP IDs. Linking to an existing repository of publication (meta) data has the advantage that information about cited papers in readily available. The choice of DBLP restricts resolved references to the field of computer science though. Citations to, for example, publications in maths or statistics can not be resolved to a DBLP ID. A strength of the data set is that it was generated from \LaTeX{} source files, which makes it possible to get very clean data.
 

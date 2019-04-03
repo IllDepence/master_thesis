@@ -23,12 +23,15 @@ mag_engine = create_engine(mag_db_uri,
 
 with open(sys.argv[1]) as f:
     lisd = json.load(f)
+    # lines = f.readlines()
+    # lisd = [l.strip() for l in lines]
 
 new_list = []
+# dikt = {}
 for item in lisd:
     new_item = {}
     new_item['context'] = item['context']
-    methods = [('bow', item['bow']), ('pp', item['pp'])]
+    methods = [('bow', item['bow']), ('pp+bow', item['pp+bow'])]
     if 'np' in item:
         methods.append(('np', item['np']))
     for name, ranking in methods:
@@ -41,3 +44,16 @@ for item in lisd:
 
 with open('more_extended_online_eval_recomms.json', 'w') as f:
     f.write(json.dumps(new_list))
+
+# for mid in lisd:
+#     title, year, citcount = get_paper_info(mid, mag_engine)
+#     abstract = get_abstract(mid, mag_engine)
+#     dikt[mid] = {
+#         'title': title,
+#         'year': year,
+#         'citcount': citcount,
+#         'abstract': abstract
+#         }
+#
+# with open('arxivCS_mid2info.json', 'w') as f:
+#     f.write(json.dumps(dikt))

@@ -115,6 +115,10 @@ pp_tfidf = models.TfidfModel.load(pp_model_fn)
 with open(id_list_fn) as f:
     id_list = json.load(f)
 print('done')
+print('loading MAG info')
+with open('arxivCS_mid2info.json') as f:
+    mid2info = json.load(f)
+print('done')
 
 input_text = 'foo bar'
 
@@ -141,6 +145,6 @@ while len(input_text) > 0:
             np_sims = np_index[np_bow]
             np_ranking = sims2ranking(np_sims)
 
-    print('bow: {}'.format(bow_ranking))
-    print('pp: {}'.format(pp_ranking))
-    print('np: {}'.format(np_ranking))
+    print('bow: {}'.format(''.join(['\n    {}'.format(mid2info[mid]['title']) for mid in bow_ranking])))
+    print('pp: {}'.format(''.join(['\n    {}'.format(mid2info[mid]['title']) for mid in pp_ranking])))
+    print('np: {}'.format(''.join(['\n    {}'.format(mid2info[mid]['title']) for mid in np_ranking])))

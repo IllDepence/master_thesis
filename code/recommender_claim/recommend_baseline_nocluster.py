@@ -449,7 +449,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             final_ranking = [x for x in final_ranking
                      if not (train_mids[x] in seen or seen_add(train_mids[x]))]
         if use_predpatt_model:
-            sims_comb = combine_simlists(sims, np_sims, [2, 1])
+            sims_comb = combine_simlists(sims, pp_sims, [2, 1])
             comb_sims_list = list(enumerate(sims_comb))
             comb_sims_list.sort(key=lambda tup: tup[1], reverse=True)
             comb_ranking = [s[0] for s in comb_sims_list]
@@ -491,7 +491,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         # recomm = {}
         # recomm['context'] = tpl[1]
         # recomm['bow'] = [train_mids[r] for r in bow_ranking[:5]]
-        # recomm['pp'] = [train_mids[r] for r in comb_ranking[:5]]
+        # recomm['pp+bow'] = [train_mids[r] for r in comb_ranking[:5]]
         # if np_sims_list[0][1] != 0:
         #     recomm['np'] = [train_mids[r] for r in np_ranking[:5]]
         # recomms.append(recomm)

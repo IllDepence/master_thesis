@@ -34,7 +34,7 @@ def eval(item_num):
     item = items[n]
     context = item['context'].replace('MAINCIT', '<span style="color: #d11; font-weight: bold;">MAINCIT</span>')
     recs_bow = item['bow']
-    recs_pp = item['pp']
+    recs_pp = item['pp+bow']
     recs_np = item.get('np', [])
     return render_template('index.html', context=context, recs_bow=recs_bow, recs_pp=recs_pp, recs_np=recs_np, n=n, num_items=num_items)
 

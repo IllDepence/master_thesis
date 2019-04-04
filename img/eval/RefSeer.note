@@ -2,8 +2,8 @@ train on ~2011, test on 2012~
 
 number of candidates to rank: 184539
 number of test set items: 53401
-trained for 184539 cited docs
-will test for 183462 of those
+trained for 183462 cited docs (rankable candidates)
+will test for 17323 of those
 
 citation contexts per candidate:
     min: 1

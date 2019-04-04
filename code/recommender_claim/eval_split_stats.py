@@ -21,6 +21,7 @@ def stat(docs_path):
 
     test = []
     train_mids = []
+    test_mids = []
     train_item_num_contexts = []
     train_item_num_context_dict = {}
     tmp_bag = []
@@ -80,9 +81,9 @@ def stat(docs_path):
                 test_tups = []
                 for jdx, sub_bag_key in enumerate(order):
                     sb_tup = sub_bags_dict[sub_bag_key]
-                    # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
-                    # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
                     # if sub_bag_key[:2] == '17':  # FIXME time split arXiv
+                    # if mag_id2year[sub_bag_key] > 2017:  # FIXME time split MAG
+                    # if sub_bag_key[1:3] == '06':  # FIXME time split ACL
                     try:
                         refseer_year = int(sub_bag_key.split('_')[0])
                     except ValueError:
@@ -92,10 +93,12 @@ def stat(docs_path):
                         test_tups.extend(sb_tup)
                     else:
                         train_tups.extend(sb_tup)
+                if len(test_tups) > 0:
+                    test_mids.append(tmp_bag_current_mid)
                 test.extend(
                     [
                         [tmp_bag_current_mid]
-                    for tup in test_tups
+                        for tup in test_tups
                     ])
                 # combine train contexts per cited doc
                 train_item_num_contexts.append(len(train_tups))
@@ -108,12 +111,12 @@ def stat(docs_path):
             tmp_bag.append([in_doc])
     print('number of candidates to rank: {}'.format(len(train_mids)))
     print('number of test set items: {}'.format(len(test)))
-    print('trained for {} cited docs'.format(len(train_item_num_contexts)))
-    print('will test for {} of those'.format(len(train_item_num_context_dict)))
-    with open('train_item_num_contexts_{}.json'.format(str(int(time.time()))), 'w') as f:
-        f.write(json.dumps((train_item_num_contexts)))
-    with open('train_item_num_context_dict_{}.json'.format(str(int(time.time()))), 'w') as f:
-        f.write(json.dumps((train_item_num_context_dict)))
+    print('trained for {} cited docs (rankable candidates)'.format(len(train_item_num_context_dict)))
+    print('will test for {} of those'.format(len(set(test_mids))))
+    # with open('train_item_num_contexts_{}.json'.format(str(int(time.time()))), 'w') as f:
+    #     f.write(json.dumps((train_item_num_contexts)))
+    # with open('train_item_num_context_dict_{}.json'.format(str(int(time.time()))), 'w') as f:
+    #     f.write(json.dumps((train_item_num_context_dict)))
 
 
 if __name__ == '__main__':

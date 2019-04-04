@@ -2,6 +2,7 @@
 """
 
 import json
+import os
 import re
 from gensim import corpora, models, similarities
 from gensim.matutils import corpus2csc, Sparse2Corpus
@@ -85,19 +86,29 @@ def sum_weighted_term_lists(wtlist, dictionary):
     return sum_vec
 
 
+def mid2recomm(mid, mid2info):
+    info = mid2info[mid]
+    return [mid, info['title'], info['year'],
+            info['citcount'], info['abstract']]
+
+
 # bow
-bow_dict_fn = 'items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both.dict'
-bow_model_fn = 'arXivCS_bow_model.tfidf'
-bow_index_fn = 'arXivCS_bow_index.idx'
+bow_dict_fn = 'online_eval_model/items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both.dict'
+bow_model_fn = 'online_eval_model/arXivCS_bow_model.tfidf'
+bow_index_fn = 'online_eval_model/arXivCS_bow_index.idx'
 # pp
-pp_dict_fn = 'items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both_PPterms.dict'
-pp_model_fn = 'arXivCS_pp_model.tfidf'
-pp_index_fn = 'arXivCS_pp_index.idx'
+pp_dict_fn = 'online_eval_model/items_CSall_1s_5mindoc_5mincont_wPP_3.1_wNP_both_PPterms.dict'
+pp_model_fn = 'online_eval_model/arXivCS_pp_model.tfidf'
+pp_index_fn = 'online_eval_model/arXivCS_pp_index.idx'
 # np
-np_dict_fn = 'arxiv_allNPs_until20180830_countGt2_cleaned.dict'
-np_index_fn = 'arXivCS_npmarker_index.idx'
+np_dict_fn = 'online_eval_model/arxiv_allNPs_until20180830_countGt2_cleaned.dict'
+np_index_fn = 'online_eval_model/arXivCS_npmarker_index.idx'
 # recomm
-id_list_fn = 'arXivCS_ID_list.json'
+id_list_fn = 'online_eval_model/arXivCS_ID_list.json'
+mid2info_fn = 'online_eval_model/arxivCS_mid2info.json'
+# IPC
+pipe_query_fn = 'arXivCS_query_fifo'
+pipe_recomm_fn = 'arXivCS_recomm_fifo'
 
 print('loading models')
 bow_dictionary = corpora.Dictionary.load(bow_dict_fn)
@@ -116,16 +127,33 @@ with open(id_list_fn) as f:
     id_list = json.load(f)
 print('done')
 print('loading MAG info')
-with open('arxivCS_mid2info.json') as f:
+with open(mid2info_fn) as f:
     mid2info = json.load(f)
 print('done')
 
-input_text = 'foo bar'
+print('initializing PredPatt')
+pp_warmup = ('Huang et al. MAINCIT used an online active SVM'
+             '(LASVM) to boost the speed of SVM classifier.')
+pp_tuples, _ = build_pp_rep(pp_warmup)
+print('done')
 
-while len(input_text) > 0:
-    input_text = input()
+if not os.path.exists(pipe_query_fn):
+    _foo = os.mkfifo(pipe_query_fn)
+if not os.path.exists(pipe_recomm_fn):
+    _bar = os.mkfifo(pipe_recomm_fn)
+
+print('waiting for flask app')
+pipe_in = open(pipe_query_fn, 'r')
+pipe_out = os.open(pipe_recomm_fn, os.O_WRONLY)
+
+while True:
+    print('waiting for query')
+    input_text = pipe_in.readline()
+    print('recommending ...')
     input_text = input_text.strip()
+    input_text = input_text.replace('[]', ' MAINCIT ')
 
+    # try:
     prep_text = bow_preprocess_string(input_text)
     test_bow = bow_dictionary.doc2bow(prep_text)
     bow_sims = bow_index[bow_tfidf[test_bow]]
@@ -144,7 +172,13 @@ while len(input_text) > 0:
         if np_bow:
             np_sims = np_index[np_bow]
             np_ranking = sims2ranking(np_sims)
+    msg = '{}\n'.format(json.dumps(
+        [
+            [mid2recomm(mid, mid2info) for mid in bow_ranking],
+            [mid2recomm(mid, mid2info) for mid in pp_ranking],
+            [mid2recomm(mid, mid2info) for mid in np_ranking]
+        ]))
+    # except:
+    #     msg = '[[],[],[]]\n'
 
-    print('bow: {}'.format(''.join(['\n    {}'.format(mid2info[mid]['title']) for mid in bow_ranking])))
-    print('pp: {}'.format(''.join(['\n    {}'.format(mid2info[mid]['title']) for mid in pp_ranking])))
-    print('np: {}'.format(''.join(['\n    {}'.format(mid2info[mid]['title']) for mid in np_ranking])))
+    os.write(pipe_out, msg.encode())

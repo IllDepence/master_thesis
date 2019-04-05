@@ -38,6 +38,14 @@ def ploteval(fn, multiple):
         y_mrr.append(model['mrr_results'])
         y_recall.append(model['recall_results'])
 
+    # print('@5\t\tNDCG\tMAP\tMRR\tRecall')
+    # for i in range(4):
+    #     print('{}\t\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}'.format(
+    #         model_names[i], y_ndcg[i][5], y_map[i][5],
+    #         y_mrr[i][5], y_recall[i][5]
+    #         ))
+    # sys.exit()
+
     # plt.xticks(np.arange(min(x), max(x), 1.0))
 
     f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)

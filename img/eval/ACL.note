@@ -12,3 +12,6 @@ citation contexts per candidate:
     max: 158
     mean: 6.758246527777778
     STD: 9.513202250778864
+
+filter criteria:
+    cited doc needs to be resolved to a DBLP ID

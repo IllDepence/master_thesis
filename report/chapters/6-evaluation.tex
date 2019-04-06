@@ -10,21 +10,19 @@ With citations there is more to it than just preference. For a recommended citat
 
 % A common method for evaluating recommender systems is to use items that have existing relevance judgements (e.g. movies with user ratings logged on a website) as an input to the system and compare the output with the actual user judgement. A similar practice exists in citation recommendation. Citation contexts from existing publications are stripped of their citations, fed into the recommender and the result is compared to the original citation. 
 
-A common source of ground truths for automatically evaluating recommender systems is existing relevance judgements (e.g. movies with user ratings logged on a website). For evaluation these are used as an input to the system and the output is compared with the actual judgement. The equivalent in citation recommendation is to harvest citation contexts from existing publications and trying to re-predict the citaions originally contained. While in the case of a movie recommendation, the user's rating at the point in time it was made is \emph{the} truth---within the bounds of the user's introspective capabilities---, a citation, albeit in a published work, can be flawed or may be one of several possibly valid ones. Awareness of this is helpful for interpreting evaluation results in re-prediction scenarios and also the motivation behind alternative evaluation metrics (see also Section~\ref{sec:offeval}).
+A common source of ground truths for automatically evaluating recommender systems is existing relevance judgements (e.g. movies with user ratings logged on a website). For evaluation these are used as an input to the system and the output is compared with the actual judgement. The equivalent in citation recommendation is to harvest citation contexts from existing publications and trying to re-predict the citaions originally contained. While in the case of a movie recommendation, the user's rating at the point in time it was made is \emph{the} truth---within the bounds of the user's introspective capabilities---, a citation, albeit in a published work, can be flawed or may be one of several possibly valid ones. Awareness of this is helpful for interpreting evaluation results in re-prediction scenarios and also the motivation behind alternative evaluation metrics. % (see also Section~\ref{sec:offeval})
 
-Another aspect of automatically harvested ground truth is change over time. In our movie recommendation example this can manifest in a user's taste changing. In scholarly discourse, a cited documents role---that is, how or if it is cited---can develop over time~\cite{Swales1986,He2018}. Examples of causes are concepts becoming obsolete through new discoveries (e.g. the expanding Earth~\cite{Wu2011}), discoveries becoming named retrospecively (e.g. Lotka's law~\cite{Potter1981}) and important work within a field becoming established knowledge and not being referred to anymore (e.g. physicists not citing Einstein's 1905 paper \emph{``Zur Elektrodynamik bewegter Körper''} when talking about the theory of relativity). This observation motivates harvesting citation contexts for ground truths preferably from recent publications which can be achieved through a temporal split of training and test data (see also Section~\ref{sec:offeval}).
+Another aspect of automatically harvested ground truth is change over time. In our movie recommendation example this can manifest in a user's taste changing. In scholarly discourse, a cited documents role---that is, how or if it is cited---can develop over time~\cite{Swales1986,He2018}. Examples of causes are concepts becoming obsolete through new discoveries (e.g. the expanding Earth~\cite{Wu2011}), discoveries becoming named retrospecively (e.g. Lotka's law~\cite{Potter1981}) and important work within a field becoming established knowledge and not being referred to anymore (e.g. physicists not citing Einstein's 1905 paper \emph{``Zur Elektrodynamik bewegter Körper''} when talking about the theory of relativity). This observation motivates harvesting citation contexts for ground truths preferably from recent publications which can be achieved through a temporal split of training and test data. % (see also Section~\ref{sec:offeval})
+
+A last important consideration has to be made concerning the split of training and test data. A na\"{\i}ve way of doing this would be to group citation contexts by cited document and then split each group into, for example, 80\% training and 20\% test data. This would ensure all cited documents are tested for. However, it would also lead to cases where citation contexts from a single publication are split. This would mean an author's word choice, writing style, etc. could be an unwanted signal informing the recommendation. Fortunately, a temporal split of training and test data as mentioned in above paragraph (i.e. splitting training and test data by pulication date of citing documents) automatically solves this problem.
+
+% FIXME: temporal split also ensures that contexts are split document wise, which is important, b/c splitting on a context and not document level can lead to an authors writing style etc. being a signal (TODO write this properly)
 
 % Lastly, the number of contexts describing a recommendation item, ...
 
 % candidates are only citations within current paper\cite{Duma2014}
 
-\section{Offline evaluation}\label{sec:offeval}
-Our online evaluation, in total, encompasses seven different models and four data sets. First, we will introduce the data sets used. We  employ citation contexts from arXiv, the MAG, RefSeer and ACL (see also Chapter~\ref{chap:dataset}). Table~\ref{tab:datasetprops} gives an overview of key properties of the data used. Given are the temporal split between train and test set, the number of candidates to rank (documents), number of these tested for (documents), the number of test set items (contexts) and the mean number of citation contexts trained on per recommendation candidate. This last measure is furthermore visualized in Figure~\ref{fig:evalcomp}. The amount of candidates to rank for each recommendation (\#Cand.) and how well these candidates are described (CC/RC) gives insight into how difficult the recommendation task for each of the data sets is. Comparing, for example, arXiv and MAG under the assumption the data is equally clean (which is not necessarily the case), recommendation using the MAG data should be the easier task, because there are fewer, better described candidates to rank. The number of cited documents tested for (\#Tested) and number of test set items are indicative of how comprehensive the evaluation is. Testing for 50k cited documents using 490k contexts (arXiv) can, for example, be considered more thorough than testing for 2.4k cited documents using 3.8k contexts (ACL-ARC).
-
-% We perform an offline evaluation of several models on multiple data sets. Our main focus will be a subset of the arXiv data set described in Chapter~\ref{chap:dataset} and three of the models discussed in Chapter~\ref{chap:approach} plus a baseline. The arXiv subset is comprised of 1,835,797 citation contexts (7.5\% of the whole data set) generated by filtering with two conditions: the citing paper is from the field of computer science and the cited paper has at least five citing papers within the data set. The reasoning behind this is % comparability to online? annotation time? -> mby go with b/c time "to allow for also annotating other data sets"
-% The contexts used from arXiv are filtered by two conditions: the citing paper is from the field of computer science and the cited paper has at least five citing papers within the data set. This results in 1,835,797 citation contexts (7.5\% of the whole data set). Our reason for this aggresive filtering is 
-
-\begin{table}[]
+\begin{table}[b]
 \centering
     \caption{Key properties of data sets used for evaluation.}
     \label{tab:datasetprops}
@@ -42,26 +40,26 @@ Our online evaluation, in total, encompasses seven different models and four dat
 \end{center}
 \end{table}
 
-\begin{figure}[]
+\section{Offline evaluation}\label{sec:offeval}
+Our offline evaluation, in total, encompasses seven different models and four data sets. First, we will introduce the data sets used. We  employ citation contexts from arXiv, the MAG, RefSeer and ACL (see also Chapter~\ref{chap:dataset}).
+Note that in all four cases we do not use all contexts available in the data set but rather apply filter criteria, the details of which can be found in Appendix~\ref{chap:offlineevalfilter}.
+Table~\ref{tab:datasetprops} gives an overview of key properties of the resulting data. Given are the temporal split between train and test set, the number of candidates to rank (documents), number of these tested for (documents), the number of test set items (contexts) and the mean number of citation contexts trained on per recommendation candidate. This last measure is furthermore visualized in Figure~\ref{fig:evalcomp}. The amount of candidates to rank for each recommendation (\#Cand.) and how well these candidates are described (CC/RC) gives insight into how difficult the recommendation task for each of the data sets is. Comparing, for example, arXiv and MAG under the assumption the data is equally clean (which is not necessarily the case), recommendation using the MAG data should be the easier task, because there are fewer, better described candidates to rank. The number of cited documents tested for (\#Tested) and number of test set items are indicative of how comprehensive the evaluation is. Testing for 50k cited documents using 490k contexts (arXiv) can, for example, be considered more thorough than testing for 2.4k cited documents using 3.8k contexts (ACL-ARC). % TODO: mention "A last difference between the four data sets is that ..." there's precise citation marker info and (consequentially) info on adjacent citations (see Chap 4.?, mby a Fig/Lst) which is relevant for the evaluation in way X and Y (usability of NPmarker and MAP/NDCG numbers)
+
+% We perform an offline evaluation of several models on multiple data sets. Our main focus will be a subset of the arXiv data set described in Chapter~\ref{chap:dataset} and three of the models discussed in Chapter~\ref{chap:approach} plus a baseline. The arXiv subset is comprised of 1,835,797 citation contexts (7.5\% of the whole data set) generated by filtering with two conditions: the citing paper is from the field of computer science and the cited paper has at least five citing papers within the data set. The reasoning behind this is % comparability to online? annotation time? -> mby go with b/c time "to allow for also annotating other data sets"
+% The contexts used from arXiv are filtered by two conditions: the citing paper is from the field of computer science and the cited paper has at least five citing papers within the data set. This results in 1,835,797 citation contexts (7.5\% of the whole data set). Our reason for this aggresive filtering is 
+
+\begin{figure}[tb]
   \centering
     \includegraphics[width=.8\textwidth]{figures/evaluation/comparison_contexts_per_cited_doc.pdf}
   \caption{Number of citation contexts per recommendation candidate.}
   \label{fig:evalcomp}
 \end{figure}
 
-In the following we will describe how the contexts were chosen from each of the named data sets. In order to allow us to annotate\footnote{Calculation of NP and especially claim representations take too much time to be realisticly done on the fly while learning and testing and are therefore generated in a prior offline step.} and evaluate on several data sets with the available temporal and computational resources, we apply the following filter criteria to generate the data described in Table~\ref{tab:datasetprops}: arXiv contexts are those where the citing document is from the field of computer science and the cited document has at least 5 citing documents; MAG contexts ...
+% In the following we will describe how the contexts were chosen from each of the data sets. In order to allow us to annotate\footnote{The calculation of NP and especially claim representations takes too much time to realisticly be done on the fly while learning and testing. These representations are therefore generated in a prior offline step.} and evaluate on several data sets with the available temporal and computational resources, we apply the following filter criteria to generate the data described in Table~\ref{tab:datasetprops}: arXiv contexts are those where the citing document is from the field of computer science and the cited document has at least 5 citing documents; MAG contexts are first filtered to be from the field of computer science, in English
 
-name all data sets
-
-name all models
-
-name all eval metrics
-
-how baseline was chosen (TFIDF performed better than BM25 probably b/c length difference of single context vs. aggregated contexts of a cited doc)
-
-FoS doesn't really work, can bring miiinimal plus to bow
-
-count adjacent cits for arXiv, info not available for other data sets
+The models used for recommendation are the four presented in Chapter~\ref{chap:approach}, ${R_{\text{FoS}}}$, ${R_{\text{NP}}}$, ${R_{\text{NPmrk}}^{2+}}$ and $R_{\text{claim}}$---which we will refer to as FoS, NP, NPmarker, and Claim from here on for simplicity---as well as a Bag-of-Words baseline (BoW) and two combined models (BoW+fosboost and Claim+BoW). The BoW baseline involves removal of punctuation as well as stopwords and uses TFIDF for ranking. We choose TFIDF over BM25 because the former shows better performance in our evaluations%
+% \footnote{Maybe write a long footnote here about how BM25 gives comparable results to TFIDF when representations of cited documents are not jointly learned but contexts are treated separately, but this method in general gives worse results than using joinly learned representations}
+. Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and recall values at cut-off 5 for all models evaluated on the arXiv data.
 
 % pre-filtering experiments (knn\cite{Bhagavatula2018}, lsi, lda, fos, ...)
 % different evaluation settings (all, CSonly, comparison to MAG, ACL (data from \cite{Faerber2018b})...)
@@ -82,7 +80,7 @@ count adjacent cits for arXiv, info not available for other data sets
     Model & NDCG@5 & MAP@5 & MRR@5 & Recall@5 \\
     \midrule
     Claim+BoW & \textbf{0.21829} & \textbf{0.34416} & 0.17530 & \textbf{0.27420} \\
-    BoW+FoS   & 0.20682 & 0.32980 & 0.16264 & 0.25824 \\
+    BoW+fosboost   & 0.20682 & 0.32980 & 0.16264 & 0.25824 \\
     BoW       & 0.20673 & 0.32961 & 0.16256 & 0.25817 \\
     NPmarker  & 0.17677 & 0.30769 & \textbf{0.17764} & 0.24931 \\
     Claim     & 0.08337 & 0.14441 & 0.07477 & 0.11750 \\
@@ -92,6 +90,11 @@ count adjacent cits for arXiv, info not available for other data sets
     \end{tabular}
 \end{center}
 \end{table}
+
+FoS doesn't really work, can bring miiinimal plus to bow
+
+count adjacent cits for arXiv, info not available for other data sets
+
 
 \begin{figure}
   \centering

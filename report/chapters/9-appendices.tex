@@ -364,3 +364,75 @@ Integral citations were first defined by Swales~\cite{Swales1990} in 1990 and ar
 Listing~\ref{lst:claimextooleval} shows our small preliminary evaluation of Open IE 5.0, PredPatt, ClausIE and Ollie using 5 citation contexts of 3 sentences each. Because Open IE 5.0 and PredPatt showed the most promising output on a first look, their precision and recall values were determined, leading to the conclusion that PredPatt performed best.
 
 \lstinputlisting[caption={Manual evaluation of tools for claim extraction.},label={lst:claimextooleval},basicstyle=\tiny]{figures/appendix/ie_tool_comparison}
+
+% -----------------------------------------------------------------------------------
+
+\chapter{Offline evaluation data filter criteria}\label{chap:offlineevalfilter}
+% The calculation of NP and especially claim representations takes too much time to realisticly be done on the fly while learning and testing. These representations are therefore generated in a prior offline step. In order to allow us to precompute representations and evaluate on several data sets, given the available temporal and computational resources, we apply the filter criteria described in Table~\ref{tab:datasetfilter}.
+
+Table~\ref{tab:datasetfilter} details how the citation contexts for our offline evaluation were chosen. The arXiv data used is the one described in Chapter~\ref{chap:dataset}, the MAG data used is a snapshot from February 2019, the RefSeer data set is from Huang et al.~\cite{Huang2015} available at \url{https://psu.app.box.com/v/refseer} and the ACL-ARC data is the same as used in Färber et al.~\cite{Faerber2018b} available at \url{http://citation-recommendation.org/publications/#To_Cite_or_Not_to_Cite}.
+
+\begin{table}[]
+\centering
+    \caption{Filter criteria for offline evaluation data.}
+    \label{tab:datasetfilter}
+\begin{center}
+    \begin{tabular}{lp{11.5cm}}
+    \toprule
+    Data set & Filter criteria and resoning\\
+    \midrule
+    arXiv & citing document
+            \begin{itemize}
+                \item from the field of computer science
+            \end{itemize}
+            cited document
+            \begin{itemize}
+                \item has at least 5 citing documents within the data set
+            \end{itemize}
+            \ 
+            \newline
+            Computer science is chosen so that we can use the same data for online evaluation and resonably judge the quality of recommendations then.
+            \newline
+            Filtering out recommendation candidates described by $\le$4 contexts is done to ensure a minimum quality of candidate descriptions.\\
+    \midrule
+    MAG & citing and cited document
+            \begin{itemize}
+                \item from the field of computer science
+                \item in English
+                \item abstract in MAG not NULL
+            \end{itemize}
+            cited document
+            \begin{itemize}
+                \item has at least 50 citing documents within the data set
+            \end{itemize}
+            from the resulting contexts
+            \begin{itemize}
+                \item take a sample of 3.5M contexts
+            \end{itemize}
+            \ 
+            \newline
+            Above criteria give us a number of reommendation candidates to rank that is close to that of the arXiv data while the quality threshold for those candidates is considerably higher.\\
+    \midrule
+    RefSeer & citing and cited document
+            \begin{itemize}
+                \item title in DB not NULL
+                \item venue in DB not NULL
+                \item venuetype in DB not NULL
+                \item abstract in DB not NULL
+                \item year in DB not NULL
+            \end{itemize}
+            \ 
+            \newline
+            Emulating the filtering criteria used in \cite{Ebesu2017} to remove unclean data.\\
+    \midrule
+    ACL-ARC & cited document
+            \begin{itemize}
+                \item needs to have a globally consistent identifier (here a DBLP ID)
+            \end{itemize}
+            \ 
+            \newline
+            Requirement to be able to perform recommendation.\\
+    \bottomrule
+    \end{tabular}
+\end{center}
+\end{table}

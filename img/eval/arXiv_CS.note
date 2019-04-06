@@ -10,3 +10,7 @@ citation contexts per candidate:
     max: 4035
     mean: 21.74
     SD:  51.2
+
+filter criteria:
+    - citing doc CS
+    - cited doc at least 5 citing docs

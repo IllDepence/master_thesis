@@ -10,6 +10,7 @@
   % enumerate and itemize. For this purpose we include the enumitem package and set itemsep=.5em, of course you can change this
   BCOR=10mm, % BCOR is binding correction
   ngerman,
+  numbers=noenddot,  % "Figure 1.:" -> "Figure 1:" but also "1. Intro" -> "1 Intro"
   % if you'd rather have a one sided thesis, add `oneside' to the documentclass
   % onside,
   % ngerman is needed for hyphenation if the thesis contains parts written in German, switch order with english if you write mainly in English.
@@ -53,9 +54,9 @@
     \input{chapters/0_1-declaration}
     \input{chapters/0_2-abstract}
     \tableofcontents
-    \listoffigures
-    \listoftables
-    \listofalgorithms
+    % \listoffigures
+    % \listoftables
+    % \listofalgorithms
     \hypersetup{pageanchor=true}  % re-enable hyperlinking
 
     \mainmatter  % Arabic page numbers
@@ -76,9 +77,33 @@
     \bibliographystyle{ieeetr}
     \bibliography{bib/paper}
 
-    \newpage  % makes Appendices page start at A1 instead of A3
+    % - - - | makes it so that Bibliography ends with a numerical page number
+    %       v instead of A1 and Appendices starts with A1
+    \newpage
+    \thispagestyle{empty}
+    \mbox{}
+    \newpage
+    % - - - ^
+
+    % - - - | makes it so that "Appendices" page has no page number
+    %       v (found no way so far to make A1 start at Appendix A tho)
+    \let\origappendixpage\appendixpage
+    \makeatletter
+    \renewcommand*{\appendixpage}{
+        \begingroup
+        \let\ps@plain\ps@empty
+        \origappendixpage
+        \endgroup
+        }
+    \makeatother
+    % - - - ^
+
+    % - - - v
     \pagenumbering{arabic}  % resets `page` counter to 1
     \renewcommand*{\thepage}{A\arabic{page}}
+    % - - - ^ this MUST be outsite of \begin{appendices}! if not, the last
+    %       | pages of appendices have page numbers w/o the "A" prefix
+
     \begin{appendices}
     \input{chapters/9-appendices}
     \end{appendices}

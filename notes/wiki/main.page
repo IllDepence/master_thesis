@@ -2081,6 +2081,15 @@ ndcg@5: 0.6204520249953053
 map@5: 0.6087214124896325     — sliiightly better
 ```
 
+combine_train_context=False numbers for ACL:
+```
+@5              NDCG    MAP     MRR     Recall
+bow (tfidf)     0.228   0.200   0.200   0.315
+bow (bm25)      0.081   0.073   0.073   0.107
+```
+
+→ BM25 for some reason way worse when train contexts are combined (see ACL numbers) and very samey to TFIDF when not combined but then both are worse then when combined
+
 ##### MAG specific notes
 query DB for citation contexts for English CS cited papers with at least 5 citing papers
 ```

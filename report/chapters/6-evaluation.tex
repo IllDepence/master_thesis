@@ -61,7 +61,7 @@ The models used for recommendation are the four presented in Chapter~\ref{chap:a
 % \footnote{Maybe write a long footnote here about how BM25 gives comparable results to TFIDF when representations of cited documents are not jointly learned but contexts are treated separately, but this method in general gives worse results than using joinly learned representations}
 . BoW+fosboost is constructed by taking the BoW ranking and then moving all candidates, where the overlap in fields of study (${\big|R_{\text{FoS}}(c_i)\cap\big(\bigcup\limits_{c \in \varrho(d)} R_{\text{FoS}}(c)\big)\big|}$, cf. Section~\ref{sec:approachfos}) is maximal, one position upwards in the ranking. Ranking in Claim+BoW is done by linearly combining similarity values $S(A,B)=\sum\limits_{m\in\mathcal{M}}\alpha_mS_m(A,B)$ of the models $\mathcal{M}=\{\text{Claim},\text{BoW}\}$ with heuristically determined coefficients $\alpha_{\text{Claim}}=1$ and $\alpha_{\text{BoW}}=2$.
 
-Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and recall values at cut-off 5 for all models evaluated on the arXiv data. While FoS alone performs very poorly, the combined model BoW+fosboost consistently performs better then BoW alone. Nevertheless, because the performance gain is minute, we see no reason for a more detailed investigation of the models FoS and BoW+fosboost. Overall Claim+BoW shows the best performance, with NPmarker achieving the highest value for the MRR metric. To investigate the performance of these models further we look at above metrics with at different cut-off values and using multiple data sets. Note that arXiv is the only of our data sets where the NPmarker model is applicable (because the exact position of the citation marker is needed) and also the only of the data sets where more than one cited document in can be counted as relevant (cf. ``adjacent citations'' in Section~\ref{sec:datasetformat}).
+Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and recall values at cut-off 5 for all models evaluated on the arXiv data. While FoS alone performs very poorly, the combined model BoW+fosboost consistently performs better then BoW alone. Nevertheless, because the performance gain is minute, we see no reason for a more detailed investigation of the models FoS and BoW+fosboost. Overall Claim+BoW shows the best performance, with NPmarker achieving the highest value for the MRR metric. To investigate the performance of these models further, we look at above metrics at different cut-off values and using multiple data sets. Note that arXiv is the only of our data sets where the NPmarker model is applicable (because the exact position of the citation marker is needed) and also the only of the data sets where more than one cited document in can be counted as relevant (cf. ``adjacent citations'' in Section~\ref{sec:datasetformat}).
 
 % pre-filtering experiments (knn\cite{Bhagavatula2018}, lsi, lda, fos, ...)
 % different evaluation settings (all, CSonly, comparison to MAG, ACL (data from \cite{Faerber2018b})...)
@@ -93,14 +93,6 @@ Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and recall values at cut-o
 \end{center}
 \end{table}
 
-Figures~\ref{fig:evalarxiv}--\ref{fig:evalacl} show the results of these evaluations. For each of the data sets Claim+BoW outperforms the BoW baseline in each measure and for all cut-off values. Claim and NP do not compare in performance with the aforementioned. NPmarker, only present in Figures~\ref{fig:evalarxiv}, gives particularly good results for lower cut-offs and performs especially well in the MRR metric. If performs the worst at high cut-offs measured by NDCG. Note that NPmarker is only evaluated for test set items where the model was applicable (i.e. where a noun phrase of minium length 2 was directly preceding the citation marker; cf. Section~\ref{sec:npmodel}). For our evaluation this was the case for 100,308 out of the 49,0018 test set items (20.5\%). The evaluation results for NPmarker indicate that it is comparatively well suited to recommend citations where there is one particularly fitting publication (e.g. a reference paper for a tool, method or data set) and less suited for exemplifications (cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}). Comparing values between the different data sets we can see differences in accordance with our expectations based on the values in Table~\ref{tab:datasetprops}. For the MAG data, where we ensured very well described recommendation candidates by setting a threshold, the models perform best.
-% Differences between the other three models are less straightforward, which is no surprise because there are many factors involved (number of recommendation candidates, number of contexts describing these, cleanliness of data, etc.).
-This shows us that differences in data set composition can make a large difference in evaluation results. As a consequence, comparison between approaches is only realistically possible when using the same data.
-
-% Consitent with the X in \cite{Beel2017} we can observe that beating even a simple TFIDF baseline is hard
-
-% \cite{Huang2015} use CiteSeer (which RefSeer is based on) w/ 329,365 recommendation candidates. mby kind of comparable with a few buckets of salt?
-
 \begin{figure}
   \centering
     \includegraphics[width=.9\textwidth]{figures/evaluation/arXiv_CS_select.pdf}
@@ -129,5 +121,20 @@ This shows us that differences in data set composition can make a large differen
   \label{fig:evalacl}
 \end{figure}
 
+Figures~\ref{fig:evalarxiv}--\ref{fig:evalacl} show the results of these evaluations. For each of the data sets Claim+BoW outperforms the BoW baseline in each measure and for all cut-off values. Claim and NP do not compare in performance with the two aforementioned. This suggests that the claim structures we model with $R_{\text{claim}}$ are not enough for well performing recommendations on their own, but do capture information that non-semantic models (BoW) miss. NPmarker, only present in Figures~\ref{fig:evalarxiv}, gives particularly good results for lower cut-offs and performs especially well in the MRR metric. It performs the worst at high cut-offs measured by NDCG. Note that NPmarker is only evaluated for test set items where the model was applicable (i.e. where a noun phrase of minium length 2 is directly preceding the citation marker; cf. Section~\ref{sec:npmodel}). For our evaluation this was the case for 100,308 out of the 490,018 test set items (20.5\%). The evaluation results for NPmarker indicate that it is comparatively well suited to recommend citations where there is one particularly fitting publication (e.g. a reference paper for a tool, method or data set) and less suited for exemplifications (cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}). Comparing values between the different data sets, we can confirm our expectations based on the values in Table~\ref{tab:datasetprops}. For the MAG data, where we ensured very well described recommendation candidates by setting a threshold, the models perform best.
+% Differences between the other three models are less straightforward, which is no surprise because there are many factors involved (number of recommendation candidates, number of contexts describing these, cleanliness of data, etc.).
+This shows us that differences in data set composition can make a large difference in evaluation results. As a consequence, comparison between approaches is only realistically possible when using the same data.
+
+% maybe mention \cite{Beel2017} ("None of these variations performed better than the simple out-of-the-box Apache Lucene baseline"), but then mention that Beel2017 is about *online* systems
+
+% \cite{Huang2015} use CiteSeer (which RefSeer is based on) w/ 329,365 recommendation candidates. mby kind of comparable with a few buckets of salt?
+
 \section{Online evaluation}\label{sec:oneval}
-online online
+Main difference = direct human judgement
+
+\subsection{Non-free text}
+(i.e. insight into offline eval)
+(controlled for free text input bias)
+
+\subsection{Free text}
+free free

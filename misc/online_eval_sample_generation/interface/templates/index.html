@@ -44,17 +44,17 @@
 <form action="/{{ n }}/rate" method="POST">
 <table>
     <tr>
-        <td colspan="3"><p style="color: #999; text-align: center;">{{ n }}/{{ num_items - 1 }}</p><p style="text-align: center;">&ldquo;{{ context|safe }}&rdquo;</p></td>
+        <td colspan="3"><p style="color: #999; text-align: center;">{{ n }}/{{ num_items - 1 }}</p><p style="text-align: center; line-height: 1.5;">&ldquo;{{ context|safe }}&rdquo;</p></td>
     </tr>
     <tr>
-        <td colspan="3"><p style="text-align: center;"><a href="/{{ n }}/undecidable">definitely not enough information in context (relevance not judgeable)</a></p>
-        <p style="text-align: center;"><a href="/{{ n }}/pass">pass (can't judge relevance)</a></p>
+        <td colspan="3"><p style="text-align: center;"><a href="/{{ n }}/undecidable">not enough information</a>&emsp;/&emsp;<a href="/{{ n }}/pass">pass (I can't judge the relevance)</a></p>
         <hr>
-        <p style="text-align: center;"><input type="checkbox" name="author_name"> author name inc.<input type="checkbox" name="syntactical"> marker has gramm. func. | citation type: <select>
+        <p style="text-align: center;"><input type="checkbox" name="author_name"> <span title="Does the author's name appear in the citation context?">author name inc.</span>&emsp;<input type="checkbox" name="syntactical"> <span title="Does the cit. marker have a grammatical function?">marker has gramm. func.</span>&emsp;|&nbsp;citation type: <select name="cit_type">
           <option value="not_given" selected>&emsp;</option>
-          <option value="np">noun phrase</option>
-          <option value="claim">claim</option>
-          <option value="other">other</option>
+          <option value="ne">NE/concept</option>
+          <option value="claim">Claim</option>
+          <option value="example">Example</option>
+          <option value="other">Other</option>
         </select></p>
         <p><strong>check all relevant:</strong></p></td>
     </tr>
@@ -67,7 +67,7 @@
         <td>
             <ol>
                 {% for rec in recs_bow %}
-                <li><input type="checkbox" name="bow{{ loop.index }}">
+                <li><input type="checkbox" name="bow{{ loop.index }}" onchange="sync(this)" class="{{ rec[0] }}">
                 <div class="tooltip">
                 <span class="tooltiptext">year: {{ rec[2] }}&emsp;citations: {{ rec[3] }}<br>{{ rec[4] }}</span>
                 <a href="https://academic.microsoft.com/paper/{{ rec[0] }}/">{{ rec[1] }}</a></div></li>
@@ -77,7 +77,7 @@
         <td>
             <ol>
                 {% for rec in recs_pp %}
-                <li><input type="checkbox" name="pp{{ loop.index }}">
+                <li><input type="checkbox" name="pp{{ loop.index }}" onchange="sync(this)" class="{{ rec[0] }}">
                 <div class="tooltip">
                 <span class="tooltiptext">year: {{ rec[2] }}&emsp;citations: {{ rec[3] }}<br>{{ rec[4] }}</span>
                 <a href="https://academic.microsoft.com/paper/{{ rec[0] }}/">{{ rec[1] }}</a></div></li>
@@ -87,7 +87,7 @@
         <td>
             <ol>
                 {% for rec in recs_np %}
-                <li><input type="checkbox" name="np{{ loop.index }}">
+                <li><input type="checkbox" name="np{{ loop.index }}" onchange="sync(this)" class="{{ rec[0] }}">
                 <div class="tooltip">
                 <span class="tooltiptext">year: {{ rec[2] }}&emsp;citations: {{ rec[3] }}<br>{{ rec[4] }}</span>
                 <a href="https://academic.microsoft.com/paper/{{ rec[0] }}/">{{ rec[1] }}</a></div></li>
@@ -99,7 +99,7 @@
         </td>
     </tr>
     <tr>
-        <td colspan="3"><p style="text-align: center;"><input style="width: 100%" type="submit" value="Submit"></p>
+        <td colspan="3"><p style="text-align: center;"><input style="width: 100%" type="submit" value="Rate"></p>
     </tr>
     <tr>
         <td colspan="3"><p style="text-align: center;"><a style="color: #bbb;" href="/{{ [n - 1,0]|max }}/">← prev</a>&emsp;<a style="color: #bbb;" href="/{{ [n + 1,num_items - 1]|min }}/">next →</a></p>
@@ -110,5 +110,13 @@
 </table>
 </form>
 </div>
+<script>
+function sync(checkboxElem) {
+  nakama = document.getElementsByClassName(checkboxElem.className);
+  for (i=0; i<nakama.length; i++) {
+    nakama[i].checked = checkboxElem.checked;
+    }
+}
+</script>
 </body>
 </html>

@@ -746,17 +746,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.25000001"
-     inkscape:cx="1879.9748"
-     inkscape:cy="1668.2191"
+     inkscape:zoom="0.1767767"
+     inkscape:cx="714.65558"
+     inkscape:cy="2388.4181"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="mm"
      showguides="false"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1918"
-     inkscape:window-height="1062"
+     inkscape:window-width="1920"
+     inkscape:window-height="1080"
      inkscape:window-x="1366"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -860,7 +860,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -25313,9 +25313,9 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
          id="flowPara7622">　- Citing papers' full plain text with citation annotations</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
-         id="flowPara7624">　- Data base with mapping from reference texts to MAG IDs</flowPara><flowPara
+         id="flowPara7624">　- Data base with mapping from reference strings to MAG IDs</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
-         id="flowPara7626">　- Citation context export CSV (+script to generate)</flowPara><flowPara
+         id="flowPara7626">　- Citation context export CSV (+export script)</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
          id="flowPara7628">• <flowSpan
    style="font-weight:bold;stroke-linecap:butt;stroke-linejoin:round"
@@ -25409,13 +25409,13 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
          id="flowPara8157" /><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
-         id="flowPara8159">- New data set of comparably large size</flowPara><flowPara
+         id="flowPara8159">• New data set of comparably large size</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
-         id="flowPara8143">- Clean and accurate data by using LaTeX sources instead of PDFs</flowPara><flowPara
+         id="flowPara8143">• Clean and accurate data by using LaTeX sources instead of PDFs</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
-         id="flowPara8231">- Spanning multiple research domains enabling comparative analysis</flowPara><flowPara
+         id="flowPara8231">• Spanning multiple research domains enabling comparative analysis</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
-         id="flowPara8153">- Flexible data format that is applicable to paper based and citation</flowPara><flowPara
+         id="flowPara8153">• Flexible data format that is applicable to paper based and citation</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"
          id="flowPara8209">　based tasks</flowPara><flowPara
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:1.5;font-family:'Linux Libertine O';-inkscape-font-specification:'Linux Libertine O';stroke-linecap:butt;stroke-linejoin:round"

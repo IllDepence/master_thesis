@@ -1,0 +1,10 @@
+number of candidates to rank: 81320
+number of test set items: 141631
+trained for 81288 cited docs (rankable candidates)
+will test for 19037 of those
+
+citation contexts per candidate:
+    min: 1
+    max: 11051
+    mean: 104.07416838893809
+    STD: 198.56856603889506

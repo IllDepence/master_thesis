@@ -113,7 +113,7 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     tmp_bag = []
     adjacent_cit_map = {}
 
-    if pp_dict_path:
+    if pp_dict_path and False:
         prind('loading predpatt dictionary')
         pp_dictionary = corpora.Dictionary.load(pp_dict_path)
         pp_num_unique_tokens = len(pp_dictionary.keys())
@@ -309,11 +309,11 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
     # index.save('arXivCS_bow_index.idx')
     # prind('Done.')
 
-    # bm25 = BM25(corpus)
-    # average_idf = sum(
-    #     map(lambda k: float(bm25.idf[k]),
-    #         bm25.idf.keys())
-    #     ) / len(bm25.idf.keys())
+    bm25 = BM25(corpus)
+    average_idf = sum(
+        map(lambda k: float(bm25.idf[k]),
+            bm25.idf.keys())
+        ) / len(bm25.idf.keys())
 
     if lda_preselect:
         orig_index = index.index.copy()
@@ -356,13 +356,13 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
 
     # sys.exit()
 
-    # online eval
+    # TFIDF vs BM25 eval
     # models: BoW, NP<marker>, BoW+PP
     eval_models = [
-        {'name':'bow'},
-        {'name':'npmarker'},
-        {'name':'bow+pp'},
-        {'name':'-'}
+        {'name':'bow (TFIDF)'},
+        {'name':'bow (TFIDF)'},
+        {'name':'bow (BM25)'},
+        {'name':'bow (BM25)'}
         ]
     for mi in range(len(eval_models)):
         eval_models[mi]['num_cur'] = 0
@@ -430,9 +430,9 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
         sims_list.sort(key=lambda tup: tup[1], reverse=True)
         bow_ranking = [s[0] for s in sims_list]
 
-        # bm25_scores = list(enumerate(bm25.get_scores(test_bow, average_idf)))
-        # bm25_scores.sort(key=lambda tup: tup[1], reverse=True)
-        # bm25_ranking = [s[0] for s in bm25_scores]
+        bm25_scores = list(enumerate(bm25.get_scores(test_bow, average_idf)))
+        bm25_scores.sort(key=lambda tup: tup[1], reverse=True)
+        bm25_ranking = [s[0] for s in bm25_scores]
 
         if lda_preselect:
             # translate back from listing in LDA/LSI pick subset to global listing
@@ -501,15 +501,11 @@ def recommend(docs_path, dict_path, use_fos_annot=False, pp_dict_path=None,
             if mi == 0:
                 final_ranking = bow_ranking
             elif mi == 1:
-                if np_sims_list[0][1] == 0:
-                    continue
-                final_ranking = np_ranking
+                final_ranking = bow_ranking
             elif mi == 2:
-                if fos_sims_list[0][1] == 0:
-                    continue
-                final_ranking = fos_ranking
+                final_ranking = bm25_ranking
             elif mi == 3:
-                final_ranking = boost_ranking
+                final_ranking = bm25_ranking
             rank = len(bow_ranking)  # assign worst possible
             for idx, doc_id in enumerate(final_ranking):
                 if train_mids[doc_id] == test_mid:

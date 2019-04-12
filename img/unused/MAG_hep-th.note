@@ -1,0 +1,15 @@
+Example reference string:
+    K. Kondo, hep-th/0303251.
+Neural ParsCit:
+    "K." -> author
+    "Kondo" -> auhtor
+    "hep-th/0303251." title
+MAG normalize:
+    "hep-th/0303251." -> "hep th 0303251"
+try smaller chunks b/c ParsCit sometimes overshoots:
+    "hep th"
+MAG=> select papertitle from papers where paperid = 2811252340;
+ papertitle 
+------------
+ hep th
+(1 row)

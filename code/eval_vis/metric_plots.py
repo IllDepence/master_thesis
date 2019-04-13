@@ -12,6 +12,16 @@ from matplotlib.colors import LogNorm
 
 
 def ploteval(fn, multiple):
+    pretty_names = {
+        'bow': 'BoW',
+        'np': 'NP',
+        'pp': 'Claim',
+        'pp+bow': 'Claim+BoW',
+        'npmarker': 'NPmarker',
+        'fos': 'FoS',
+        'bow+fosboost': 'BoW+fosboost'
+        }
+
     with open(fn) as f:
         results = json.load(f)
 
@@ -26,7 +36,7 @@ def ploteval(fn, multiple):
     num_tested = 0
     for i, model in enumerate(results['models']):
         num_tested = max(num_tested, model['num_cur'])
-        model_names.append(model['name'])
+        model_names.append(pretty_names.get(model['name'], model['name']))
         if 'ndcg_results' not in model:
             for j in range(10):
                 model['ndcg_results'] = [sm/model['num_cur'] for sm in model['ndcg_sums']]

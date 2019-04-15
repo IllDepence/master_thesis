@@ -36,16 +36,22 @@ In this chapter we will define important terms and lay out the theoretical backg
 % \paragraph{Citation recommendation} global/local  % already explained in first chapter
 \paragraph{Named Entity} In natural language processing the term ``Named Entity'' (NE) describes unambiguous abstract or physical entities which have a proper name. Examples are people (Tim Berners-Lee), places (the city Taipei), organizations (the Free Software Foundation) and concepts (Okapi BM25). For a more detailed discussion of the term see~\cite{Nadeau2007}.
 \paragraph{Noun phrase} A noun phrase is a group of words (or a single word) functioning grammatically as one unit, that has a noun at its head. Examples are ``\emph{example}'', ``noun \emph{phrase}'' and ``context-based co-citation \emph{recommendation}'' (head of the phrase \emph{highlighted}).
-\paragraph{Claim} For our purposes we define a ``claim'' as ...
+\paragraph{Claim} For the scope of this thesis we define a ``claim'' as a verifiable statement in writing. The motivation is to capture those parts of publications, that are backed by citations. Examples are ``CiteSeer was introduced in 1998.'' and ``Parsing \LaTeX{} sources is a non trivial task.''.
 
 \section{Theoretical background}
-\subsection{Foo}
-supervized ml (briefly)
+\subsection{Recommending scientfic publications}
+Generally speaking, recommender systems are tools of discovery. In situations where a user can not reasonably be assumed to consider all availabe options, a recommender system's task is to identify those items that maximize a user's satisfaction, service provider's revenue or similar goal. This is typically done by calculating a score for each item, ranking them by score and finally presenting the top ones to the user. Common domains of recommendation are shopping products and media (movies, news articles, etc.). A coarse distinction of techniques for recommendation---ignoring hybrid and less conventional cases---can be made between \emph{content-based} and \emph{collaborative filtering}. The latter exploits the similarity of user profiles for recommendation, while the former operates on the similarity of the items.~\cite{Ricci2015}
+
+supervized ML ... 
+
+Scientific publications as a recommender domain ...
+
+Recommending for citation ...
+
+explain harvesting citation contexts and comparing aggregrates to input
 % michael:
 % - peculiarities of CiteRec (many papers, few users, even in the field of rec systems);
 % - diverse nature of publications to be parsed (what data can be extracted from papers, ...);
 % in general: Only focus on really, i.e., directly relevant items/concepts mentioned later in the thesis.
-\subsection{Bar}
-explain harvesting citation contexts and comparing aggregrates to input
 \subsection{Evaluation metrics}
-Recall, MAP, MRR, NDCG
+Recall, MAP, MRR, NDCG~\cite{Aggarwal2016}

@@ -347,6 +347,8 @@ Listing~\ref{lst:claimextooleval} shows our small preliminary evaluation of Open
 
 Table~\ref{tab:datasetfilter} details how the citation contexts for our offline evaluation were chosen. The arXiv data used is the one described in Chapter~\ref{chap:dataset}, the MAG data used is a snapshot from February 2019, the RefSeer data set is from Huang et al.~\cite{Huang2015} available at \url{https://psu.app.box.com/v/refseer} and the ACL-ARC data is the same as used in Färber et al.~\cite{Faerber2018b} available at \url{http://citation-recommendation.org/publications/#To_Cite_or_Not_to_Cite}.
 
+% https://github.com/tebesu/NeuralCitationNetwork/files/2939407/Notes_for_NCN.pdf
+
 \begin{table}[]
 \centering
     \caption{Filter criteria for offline evaluation data.}
@@ -366,7 +368,7 @@ Table~\ref{tab:datasetfilter} details how the citation contexts for our offline 
             \end{itemize}
             \ 
             \newline
-            Computer science is chosen so that we can use the same data for online evaluation and resonably judge the quality of recommendations then.
+            Computer science is chosen so that the same data can be used in a user study where participants from the field computer science judge the quality of recommendations.
             \newline
             Filtering out recommendation candidates described by $\le$4 contexts is done to ensure a minimum quality of candidate descriptions.\\
     \midrule

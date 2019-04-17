@@ -49,15 +49,45 @@ Recommendation of scientfic publications can be done for several purposes, like 
 
 Having established the relative position of the field of citation recommendation with respect to related fields, we will lay out the core concepts relevant to our approach, \emph{content based local citation recommendation by use of citation contexts}, below.
 
-types of information that can be harvested and used: citation network, metadata, full text
+\begin{figure}
+  \centering
+    \includegraphics[width=0.8\textwidth]{figures/background/document_rich_view.pdf}
+  \caption{Schematic view on a document, its metadata and embedding in the citation graph.}
+  \label{fig:docrichview}
+\end{figure}
 
-harvesting citation contexts and comparing aggregrates to input
-% michael:
-% supervized ML ... 
-% - peculiarities of CiteRec (many papers, few users, even in the field of rec systems);
-% - diverse nature of publications to be parsed (what data can be extracted from papers, ...);
-% in general: Only focus on really, i.e., directly relevant items/concepts mentioned later in the thesis.
-\subsection{Evaluation metrics}
-Recall, MAP, MRR, NDCG~\cite{Aggarwal2016}
+\begin{figure}[t]
+  \centering
+    \includegraphics[width=\textwidth]{figures/background/document_context_view_withvec.pdf}
+  \caption{Schematic visualization of a document's representation using citation contexts.}
+  \label{fig:doccontview}
+\end{figure}
 
-maybe also explain re-recommendation and other evaluation settings here (then rename section)
+As mentioned above, the focus in the case of citation recommendation lies on the candidate items---which are scientific publications. Figure~\ref{fig:docrichview} shows the types of information that are available to describe them. First and foremost each publication has, of course, its textual contents. Alongside this it is also part of a network of citations, meaning is has documents it is being cited by as well as documents it is citing. Lastly, there may also be metadata describing the document, such as the title, authors, year of publication etc. In order to study the viability of using explicit semantic representations of citation contexts for citation recommendation, without introducing any confounding variables, we will describe our documents \emph{only} by citation contexts. As citation contexts have been shown to contain information similar to and sometimes more extensive and focussed than abstracts~\cite{Elkiss2008}, we can expect decent recommendation results even though we're not taking any metadata associated with or textual content contained in the candidate documents into account. Figure~\ref{fig:doccontview} shows how a document representation can be generated from citation contexts. Document $d_i$ is cited by several other documents. By aggregating the contexts of these citations and deriving an abstract representation, $d_i$ can be represented by how it is being referenced in existing literature.
+% Generating such representations of recommendation candidates is referred to as learning or training.
+
+\begin{figure}[!b]
+  \centering
+    \includegraphics[width=0.7\textwidth]{figures/background/document_context_view_comparison.pdf}
+  \caption{Schematic visualization of determining the similarity between an input citation contexts and a document representation.}
+  \label{fig:doccomp}
+\end{figure}
+
+Recommendation itself is then done by taking a citation contexts $c_i$ as input, deriving an abstract representation in the same manner as was done for the aggregated contexts referencing a document, and then comparing the input's representation against those of all the documents. One such comparison is schematically depicted in Figure~\ref{fig:doccomp}. When every document---i.e., recommendation candidate---is associated with a similarity score, the system can output the most similar candidates as recommendations. With this, the overall picture looks as follows. The recommender system is trained on citation contexts, from which representations of the cited documents are learned. These documents are the publications the system is able to recommend. For a new context (without attached citation) given as input, the system identifies the documents most similar in the abstract representation space to the input and outputs these as recommendations.
+
+\subsection{Evaluating citation recommendations}
+Evaluation of recommender systems can be diveded into three types, online evaluation, user study and offline evaluation. Online evaluation refers to monitoring naturally occuring user interaction with a system deployed online and drawing conclusions from metrics like click-through rates. User studies are conducted in a more controlled manner where users are aware of the evaluation and may be asked for explicit feedback on parts of the system. Offline evaluation differs from the other two types in that it does not directly involve human judgement. Rather, part of the data the system would, for online deployment, be trained on, is withheld and used as testing data. In doing this, past user judgement (like rating a movie or placing a citation) is used as a ground truth to test the system's output against. Because the human judgement is implicitly given within the data and can be processed automatically, offline evaluations can easily be performed on a large scale.~\cite{Aggarwal2016}
+
+When recommending citations, abovementioned three types of evaluation can be realized as follows. Online evaluation can be performed by measuring which, if any, of the suggested publications a user actually inserts into their text. In a user study, participants can be asked to judge the relevance of recommended items while the system's input could be chosen by the user or given by the creators of the study. Lastly, offline evaluation as outlined above results in a re-recommendation setting. That is, existing citation contexts are stripped of their citations, input into the system, and the resulting output compared to the original.
+
+To aggregate relevance judgements of a large number of recommendations into a single number in order to compare different approaches, metrics are necessary. We use Recall, MRR, MAP and NDCG%
+%with different cut-off values. They are
+, which are defined as follows~\cite{Aggarwal2016}:
+
+\paragraph{Recall} is
+
+\paragraph{MRR} is
+
+\paragraph{MAP} is
+
+\paragraph{NDCG} is

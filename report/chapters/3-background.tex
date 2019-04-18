@@ -96,4 +96,4 @@ where DCG is a sum of discounted relevance values
  \[ \mathit{DCG}@k = \sum\limits_{i=1}^{k} \frac{2^{\mathit{rel}(r_i)}-1}{\mathit{log}_2(i+1)} \]
 and IDCG is a normalization factor to get values between zero and one, derived from an ideal recommendation $\mathcal{R}_{\mathit{ideal}}$ in which all items are ordered from the most relevant to the least
  \[ \mathit{IDCG}@k = \sum\limits_{r\in\mathcal{R}_{\mathit{ideal}}}\frac{2^{\mathit{rel}(r)}-1}{\mathit{log}_2(i+1)} \]
-
+Likewise to the other metrics, the mean is calculated when evaluating over a set of test inputs.

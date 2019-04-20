@@ -141,11 +141,11 @@ To get more insight into the nature of our evaluation data and a better understa
   \label{fig:interface}
 \end{figure}
 
-As in the offline evaluation, the NPmarker model was only evaluated when applicaple (40 out of 60 contexts here). When no NPmarker based recommendations where available, a text ``Model not applicable'' was displayed in their stead.
+As in the offline evaluation, the NPmarker model was only evaluated when applicaple (40 out of the 100 contexts). When no NPmarker based recommendations where available, the text ``Model not applicable'' was displayed in their stead.
 
 User 1: 14 deemed not judgable (12 not enough information, 1 broken, 1 passed) leaving 86 judged contexts. Of these 7 with author (8.1\%) and 5 syntactic (5.8\%). Distribution of types is 28 NE/concept, 25 exemplification, 21 claim and 12 other.
 
-When second user insert confusion matrix of types.
+When second user insert confusion matrix of context types.
 % concerning author present criteria: can be unclear if author's name is part of NE (e.g. ``Pearson Correlation'')
 % Ambiguous case claim/example: ``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval CIT , semantic parsing MAINCIT , sentence modeling CIT and other traditional natural language processing tasks CIT .'' (also good example for when NPmarker misses out on important information)
 % Ambiguous case claim/example: ``Closeness centrality describes the efficiency of the information propagation from one node to the other nodes CIT MAINCIT CIT .''
@@ -199,4 +199,5 @@ Table~\ref{tab:arxivevalnumbers} shows evaluation numbers (if sensible aggregrat
 Insert observations here.\\
 - Claim+BoW and BoW close but in contrast to offline eval Claim+BoW only outperforms BoW in Recall metric.\\
 - Claim+BoW results highest for claim and exemplification contexts -> useful for the taks its designed for\\
-- NPmarker dominating NE/concept contexts ->useful for the taks its designed for
+- NPmarker dominating NE/concept contexts ->useful for the taks its designed for\\
+- Non-syntactic citations seem to be the norm

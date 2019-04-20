@@ -5,6 +5,8 @@ The following sections describe the details of our assessment as well as the cre
 
 \section{Existing data sets}
 
+Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While various recommendation domains have established quasi standard data sets, this is not yet the case in citation recommendation. CiteSeer\textsuperscript{x} is currently the most used in the field~\cite{Beel2016}. It is comparatively large, but many approaches only use subsets and generate them with varying filtering criteria. It includes pre-extracted citation contexts of 400 characters in length, whereby references are resolved to an internal set of identifiers. Unfortunately there are several quality issues with the data set. The main ones being inaccurate citaion information, noisy citation contexts and cut off words at the borders of citation contexts~\cite{Roy2016}.
+
 \begin{table}
 \centering
     \caption[Overview of existing data sets.]{Overview of existing data sets.\\Listed are the number of papers, nature of citation contexts, covered disciplices of citing papers and the type of global reference identifiers.\\(\emph{extractable*} is to indicate that extraction might be error-prone due to papers only being available as in PDF format.)}
@@ -28,32 +30,31 @@ The following sections describe the details of our assessment as well as the cre
 \end{center}
 \end{table}
 
-Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While various recommendation domains have established quasi standard data sets, this is not yet the case in citation recommendation. CiteSeerX is currently the most used in the field~\cite{Beel2016}. It is comparatively large, but many approaches only use subsets and generate them with varying filtering criteria. It includes pre-extracted citation contexts of 400 characters in length, whereby references are resolved to an internal set of identifiers. Unfortunately there are several quality issues with the data set. The main ones being inaccurate citaion information, noisy citation contexts and cut off words at the borders of citation contexts~\cite{Roy2016}.
 
-The PubMed Central Open Access Subset (PMC-OAS) is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \texttt{\url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}}}~\cite{Gipp2015}.
+The PubMed Central Open Access Subset (PMC-OAS) is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in the JATS\cite{Huh2014} XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \texttt{\url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}}}~\cite{Gipp2015}.
 
-Similar to the PMC-OAS, albeit smaller, the Public Library of Science (PLOS) offers publications in XML format and has seen application for citation based tasks~\cite{Bertin2016,Bertin2018}. In contrast to the the PMC-OAS, references are in general not resolved to any global identifier.
+Similar to the PMC-OAS, albeit smaller, the Public Library of Science (PLOS) offers publications in the same XML format and has seen application for citation based tasks~\cite{Bertin2016,Bertin2018}. In contrast to the the PMC-OAS, references are in general not resolved to any global identifier.
 
 Consistent global reference identifiers are given in the arXiv CS data set in the form of DBLP IDs. Linking to an existing repository of publication (meta) data has the advantage that information about cited papers in readily available. The choice of DBLP restricts resolved references to the field of computer science though. Citations to, for example, publications in maths or statistics can not be resolved to a DBLP ID. A strength of the data set is that it was generated from \LaTeX{} source files, which makes it possible to get very clean data.
 
 For the remainig the data sets---Scholarly, ACL-AAN and ACL-ARC---citing papers are only available in PDF format and references are not resolved. The two ACL sets have the additional drawback of being very small.
 
-Above observations lead us to the conclusion that it would be worthwhile to tackle the creation of a data set that is large (in the order of CiteSeerX/RefSeer/PMC-OAS), clean (like the PMC-OAS and arXiv CS) and also offers consitent global reference IDs that don't restrict the data set to citations within the same discipline. The creation and evaluation of this data set is described in the following sections.
+Above observations lead us to the conclusion that it would be worthwhile to tackle the creation of a data set that is large (in the order of CiteSeer\textsuperscript{x}/RefSeer/PMC-OAS), clean (like the PMC-OAS and arXiv CS) and also offers consitent global reference IDs that don't restrict the data set to citations within the same discipline. The creation and evaluation of this data set is described in the following sections.
 
 % TODO: mby add MAG use/analysis: \cite{Herrmannova2016,Paszcza2016,Hug2017}
 
 % TODO: add: evaluation of reference string parsers\cite{Tkaczyk2018}, a dataset for reference string parsing\cite{Anzaroot2013}
 
 \section{Data set creation}\label{sec:data-set-creation}
-Scientific publications are usually distributed in formats targeted at human consumption (e.g. PDF) or, in cases like arXiv.org, also as source files \emph{for} the aforementioned (e.g. \LaTeX{} sources for generating PDFs). Citation-based tasks, such as local citation recommendation, in contrast, require automated processing of the publications' textual contents as well as the documents' interlinking through citations. The creation of a data set for such tasks therefore encompasses two main steps: extraction of plain text and resolution of references. In the following we will describe how we approached these two steps using arXiv publication sources and the Microsoft Academic Graph (MAG)~\cite{Sinha2015}.
+Scientific publications are usually distributed in formats targeted at human consumption (e.g. PDF) or, in cases like arXiv, also as source files \emph{for} the aforementioned (e.g. \LaTeX{} sources for generating PDFs). Citation-based tasks, such as local citation recommendation, in contrast, require automated processing of the publications' textual contents as well as the documents' interlinking through citations. The creation of a data set for such tasks therefore encompasses two main steps: extraction of plain text and resolution of references. In the following we will describe how we approached these two steps using arXiv publication sources and the Microsoft Academic Graph (MAG)~\cite{Sinha2015}.
 
 \subsection{Used data sets}
 
 The following two resources are the basis of the data set creation process.
 
-\paragraph{arXiv.org} hosts over 1.4 million submissions from August 1991 onward~\cite{Ginsparg1994}. They are available not only as PDF, but (in most cases) also as \LaTeX{} source files. The discipline most prominently represented is physics, followed by mathematics, with computer science seeing a continued increase in percentage of submissions ranking third (see Fig.~\ref{fig:sankey}). The availability of \LaTeX{} sources makes arXiv submissions particularly well suited for extracting high quality plain text and accurate citation information. So much so, that it has been used to generate ground truths for the evaluation of PDF to text conversion tools~\cite{Bast2017}. Approaches to automatically extract citation interlinks from arXiv sources by parsing \LaTeX{} files have existed for over 20 years \cite{Nanba1998}. Nevertheless we are not aware of any existing data sets for citation based tasks generated from the whole of arXiv.
+\paragraph{arXiv.org} hosts over 1.4 million submissions from August 1991 onward~\cite{Ginsparg1994}. They are available not only as PDF, but (in most cases) also as \LaTeX{} source files. The discipline most prominently represented is physics, followed by mathematics, with computer science seeing a continued increase in percentage of submissions ranking third (see Figure~\ref{fig:sankey}). The availability of \LaTeX{} sources makes arXiv submissions particularly well suited for extracting high quality plain text and accurate citation information. So much so, that it has been used to generate ground truths for the evaluation of PDF to text conversion tools~\cite{Bast2017}. Approaches to automatically extract citation interlinks from arXiv sources by parsing \LaTeX{} files have existed for over 20 years \cite{Nanba1998}. Nevertheless we are not aware of any existing data sets for citation based tasks generated from the whole of arXiv.
 
-\paragraph{Microsoft Academic Graph (MAG)} is a very large\footnote{At the time of writing the MAG contains data on over 200 million publications.}, automatically generated data set on publications, related entities (authors, venues, etc.) and their interconnections through citation. While citation contexts are available to some degree, full text documents are not. The size of the MAG makes it a good target for matching reference strings against it, especially given that arXiv spans several fields of study.
+\paragraph{Microsoft Academic Graph (MAG)} is a very large\footnote{At the time of writing the MAG contains data on over 200 million publications.}, automatically generated data set on publications, related entities (authors, venues, etc.) and their interconnections through citation. While citation contexts of varying length are available to some degree, full text documents are not. The size of the MAG makes it a good target for matching reference strings against it, especially given that arXiv spans several fields of study.
 
 \subsection{Pipeline overview}
 
@@ -69,9 +70,7 @@ As depicted in Figure~\ref{fig:datagen}, we start out with arXiv sources to crea
 \subsection{\LaTeX{} Parsing}
 In the following we will describe the tools considered for parsing \LaTeX{}, the challenges we faced in general and with regard to arXiv sources in particular, and our resulting approach.
 
-\subsubsection{Tools}
-
-\begin{table}[t]
+\begin{table}[bh]
 \centering
   \caption{Comparison of tools for parsing \LaTeX{}.}
   \label{tbl:tools}
@@ -89,10 +88,14 @@ In the following we will describe the tools considered for parsing \LaTeX{}, the
 \end{tabular}
 \end{table}
 
+\subsubsection{Tools}
 We took several tools for the conversion from \LaTeX{} to plain text or to intermediate formats into consideration and evaluated them. Table \ref{tbl:tools} gives an overview of our results. Half of the tools failed to produce any output for a large amount of arXiv submissions we used as test input and were therefore deemed not robust enough. \textit{GrabCite} is able to parse 78.5\% of arXiv CS submissions but integrates resolving references against DBLP into the parsing process and therefore would require significant modification to fit our system architecture. \textit{LaTeXML} and \textit{Tralics} are both robust and can be used as \LaTeX{} conversion tools as is. On subsequent tests we note that \textit{LaTeXML} needs on average 7.7 seconds (3.3 if formula environments are heuristically removed beforehand) to parse an arXiv submission while \textit{Tralics} needs 0.09. Because the quality of their output seemed comparable we chose to use \textit{Tralics}.
 
+
 \subsubsection{Challenges}
-Apart from the general difficulty of parsing \LaTeX{} due to its feature richness and people's free-spirited use of it, we especially note difficulty in dealing with extra packages not included in submissions' sources\footnote{arXiv.org specifically suggest the omission of such (see \texttt{\url{https://arxiv.org/help/submit\_tex\#wegotem}})}. While \textit{Tralics} is supposed to for example deal with \textit{natbib} citations\footnote{See \texttt{\url{https://www-sop.inria.fr/marelle/tralics/packages.html\#natbib}}}, normalization of such citations lead to a decrease of citation markers not being able to be matched to an entry in the document's reference section from 30\% to 5\% in a sample of 565,613 citations we tested.
+Apart from the general difficulty of parsing \LaTeX{} due to its feature richness and people's free-spirited use of it, we especially note difficulty in dealing with extra packages not included in submissions' sources\footnote{arXiv specifically suggest the omission of such (see \texttt{\url{https://arxiv.org/help/submit\_tex\#wegotem}})}. While \textit{Tralics} is supposed to for example deal with \textit{natbib} citations\footnote{See \texttt{\url{https://www-sop.inria.fr/marelle/tralics/packages.html\#natbib}}}, normalization of such citations lead to a decrease of citation markers not being able to be matched to an entry in the document's reference section from 30\% to 5\% in a sample of 565,613 citations we tested.
+
+% \vfill % in case there's ugly large spaces between section title and text
 
 \subsubsection{Resulting approach}
 Our \LaTeX{} parsing solution consists of two steps. First, we flatten each arXiv submission's sources to a single \LaTeX{} file using \textit{latexpand}\footnote{See \url{https://ctan.org/pkg/latexpand}}\textsuperscript{,}\footnote{We also tested flatex (\url{https://ctan.org/pkg/flatex}) and flap (\url{https://github.com/fchauvel/flap}) but got the best results with \texttt{latexpand}.} and normalize \texttt{\textbackslash cite} commands to prevent parsing problems later on. In the second step, we then generate an XML representation of the \LaTeX{} document using \textit{Tralics}, replace formulas, figures, tables and non citation references with replacement tokens and extract the plain text. Furthermore, each entry in the document's reference section is assigned a unique identifier, its text is stored in a database and corresponding citation markers are placed in the plain text.
@@ -134,9 +137,6 @@ It has over 79 million images stored at the resolution of FORMULA . Each image i
 2038721957|2081580037|1412.3684|It has over 79 million images stored at the resolution of FORMULA . Each image is labeled with one of the 75,062 non-abstract nouns in English, as listed in the Wordnet CIT MAINCIT lexical database. It has been noted that many of the labels are not reliable CIT .
 \end{lstlisting}
 
-\section{Evaluation of reference resolution}
-To evaluate the quality of our reference resolution results, we take a random sample of 300 matched reference strings and manually check if the correct record in the MAG was identified by our method. Given the 300 items, we obtained 3 errors, giving us an accuracy estimate of 96\% at the worst, as shown in Table~\ref{tbl:confvals}.
-
 \begin{table}[h]
   \caption[Confidence intervals for a sample size of 300 with 297 positive results.]{Confidence intervals for a sample size of 300 with 297 positive results as given by Wilson score interval and Jeffreys interval \cite{Brown2001}.}
   \label{tbl:confvals}
@@ -153,6 +153,9 @@ To evaluate the quality of our reference resolution results, we take a random sa
     \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Evaluation of reference resolution}
+To evaluate the quality of our reference resolution results, we take a random sample of 300 matched reference strings and manually check if the correct record in the MAG was identified by our method. Given the 300 items, we obtained 3 errors, giving us an accuracy estimate of 96\% at the worst, as shown in Table~\ref{tbl:confvals}.
 
 The three incorrectly identified references were as follows (MAG IDs in square brackets):
 \begin{enumerate}
@@ -182,26 +185,19 @@ We used an arXiv source dump containing all submissions up until the end of 2017
 
 Of the 35,053,329 reference strings, we were able to match 14,046,239 (40.07\%). For 33.14\% of the reference strings we could neither find an arXiv ID or DOI, nor was Neural ParsCit able to identify a title. For the remaining 26.79\% a title was identified but could not be matched with the MAG. Of the matched 14 million items' titles, 50.67\% were identified via Neural ParsCit, 29.67\% by DOI and 19.66\% by arXiv ID. Of the identified DOIs 26.8\% were found as is while 73.2\% were heuristically determined\footnote{This was possible because the DOIs of articles in journals of the American Physical Society follow predictable patterns.}. The matching process took 103 hours, run in 10 parallel processes on a 64 core Intel Xeon Gold 6130 2.10GHz machine with 500 GB of memory.
 
-\subsection{Resulting data set}
-The resulting data set consists of \emph{2,343,585 cited papers, 926.644 citing papers, 13,303,373 references and 24,558,560 citation contexts}. Note that references with no citation markers (due to parsing errors) are not counted here.
-
-Figure \ref{fig:numcitdoc} shows the number of citing documents for all cited documents. There is one document with close to 10,000 citations, another three with more than 5,000 and another ten with more than 3,000. 1,262,861 (53.89\%) of the documents have at least two citations, 547,036 (23.34\%) have at least five. The mean number of citations is 5.68 (SD 26.82). Figure \ref{fig:numcontref} shows the number of citation context per reference. 8,722,795 (65.57\%) references have only one citation context, the maximum is 278, the mean 1.85 (SD 2.02). This means a cited document is described by on average $1.85 \times 5.68 \approx 10.5$ citation contexts.
-
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{figures/dataset/citing_docs_per_cited_doc.pdf}
+  \includegraphics[width=0.8\linewidth]{figures/dataset/citing_docs_per_cited_doc.pdf}
   \caption{Number of citing documents per cited document.}
   \label{fig:numcitdoc}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{figures/dataset/citation_contexts_per_reference.pdf}
+  \includegraphics[width=0.8\linewidth]{figures/dataset/citation_contexts_per_reference.pdf}
   \caption{Number of citation contexts per reference.}
   \label{fig:numcontref}
 \end{figure}
-
-Figure \ref{fig:sankey} depicts the flow of citations by field of study for all 13.3 million matched references. Fields of study with very small numbers of references are combined to \emph{other} for legibility reasons. For the citing document's side, these are economics, electrical engineering and systems science, quantitative biology, quantitative finance and statistics. Combined on the cited document's side are chemistry, biology, engineering, materials science, economics, geology, psychology, medicine, business, geography, sociology, political science, philosophy, environmental science and art. To no surprise, publications in each field are cited the most from within the field itself. Notable is, however, that the incoming citations in mathematics are the most varied (physics and computer science combined make up 38\% of the citations).
 
 \begin{figure}
   \centering
@@ -210,4 +206,11 @@ Figure \ref{fig:sankey} depicts the flow of citations by field of study for all 
   \label{fig:sankey}
 \end{figure}
 
-By generating our data set from \LaTeX{} sources we were able to ensure clean text output as well as accurate citation information and exact citation marker positions. In terms of size it is closer to CiteSeerX and PMC-OAS than the smaller data sets available. The fact that the data set spans multiple disciplines also allows for comparisons in citing behaviour between these disciplices. Because references are already resolved to MAG IDs, the data set is readily usable for recommendation tasks and allows for the use of rich metadata on both the citing and cited document side. Lastly, the embedding of citation markers in the full plain text of papers instead of pre-extraction enables users of the data set to choose and compare citation context lenghts and variations at will.
+\subsection{Resulting data set}
+The resulting data set consists of \emph{2,343,585 cited papers, 926.644 citing papers, 13,303,373 references and 24,558,560 citation contexts}. Note that references with no citation markers (due to parsing errors) are not counted here.
+
+Figure \ref{fig:numcitdoc} shows the number of citing documents for all cited documents. There is one document with close to 10,000 citations, another three with more than 5,000 and another ten with more than 3,000. 1,262,861 (53.89\%) of the documents have at least two citations, 547,036 (23.34\%) have at least five. The mean number of citations is 5.68 (SD 26.82). Figure \ref{fig:numcontref} shows the number of citation context per reference. 8,722,795 (65.57\%) references have only one citation context, the maximum is 278, the mean 1.85 (SD 2.02). This means a cited document is described by on average $1.85 \times 5.68 \approx 10.5$ citation contexts.
+
+Figure \ref{fig:sankey} depicts the flow of citations by field of study for all 13.3 million matched references. Fields of study with very small numbers of references are combined to \emph{other} for legibility reasons. For the citing document's side, these are economics, electrical engineering and systems science, quantitative biology, quantitative finance and statistics. Combined on the cited document's side are chemistry, biology, engineering, materials science, economics, geology, psychology, medicine, business, geography, sociology, political science, philosophy, environmental science and art. To no surprise, publications in each field are cited the most from within the field itself. Notable is, however, that the incoming citations in mathematics are the most varied (physics and computer science combined make up 38\% of the citations).
+
+By generating our data set from \LaTeX{} sources we were able to ensure clean text output as well as accurate citation information and exact citation marker positions. In terms of size it is closer to CiteSeer\textsuperscript{x} and PMC-OAS than the smaller data sets available. The fact that the data set spans multiple disciplines also allows for comparisons in citing behaviour between these disciplices. Because references are already resolved to MAG IDs, the data set is readily usable for recommendation tasks and allows for the use of rich metadata on both the citing and cited document side. Lastly, the embedding of citation markers in the full plain text of papers instead of pre-extraction enables users of the data set to choose and compare citation context lenghts and variations at will.

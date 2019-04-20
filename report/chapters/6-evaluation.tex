@@ -61,7 +61,7 @@ The models used for recommendation are the four presented in Chapter~\ref{chap:a
 % \footnote{Maybe write a long footnote here about how BM25 gives comparable results to TFIDF when representations of cited documents are not jointly learned but contexts are treated separately, but this method in general gives worse results than using joinly learned representations}
 . BoW+fosboost is constructed by taking the BoW ranking and then moving all candidates, where the overlap in fields of study (${\big|R_{\text{FoS}}(c_i)\cap\big(\bigcup\limits_{c \in \varrho(d)} R_{\text{FoS}}(c)\big)\big|}$, cf. Section~\ref{sec:approachfos}) is maximal, one position upwards in the ranking. Ranking in Claim+BoW is done by linearly combining similarity values $S(A,B)=\sum\limits_{m\in\mathcal{M}}\alpha_mS_m(A,B)$ of the models $\mathcal{M}=\{\text{Claim},\text{BoW}\}$ with heuristically determined coefficients $\alpha_{\text{Claim}}=1$ and $\alpha_{\text{BoW}}=2$.
 
-Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and Recall values at cut-off 5 for all models evaluated on the arXiv data. While FoS alone performs very poorly, the combined model BoW+fosboost consistently performs better then BoW alone. Nevertheless, because the performance gain is minute, we see no reason for a more detailed investigation of the models FoS and BoW+fosboost. Overall Claim+BoW shows the best performance, with NPmarker achieving the highest value for the MRR metric. To investigate the performance of these models further, we look at above metrics at different cut-off values and using multiple data sets. Note that arXiv is the only of the data sets where the NPmarker model is applicable, because the exact position of the citation marker is needed. Also note that for the arXiv data, we count adjacent citations (see Section~\ref{sec:datasetformat}) as relevant when calculating MAP scores and give them a relevance of 0.5 in the NDCG calculation.
+Table~\ref{tab:arxivevalnumbers} shows Recall, MRR, MAP and NDCG values at cut-off 5 for all models evaluated on the arXiv data. While FoS alone performs very poorly, the combined model BoW+fosboost consistently performs better then BoW alone. Nevertheless, because the performance gain is minute, we see no reason for a more detailed investigation of the models FoS and BoW+fosboost. Overall Claim+BoW shows the best performance, with NPmarker achieving the highest value for the MRR metric. To investigate the performance of these models further, we look at above metrics at different cut-off values and using multiple data sets. Note that arXiv is the only of the data sets where the NPmarker model is applicable, because the exact position of the citation marker is needed. Also note that for the arXiv data, we count adjacent citations (see Section~\ref{sec:datasetformat}) as relevant when calculating MAP scores and give them a relevance of 0.5 in the NDCG calculation.
 
 % pre-filtering experiments (knn\cite{Bhagavatula2018}, lsi, lda, fos, ...)
 % different evaluation settings (all, CSonly, comparison to MAG, ACL (data from \cite{Faerber2018b})...)
@@ -79,15 +79,15 @@ Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and Recall values at cut-o
 \begin{center}
     \begin{tabular}{lllll}
     \toprule
-    Model & NDCG@5 & MAP@5 & MRR@5 & Recall@5 \\
+    Model & Recall@5 & MRR@5 & MAP@5 & NDCG@5 \\
     \midrule
-    Claim+BoW & \textbf{0.21829} & \textbf{0.34416} & 0.17530 & \textbf{0.27420} \\
-    BoW+fosboost   & 0.20682 & 0.32980 & 0.16264 & 0.25824 \\
-    BoW       & 0.20673 & 0.32961 & 0.16256 & 0.25817 \\
-    NPmarker  & 0.17677 & 0.30769 & \textbf{0.17764} & 0.24931 \\
-    Claim     & 0.08337 & 0.14441 & 0.07477 & 0.11750 \\
-    NP        & 0.07914 & 0.13950 & 0.06775 & 0.10558 \\
-    FoS       & 0.00921 & 0.01999 & 0.00420 & 0.00933 \\
+    Claim+BoW & \textbf{0.27420} & 0.17530 & \textbf{0.34416} & \textbf{0.21829} \\
+    BoW+fosboost  & 0.25824 & 0.16264 & 0.32980 & 0.20682 \\
+    BoW       & 0.25817 & 0.16256 & 0.32961 & 0.20673 \\
+    NPmarker  & 0.24931 & \textbf{0.17764} & 0.30769 & 0.17677 \\
+    Claim     & 0.11750 & 0.07477 & 0.14441 & 0.08337 \\
+    NP        & 0.10558 & 0.06775 & 0.13950 & 0.07914 \\
+    FoS       & 0.00933 & 0.00420 & 0.01999 & 0.00921 \\
     \bottomrule
     \end{tabular}
 \end{center}
@@ -121,7 +121,7 @@ Table~\ref{tab:arxivevalnumbers} shows NDCG, MAP, MRR and Recall values at cut-o
   \label{fig:evalacl}
 \end{figure}
 
-Figures~\ref{fig:evalarxiv}--\ref{fig:evalacl} show the results of abovementioned evaluations. For each of the data sets Claim+BoW outperforms the BoW baseline in each measure and for all cut-off values. Claim and NP do not compare in performance with the two aforementioned. This suggests that the claim structures we model with $R_{\text{claim}}$ are not enough for well performing recommendations on their own, but do capture information that non-semantic models (BoW) miss. NPmarker, only present in Figures~\ref{fig:evalarxiv}, gives particularly good results for lower cut-offs and performs especially well in the MRR metric. It performs the worst at high cut-offs measured by NDCG. Note that NPmarker is only evaluated for test set items where the model was applicable (i.e. where a noun phrase of minium length 2 is directly preceding the citation marker; cf. Section~\ref{sec:npmodel}). For our evaluation this was the case for 100,308 out of the 490,018 test set items (20.5\%). The evaluation results for NPmarker indicate that it is comparatively well suited to recommend citations where there is one particularly fitting publication (e.g. a reference paper for a tool, method or data set) and less suited for exemplifications (cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}). Comparing values between the different data sets, we can confirm our expectations based on the values in Table~\ref{tab:datasetprops}. For the MAG data, where we ensured very well described recommendation candidates by setting a threshold, the models perform best.
+Figures~\ref{fig:evalarxiv}--\ref{fig:evalacl} show the results of abovementioned evaluations. For each of the data sets Claim+BoW outperforms the BoW baseline in each measure and for all cut-off values. Claim and NP do not compare in performance with the two aforementioned. This suggests that the claim structures we model with $R_{\text{claim}}$ are not enough for well performing recommendations on their own, but do capture important information that non-semantic models (BoW) miss. NPmarker, only present in Figures~\ref{fig:evalarxiv}, gives particularly good results for lower cut-offs and performs especially well in the MRR metric. It performs the worst at high cut-offs measured by NDCG. Note that NPmarker is only evaluated for test set items where the model was applicable (i.e. where a noun phrase of minium length 2 is directly preceding the citation marker; cf. Section~\ref{sec:npmodel}). For our evaluation this was the case for 100,308 out of the 490,018 test set items (20.5\%). The evaluation results for NPmarker indicate that it is comparatively well suited to recommend citations where there is one particularly fitting publication (e.g. a reference paper for a tool, method or data set) and less suited for exemplifications (cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}). Comparing values between the different data sets, we can confirm our expectations based on the values in Table~\ref{tab:datasetprops}. For the MAG data, where we ensured very well described recommendation candidates by setting a threshold, the models perform best.
 % Differences between the other three models are less straightforward, which is no surprise because there are many factors involved (number of recommendation candidates, number of contexts describing these, cleanliness of data, etc.).
 This shows us that differences in data set composition can make a large difference in evaluation results. As a consequence, comparison between approaches is only realistically possible when using the same data.
 
@@ -130,19 +130,73 @@ This shows us that differences in data set composition can make a large differen
 % \cite{Huang2015} use CiteSeer\textsuperscript{x} (which RefSeer is based on) w/ 329,365 recommendation candidates. mby kind of comparable with a few buckets of salt?
 
 \section{User study}\label{sec:oneval}
-Main difference = direct human judgement
+To get more insight into the nature of our evaluation data and a better understanding of our models, we perform a user study in which human participants judge input-output paris of our offline evaluation (i.e. citation contexts and the recommendations given for them). For this we randomly choose 100 citation contexts from our arXiv data, where the citing paper belongs to the category ``Computer Science - Information Retrieval''. This is to ensure that participants are able to reasonably judge the relevance of the recommendations given. For each input context we present the user with the top 5 recommendations of the Bow, Claim+BoW and NPmarker models. We furthermore let the users judge the type of citation (NE/concept, Claim, Exemplification, Other; cf. Table~\ref{tab:citfunctions} in Section~\ref{chap:approach}), whether or not the author's name of the cited document is present in the citation contexts and whether or not the citation marker has a grammatical function (i.e. syntactic/non-syntactic citation). Participants can also choose not to judge a context and give one of three reasons: (1) there's not enough information contained to resonably make a decision, (2) the context is broken in some other form (e.g. due to faulty sentence segmentation an unresonably large context was used) and (3) the participant can not make a relevance judgement for some other reason (``pass''). Figure~\ref{fig:interface} shows the interface participants used to give their judgement.
 
-NP model not applicaple to 304 of 415 items.
+% mby insert "controlled for free text input bias" argument somewhere here
 
-concerning author present criteria: can be unclear if author's name is part of NE (e.g. ``Pearson Correlation'')
+\begin{figure}[]
+  \centering
+    \includegraphics[width=0.8\textwidth]{figures/evaluation/interface.png}
+  \caption{Interface used in the user study.}
+  \label{fig:interface}
+\end{figure}
 
-(i.e. insight into offline eval)
-(controlled for free text input bias)
+As in the offline evaluation, the NPmarker model was only evaluated when applicaple (40 out of 60 contexts here). When no NPmarker based recommendations where available, a text ``Model not applicable'' was displayed in their stead.
 
-Ambiguous case claim/example: ``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval CIT , semantic parsing MAINCIT , sentence modeling CIT and other traditional natural language processing tasks CIT .'' (also good example for when NPmarker misses out on important information)
+User 1: 14 deemed not judgable (12 not enough information, 1 broken, 1 passed) leaving 86 judged contexts. Of these 7 with author (8.1\%) and 5 syntactic (5.8\%). Distribution of types is 28 NE/concept, 25 exemplification, 21 claim and 12 other.
 
-Ambiguous case claim/example: ``Closeness centrality describes the efficiency of the information propagation from one node to the other nodes CIT MAINCIT CIT .''
+When second user insert confusion matrix of types.
+% concerning author present criteria: can be unclear if author's name is part of NE (e.g. ``Pearson Correlation'')
+% Ambiguous case claim/example: ``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval CIT , semantic parsing MAINCIT , sentence modeling CIT and other traditional natural language processing tasks CIT .'' (also good example for when NPmarker misses out on important information)
+% Ambiguous case claim/example: ``Closeness centrality describes the efficiency of the information propagation from one node to the other nodes CIT MAINCIT CIT .''
+% Ambiguous case author name present or not: ``We propose a heuristic method based on strong connected component detection to compute Kemeny-Young ranking MAINCIT.''
 
-Ambiguous case author name present or not: ``We propose a heuristic method based on strong connected component detection to compute Kemeny-Young ranking MAINCIT.''
+Table~\ref{tab:arxivevalnumbers} shows evaluation numbers (if sensible aggregrate w/ 2nd user data).
 
-confusion matrix of citation types
+\begin{table}[tb]
+\centering
+    \caption{Evaluation scores at cut-off 5.}
+    \label{tab:arxivevalnumbers}
+\begin{center}
+    \begin{tabular}{lllll}
+    \toprule
+    Model & Recall@5 & MRR@5 & MAP@5 & NDCG@5 \\
+    \midrule
+    \multicolumn{5}{c}{\emph{all contexts}} \\
+    \midrule
+    Claim+BoW & \textbf{0.55} & 0.45 & 0.42 & 0.47 \\
+    BoW       & 0.52 & \textbf{0.48} & \textbf{0.45} & \textbf{0.49} \\
+    NPmarker  & 0.31 & 0.30 & 0.28 & 0.30 \\
+    \midrule
+    \multicolumn{5}{c}{\emph{only contexts of type ``claim''}} \\
+    \midrule
+    Claim+BoW & \textbf{0.71} & 0.48 & 0.44 & 0.53 \\
+    BoW       & 0.64 & \textbf{0.53} & \textbf{0.51} & \textbf{0.57} \\
+    NPmarker  & 0.25 & 0.08 & 0.08 & 0.12 \\
+    \midrule
+    \multicolumn{5}{c}{\emph{only contexts of type ``NE/concept''}} \\
+    \midrule
+    Claim+BoW & 0.45 & 0.43 & 0.40 & 0.43 \\
+    BoW       & 0.46 & 0.43 & 0.40 & 0.44 \\
+    NPmarker  & \textbf{0.49} & \textbf{0.50} & \textbf{0.45} & \textbf{0.49} \\
+    \midrule
+    \multicolumn{5}{c}{\emph{only contexts of type ``exemplification''}} \\
+    \midrule
+    Claim+BoW & \textbf{0.53} & \textbf{0.52} & 0.49 & 0.52 \\
+    BoW       & \textbf{0.53} & \textbf{0.52} & \textbf{0.50} & \textbf{0.53} \\
+    NPmarker  & 0.14 & 0.14 & 0.14 & 0.14 \\
+    \midrule
+    \multicolumn{5}{c}{\emph{only contexts of type ``other''}} \\
+    \midrule
+    Claim+BoW & \textbf{0.50} & 0.30 & 0.31 & 0.35 \\
+    BoW       & 0.46 & 0.36 & 0.36 & \textbf{0.40} \\
+    NPmarker  & 0.40 & \textbf{0.40} & \textbf{0.37} & 0.38 \\
+    \bottomrule
+    \end{tabular}
+\end{center}
+\end{table}
+
+Insert observations here.\\
+- Claim+BoW and BoW close but in contrast to offline eval Claim+BoW only outperforms BoW in Recall metric.\\
+- Claim+BoW results highest for claim and exemplification contexts -> useful for the taks its designed for\\
+- NPmarker dominating NE/concept contexts ->useful for the taks its designed for

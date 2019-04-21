@@ -1,27 +1,15 @@
 \chapter{Future work}\label{chap:todo}
-data set:
-arXiv keeps growing, therefore data set can grow,
-btw. data set is already extended with 2018 data\cite{Saier2019}
+% As a first step towards semantic citation recommendation, the work presented not only presents insights, but also lays bare new questions.
+Several parts of the work presented merit continued development, others lay bare questions yet to be answererd. In closing, we want to briefly highlight these with regards to the newly created data set, the entity as well as claim based models, and finally semantic citation recommendation in general.
 
-also for data set, look into including formula info instead of using replacement token (as important knowledge is contained in formulas, especially in math and physics publications). (math retrieval based on arXiv LaTeX: \cite{Aizawa2014,Zanibbi2016})
+The flexible nature of our data set makes it suitable for the development and evaluation of various citation based tasks, not just the one presented here. Because arXiv is an established resource in active use, new publications are added to it every day. These new submissions can be a valuable addition to our data set. In parallel to the development and evaluation of our models, we already extended the data with all publications from 2018~\cite{Saier2019}. Apart from the addition of new papers, the inclusion of mathematical formulas in some way, shape, or form (instead of replacing them with a substitution token) would presumably improve recommendation, as they can contain key information and are abundant in mathematics and physics papers. Such improvements can be guided by existing arXiv based efforts in mathematical information retrieval~\cite{Aizawa2014,Zanibbi2016}.
 
-segue:
-b/c data set spans several FoS,
-test different FoS of arXiv data (while keeping data composition comparable, b/c as seen in eval this has a significant effect on evaluation outcomes)
+Because the arXiv data set spans several disciplines, a comparative analysis of the performance of our models could reveal interdisciplinary differences. As shown in our offline evaluation, the size and composition of a data set can have a large impact on the results. A comparative analysis would therefore require the adjustment of the data set's math and physics subsets in terms of number of recommendation candidates and number of citing papers describing those.
 
-models:
-NPmarker so far only tested on arXiv data (b/c marker position)
-for data where no precise citation marker can be guaraneed, look into heuristically identifying marker position
-
-claim model
-predicates could be grouped/clustered to represent functions as in \cite{Gabor2018}
-+
-b/c claim model is predicate-argument, it might allow for semantic/some kind of enhanced user search (e.g. showing citations backing claims that sth. \emph{is:NP-hard})
-
-marker-aware claim model when handling of non-syntactic citations is solved
+Concerning our NPmarker model, an evaluation on more than just the arXiv data is needed. Because the model relies on the exact position of the citation marker, which is not given in the other data sets used, a heuristic for the marker's identification could be used. Another possibility would be the use of PMC-OAS data, as their JATS XML files also provide exact citation marker positions. Our Claim model in its current state uses the lemmatized form of predicates. These could be further generalized into a number of semantic relation types as done in~\cite{Gabor2018}. Given the models \emph{predicate-argument} strucutre, it might already be possible to implement a basic semantic citation search on top of it, allowing users to, for example, search for publications showing that something \emph{``is:NP-hard''} or where the authors \emph{``improve:local citation recommendation''}. A last point concerning the claim based model is the realization of grammatical citation marker awareness. This requires proper handling of non-syntactic citations, which, judging by our user study results, make up the vast majority of citations.
 
 in general:
-As a first step identify types of citations more systematically.
+As a first step identify types of citations more systematically.Chapter~\ref{chap:conclusion}
 For different types, different models.
 
 far future:

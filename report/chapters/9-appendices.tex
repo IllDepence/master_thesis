@@ -14,7 +14,7 @@ select b.bibitem_string, m.mag_id
         on b.uuid = m.uuid;
 \end{lstlisting}
 
-Table~\ref{tbl:matcheval} shows the full evaluation. Wrongly matched items are {\color{UniRed}highlited in red}. Note that there are seven cases where the reference item refers to more than one publication. In such cases our method only captures the first one and is cosequetually evaluated on the first one. Note further that in one case a reference item named a PhD thesis while the match was for the very same thesis published two years later. This was deemed a correct match. Lastly, there was one case where a book was cited with the date indicating its second edition while the matched record in the MAG has a date indiciating the books thrid edition. This also was deemed a correct match.
+Table~\ref{tbl:matcheval} shows the full evaluation. Wrongly matched items are {\color{UniRed}highlited in red}. Note that there are seven cases where the reference item refers to more than one publication. In such cases our method only captures the first one and is consequentially evaluated on the first one. Note further that in one case a reference item named a PhD thesis while the match was for the very same thesis published two years later. This was deemed a correct match. Lastly, there was one case where a book was cited with the date indicating its second edition while the matched record in the MAG has a date indicating the books third edition. This also was deemed a correct match.
 \newpage
 
 \tiny
@@ -356,7 +356,7 @@ Table~\ref{tab:datasetfilter} details how the citation contexts for our offline 
 \begin{center}
     \begin{tabular}{lp{11.5cm}}
     \toprule
-    Data set & Filter criteria and resoning\\
+    Data set & Filter criteria and reasoning\\
     \midrule
     arXiv & citing document
             \begin{itemize}
@@ -384,7 +384,7 @@ Table~\ref{tab:datasetfilter} details how the citation contexts for our offline 
             \end{itemize}
             \ 
             \newline
-            Above criteria give us a number of reommendation candidates to rank that is close to that of the arXiv data while the quality threshold for those candidates is considerably higher.\\
+            Above criteria give us a number of recommendation candidates to rank that is close to that of the arXiv data while the quality threshold for those candidates is considerably higher.\\
     \midrule
     RefSeer & citing and cited document
             \begin{itemize}

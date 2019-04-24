@@ -1,17 +1,19 @@
 \chapter{Related Work}\label{chap:relatedwork}
 
-To the best of our knowledge there is, so far, almost no work investigating (1) the use of explicit semantic representations for (2) the task of local citation recommendation. We will therefore present related work in two areas. First, semantic approaches to citation/paper recommendation in general (global as well as local). Second, local citation recommendation regardless of the specifics of the approach taken.
+To the best of our knowledge there is, so far, almost no work investigating (1) the use of explicit semantic representations for (2) the task of local citation recommendation. We will therefore present related work in two areas. First, semantic approaches to \emph{global} citation and paper recommendation. Second, \emph{non-semantic} approaches to local citation recommendation.
 
-Note that SemCir~\cite{Zarrinkalam2013} (see below) is the only case of a semantic approach to local citation recommendation we are aware of. The explicit semantic representations are, however, not generated from citation contexts (local) but from papers (global) that are textually (not necessarily semantically) similar to the citation contexts.
+Note that SemCir~\cite{Zarrinkalam2013} (see below) is the only case we are aware of, that can be regarded as a semantic approach to local citation recommendation. The explicit semantic representations are, however, not generated from citation contexts (local), but from papers (global), that are textually (not necessarily semantically) similar to the citation contexts. To avoid complicating the document structure unnecessarily, we therefore list SemCir as a semantic but global approach.
 
 \section{Semantic approaches to citation recommendation}
+
+The key difference between the following approaches and our work, is that they recommend publications \emph{globally} and not \emph{locally}. This means the input for a recommendation is not a citation context but a whole paper, meaning semantic similarity between input and recommendation candidates can be assessed by paper specific aspects like authors, title, abstract, etc.
 
 At a point in time where publishing research papers online was an emerging trend, Middleton et al.~\cite{Middleton2001} propose a system for paper recommendation making use of a topic ontology. Based on classifying papers into topics and recording which papers a researcher would access on the web, they employ content-based filtering, collaborative filtering and a feedback mechanism to suggest papers from new topics to users. Comparing the topic ontology to a flat list of topics in two user studies, they report 7--15\% more user satisfaction for the ontology case.
 % \cite{Middleton2004} reports on new/extended system using CORA as ontology base (evaluation is somewhat convoluted though)
 
 In a similar vein, Zhang et al.~\cite{Zhang2008} propose a hybrid recommender system for papers based on semantic concept similarity. They derive concepts from CiteULike\footnote{See \url{http://citeulike.org/}.} tags and use these to measure the semantic similarity of papers and users' interest. In their evaluation they compare different settings of the approach but do not compare to other work or alternative techniques.
 
-Jiang et al.~\cite{Jiang2012} use CiteULike tags as academic concepts to build a topic model applied to paper abstracts. In a content-based recommendation setting they let volunteers judge the relevance of recommendations for a test set of 30 papers. The evaluation includes a TFIDF baseline, latent Dirichlet allocation (LDA) and an approach combining LDA with their concept model. The reported MAP@5 and NDCG@5 values are best for the LDA+concept method.
+Jiang et al.~\cite{Jiang2012} use CiteULike tags as academic concepts to build a topic model applied to paper abstracts. In a content-based recommendation setting they let volunteers judge the relevance of recommendations for a test set of 30 papers. The evaluation includes a TFIDF baseline, latent Dirichlet allocation (LDA) and an approach combining LDA with their concept model. The report MAP@5 and NDCG@5 values to be best for the LDA+concept method.
 
 In \cite{Zarrinkalam2012} Zarrinkalam et al. enrich their metadata on research papers using multiple Linked Open Data (LOD) sources to drive a hybrid recommender system. They compare a purely content-based method using only text similarity with a second method additionally utilizing collaborative filtering and a third method furthermore using the LOD enriched data. They report recall, co-cited probability and NDCG values for various cut-off values for which the LOD enriched method consistently achieves the best performance.
 
@@ -25,7 +27,9 @@ With SemCiR~\cite{Zarrinkalam2013} Zarrinkalam et al. introduce a content-based,
 
 % DiNoia\cite{DiNoia2012}
 
-\section{Local citation recommendation}
+\section{Local citation recommendation}\label{sec:localrelated}
+
+The following approaches recommend publications for a specific citation context (local). The key difference to our work is, that they solely rely on lexical and syntactic features (n-grams, part-of-speech tags, word embeddings etc.) and do not attempt to semantically model citation contexts.
 
 Probably one of the first investigations into local citation recommendation is the work of He et al.~\cite{He2010}. They propose a two-step system that first identifies recommendation candidates and then re-ranks them by concept similarity. While also discussing global citation recommendation in detail, for the local case they compare recommending for a single context and recommending for all contexts within a document simultaneously. In an evaluation on the CiteSeer\textsuperscript{x} data set measured by recall, co-cited probability and NDCG they find that the single context task is harder, but also, that their approach to the all contexts task achieves results comparable to and even better than some global citation recommendation methods.
 

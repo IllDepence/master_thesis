@@ -1,3 +1,9 @@
+# for first 29:
+Agreement on: 334/388
+Average observed agreement: 0.8608247422680413
+Krippendorff's alpha: 0.7450766597428229
+
+
 ### user: d4062c8c ###
 #
 ## items judged: 100
@@ -39,3 +45,25 @@ measuring other contexts only:
 # bow Recall: 0.46 | MRR: 0.36 | MAP: 0.36 | NDCG: 0.40
 # pp Recall: 0.50 | MRR: 0.30 | MAP: 0.31 | NDCG: 0.35
 # np Recall: 0.40 | MRR: 0.40 | MAP: 0.37 | NDCG: 0.38
+
+
+### user: bbd51eea ###
+#
+## items judged: 29
+#
+# passed: 0
+# undecidable: 2
+# broken: 0
+#
+## remaining: 27
+#
+# with author: 2
+# syntactic: 0
+#
+# type claim: 11
+# type ne: 11
+# type example: 5
+#
+# bow Recall: 0.45 | MRR: 0.45 | MAP: 0.40 | NDCG: 0.44
+# pp Recall: 0.51 | MRR: 0.44 | MAP: 0.39 | NDCG: 0.44
+# np Recall: 0.43 | MRR: 0.50 | MAP: 0.47 | NDCG: 0.49

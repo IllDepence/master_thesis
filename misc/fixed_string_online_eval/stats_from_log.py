@@ -1,6 +1,8 @@
 import json
 import math
 import sys
+from operator import itemgetter
+from nltk.metrics.agreement import AnnotationTask
 
 np_not_applicable = [0, 1, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 18, 21, 23,
 27, 28, 30, 31, 32, 33, 35, 36, 39, 41, 45, 47, 48, 49, 51, 52, 55, 56, 57, 58,
@@ -21,6 +23,7 @@ np_not_applicable = [0, 1, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 18, 21, 23,
 357, 359, 361, 362, 364, 365, 366, 368, 369, 371, 372, 373, 377, 378, 379, 382,
 383, 384, 388, 389, 390, 391, 393, 394, 396, 397, 398, 399, 401, 402, 403, 404,
 407, 408, 409, 410, 411, 412, 414]
+
 
 def prettify_judgement(item_num, j):
     """ Change recorded data from web form output into nicer format.
@@ -52,8 +55,66 @@ def prettify_judgement(item_num, j):
     nj['np'] = np
     return nj
 
-with open(sys.argv[1]) as f:
-    lines = f.readlines()
+
+def pjudgement_to_nltk_annot_task(uid, item_num, pjudgement, **kwargs):
+    """ Transform prettyfied judgement into NLTK AnnotationTask fromat.
+        http://www.nltk.org/api/nltk.metrics.html
+
+        Possible kwargs:
+            only_key: cit_type / author_in_context / syntactic
+            only_relevance: True / False
+    """
+
+    if type(pjudgement) == str:
+        return [(uid, item_num, pjudgement)]
+
+    task_items = []
+    keys = ['cit_type', 'author_in_context', 'syntactic']
+    if kwargs.get('only_key', False):
+        keys = [kwargs.get('only_key')]
+    elif kwargs.get('only_relevance', False):
+        keys = []
+    for key in keys:
+        task_items.append((
+            uid,
+            '{}{}'.format(item_num, key),
+            pjudgement[key]
+            ))
+    if kwargs.get('only_key', False):
+        return task_items
+    models = ['bow', 'pp']
+    if pjudgement['np'] != None:
+        models.append('np')
+    for model in models:
+        for rank, rel in enumerate(pjudgement[model]):
+            task_items.append((
+                uid,
+                '{}{}{}'.format(item_num, model, rank),
+                rel
+                ))
+    return task_items
+
+
+def align_annot_task(tup_arr):
+    """ Items passed by at least one author can not be compared to judgements
+        performed by others. The aligned task is therefore the intersection of
+        items not passed.
+    """
+
+    aligned = []
+    num_raters = len(set([t[0] for t in tup_arr]))
+    tup_arr.sort(key=itemgetter(1))
+    for key in set([t[1] for t in tup_arr]):
+        ratings = [t for t in tup_arr if t[1] == key]
+        if len(ratings) == num_raters:
+            aligned.extend(ratings)
+    return aligned
+
+
+lines = []
+for in_file in sys.argv[1:]:
+    with open(in_file) as f:
+        lines += f.readlines()
 
 # Build test item dict (item->user->judgement) to compare user differences
 #   per item.
@@ -61,10 +122,39 @@ with open(sys.argv[1]) as f:
 #   metrics per user.
 items = {}
 users = {}
+annot_task_all = []
+annot_task_type = []
+annot_task_auth = []
+annot_task_synt = []
+annot_task_rel = []
 for line in lines:
     timestamp, uid, item_num, json_str = line.split('\u241F')
     judgement_raw = json.loads(json_str.strip())
     judgement = prettify_judgement(item_num, judgement_raw)
+    annot_task_all += pjudgement_to_nltk_annot_task(
+        uid,
+        item_num,
+        judgement)
+    annot_task_type += pjudgement_to_nltk_annot_task(
+        uid,
+        item_num,
+        judgement,
+        only_key='cit_type')
+    annot_task_auth += pjudgement_to_nltk_annot_task(
+        uid,
+        item_num,
+        judgement,
+        only_key='author_in_context')
+    annot_task_synt += pjudgement_to_nltk_annot_task(
+        uid,
+        item_num,
+        judgement,
+        only_key='syntactic')
+    annot_task_rel += pjudgement_to_nltk_annot_task(
+        uid,
+        item_num,
+        judgement,
+        only_relevance=True)
     if not item_num in items:
         items[item_num] = {}
     if not uid in items[item_num]:
@@ -73,7 +163,23 @@ for line in lines:
         users[uid] = []
     users[uid].append(judgement)
 
+at = align_annot_task(annot_task_all)
+at.sort(key=itemgetter(1))
+t = AnnotationTask(at)
+same = 0
+diff = 0
+for key in set([t[1] for t in at]):
+    r1, r2 = [t for t in at if t[1] == key]
+    if r1[2] == r2[2]:
+        same += 1
+    else:
+        diff += 1
+print('Agreement on: {}/{}'.format(same, same+diff))
+print('Average observed agreement: {}'.format(t.avg_Ao()))
+print('Krippendorff\'s alpha: {}'.format(t.alpha()))
+
 for uid, judgements in users.items():
+    print()
     print('### user: {} ###'.format(uid))
     print('#')
     print('## items judged: {}'.format(len(judgements)))

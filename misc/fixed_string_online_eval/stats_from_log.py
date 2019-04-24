@@ -3,6 +3,7 @@ import math
 import sys
 from operator import itemgetter
 from nltk.metrics.agreement import AnnotationTask
+from nltk.metrics import ConfusionMatrix
 
 np_not_applicable = [0, 1, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 18, 21, 23,
 27, 28, 30, 31, 32, 33, 35, 36, 39, 41, 45, 47, 48, 49, 51, 52, 55, 56, 57, 58,
@@ -163,13 +164,13 @@ for line in lines:
         users[uid] = []
     users[uid].append(judgement)
 
-at = align_annot_task(annot_task_all)
-at.sort(key=itemgetter(1))
-t = AnnotationTask(at)
+ata = align_annot_task(annot_task_all)
+ata.sort(key=itemgetter(1))
+t = AnnotationTask(ata)
 same = 0
 diff = 0
-for key in set([t[1] for t in at]):
-    r1, r2 = [t for t in at if t[1] == key]
+for key in set([t[1] for t in ata]):
+    r1, r2 = [t for t in ata if t[1] == key]
     if r1[2] == r2[2]:
         same += 1
     else:
@@ -177,6 +178,25 @@ for key in set([t[1] for t in at]):
 print('Agreement on: {}/{}'.format(same, same+diff))
 print('Average observed agreement: {}'.format(t.avg_Ao()))
 print('Krippendorff\'s alpha: {}'.format(t.alpha()))
+
+type_arr1 = []
+type_arr2 = []
+att = align_annot_task(annot_task_type)
+att.sort(key=itemgetter(1))
+for key in set([t[1] for t in att]):
+    r1, r2 = [t for t in att if t[1] == key]
+    type_arr1.append(r1[2])
+    type_arr2.append(r2[2])
+cm = ConfusionMatrix(type_arr1, type_arr2)
+
+types = ['claim', 'ne', 'example', 'other']
+print()
+print('\t'.join([''] + types))
+for tx in types:
+    vals = []
+    for ty in types:
+        vals.append(cm[tx, ty])
+    print('\t'.join([tx] + [str(v) for v in vals]))
 
 for uid, judgements in users.items():
     print()

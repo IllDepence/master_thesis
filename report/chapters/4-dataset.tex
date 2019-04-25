@@ -1,5 +1,5 @@
 \chapter{Data set}\label{chap:dataset}
-Recommender systems rely on data for their development, training and evaluation. It is therefore important to properly assess potential data sets in terms of their strengths and shortcomings---especially with regards to the task at hand. In citation recommendation, the goal is to identify papers relevant to a user input. Because of the large amount of available research, this means a recommender has to be able to find relevant publications in a large set of possible candidates in order to be considered fit for the task. As a consequence, evaluation results are likely to be more meaningful when a large data set is used. Apart from the size, the quality of data is also crucial. For local citation recommendation this means that a clean citation context, precise position of citation markers and valid citation information are desirable. With these criteria in mind we assessed existing data sets and come to the conclusion that, for the relatively new task of local citation recommendation, the creation of a dedicated data set will bring considerable benefits.
+Recommender systems rely on data for their development, training and evaluation. It is therefore important to properly assess potential data sets in terms of their strengths and shortcomings---especially with regards to the task at hand. In citation recommendation, the goal is to identify papers relevant to a user input. Because of the large amount of available research, this means a recommender has to be able to find relevant publications in a large set of possible candidates in order to be considered fit for the task. As a consequence, evaluation results are likely to be more meaningful when a large data set is used. Apart from the size, the quality of data is also crucial. For local citation recommendation, this means that a clean citation context, precise position of citation markers and valid citation information are desirable. With these criteria in mind we assessed existing data sets and come to the conclusion that, for the relatively new task of local citation recommendation, the creation of a dedicated data set will bring considerable benefits.
 
 The following sections describe the details of our assessment as well as the creation process and evaluation of our new data set.
 
@@ -9,7 +9,7 @@ Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While
 
 \begin{table}
 \centering
-    \caption[Overview of existing data sets.]{Overview of existing data sets.\\Listed are the number of papers, nature of citation contexts, covered disciplines of citing papers and the type of global reference identifiers.\\(\emph{extractable*} is to indicate that extraction might be error-prone due to papers only being available as in PDF format.)}
+    \caption[Overview of existing data sets.]{Overview of existing data sets.\\Listed are the number of papers, nature of citation contexts, covered disciplines of citing papers and the type of global reference identifiers.\\(\emph{extractable*} is to indicate that extraction might be error-prone due to papers only being available in PDF format.)}
     \label{tab:datasets}
 \begin{center}
     % \caption{Overview of existing data sets.}
@@ -19,8 +19,8 @@ Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While
     Data set & \#Papers & Cit. context & Disciplines & Ref. IDs \\
     \midrule
     CiteSeer\textsuperscript{x}~\cite{Caragea2014} / RefSeer~\cite{Huang2014} & 5M & 400 chars & (unrestricted) & internal \\
-    PubMed Central OAS\footnote{\url{https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/}} & 2.3M & extractable & Biomed./Life Sci. & mixed \\
-    Public Library of Science\footnote{\url{https://www.plos.org/text-and-data-mining}} & 200k & extractable & mostly Biol./Med. & - \\
+    PubMed Central OAS\footnote{See \url{https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/}.} & 2.3M & extractable & Biomed./Life Sci. & mixed \\
+    Public Library of Science\footnote{See \url{https://www.plos.org/text-and-data-mining}.} & 200k & extractable & mostly Biol./Med. & - \\
     arXiv CS~\cite{Faerber2018} &  90K & 1 sentence & CS & DBLP \\
     Scholarly~\cite{Sugiyama2013}  & 100k & extractable* & CS & - \\
     ACL-AAN~\cite{Radev2013} & 18K & extractable* & CS/Comp. Ling. & -  \\
@@ -31,7 +31,7 @@ Table~\ref{tab:datasets} gives an overview of relevant existing data sets. While
 \end{table}
 
 
-The PubMed Central Open Access Subset (PMC-OAS) is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in the JATS\cite{Huh2014} XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \texttt{\url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}}}~\cite{Gipp2015}.
+The PubMed Central Open Access Subset (PMC-OAS) is another large data set that has been used for citation based tasks~\cite{Duma2016,Gipp2015,Galke2018,Bhagavatula2018}. Contained publications are already processed and available in the JATS\cite{Huh2014} XML format. While the data set overall is comparatively clean, heterogeneous annotation of citations within the text and mixed usage of global reference identifiers (PubMed, MEDLINE, DOI, ...) make it difficult to retrieve high quality citation interlinkings of documents from the data set\footnote{To be more precise, the heterogeneity makes the usage of the data set \emph{as is} problematic. Resolving references retrospectively would be an option but comparatively challenging in the case of PubMed because of the frequent usage of special notation in publication titles; see also: \url{http://www.sciplore.org/files/citrec/CITREC_Parser_Documentation.pdf}.}~\cite{Gipp2015}.
 
 Similar to the PMC-OAS, albeit smaller, the Public Library of Science (PLOS) offers publications in the same XML format and has seen application for citation based tasks~\cite{Bertin2016,Bertin2018}. In contrast to the PMC-OAS, references are in general not resolved to any global identifier.
 
@@ -78,12 +78,12 @@ In the following we will describe the tools considered for parsing \LaTeX{}, the
 \toprule
     Tool & Output & Robust & Usable w/o modification \\
    \midrule
-    plastex\footnote{\url{https://github.com/tiarno/plastex}} & DOM & no & yes\\
-    TexSoup\footnote{\url{https://github.com/alvinwan/texsoup}} & document tree & no & yes\\
-    opendetex\footnote{\url{https://github.com/pkubowicz/opendetex}}/detex\footnote{\url{https://www.freebsd.org/cgi/man.cgi?query=detex}} & plain text & no & yes\\
+    plastex\footnote{See \url{https://github.com/tiarno/plastex}.} & DOM & no & yes\\
+    TexSoup\footnote{See \url{https://github.com/alvinwan/texsoup}.} & document tree & no & yes\\
+    opendetex\footnote{See \url{https://github.com/pkubowicz/opendetex}.}/detex\footnote{See \url{https://www.freebsd.org/cgi/man.cgi?query=detex}.} & plain text & no & yes\\
     GrabCite\cite{Faerber2018} & plain\hphantom{ }text\hphantom{ }+ resolved ref. & yes & no\\
-    LaTeXML\footnote{\url{https://github.com/brucemiller/LaTeXML}} & XML & yes & yes\\
-    Tralics\footnote{\url{https://www-sop.inria.fr/marelle/tralics/}} & XML & yes & yes\\
+    LaTeXML\footnote{See \url{https://github.com/brucemiller/LaTeXML}.} & XML & yes & yes\\
+    Tralics\footnote{See \url{https://www-sop.inria.fr/marelle/tralics/}.} & XML & yes & yes\\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -93,15 +93,15 @@ We took several tools for the conversion from \LaTeX{} to plain text or to inter
 
 
 \subsubsection{Challenges}
-Apart from the general difficulty of parsing \LaTeX{} due to its feature richness and people's free-spirited use of it, we especially note difficulty in dealing with extra packages not included in submissions' sources\footnote{arXiv specifically suggest the omission of such (see \texttt{\url{https://arxiv.org/help/submit\_tex\#wegotem}})}. While \textit{Tralics} is supposed to for example deal with \textit{natbib} citations\footnote{See \texttt{\url{https://www-sop.inria.fr/marelle/tralics/packages.html\#natbib}}}, normalization of such citations lead to a decrease of citation markers not being able to be matched to an entry in the document's reference section from 30\% to 5\% in a sample of 565,613 citations we tested.
+Apart from the general difficulty of parsing \LaTeX{} due to its feature richness and people's free-spirited use of it, we especially note difficulty in dealing with extra packages not included in submissions' sources\footnote{arXiv specifically suggest the omission of such (see \url{https://arxiv.org/help/submit\_tex\#wegotem}).}. While \textit{Tralics} is supposed to for example deal with \textit{natbib} citations\footnote{See \url{https://www-sop.inria.fr/marelle/tralics/packages.html\#natbib}.}, normalization of such citations lead to a decrease of citation markers not being able to be matched to an entry in the document's reference section from 30\% to 5\% in a sample of 565,613 citations we tested.
 
 % \vfill % in case there's ugly large spaces between section title and text
 
 \subsubsection{Resulting approach}
-Our \LaTeX{} parsing solution consists of two steps. First, we flatten each arXiv submission's sources to a single \LaTeX{} file using \textit{latexpand}\footnote{See \url{https://ctan.org/pkg/latexpand}}\textsuperscript{,}\footnote{We also tested flatex (\url{https://ctan.org/pkg/flatex}) and flap (\url{https://github.com/fchauvel/flap}) but got the best results with \texttt{latexpand}.} and normalize \texttt{\textbackslash cite} commands to prevent parsing problems later on. In the second step, we then generate an XML representation of the \LaTeX{} document using \textit{Tralics}, replace formulas, figures, tables and non citation references with replacement tokens and extract the plain text. Furthermore, each entry in the document's reference section is assigned a unique identifier, its text is stored in a database and corresponding citation markers are placed in the plain text.
+Our \LaTeX{} parsing solution consists of two steps. First, we flatten each arXiv submission's sources to a single \LaTeX{} file using \textit{latexpand}\footnote{See \url{https://ctan.org/pkg/latexpand}.}\textsuperscript{,}\footnote{We also tested flatex (\url{https://ctan.org/pkg/flatex}) and flap (\url{https://github.com/fchauvel/flap}) but got the best results with \texttt{latexpand}.} and normalize \texttt{\textbackslash cite} commands to prevent parsing problems later on. In the second step, we then generate an XML representation of the \LaTeX{} document using \textit{Tralics}, replace formulas, figures, tables and intra-document references with replacement tokens and extract the plain text. Furthermore, each entry in the document's reference section is assigned a unique identifier, the reference string stored in a database and corresponding citation markers are placed in the plain text.
 
 \subsection{Reference resolution}\label{sec:refresol}
-Resolving references to globally consistent identifiers (e.g. detecting that the references (1), (2), and (3) in Listing~\ref{lst:refitems} all reference the same document) is a challenging and still unsolved task~\cite{Nasar2018}. Given it is, by itself, the most distinctive part of a publication, we base our reference resolution on the title of the cited work and use other pieces of information (e.g., authors' names) only in secondary steps. In the following we will describe the challenges we faced, matching arXiv submissions' reference strings against MAG paper records and how we approached the task.
+Resolving references to globally consistent identifiers (e.g. detecting that the references (1), (2), and (3) in Listing~\ref{lst:refitems} all reference the same document) is a challenging and still unsolved task~\cite{Nasar2018}. Given it is, by itself, the most distinctive part of a publication, we base our reference resolution on the title of the cited work and use other pieces of information (e.g. authors' names) only in secondary steps. In the following we will describe the challenges we faced, matching arXiv submissions' reference strings against MAG paper records and how we approached the task.
 
 \begin{lstlisting}[caption={Examples of reference strings.},label={lst:refitems}]
 (1) V. N. Senoguz and Q. Shafi, arXiv:hep-ph/0412102
@@ -113,10 +113,10 @@ Resolving references to globally consistent identifiers (e.g. detecting that the
 \end{lstlisting} % (*$B^{0}_{s} \to \eta^{\prime}\phi$*)
 
 \subsubsection{Challenges}
-Reference resolution can be challenging when reference strings contain only minimal amounts of information, when formulas are used in titles or when they refer to non publications (e.g., Listing~\ref{lst:refitems} (4)-(6)). A further problem we encountered was noise in the MAG. Our mechanism matched 13,041 reference strings like \texttt{K. Kondo, hep-th/0303251.} and \texttt{T. Heinzl, hep-th/9812190.} to a MAG paper with the title \textit{``hep-th.''} with one of the author's names being \textit{``He''} (paper ID \texttt{2811252340}).
+Reference resolution can be challenging when reference strings contain only minimal amounts of information, when formulas are used in titles or when they refer to non publications (e.g. Listing~\ref{lst:refitems} (4)-(6)). A further problem we encountered was noise in the MAG. Our mechanism matched 13,041 reference strings like \texttt{K. Kondo, hep-th/0303251.} and \texttt{T. Heinzl, hep-th/9812190.} to a MAG paper with the title \textit{``hep-th.''} with one of the author's names being \textit{``He''} (paper ID \texttt{2811252340}).
 
 \subsubsection{Resulting approach}
-Our reference resolution procedure can be broken down in two steps: title identification and matching. If possible, title identification is done by arXiv ID or DOI (where we retrieve the title from an arXiv metadata dump or via crossref.org\footnote{See \url{https://www.crossref.org/}}); otherwise we use Neural ParsCit~\cite{Animesh2018}. The identified title is matched against the normalized titles of all publications in the MAG. Resulting candidates are considered, if at least one of the author's names is present in the reference string. If multiple candidates remain, we judge by the citation count given in the MAG. The last step particularly helped mitigate rouge almost-duplicate entries in the MAG that often have few to no citations.
+Our reference resolution procedure can be broken down in two steps: title identification and matching. If possible, title identification is done by arXiv ID or DOI (where we retrieve the title from an arXiv metadata dump or via Crossref\footnote{See \url{https://www.crossref.org/}.}); otherwise we use Neural ParsCit~\cite{Animesh2018}. The identified title is matched against the normalized titles of all publications in the MAG. Resulting candidates are considered, if at least one of the author's names is present in the reference string. If multiple candidates remain, we judge by the citation count given in the MAG. The last step particularly helped mitigate rouge almost-duplicate entries in the MAG that often have few to no citations.
 
 \subsection{Result format}\label{sec:datasetformat}
 Listing \ref{lst:formatall} shows some example content from the data set. While the data set in and of itself consists of plain text files and a references database, citation contexts of successfully resolved references are straightforward to extract and use as input for a recommender. The bottom part of Listing~\ref{lst:formatall} shows an example of a 3 sentence context with \texttt{cited doc MAG ID},\hphantom{n}\texttt{MAG IDs of adjacent citations},\hphantom{n}\texttt{citing doc arXiv ID} and \texttt{text} in a CSV file. Citations are deemed adjacent, if they are part of a citation group or are at most 5 characters apart (e.g. \emph{''[27,42]''}, \emph{''[27], [42]''} or \emph{''[27] and [42]''}). % Sentence tokenization is performed with NLTK’s pre-trained PunktSentenceTokenizer.
@@ -176,7 +176,7 @@ The three incorrectly identified references were as follows (MAG IDs in square b
     \end{itemize}
 \end{enumerate}
 
-In all three cases the misidentified document’s title is contained in the correct document’s title, and there is a large or complete author overlap between correct and actual match. This shows that authors sometimes title follow-up work very similarly, which leads to hard to distinguish cases. Another observation that can be made, is that longer titles are more distinctive. As certain publication titles might be sub-strings of of other publication's title, a matching mechanic should always try to first match a long title before trying shorter candidates. The full details of the evaluation can be found in Appendix~\ref{chap:matcheval}.
+In all three cases the misidentified document’s title is contained in the correct document’s title, and there is a large or complete author overlap between correct and actual match. This shows that authors sometimes title follow-up work very similarly, which leads to hard to distinguish cases. Another observation that can be made, is that longer titles are more distinctive. As certain publication titles might be sub-strings of other publications' titles, a matching mechanism should always try to first match a long title before trying shorter candidates. The full details of the evaluation can be found in Appendix~\ref{chap:matcheval}.
 
 \section{Statistics and key figures}
 
@@ -207,7 +207,7 @@ Of the 35,053,329 reference strings, we were able to match 14,046,239 (40.07\%).
 \end{figure}
 
 \subsection{Resulting data set}
-The resulting data set consists of \emph{2,343,585 cited papers, 926.644 citing papers, 13,303,373 references and 24,558,560 citation contexts}. Note that references with no citation markers (due to parsing errors) are not counted here.
+The resulting data set consists of \emph{2,343,585 cited papers, 926,644 citing papers, 13,303,373 references and 24,558,560 citation contexts}. Note that references with no citation markers (due to parsing errors) are not counted here.
 
 Figure \ref{fig:numcitdoc} shows the number of citing documents for all cited documents. There is one document with close to 10,000 citations, another three with more than 5,000 and another ten with more than 3,000. 1,262,861 (53.89\%) of the documents have at least two citations, 547,036 (23.34\%) have at least five. The mean number of citations is 5.68 (SD 26.82). Figure \ref{fig:numcontref} shows the number of citation context per reference. 8,722,795 (65.57\%) references have only one citation context, the maximum is 278, the mean 1.85 (SD 2.02). This means a cited document is described by on average $1.85 \times 5.68 \approx 10.5$ citation contexts.
 

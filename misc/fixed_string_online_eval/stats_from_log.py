@@ -108,7 +108,8 @@ def align_annot_task(tup_arr):
     for key in set([t[1] for t in tup_arr]):
         ratings = [t for t in tup_arr if t[1] == key]
         if len(ratings) == num_raters:
-            aligned.extend(ratings)
+            if ratings[0][2] not in ['undecidable', 'pass', 'broken']:
+                aligned.extend(ratings)
     return aligned
 
 
@@ -164,20 +165,30 @@ for line in lines:
         users[uid] = []
     users[uid].append(judgement)
 
-ata = align_annot_task(annot_task_all)
-ata.sort(key=itemgetter(1))
-t = AnnotationTask(ata)
-same = 0
-diff = 0
-for key in set([t[1] for t in ata]):
-    r1, r2 = [t for t in ata if t[1] == key]
-    if r1[2] == r2[2]:
-        same += 1
-    else:
-        diff += 1
-print('Agreement on: {}/{}'.format(same, same+diff))
-print('Average observed agreement: {}'.format(t.avg_Ao()))
-print('Krippendorff\'s alpha: {}'.format(t.alpha()))
+task_dict = {
+    'all': annot_task_all,
+    'type': annot_task_type,
+    'auth': annot_task_auth,
+    'synt': annot_task_synt,
+    'rel': annot_task_rel
+    }
+
+for label, task in task_dict.items():
+    ata = align_annot_task(task)
+    ata.sort(key=itemgetter(1))
+    t = AnnotationTask(ata)
+    same = 0
+    diff = 0
+    for key in set([t[1] for t in ata]):
+        r1, r2 = [t for t in ata if t[1] == key]
+        if r1[2] == r2[2]:
+            same += 1
+        else:
+            diff += 1
+    print('- - - {} - - -'.format(label))
+    print('Agreement on: {}/{}'.format(same, same+diff))
+    print('Average observed agreement: {}'.format(t.avg_Ao()))
+    print('Krippendorff\'s alpha: {}'.format(t.alpha()))
 
 type_arr1 = []
 type_arr2 = []
@@ -198,7 +209,9 @@ for tx in types:
         vals.append(cm[tx, ty])
     print('\t'.join([tx] + [str(v) for v in vals]))
 
-for uid, judgements in users.items():
+users_sep = list(users.items())
+users_both = [('all', users_sep[0][1]+users_sep[1][1])]
+for uid, judgements in users_sep + users_both:
     print()
     print('### user: {} ###'.format(uid))
     print('#')

@@ -130,30 +130,46 @@ This shows us that differences in data set composition can make a large differen
 % \cite{Huang2015} use CiteSeer\textsuperscript{x} (which RefSeer is based on) w/ 329,365 recommendation candidates. mby kind of comparable with a few buckets of salt?
 
 \section{User study}\label{sec:oneval}
-To get more insight into the nature of our evaluation data and a better understanding of our models, we perform a user study in which human participants judge input-output pairs of our offline evaluation (i.e. citation contexts and the recommendations given for them). For this we randomly choose 100 citation contexts from our arXiv data, where the citing paper belongs to the category ``Computer Science - Information Retrieval''. This is to ensure that participants are able to reasonably judge the relevance of the recommendations given. For each input context we present the user with the top 5 recommendations of the BoW, Claim+BoW and NPmarker models. We furthermore let the users judge the type of citation (NE/concept, Claim, Exemplification, Other; cf. Table~\ref{tab:citfunctions} in Section~\ref{chap:approach}), whether or not the author's name of the cited document is present in the citation contexts and whether or not the citation marker has a grammatical function (i.e. syntactic/non-syntactic citation). Participants can also choose not to judge a context and give one of three reasons: (1) there's not enough information contained to reasonably make a decision, (2) the context is broken in some other form (e.g. due to faulty sentence segmentation an unreasonably large context was used) and (3) the participant can not make a relevance judgement for some other reason (``pass''). Figure~\ref{fig:interface} shows the interface participants used to give their judgement.
+To get more insight into the nature of our evaluation data and a better understanding of our models, we perform a user study in which 2 human raters judge input-output pairs of our offline evaluation (i.e. citation contexts and the recommendations given for them). For this, we randomly choose 50 citation contexts from our arXiv data, where the citing paper belongs to the category ``Computer Science - Information Retrieval''. This is to ensure that raters are able to reasonably judge the relevance of the recommendations given. For each input context, we show the top 5 recommendations of the BoW, Claim+BoW and NPmarker models---i.e. 750 recommended items in total. We furthermore let the raters judge the type of citation (Claim, NE/concept, Exemplification, Other; cf. Table~\ref{tab:citfunctions} in Section~\ref{chap:approach}), whether or not the author's name of the cited document is present in the citation contexts and whether or not the citation marker has a grammatical function (i.e. syntactic/non-syntactic citation). Raters can also choose not to judge a context and give one of %
+%three
+two reasons: (1) there's not enough information contained to reasonably make a decision, %
+%(2) the context is broken in some other form (e.g. due to faulty sentence segmentation an unreasonably large context was used) and (3)
+(2) the rater can not make a relevance judgement for some other reason (``pass''). Figure~\ref{fig:interface} shows the interface used to record the judgements. Likewise to the offline evaluation, the NPmarker model was only evaluated when applicable (19 out of the 50 contexts). When no NPmarker based recommendations where available, the text ``Model not applicable'' was displayed in their stead.
 
 % mby insert "controlled for free text input bias" argument somewhere here
 
-\begin{figure}[]
+\begin{figure}[t]
   \centering
     \includegraphics[width=0.8\textwidth]{figures/evaluation/interface.png}
   \caption{Interface used in the user study.}
   \label{fig:interface}
 \end{figure}
 
-As in the offline evaluation, the NPmarker model was only evaluated when applicable (40 out of the 100 contexts). When no NPmarker based recommendations where available, the text ``Model not applicable'' was displayed in their stead.
+Overall, we observe an inter-rater agreement of 87.8\%. Judgements on the presence of an author's name and the citation being syntactic or not matched 100\%, relevance jugements were 86.9\% consistent and type categorization 73.2\%. Of the 50 contexts, 8 contained an author's name and 2 were syntactic. The confusion matrix for the four types of citations, presented in Table~\ref{tab:confusion}, clearly shows, that the distinction between the types is not always clear cut\footnote{Note that the values within the matrix do not add up to 50, because type information was not recorded when recommendation relevance was deemed not judgable and the item therefore skipped.}. This can be seen with a citation context like \emph{``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval [1], semantic parsing [2], sentence modeling [3] and other traditional natural language processing tasks [4].''}, which can equally be interpreted as claims being backed or a list of examples.
 
-User 1: 14 deemed not judgeable (12 not enough information, 1 broken, 1 passed) leaving 86 judged contexts. Of these 7 with author (8.1\%) and 5 syntactic (5.8\%). Distribution of types is 28 NE/concept, 25 exemplification, 21 claim and 12 other.
+\begin{table}
+\centering
+    \caption{Confusion matrix of citation types.}
+    \label{tab:confusion}
+\begin{center}
+    \begin{tabular}{lr|c|c|c|c|}
+    \multicolumn{2}{c}{} & \multicolumn{4}{c}{Rater 1} \\
+    \noalign{\smallskip}
+    \ & \  & \rotatebox{90}{Claim} & \rotatebox{90}{NE/concept\ } & \rotatebox{90}{Exemplific.\ } & \rotatebox{90}{Other} \\
+    \cline{2-6}
+    \multirow{4}{*}{\rotatebox{90}{Rater 2}} & Claim   & 8 & 0  & 1 & 0 \\
+    \cline{2-6}
+    & NE/concept  & 1 & 13 & 2 & 0 \\
+    \cline{2-6}
+    & Exemplific. & 2 & 1  & 8 & 1 \\
+    \cline{2-6}
+    & Other   & 2 & 0  & 0 & 2 \\
+    \cline{2-6}
+    \end{tabular}
+\end{center}
+%\end{table}
 
-When second user insert confusion matrix of context types.
-% concerning author present criteria: can be unclear if author's name is part of NE (e.g. ``Pearson Correlation'')
-% Ambiguous case claim/example: ``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval CIT , semantic parsing MAINCIT , sentence modeling CIT and other traditional natural language processing tasks CIT .'' (also good example for when NPmarker misses out on important information)
-% Ambiguous case claim/example: ``Closeness centrality describes the efficiency of the information propagation from one node to the other nodes CIT MAINCIT CIT .''
-% Ambiguous case author name present or not: ``We propose a heuristic method based on strong connected component detection to compute Kemeny-Young ranking MAINCIT.''
-
-Table~\ref{tab:userevalnumbers} shows evaluation numbers (if sensible aggregate w/ 2nd user data).
-
-\begin{table}[tb]
+%\begin{table}
 \centering
     \caption{Evaluation scores at cut-off 5.}
     \label{tab:userevalnumbers}
@@ -164,40 +180,36 @@ Table~\ref{tab:userevalnumbers} shows evaluation numbers (if sensible aggregate 
     \midrule
     \multicolumn{5}{c}{\emph{all contexts}} \\
     \midrule
-    Claim+BoW & \textbf{0.55} & 0.45 & 0.42 & 0.47 \\
-    BoW       & 0.52 & \textbf{0.48} & \textbf{0.45} & \textbf{0.49} \\
-    NPmarker  & 0.31 & 0.30 & 0.28 & 0.30 \\
+    Claim+BoW & \textbf{0.50} & 0.44 & 0.40 & 0.44 \\
+    BoW       & 0.47 & \textbf{0.45} & \textbf{0.42} & \textbf{0.46} \\
+    NPmarker  & 0.34 & 0.38 & 0.35 & 0.37 \\
     \midrule
     \multicolumn{5}{c}{\emph{only contexts of type ``claim''}} \\
     \midrule
-    Claim+BoW & \textbf{0.71} & 0.48 & 0.44 & 0.53 \\
-    BoW       & 0.64 & \textbf{0.53} & \textbf{0.51} & \textbf{0.57} \\
-    NPmarker  & 0.25 & 0.08 & 0.08 & 0.12 \\
+    Claim+BoW & \textbf{0.61} & 0.51 & 0.46 & 0.51 \\
+    BoW       & 0.55 & \textbf{0.55} & \textbf{0.53} & \textbf{0.56} \\
+    NPmarker  & 0.17 & 0.17 & 0.17 & 0.17 \\
     \midrule
     \multicolumn{5}{c}{\emph{only contexts of type ``NE/concept''}} \\
     \midrule
-    Claim+BoW & 0.45 & 0.43 & 0.40 & 0.43 \\
-    BoW       & 0.46 & 0.43 & 0.40 & 0.44 \\
-    NPmarker  & \textbf{0.49} & \textbf{0.50} & \textbf{0.45} & \textbf{0.49} \\
+    Claim+BoW & 0.42 & 0.38 & 0.35 & 0.38 \\
+    BoW       & 0.42 & 0.38 & 0.34 & 0.38 \\
+    NPmarker  & \textbf{0.53} & \textbf{0.60} & \textbf{0.61} & \textbf{0.56} \\
     \midrule
     \multicolumn{5}{c}{\emph{only contexts of type ``exemplification''}} \\
     \midrule
-    Claim+BoW & \textbf{0.53} & \textbf{0.52} & 0.49 & 0.52 \\
-    BoW       & \textbf{0.53} & \textbf{0.52} & \textbf{0.50} & \textbf{0.53} \\
-    NPmarker  & 0.14 & 0.14 & 0.14 & 0.14 \\
+    Claim+BoW & \textbf{0.54} & 0.44 & 0.38 & 0.45 \\
+    BoW       & 0.49 & \textbf{0.46} & \textbf{0.43} & \textbf{0.48} \\
+    NPmarker  & 0.24 & 0.29 & 0.29 & 0.29 \\
     \midrule
     \multicolumn{5}{c}{\emph{only contexts of type ``other''}} \\
     \midrule
-    Claim+BoW & \textbf{0.50} & 0.30 & 0.31 & 0.35 \\
-    BoW       & 0.46 & 0.36 & 0.36 & \textbf{0.40} \\
-    NPmarker  & 0.40 & \textbf{0.40} & \textbf{0.37} & 0.38 \\
+    Claim+BoW & 0.50 & 0.50 & 0.50 & 0.50 \\
+    BoW       & 0.50 & 0.50 & 0.50 & 0.50 \\
+    NPmarker  & 0.50 & 0.50 & 0.45 & 0.48 \\
     \bottomrule
     \end{tabular}
 \end{center}
 \end{table}
 
-Insert observations here.\\
-- Claim+BoW and BoW close but in contrast to offline eval Claim+BoW only outperforms BoW in Recall metric.\\
-- Claim+BoW results highest for claim and exemplification contexts -> useful for the tasks its designed for\\
-- NPmarker dominating NE/concept contexts ->useful for the tasks its designed for\\
-- Non-syntactic citations seem to be the norm
+Table~\ref{tab:userevalnumbers} shows the results of the combined 1,500 relevance judgements (50 contexts with 15 recommendations each, judged by 2 raters). Measurements are given for all contexts, as well as each of the citation classes on its own. We note that Claim+BoW and BoW are close, but in contrast to the offline evaluation, Claim+BoW only outperforms BoW in the Recall metric. In the case of NE/concept type citations, the NPmarker model performs better than the other two models in all metrics. Furthermore, we can see that both Claim+BoW and NPmarker achieve their best results for the type of citation they're designed for---Claim and NE/concept respectively. This indicates that both models actually capture the kind of information they're conceptualized for. Comparing to the offline evaluation, ... % numbers higher (don't forget evaluation is *way* smaller), indicates that re-prediction, to no one's surpise, misses quite a few relevant recommendations

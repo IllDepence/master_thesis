@@ -212,6 +212,7 @@ for tx in types:
 users_sep = list(users.items())
 users_both = [('all', users_sep[0][1]+users_sep[1][1])]
 for uid, judgements in users_sep + users_both:
+    num_judgements = 0
     print()
     print('### user: {} ###'.format(uid))
     print('#')
@@ -262,6 +263,7 @@ for uid, judgements in users_sep + users_both:
             for ml in model_labels:
                 if j[ml] == None:
                     continue
+                num_judgements += 5
                 ts = len([i for i in j[ml] if i])  # number of Trues
                 num_relevant = max(ts, num_relevant)
             # go through models and their relevance judgements
@@ -309,6 +311,7 @@ for uid, judgements in users_sep + users_both:
     print('# broken: {}'.format(num_broken))
     print('#')
     print('## remaining: {}'.format(remaining))
+    print('## number of judgements: {}'.format(num_judgements))
     print('#')
     print('# with author: {}'.format(num_with_author))
     print('# syntactic: {}'.format(num_syntactic))

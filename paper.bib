@@ -18,7 +18,7 @@
   title     = {{A High-Quality Gold Standard for Citation-based Tasks}},
   booktitle = {{Proceedings of the 11th International Conference on Language Resources and Evaluation}},
   year      = {2018},
-  series    = {{{LREC} 2018}},
+  series    = {{LREC}},
   review    = {- created new data set for cit.rec. based on arXiv
 - only compsci papers
 - other data sets (most commonly used one is CiteSeerX) have two main problems: (1) noisy citation context, (2) no/low quality links of citations to cited publications
@@ -218,14 +218,6 @@
   isbn      = {0262026430, 9780262026437},
 }
 
-@Unpublished{Faerber,
-  author = {Michael F{\"{a}}rber and Adam Jatowt},
-  title  = {{Citation Recommendation for Scientific Publications}},
-  review = {-  (!!!) argument for semantic approach (!!!)
-    "One can envision that, in the mid-term, citation recommendation approaches can better capture the semantics of the citation context, with the result that actual fact-based citation recommendation becomes reality."
-    (chapter 6 POTENTIAL FUTURE WORK)},
-}
-
 @Article{Tbahriti2006,
   author   = {Imad Tbahriti and Christine Chichester and Frédérique Lisacek and Patrick Ruch},
   title    = {{Using argumentation to retrieve articles with similar citations: An inquiry into improving related articles search in the MEDLINE digital library}},
@@ -335,7 +327,7 @@
   year      = {2016},
   volume    = {22},
   number    = {3},
-  pages     = {327–349},
+  pages     = {327--349},
   doi       = {10.1017/S1351324915000388},
   publisher = {Cambridge University Press},
   review    = {- good overview (many citations) for citation context identification and citation function classification, etc.
@@ -609,25 +601,22 @@
 }
 
 @Article{Stab2016,
-  author        = {Christian Stab and Iryna Gurevych},
-  title         = {{Parsing Argumentation Structures in Persuasive Essays}},
-  journal       = {CoRR},
-  year          = {2016},
-  volume        = {abs/1604.07370},
-  archiveprefix = {arXiv},
-  bibsource     = {dblp computer science bibliography, https://dblp.org},
-  biburl        = {https://dblp.org/rec/bib/journals/corr/StabG16},
-  eprint        = {1604.07370},
-  review        = {- Michael: "good survey"
-- TODO: read as intro to argumentation mining},
-  timestamp     = {Mon, 13 Aug 2018 16:46:30 +0200},
-  url           = {http://arxiv.org/abs/1604.07370},
+  author  = {Stab, Christian and Gurevych, Iryna},
+  title   = {{Parsing Argumentation Structures in Persuasive Essays}},
+  journal = {Computational Linguistics},
+  year    = {2017},
+  volume  = {43},
+  number  = {3},
+  pages   = {619--659},
+  month   = sep,
+  doi     = {10.1162/COLI_a_00295},
+  url     = {https://www.aclweb.org/anthology/J17-3005},
 }
 
 @Article{Habernal2017,
   author     = {Habernal, Ivan and Gurevych, Iryna},
   title      = {{Argumentation Mining in User-generated Web Discourse}},
-  journal    = {Comput. Linguist.},
+  journal    = {Computational Linguistics},
   year       = {2017},
   volume     = {43},
   number     = {1},
@@ -656,7 +645,7 @@
 @Article{Lippi2016,
   author     = {Lippi, Marco and Torroni, Paolo},
   title      = {{Argumentation Mining: State of the Art and Emerging Trends}},
-  journal    = {ACM Trans. Internet Technol.},
+  journal    = {ACM Transactions on Internet Technology},
   year       = {2016},
   volume     = {16},
   number     = {2},
@@ -777,7 +766,7 @@
 @InProceedings{Duma2014,
   author    = {Duma, Daniel and Klein, Ewan},
   title     = {{Citation resolution: A method for evaluating context-based citation recommendation systems}},
-  booktitle = {Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
+  booktitle = {Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics},
   year      = {2014},
   volume    = {2},
   pages     = {358--363},
@@ -888,12 +877,15 @@
   review  = {- cite2vec (as title suggests) but used for the purpose discovery/visualization},
 }
 
-@InProceedings{He2018,
-  author    = {Jian He and Chaomei Chen},
-  title     = {{Temporal Representations of Citations for Understanding the Changing Roles of Scientific Publications}},
-  booktitle = {Front. Res. Metr. Anal.},
-  year      = {2018},
-  review    = {- early version: https://arxiv.org/pdf/1711.05822.pdf
+@Article{He2018,
+  author  = {He, Jiangen and Chen, Chaomei},
+  title   = {{Temporal Representations of Citations for Understanding the Changing Roles of Scientific Publications}},
+  journal = {Frontiers in Research Metrics and Analytics},
+  year    = {2018},
+  volume  = {3},
+  issn    = {2504-0537},
+  doi     = {10.3389/frma.2018.00027},
+  review  = {- early version: https://arxiv.org/pdf/1711.05822.pdf
 - "approach to understanding the changing roles of a publication characterized by its citation contexts"},
 }
 
@@ -992,12 +984,12 @@
   journal       = {CoRR},
   year          = {2017},
   volume        = {abs/1704.00156},
-  abstract      = {- relevant citation for implementation
-- talks about evaluation by click through rate},
   archiveprefix = {arXiv},
   bibsource     = {dblp computer science bibliography, https://dblp.org},
   biburl        = {https://dblp.org/rec/bib/journals/corr/BeelD17},
   eprint        = {1704.00156},
+  review        = {- relevant citation for implementation
+- talks about evaluation by click through rate},
   timestamp     = {Mon, 13 Aug 2018 16:48:46 +0200},
   url           = {http://arxiv.org/abs/1704.00156},
 }
@@ -1032,12 +1024,17 @@ also see
 }
 
 @InProceedings{Bhagavatula2018,
-  author    = {Chandra Bhagavatula and Sergey Feldman and Russell Power and Waleed Ammar},
+  author    = {Bhagavatula, Chandra and Feldman, Sergey and Power, Russell and Ammar, Waleed},
   title     = {{Content-Based Citation Recommendation}},
-  booktitle = {NAACL-HLT},
+  booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1},
   year      = {2018},
+  pages     = {238--251},
+  month     = jun,
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/N18-1022},
   review    = {- kNN preselection
 - use PMC OA},
+  url       = {https://www.aclweb.org/anthology/N18-1022},
 }
 
 @InProceedings{White2016,
@@ -1075,7 +1072,7 @@ also see
 @Article{Schneider2013,
   author     = {Schneider, Jodi and Groza, Tudor and Passant, Alexandre},
   title      = {{A Review of Argumentation for the Social Semantic Web}},
-  journal    = {Semant. web},
+  journal    = {Semantic Web},
   year       = {2013},
   volume     = {4},
   number     = {2},
@@ -1149,8 +1146,9 @@ also see
 @InProceedings{Middleton2001,
   author    = {Stuart E. Middleton and David De Roure and Nigel Shadbolt},
   title     = {{Capturing knowledge of user preferences: ontologies in recommender systems}},
-  booktitle = {K-CAP},
+  booktitle = {Proceedings of the 1st International Conference on Knowledge Capture},
   year      = {2001},
+  pages     = {100--107},
   abstract  = {- related work
 - system that tracks and classifies URLs a researcher borwses
 - probably limits above step to direct links to PDF or PS documents (HTML content said to be ignored "at the expense of HTML format papers")
@@ -1241,7 +1239,6 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   title     = {{A Paper Recommender for Scientific Literatures Based on Semantic Concept Similarity}},
   booktitle = {Digital Libraries: Universal and Ubiquitous Access to Information},
   year      = {2008},
-  editor    = {Buchanan, George and Masoodian, Masood and Cunningham, Sally Jo},
   pages     = {359--362},
   address   = {Berlin, Heidelberg},
   publisher = {Springer Berlin Heidelberg},
@@ -1367,7 +1364,6 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   title     = {{CiteSeer\textsuperscript{x}: A Scholarly Big Dataset}},
   booktitle = {Advances in Information Retrieval},
   year      = {2014},
-  editor    = {de Rijke, Maarten and Kenter, Tom and de Vries, Arjen P. and Zhai, ChengXiang and de Jong, Franciska and Radinsky, Kira and Hofmann, Katja},
   pages     = {311--322},
   address   = {Cham},
   publisher = {Springer International Publishing},
@@ -1395,7 +1391,7 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   title     = {{To Cite, or Not to Cite? Detecting Citation Contexts in Text}},
   booktitle = {{Proceedings of the 40th European Conference on Information Retrieval}},
   year      = {2018},
-  series    = {{{ECIR} 2018}},
+  series    = {{ECIR}},
   review    = {- used ACL data from here},
 }
 
@@ -1452,21 +1448,22 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   url    = {http://www.ls.info.hiroshima-cu.ac.jp/~nanba/pdf/master_thesis.pdf},
 }
 
-@Article{Jeong2019,
+@Misc{Jeong2019,
   author        = {Chanwoo Jeong and Sion Jang and Hyuna Shin and Eunjeong Park and Sungchul Choi},
   title         = {{A Context-Aware Citation Recommendation Model with {BERT} and Graph Convolutional Networks}},
-  journal       = {CoRR},
   year          = {2019},
-  volume        = {abs/1903.06464},
+  note          = {arXiv:1903.06464 [cs]},
   archiveprefix = {arXiv},
   bibsource     = {dblp computer science bibliography, https://dblp.org},
   biburl        = {https://dblp.org/rec/bib/journals/corr/abs-1903-06464},
   eprint        = {1903.06464},
+  journal       = {CoRR},
   review        = {- related work
 
 (to appear in https://naacl2019.org/program/accepted/ which is held in June so I guess cite the preprint?)},
   timestamp     = {Mon, 01 Apr 2019 14:07:37 +0200},
   url           = {http://arxiv.org/abs/1903.06464},
+  volume        = {abs/1903.06464},
 }
 
 @Article{Animesh2018,
@@ -1513,7 +1510,7 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   title     = {{The ACL Anthology Reference Corpus: A Reference Dataset for Bibliographic Research in Computational Linguistics}},
   booktitle = {{Proceedings of the International Conference on Language Resources and Evaluation}},
   year      = {2008},
-  series    = {{{LREC} 2008}},
+  series    = {{LREC}},
   location  = {{Marrakech, Morocco}},
   review    = {- citation for ACL-ARC},
 }
@@ -1535,19 +1532,21 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   url      = {https://doi.org/10.1007/s10579-012-9211-2},
 }
 
-@Article{Jaradeh2019,
+@Misc{Jaradeh2019,
   author        = {Mohamad Yaser Jaradeh and S{\"{o}}ren Auer and Manuel Prinz and Viktor Kovtun and G{\'{a}}bor Kismih{\'{o}}k and Markus Stocker},
   title         = {{Open Research Knowledge Graph: Towards Machine Actionability in Scholarly Communication}},
-  journal       = {CoRR},
   year          = {2019},
-  volume        = {abs/1901.10816},
+  note          = {arXiv:1901.10816 [cs]},
   archiveprefix = {arXiv},
   bibsource     = {dblp computer science bibliography, https://dblp.org},
   biburl        = {https://dblp.org/rec/bib/journals/corr/abs-1901-10816},
   eprint        = {1901.10816},
+  journal       = {CoRR},
+  primaryclass  = {cs},
   review        = {- citation for making scholarly discourse more easily machine processable by semantic annotation (cf. ScholOnto)},
   timestamp     = {Sun, 03 Feb 2019 14:23:05 +0100},
   url           = {http://arxiv.org/abs/1901.10816},
+  volume        = {abs/1901.10816},
 }
 
 @TechReport{Whidby2011,
@@ -1683,7 +1682,7 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
   year      = {1970},
   volume    = {25},
   number    = {11},
-  pages     = {1041},
+  pages     = {1041--1048},
   publisher = {American Psychological Association},
   review    = {- better example for the use of "citation" as the citations an author receives},
 }
@@ -1769,7 +1768,7 @@ input text -> [fixed size set of textually similar papers] -> semantically simil
 @Article{Huh2014,
   author  = {Huh, Sun},
   title   = {{Journal Article Tag Suite 1.0: National Information Standards Organization standard of journal extensible markup language}},
-  journal = {Sci Ed},
+  journal = {Science Editing},
   year    = {2014},
   volume  = {1},
   number  = {2},

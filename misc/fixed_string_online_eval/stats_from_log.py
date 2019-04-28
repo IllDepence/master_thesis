@@ -174,6 +174,9 @@ task_dict = {
     }
 
 for label, task in task_dict.items():
+    if len(set([t[0] for t in task])) != 2:
+        # number of raters != 2
+        continue
     ata = align_annot_task(task)
     ata.sort(key=itemgetter(1))
     t = AnnotationTask(ata)
@@ -190,28 +193,34 @@ for label, task in task_dict.items():
     print('Average observed agreement: {}'.format(t.avg_Ao()))
     print('Krippendorff\'s alpha: {}'.format(t.alpha()))
 
-type_arr1 = []
-type_arr2 = []
-att = align_annot_task(annot_task_type)
-att.sort(key=itemgetter(1))
-for key in set([t[1] for t in att]):
-    r1, r2 = [t for t in att if t[1] == key]
-    type_arr1.append(r1[2])
-    type_arr2.append(r2[2])
-cm = ConfusionMatrix(type_arr1, type_arr2)
+if len(set([t[0] for t in task])) == 2:
+    # number of raters = 2
+    type_arr1 = []
+    type_arr2 = []
+    att = align_annot_task(annot_task_type)
+    att.sort(key=itemgetter(1))
+    for key in set([t[1] for t in att]):
+        r1, r2 = [t for t in att if t[1] == key]
+        type_arr1.append(r1[2])
+        type_arr2.append(r2[2])
+    cm = ConfusionMatrix(type_arr1, type_arr2)
 
-types = ['claim', 'ne', 'example', 'other']
-print()
-print('\t'.join([''] + types))
-for tx in types:
-    vals = []
-    for ty in types:
-        vals.append(cm[tx, ty])
-    print('\t'.join([tx] + [str(v) for v in vals]))
+    types = ['claim', 'ne', 'example', 'other']
+    print()
+    print('\t'.join([''] + types))
+    for tx in types:
+        vals = []
+        for ty in types:
+            vals.append(cm[tx, ty])
+        print('\t'.join([tx] + [str(v) for v in vals]))
 
-users_sep = list(users.items())
-users_both = [('all', users_sep[0][1]+users_sep[1][1])]
-for uid, judgements in users_sep + users_both:
+    users_sep = list(users.items())
+    users_both = [('all', users_sep[0][1]+users_sep[1][1])]
+    users_comb = users_sep + users_both
+else:
+    users_comb = list(users.items())
+
+for uid, judgements in users_comb:
     num_judgements = 0
     print()
     print('### user: {} ###'.format(uid))

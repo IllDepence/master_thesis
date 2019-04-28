@@ -121,7 +121,7 @@ Table~\ref{tab:arxivevalnumbers} shows Recall, MRR, MAP and NDCG values at cut-o
   \label{fig:evalacl}
 \end{figure}
 
-Figures~\ref{fig:evalarxiv}--\ref{fig:evalacl} show the results of abovementioned evaluations. For each of the data sets Claim+BoW outperforms the BoW baseline in each measure and for all cut-off values. Claim and NP do not compare in performance with the two aforementioned. This suggests that the claim structures we model with $R_{\text{claim}}$ are not enough for well performing recommendations on their own, but do capture important information that non-semantic models (BoW) miss. NPmarker, only present in Figure~\ref{fig:evalarxiv}, gives particularly good results for lower cut-offs and performs especially well in the MRR metric. It performs the worst at high cut-offs measured by NDCG. Note that NPmarker is only evaluated for test set items where the model was applicable (i.e. where a noun phrase of minimum length 2 is directly preceding the citation marker; cf. Section~\ref{sec:npmodel}). For our evaluation this was the case for 100,308 out of the 490,018 test set items (20.5\%). The evaluation results for NPmarker indicate that it is comparatively well suited to recommend citations where there is one particularly fitting publication (e.g. a reference paper for a tool, method or data set) and less suited for exemplifications (cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}). Comparing values between the different data sets, we can confirm our expectations based on the values in Table~\ref{tab:datasetprops}. For the MAG data, where we ensured very well described recommendation candidates by setting a threshold, the models perform best.
+Figures~\ref{fig:evalarxiv}--\ref{fig:evalacl} show the results of abovementioned evaluations. For each of the data sets Claim+BoW outperforms the BoW baseline in each metric and for all cut-off values. Claim and NP do not compare in performance with the two aforementioned. This suggests that the claim structures we model with $R_{\text{claim}}$ are not enough for well performing recommendations on their own, but do capture important information that non-semantic models (BoW) miss. NPmarker, only present in Figure~\ref{fig:evalarxiv}, gives particularly good results for lower cut-offs and performs especially well in the MRR metric. It performs the worst at high cut-offs measured by NDCG. Note that NPmarker is only evaluated for test set items where the model was applicable (i.e. where a noun phrase of minimum length 2 is directly preceding the citation marker; cf. Section~\ref{sec:npmodel}). For our evaluation this was the case for 100,308 out of the 490,018 test set items (20.5\%). The evaluation results for NPmarker indicate that it is comparatively well suited to recommend citations where there is one particularly fitting publication (e.g. a reference paper for a tool, method or data set) and less suited for exemplifications (cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}). Comparing values between the different data sets, we can confirm our expectations based on the values in Table~\ref{tab:datasetprops}. For the MAG data, where we ensured very well described recommendation candidates by setting a threshold, the models perform best.
 % Differences between the other three models are less straightforward, which is no surprise because there are many factors involved (number of recommendation candidates, number of contexts describing these, cleanliness of data, etc.).
 This shows us that differences in data set composition can make a large difference in evaluation results. As a consequence, comparison between approaches is only realistically possible when using the same data.
 
@@ -130,11 +130,11 @@ This shows us that differences in data set composition can make a large differen
 % \cite{Huang2015} use CiteSeer\textsuperscript{x} (which RefSeer is based on) w/ 329,365 recommendation candidates. mby kind of comparable with a few buckets of salt?
 
 \section{User study}\label{sec:oneval}
-To get more insight into the nature of our evaluation data, as well as a better understanding of our models, we perform a user study in which 2 human raters judge input-output pairs of our offline evaluation (i.e. citation contexts and the recommendations given for them). For this, we randomly choose 50 citation contexts from our arXiv data, where the citing paper belongs to the category ``Computer Science - Information Retrieval''. This is to ensure that raters are able to reasonably judge the relevance of the recommendations given. For each input context, we show the top 5 recommendations of the BoW, Claim+BoW and NPmarker models---i.e. 750 recommended items in total. We furthermore let the raters judge the type of citation (Claim, NE/concept, Exemplification, Other; cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}), whether or not the name of the cited document's author is present in the citation contexts and whether or not the citation marker has a grammatical function (i.e. syntactic/non-syntactic citation). Raters can also choose not to judge a context and give one of %
+To get more insight into the nature of our evaluation data, as well as a better understanding of our models, we perform a user study in which 2 human raters judge input-output pairs of our offline evaluation (i.e. citation contexts and the recommendations given for them). For this, we randomly choose 100 citation contexts from our arXiv data, where the citing paper belongs to the category ``Computer Science - Information Retrieval''. This is to ensure that raters are able to reasonably judge the relevance of the recommendations given. For each input context, we show the top 5 recommendations of the BoW, Claim+BoW and NPmarker models. We furthermore let the raters judge the type of citation (Claim, NE/concept, Exemplification, Other; cf. Table~\ref{tab:citfunctions} in Chapter~\ref{chap:approach}), whether or not the name of the cited document's author is present in the citation contexts and whether or not the citation marker has a grammatical function (i.e. syntactic/non-syntactic citation). Raters can also choose not to judge a context (``pass'') and give one of %
 %three
 two reasons: (1) there's not enough information contained to reasonably make a decision, %
 %(2) the context is broken in some other form (e.g. due to faulty sentence segmentation an unreasonably large context was used) and (3)
-(2) the rater can not make a relevance judgement for some other reason (``pass''). Figure~\ref{fig:interface} shows the interface used to record the judgements. Likewise to the offline evaluation, the NPmarker model was only evaluated when applicable (19 out of the 50 contexts). When no NPmarker based recommendations where available, the text ``Model not applicable'' was displayed in their stead.
+(2) the rater can not make a relevance judgement for some other reason. Figure~\ref{fig:interface} shows the interface used to record the judgements. Likewise to the offline evaluation, the NPmarker model was only evaluated when applicable (40 out of the 100 contexts). When no NPmarker based recommendations where available, the text ``Model not applicable'' was displayed in their stead. Of the two raters, one judged all 100 contexts (14 passed) while the other judged 62 (10 passed). In total this resulted in 1,665 recommended items judged.
 
 % mby insert "controlled for free text input bias" argument somewhere here
 
@@ -155,13 +155,13 @@ two reasons: (1) there's not enough information contained to reasonably make a d
     \noalign{\smallskip}
     \ & \  & \rotatebox{90}{Claim} & \rotatebox{90}{NE/concept\ } & \rotatebox{90}{Exemplific.\ } & \rotatebox{90}{Other} \\
     \cline{2-6}
-    \multirow{4}{*}{\rotatebox{90}{Rater 2}} & Claim   & 8 & 0  & 1 & 0 \\
+    \multirow{4}{*}{\rotatebox{90}{Rater 2}} & Claim   & 12 & 0  & 1 & 0 \\
     \cline{2-6}
-    & NE/concept  & 1 & 13 & 2 & 0 \\
+    & NE/concept  & 1 & 15 & 2 & 0 \\
     \cline{2-6}
-    & Exemplific. & 2 & 1  & 8 & 1 \\
+    & Exemplific. & 2 & 1  & 9 & 1 \\
     \cline{2-6}
-    & Other   & 2 & 0  & 0 & 2 \\
+    & Other   & 2 & 0  & 0 & 3 \\
     \cline{2-6}
     \end{tabular}
 \end{center}
@@ -176,42 +176,42 @@ two reasons: (1) there's not enough information contained to reasonably make a d
     \toprule
     Model & Recall@5 & MRR@5 & MAP@5 & NDCG@5 \\
     \midrule
-    \multicolumn{5}{c}{\emph{all contexts}} \\
+    \multicolumn{5}{c}{\emph{all contexts (138)}} \\
     \midrule
-    Claim+BoW & \textbf{0.50} & 0.44 & 0.40 & 0.44 \\
-    BoW       & 0.47 & \textbf{0.45} & \textbf{0.42} & \textbf{0.46} \\
-    NPmarker  & 0.34 & 0.38 & 0.35 & 0.37 \\
+    Claim+BoW & \textbf{0.53} & 0.44 & 0.41 & 0.46 \\
+    BoW       & 0.51 & \textbf{0.46} & \textbf{0.44} & \textbf{0.48} \\
+    NPmarker  & 0.35 & 0.35 & 0.33 & 0.34 \\
     \midrule
-    \multicolumn{5}{c}{\emph{only contexts of type ``claim''}} \\
+    \multicolumn{5}{c}{\emph{only contexts of type ``claim'' (38)}} \\
     \midrule
-    Claim+BoW & \textbf{0.61} & 0.51 & 0.46 & 0.51 \\
-    BoW       & 0.55 & \textbf{0.55} & \textbf{0.53} & \textbf{0.56} \\
-    NPmarker  & 0.17 & 0.17 & 0.17 & 0.17 \\
+    Claim+BoW & \textbf{0.63} & 0.46 & 0.42 & 0.49 \\
+    BoW       & 0.58 & \textbf{0.48} & \textbf{0.46} & \textbf{0.51} \\
+    NPmarker  & 0.20 & 0.13 & 0.13 & 0.15 \\
     \midrule
-    \multicolumn{5}{c}{\emph{only contexts of type ``NE/concept''}} \\
+    \multicolumn{5}{c}{\emph{only contexts of type ``NE/concept'' (45)}} \\
     \midrule
-    Claim+BoW & 0.42 & 0.38 & 0.35 & 0.38 \\
-    BoW       & 0.42 & 0.38 & 0.34 & 0.38 \\
-    NPmarker  & \textbf{0.53} & \textbf{0.60} & \textbf{0.61} & \textbf{0.56} \\
+    Claim+BoW & 0.46 & 0.44 & 0.41 & 0.44 \\
+    BoW       & 0.47 & 0.45 & 0.41 & 0.35 \\
+    NPmarker  & \textbf{0.52} & \textbf{0.53} & \textbf{0.48} & \textbf{0.51} \\
     \midrule
-    \multicolumn{5}{c}{\emph{only contexts of type ``exemplification''}} \\
+    \multicolumn{5}{c}{\emph{only contexts of type ``exemplification'' (38)}} \\
     \midrule
-    Claim+BoW & \textbf{0.54} & 0.44 & 0.38 & 0.45 \\
-    BoW       & 0.49 & \textbf{0.46} & \textbf{0.43} & \textbf{0.48} \\
-    NPmarker  & 0.24 & 0.29 & 0.29 & 0.29 \\
+    Claim+BoW & \textbf{0.56} & 0.52 & 0.47 & 0.52 \\
+    BoW       & 0.54 & \textbf{0.53} & \textbf{0.49} & \textbf{0.54} \\
+    NPmarker  & 0.21 & 0.24 & 0.24 & 0.24 \\
     \midrule
-    \multicolumn{5}{c}{\emph{only contexts of type ``other''}} \\
+    \multicolumn{5}{c}{\emph{only contexts of type ``other'' (17)}} \\
     \midrule
-    Claim+BoW & 0.50 & 0.50 & 0.50 & 0.50 \\
-    BoW       & 0.50 & 0.50 & 0.50 & 0.50 \\
-    NPmarker  & 0.50 & 0.50 & 0.45 & 0.48 \\
+    Claim+BoW & 0.44 & 0.29 & 0.29 & 0.33 \\
+    BoW       & 0.41 & 0.33 & 0.33 & 0.36 \\
+    NPmarker  & \textbf{0.50} & \textbf{0.50} & \textbf{0.44} & \textbf{0.47} \\
     \bottomrule
     \end{tabular}
 \end{center}
 \end{table}
 
 
-Overall, we observe an inter-rater agreement of 87.8\%. Judgements on the presence of an author's name and the citation being syntactic or not matched 100\%, relevance judgements were 86.9\% consistent and type categorization 73.2\%. Of the 50 contexts, 8 contained an author's name and 2 were syntactic. This shows us that non-syntactic citations seem to be the norm and that author's names might be a confounding variable in recommendation that could be eliminated, by, for example, heuristically removing names from citation contexts before they are trained and evaluated on. Because we observe the lowest inter-rater agreement for citation types, we generate a confusion matrix, which is presented in Table~\ref{tab:confusion}\footnote{Note that the values within the matrix do not add up to 50, because type information was not recorded when recommendation relevance was deemed not judgeable and the item therefore skipped.}. Apparently, the distinction between the types is not always clear cut. This can be seen with a citation context like \emph{``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval [1], semantic parsing [2], sentence modeling [3] and other traditional natural language processing tasks [4].''}, which can equally be interpreted as claims being backed or a list of examples.
+Overall, we observe an inter-rater agreement of 87.3\%. Judgements on the presence of an author's name and the citation being syntactic or not matched 100\%, relevance judgements were 86.0\% consistent and type categorization 78.0\%. Of the 100 contexts, 7 contained an author's name and 5 were syntactic. This shows us that non-syntactic citations seem to be the norm and that author's names are probably not a large confounding variable in our arXiv evaluation, but nevertheless could be eliminated, by, for example, heuristically removing names from citation contexts before they are trained and evaluated on. Because we observe the lowest inter-rater agreement for citation types, we generate a confusion matrix, which is presented in Table~\ref{tab:confusion}. Apparently, the distinction between the types is not always clear cut. This can be seen with a citation context like \emph{``Convolutional neural networks have also been shown to be highly effective for natural language processing and have achieved excellent results in information retrieval [1], semantic parsing [2], sentence modeling [3] and other traditional natural language processing tasks [4].''}, which can equally be interpreted as claims being backed or a list of examples.
 
 Table~\ref{tab:userevalnumbers} shows the results of the combined relevance judgements. Before discussing the results themselves, we need to point out a noteworthy difference to the offline evaluation. This is the handling of the number of relevant items. In a simple re-prediction setting (cf. Section~\ref{sec:citreceval}) there is always only one relevant item. Furthermore including adjacent citations, as we did with our arXiv data, increases this number, but does certainly not guarantee an exhaustive list of possible citations. Setting the number of possibly relevant items to the cut-off value is also not an option, because for reference publications there often is just one relevant item (e.g. Neural ParsCit~\cite{Animesh2018}). We approached this problem, by setting the number of relevant items for a given context to the maximum number of relevant (as judged by the raters) items identified by any of the models. To give an example, in the case shown in Figure~\ref{fig:interface} this would be 3, because the rightmost model recommended 3 relevant items, resulting in Recall values of 0.67, 0.67 and 1.
 

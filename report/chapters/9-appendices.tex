@@ -14,12 +14,12 @@ select b.bibitem_string, m.mag_id
         on b.uuid = m.uuid;
 \end{lstlisting}
 
-Table~\ref{tbl:matcheval} shows the full evaluation. Wrongly matched items are {\color{UniRed}highlited in red}. Note that there are seven cases where the reference item refers to more than one publication. In such cases our method only captures the first one and is consequentially evaluated on the first one. Note further that in one case a reference item named a PhD thesis while the match was for the very same thesis published two years later. This was deemed a correct match. Lastly, there was one case where a book was cited with the date indicating its second edition while the matched record in the MAG has a date indicating the books third edition. This also was deemed a correct match.
+Table~\ref{tbl:matcheval} shows the full evaluation. Wrongly matched items are {\color{UniRed}highlighted in red}. Note that there are seven cases where the reference item refers to more than one publication. In such cases our method only captures the first one and is consequentially evaluated on the first one. Note further that in one case a reference item named a PhD thesis while the match was for the very same thesis published two years later. This was deemed a correct match. Lastly, there was one case where a book was cited with the date indicating its second edition while the matched record in the MAG has a date indicating the books third edition. This also was deemed a correct match.
 \newpage
 
 \tiny
 \begin{longtable}{m{11.4cm}@{\hspace{0.2in}}c@{\hspace{0.2in}}c}
-\caption{Evaluation}\label{tbl:matcheval}\\
+\caption{Evaluation of reference resolution}\label{tbl:matcheval}\\
 \toprule
     Reference item & MAG ID & \hphantom{ }\\
 \midrule
@@ -368,7 +368,7 @@ Table~\ref{tab:datasetfilter} details how the citation contexts for our offline 
             \end{itemize}
             \ 
             \newline
-            Computer science is chosen so that the same data can be used in a user study where participants from the field computer science judge the quality of recommendations.
+            Computer science was chosen so that the same data can be used in a user study, where participants from the field of computer science are able to judge the quality of recommendations.
             \newline
             Filtering out recommendation candidates described by $\le$4 contexts is done to ensure a minimum quality of candidate descriptions.\\
     \midrule

@@ -21,7 +21,7 @@
 % Include of titling must happen before \title etc.
 % that's why it's not in setup.tex
 \usepackage{titling}
-\title{Semantic approaches to citation recommendation}
+\title{Semantic Approaches to Citation Recommendation}
 \author{Tarek Saier}
 
 % Change to your first examiner
@@ -44,7 +44,7 @@
 
     % enable/disable, depending on your chosen language
     \input{chapters/0_0-titlepage_en}
-    \input{chapters/0_0-titlepage_de}
+    % \input{chapters/0_0-titlepage_de}
 
     \pagestyle{plain} % remove chapter name from top, page number at the bottom
     % use \pagestyle{headings} for having the chapter on top of the pages
@@ -72,8 +72,13 @@
     % bibliography is not in the table of contents per default, add it manually
     % enable the \renewcommand for german header
     % \renewcommand{\bibname}{Literaturverzeichnis}
-    \addcontentsline{toc}{chapter}{Bibliography}
 
+    % - - - make Bibliography ToC entry jump to correct page - - -
+    \newpage
+    \phantomsection
+    % - - -
+
+    \addcontentsline{toc}{chapter}{Bibliography}
     \bibliographystyle{ieeetr}
     \bibliography{bib/paper}
 
@@ -108,6 +113,13 @@
     %       | pages of appendices have page numbers w/o the "A" prefix
 
     \begin{appendices}
+    \addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+    \makeatletter
+    \addtocontents{toc}{%
+      \begingroup
+      \let\protect\l@chapter\protect\l@section
+    }
+    \makeatother
     \input{chapters/9-appendices}
     \end{appendices}
 

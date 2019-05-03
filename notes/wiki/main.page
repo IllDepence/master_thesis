@@ -738,7 +738,7 @@ sqlite> select count(*) from bibitemarxividmap;
     * MAG noise:
         * *Pascual Jordan: Schwerkraft und Weltall, Vieweg and Sohn, Braunschweig(1952), VII+207p. 1,680円*
         * multiple papers with identical normalized title and (similar) authors (→ hard to distinguish, heuristically dealt with by number of citations)
-    * non citations
+    * non citations (not quite the same as non-source items (cf. [Extending citation analysis to non-source items](https://link.springer.com/article/10.1007/s11192-006-0024-1))
         * *According to the numerous discussions with my colleagues D. Fischer and P. Mokler an experimental verification of our theoretical predictions is feasible.* (in 1305.0417)
     * single process single thread bibitem-matching: extrapolated >40 days for whole arXiv dump → parallelization
 * bibitem-matching parallelization challenges:

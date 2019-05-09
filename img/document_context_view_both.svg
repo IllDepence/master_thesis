@@ -9,13 +9,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="413.78641mm"
-   height="276.84399mm"
-   viewBox="0 0 413.78642 276.844"
+   width="413.00128mm"
+   height="280.33701mm"
+   viewBox="0 0 413.00129 280.33701"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="document_context_view_both.svg">
+   sodipodi:docname="document_context_view_both.svg"
+   inkscape:export-filename="/home/tarek/studium_master/6.Semester/thesis/repo/img/document_context_view_both.svg.png"
+   inkscape:export-xdpi="54.140976"
+   inkscape:export-ydpi="54.140976">
   <defs
      id="defs2">
     <marker
@@ -657,8 +660,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497474"
-     inkscape:cx="575.38473"
-     inkscape:cy="608.86362"
+     inkscape:cx="621.25067"
+     inkscape:cy="513.38871"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -689,7 +692,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(4326.6251,-13.427139)">
+     transform="translate(4326.6251,-13.426896)">
     <g
        style="stroke:#bcbcbc;stroke-width:1.87005484;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="g835-6-7-2-6-0-9"
@@ -1237,7 +1240,7 @@
          y="285.68219"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22.57777786px;font-family:'Linux Libertine Display O';-inkscape-font-specification:'Linux Libertine Display O';stroke-width:0.26458332">c<tspan
    style="font-size:14.67555523px;baseline-shift:sub;stroke-width:0.26458332"
-   id="tspan6651-5-0">i</tspan></tspan></text>
+   id="tspan6651-5-0">j</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.66499996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutL-7-6)"
        d="m -3969.6956,263.02024 v -18.1384"
@@ -1262,8 +1265,8 @@
          x="-3934.8704"
          y="228.47058"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22.57777786px;font-family:'Linux Libertine Display O';-inkscape-font-specification:'Linux Libertine Display O';stroke-width:0.26458332">c<tspan
-   style="font-size:14.67555523px;baseline-shift:sub;stroke-width:0.26458332"
-   id="tspan6651-5-2-3-7">i</tspan></tspan></text>
+   style="font-size:64.99999762%;baseline-shift:sub"
+   id="tspan903">j</tspan></tspan></text>
     <g
        id="g10461-4"
        transform="translate(0.452,57.99633)">
@@ -1356,7 +1359,7 @@
    style="font-size:14.67555523px;baseline-shift:sub;stroke-width:0.26458332"
    id="tspan20359-6">i</tspan>, c<tspan
    style="font-size:14.67555523px;baseline-shift:sub;stroke-width:0.26458332"
-   id="tspan20361-8">i</tspan>)</tspan></text>
+   id="tspan20361-8">j</tspan>)</tspan></text>
     <g
        id="g16110-9"
        transform="rotate(180,-4903.5453,62.648015)">

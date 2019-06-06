@@ -1,0 +1,73 @@
+1991-2017 test, 2018 train
+
+Physics
+number of candidates to rank: 616921
+number of test set items: 1290865
+trained for 612681 cited docs (rankable candidates)
+will test for 265858 of those
+contexts describing a cited doc:
+    min: 1
+    max: 24455
+    mean: 20.787390175311458
+    STD: 77.12121455797983
+
+Math
+number of candidates to rank: 309492
+number of test set items: 595926
+trained for 307033 cited docs (rankable candidates)
+will test for 132337 of those
+contexts describing a cited doc:
+    min: 1
+    max: 4049
+    mean: 15.881709783638891
+    STD: 45.65700670699965
+
+CS
+number of candidates to rank: 203913
+number of test set items: 606294
+trained for 200734 cited docs (rankable candidates)
+will test for 102794 of those
+contexts describing a cited doc:
+    min: 1
+    max: 6587
+    mean: 12.87797782139548
+    STD: 48.06420705042412
+
+
+no split (online setting)
+
+Physics
+16,313,591 lines
+number of candidates to rank: 1,715,320
+contexts describing a cited doc:
+    min: 1
+    max: 24692
+    mean: 9.510522817899867
+    STD: 50.33204116863679
+
+Math
+7,113,009 lines
+number of candidates to rank: 1,017,922
+contexts describing a cited doc:
+    min: 1
+    max: 4351
+    mean: 6.987773129964771
+    STD: 28.81376468572915
+
+CS
+4,554,302 lines
+number of candidates to rank: 897,564
+contexts describing a cited doc:
+    min: 1
+    max: 9717
+    mean: 5.074068255856964
+    STD: 31.05041235973567
+
+other
+1,222,288 lines
+number of candidates to rank: 354,293
+contexts describing a cited doc:
+    min: 1
+    max: 1136
+    mean: 3.449932682835958
+    STD: 10.960752359565635

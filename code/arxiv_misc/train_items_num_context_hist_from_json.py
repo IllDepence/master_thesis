@@ -24,13 +24,15 @@ else:
         with open(inp) as f:
             id_val_dict = json.load(f)
         vs = list(id_val_dict.values())
-        lim = np.std(vs)
+        lim = np.std(vs)*.25
         global_lim = max(lim, global_lim)
-        filtered = [v for v in vs if v<=lim]
+        # filtered = [v for v in vs if v<=lim]
+        filtered = vs
         vss.append(filtered)
         fn = os.path.split(inp)[-1]
         nm, ext = os.path.splitext(fn)
-        labels.append(nm.split('_')[0])
+        # labels.append(nm.split('_')[0])
+        labels.append(nm.split('_')[-2])
         print(nm)
         print('min: {}'.format(np.min(vs)))
         print('max: {}'.format(np.max(vs)))
@@ -45,20 +47,31 @@ else:
     bin_centers = 0.5*(bin_lims[:-1]+bin_lims[1:])
     bin_widths = bin_lims[1:]-bin_lims[:-1]
 
+    bin_centers = np.arange(1, 13, step=1)
+
     hists = []
     markers = ['^', 'x', 's', '.']
     for vs in vss:
         hist, _ = np.histogram(vs, bins=bin_lims)
         norm = hist/np.sum(hist)
         hists.append(norm)
-    for idx, hist in enumerate(hists):
-        # plt.bar(bin_centers, hist, width=bin_widths, align='center',
-        #         alpha=0.2)
-        color = list(mpl.rcParams['axes.prop_cycle'])[idx]['color']
-        # plt.plot(bin_centers, hist, linestyle='', marker=markers[idx],
-        #          color=color, label=labels[idx], alpha=.8)
-        plt.plot(bin_centers, hist, linestyle='-', marker='', alpha=.7, color=color)
-    plt.xlabel('number of citation contexts trained on')
-    plt.ylabel('percentage of test set items')
+    # for idx, hist in enumerate(hists):
+    #     # plt.bar(bin_centers, hist, width=bin_widths, align='center',
+    #     #         alpha=0.2)
+    #     color = list(mpl.rcParams['axes.prop_cycle'])[idx]['color']
+    #     # plt.plot(bin_centers, hist, linestyle='', marker=markers[idx],
+    #     #          color=color, label=labels[idx], alpha=.8)
+    #     plt.plot(hist, linestyle='--', marker=markers[idx], alpha=.5, color=color)
+    colors = [x['color'] for x in list(mpl.rcParams['axes.prop_cycle'])]
+    plt.bar(bin_centers-0.3, hists[0], color=colors[0], width=0.2)
+    plt.bar(bin_centers-0.1, hists[1], color=colors[1], width=0.2)
+    plt.bar(bin_centers+0.1, hists[2], color=colors[2], width=0.2)
+    plt.bar(bin_centers+0.3, hists[3], color=colors[3], width=0.2)
+    # plt.hist(vss, bin_centers, label=labels)
+
+    plt.xticks(np.arange(1, 12.5, step=1))
+    plt.grid(color='lightgray', linestyle='--', linewidth=0.5)
+    plt.xlabel('number of citation contexts per cited document')
+    plt.ylabel('fraction of cited documents')
     plt.legend(labels)
     plt.show()

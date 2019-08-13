@@ -5,7 +5,7 @@ _0 = 0 references in MAG
 
 0: y*
 1: y
-2: n0
+2: n0 (mismatch from bibitem "Lodders, K. & Fegley, B. Jr. 2011, Chemistry of the Solar System (RSC Publishing 2011)" which is only contained in arXiv versions 2 and 3 of the paper) (MAG paper corresponding to arXiv v3 of paper (2068241754) has references given; 2803814755 doesn't)
 3: y
 4: y
 5: y0
@@ -45,7 +45,7 @@ _0 = 0 references in MAG
 39: y0
 40: y0
 41: y
-42: n
+42: n (mismatch of 2158843074 instead of 1971565000—title contained)
 43: y0
 44: y0
 45: y0
@@ -53,56 +53,56 @@ _0 = 0 references in MAG
 47: y0
 48: y
 49: y*
-50: 
-51: 
-52: 
-53: 
-54: 
-55: 
-56: 
-57: 
-58: 
-59: 
-60: 
-61: 
-62: 
-63: 
-64: 
-65: 
-66: 
-67: 
-68: 
-69: 
-70: 
-71: 
-72: 
-73: 
-74: 
-75: 
-76: 
-77: 
-78: 
-79: 
-80: 
-81: 
-82: 
-83: 
-84: 
-85: 
-86: 
-87: 
-88: 
-89: 
-90: 
-91: 
-92: 
-93: 
-94: 
-95: 
-96: 
-97: 
-98: 
-99: 
+50: y
+51: y0
+52: y*
+53: y
+54: y
+55: y*
+56: y0
+57: y
+58: y
+59: y0
+60: y*
+61: y
+62: y
+63: y0
+64: y*
+65: y
+66: y*
+67: y
+68: y
+69: y
+70: y
+71: y0
+72: n (mismatch of 1949240156 instead of 1905957412 —title contained)
+73: y*
+74: y*
+75: y0
+76: y*
+77: y*
+78: y*
+79: y
+80: y0
+81: y*
+82: y0
+83: y0
+84: y
+85: y0
+86: y0
+87: y
+88: y
+89: y*
+90: y0
+91: y*
+92: y
+93: y
+94: y (also checked MAG version 2953316841)
+95: y
+96: y (2 our of 3 source links on MAG falsely link to arXiv 1801.08240 instead of 1801.08241
+97: y*
+98: y*
+99: y
 100: 
 101: 
 102: 

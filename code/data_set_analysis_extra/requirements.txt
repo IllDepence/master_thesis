@@ -1,2 +1,3 @@
 sqlalchemy
 jupyter
+matplotlib

@@ -1,0 +1,47 @@
+### analysis
+
+##### missing links
+
+```
+all links:     15,846,351
+matching_links: 9,882,069
+    -> 62% of unarXive links found in MAG
+    -> unarXive has 60% more (160%) citation interlinkgs
+        -> are they correct and therefore missing in the MAG?
+
+
+$ wc -l missing_links.txt 
+    5964282 missing_links.txt
+
+>>> SAMPLE GENERATION <<<
+$ cat missing_links.txt | shuf | head -n 300 > missing_links_sample.txt
+
+eval snapshot:
+total: 150
+
+general indicator of quality of "not in MAG" subset of links:
+  valid: 146 (0.97)
+  invalid: 4 (0.03)
+
+indicators for "we have X, which is missing in MAG:"
+  valid missing Feb 2019: 146 verified -> ~5805234.48
+  valid missing Aug 2019: 115 verified -> ~4572616.20
+
+misc
+  papers w/ 0 references in MAG: 53 (0.35)
+```
+
+for all 994,351 where a citing MAG ID is available:
+
+* combined number of cited docs
+    * 5,918,128 only in unarXive
+    * 9,829,797 in both
+    * 10,457,909 only in MAG
+
+* number of cited docs where
+    * unarXive has more cited docs: 401,046 (←those have an average (total) number of 17.46 cited docs)
+    * MAG has more cited docs: 545,048 (←these have an average (total) number of 34.28 cited docs)
+
+##### inflow
+
+TODO: add notes

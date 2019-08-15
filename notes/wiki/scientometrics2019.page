@@ -1,5 +1,17 @@
 ### analysis
 
+##### citation marker surrounding patterns
+
+* use context export (`items_all_` file)
+    * save `<cited doc id>|<patt>` in CSV
+        * group by cited doc
+        * cluster docs by (most common) pattern
+        * look at diversity of patts in much cited docs
+        * ...
+    * save `<cited doc id>|<noun phrase preceding marker>` in CSV
+        * group by NP 
+        * analyze how predictive NP for cited doc is
+
 ##### missing links
 
 ```

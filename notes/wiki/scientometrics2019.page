@@ -27,8 +27,13 @@ $ wc -l missing_links.txt
 
 >>> SAMPLE GENERATION <<<
 $ cat missing_links.txt | shuf | head -n 300 > missing_links_sample.txt
+```
 
-eval snapshot:
+```
+eval:
+
+--- unarXive only ---
+
 total: 150
 
 general indicator of quality of "not in MAG" subset of links:
@@ -41,6 +46,14 @@ indicators for "we have X, which is missing in MAG:"
 
 misc
   papers w/ 0 references in MAG: 53 (0.35)
+
+--- MAG only ---
+
+total: 150
+
+general indicator of quality of "not in unarXive" subset of links:
+  valid: 142 (0.95)
+  invalid: 8 (0.05)
 ```
 
 for all 994,351 where a citing MAG ID is available:
@@ -53,6 +66,8 @@ for all 994,351 where a citing MAG ID is available:
 * number of cited docs where
     * unarXive has more cited docs: 401,046 (←those have an average (total) number of 17.46 cited docs)
     * MAG has more cited docs: 545,048 (←these have an average (total) number of 34.28 cited docs)
+     * only MAG has references: 241,617
+     * only unarXive has references: 265,591
 
 ##### inflow
 

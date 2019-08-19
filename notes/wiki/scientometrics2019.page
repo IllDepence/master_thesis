@@ -69,6 +69,24 @@ for all 994,351 where a citing MAG ID is available:
      * only MAG has references: 241,617
      * only unarXive has references: 265,591
 
+##### MAG citation context cleanliness
+
+```
+select count(*) from papercitationcontexts where length(citationcontext) < 25;  -> 6160945      (/209606017 = 2,9%)
+```
+```
+MAG19=> select count(*) from papercitationcontexts where substring(citationcontext from 1 for 1) = '[' or substring(citationcontext from 1 for 1) = '(' or substring(citationcontext from 1 for 1) = ',' or substring(citationcontext from 1 for 1) = ';';
+  count   
+----------
+ 15905521  -> 7.5%
+```
+```
+select count(*) from papercitationcontexts where substring(citationcontext from 1 for 1) = lower(substring(citationcontext from 1 for 1));  -> 53928293     (/209606017= 26%)  <- lower case or non letter
+select count(*) from papercitationcontexts where substring(citationcontext from 1 for 1) = upper(substring(citationcontext from 1 for 1));  -> 183538158    (/209606017 = 88%)  <- upper case or non letter
+(53928293+183538158)-209606017 = 27860434 (13%) non letter
+(53928293-27860434)/209606017 = 12% lower case
+```
+
 ##### inflow
 
 TODO: add notes

@@ -3,7 +3,7 @@
 ##### citation marker surrounding patterns
 
 * use context export (`items_all_` file)
-    * save `<cited doc id>|<patt>` in CSV
+    * save `<cited doc id>|<patt>` in CSV ✔
         * group by cited doc
         * cluster docs by (most common) pattern
         * look at diversity of patts in much cited docs
@@ -11,6 +11,24 @@
     * save `<cited doc id>|<noun phrase preceding marker>` in CSV
         * group by NP 
         * analyze how predictive NP for cited doc is
+
+**verification of manual sample count of cit. contexts referencing a specific part of the cited document** (cs 5, math 17, phys 4, other 7)
+```
+(highest in conditional probability from sentence_end_patt_comparison.txt)
+
+NNP¦CD¦IN¦<EOS>     0.995       - The implication FORMULA is a particular case of
+                                  J. Hagler's Theorem 1 of [].
+                                  (1211.1719)
+                                - We follow the strategy of Lemma 6 in [].
+                                  (1708.09712)
+                                - ... with higher ranks (cf. Definition 3.1 in []).
+                                  (1204.6548)
+
+$ cat context_patts_all_2018.csv | grep 'NNP¦CD¦IN¦\[]¦' > context_patts_specific_part_in_cited.csv
+$ wc -l context_patts_specific_part_in_cited.csv
+251123
+```
+**TODO:** get fos (mby of both sides?) from above
 
 ##### missing links
 

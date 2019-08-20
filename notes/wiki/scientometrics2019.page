@@ -54,6 +54,22 @@ total: 150
 general indicator of quality of "not in unarXive" subset of links:
   valid: 142 (0.95)
   invalid: 8 (0.05)
+
+- - - - - -
+
+stats mc statsface
+
+unarXive       lower    upper
+  Wilson(95)   0.9334   0.9896
+  Wilson(99)   0.9145   0.9920
+  Jeffreys(95) 0.9379   0.9909
+  Jeffreys(99) 0.9235   0.9942
+
+MAG
+  Wilson(95)   0.8983   0.9727
+  Wilson(99)   0.8778   0.9777
+  Jeffreys(95) 0.9019   0.9745
+  Jeffreys(99) 0.8850   0.9807
 ```
 
 for all 994,351 where a citing MAG ID is available:
@@ -66,8 +82,10 @@ for all 994,351 where a citing MAG ID is available:
 * number of cited docs where
     * unarXive has more cited docs: 401,046 (←those have an average (total) number of 17.46 cited docs)
     * MAG has more cited docs: 545,048 (←these have an average (total) number of 34.28 cited docs)
-     * only MAG has references: 241,617
-     * only unarXive has references: 265,591
+     * only MAG *additional* references: 241,617
+     * only unarXive has *additional* references: 265,591
+     * only MAG has references *at all*: 0
+     * only unarXive has references *at all*: 215,291
 
 ##### MAG citation context cleanliness
 

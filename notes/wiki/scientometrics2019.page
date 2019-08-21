@@ -27,8 +27,28 @@ NNP¦CD¦IN¦<EOS>     0.995       - The implication FORMULA is a particular cas
 $ cat context_patts_all_2018.csv | grep 'NNP¦CD¦IN¦\[]¦' > context_patts_specific_part_in_cited.csv
 $ wc -l context_patts_specific_part_in_cited.csv
 251123
+$ cat context_patts_all_2018.csv | grep '\[]¦NNP¦CD' >> context_patts_specific_part_in_cited.csv
+$ wc -l context_patts_specific_part_in_cited.csv
+365299   (+114176)
+
+fos by citing doc:
+[['Mathematics', 298009], ['Physics', 30593], ['Computer science', 9123], ['Economics', 2974], ['Biology', 750], ['Chemistry', 685],
+['Engineering', 293], ['Materials science', 235], ['Geology', 177], ['Medicine', 70], ['Psychology', 51], ['Business', 35], ['Geography', 23],
+['Art', 19], ['Environmental science', 15], ['Political science', 9], ['Sociology', 9], ['Philosophy', 2], ['History', 1]]]
+
+fos by cited doc:
+[['Mathematics', 313651], ['Physics', 31087], ['Computer science', 12179], ['Economics', 2654], ['Biology', 1065], ['Chemistry', 859],
+['Engineering', 641], ['Materials science', 389], ['Geology', 323], ['Psychology', 178], ['Philosophy', 169], ['Geography', 148],
+['Art', 130], ['Medicine', 129], ['Business', 105], ['Sociology', 74], ['History', 73], ['Political science', 45], ['Environmental science', 27]]
+
+fos by citation pair:
+[['Mathematics->Mathematics', 281226], ['Physics->Physics', 23301], ['Mathematics->Computer science', 7204], ['Physics->Mathematics', 6062],
+['Mathematics->Physics', 4991], ['Computer science->Mathematics', 4386], ['Computer science->Computer science', 4095], ['Economics->Mathematics', 1828],
+['Mathematics->Economics', 1438], ['Economics->Economics', 1013], ['Mathematics->Biology', 458], ['Mathematics->Engineering', 387],
+['Physics->Chemistry', 319], ['Chemistry->Physics', 311], ['Biology->Mathematics', 300], ['Biology->Biology', 280], ['Physics->Computer science', 253],
+['Mathematics->Chemistry', 228], ['Chemistry->Chemistry', 170], ['Physics->Materials science', 162], ['Mathematics->Philosophy', 158],
+['Engineering->Mathematics', 150], ['Physics->Geology', 147], 
 ```
-**TODO:** get fos (mby of both sides?) from above
 
 ##### missing links
 
@@ -126,3 +146,19 @@ select count(*) from papercitationcontexts where substring(citationcontext from 
 ##### inflow
 
 TODO: add notes
+
+##### sankey numbers
+
+* all 15,954,664
+* citing: phys 9,300,576 / math 3,426,117 / cs 2,526,656 / other 701,315
+* cited: phys 7,827,072 / math 5,062,033 / cs 1,876,401 / other 1,189,158
+* pairs:
+    * phys→phys 7,543,495
+    * phys→math 967,263
+    * phys→cs 157,338
+    * math→phys 177,502
+    * math→math 2,947,360
+    * math→cs  173,168
+    * cs→phys 51,942
+    * cs→math 847,932
+    * cs→cs 1,402,081

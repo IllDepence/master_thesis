@@ -1,0 +1,6 @@
+field of study counts for citations where contexts (/marker surrounding)
+matches POS tag pattern
+    NNP¦CD¦IN¦[]¦
+or
+    []¦NNP¦CD
+counted by citing docs/cited docs/citing->cited pairs

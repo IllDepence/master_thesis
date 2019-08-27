@@ -21,10 +21,12 @@ class Paper(Base):
     aid = Column(String(36))
     title = Column(UnicodeText())
     # fos = Column(String(36))
+    # subj = Column(UnicodeText())
 
 # db_uri = 'sqlite://'
 db_uri = 'sqlite:///aid_title.db'
 # db_uri = 'sqlite:///aid_fos.db'
+# db_uri = 'sqlite:///aid_fos_subj.db'
 engine = create_engine(db_uri)
 Base.metadata.create_all(engine)
 Base.metadata.bind = engine
@@ -51,7 +53,7 @@ for idx, fn in enumerate(os.listdir(dump_dir)):
                           namespaces=ns):
         header = rec.find('oai:header', namespaces=ns)
         field = header.find('oai:setSpec', namespaces=ns).text
-        field = field.split(':')[0]
+        field = field.split(':')[0]  #
         id_text = header.find('oai:identifier', namespaces=ns).text
         aid = id_text.split(':')[-1]
         meta = rec.find('oai:metadata', namespaces=ns)
@@ -62,7 +64,7 @@ for idx, fn in enumerate(os.listdir(dump_dir)):
         # try:
         #     subj = meta.getchildren()[0].find('dc:subject', namespaces=ns).text
         # except AttributeError:
-        #     continue
+        #     subj = ''  # / continue
         # if subj == 'Computer Science - Information Retrieval':
         #     with open('2018_ir_ids', 'a') as f:
         #         f.write('{}\n'.format(aid))
@@ -70,6 +72,7 @@ for idx, fn in enumerate(os.listdir(dump_dir)):
 
         paper_db = Paper(aid=aid, title=title)
         # paper_db = Paper(aid=aid, fos=field)
+        # paper_db = Paper(aid=aid, fos=field, subj=subj)
         session.add(paper_db)
         session.flush()
     # continue

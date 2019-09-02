@@ -162,3 +162,19 @@ TODO: add notes
     * cs→phys 51,942
     * cs→math 847,932
     * cs→cs 1,402,081
+
+### misc
+
+##### additional/better MAG noise showcase
+
+* ~~MAG ID `1510812367` `Schwerkraft und Weltall : Grundlagen der theoretischen Kosmologie` by `Pascual Jordan` from `1952` → cited by 18 (btw. Google Scholar lists 2 versions (probably duplicates) cited 662 and 41 times)~~
+* ~~MAG ID `565296403` `Pascual Jordan: Schwerkraft und Weltall, Vieweg and Sohn, Braunschweig(1952), VII+207p. 1,680円` by `小太郎 富山` (Tomiyama, Kotaro) from `1960` → cited by 0~~ (← would not have been matched in the first place b/c title does not appear in bibitems like this)
+
+* MAG ID `2167727518`　`Observation of a new boson at a mass of 125 GeV with the CMS experiment at the LHC`　cited 17,707 times, 112 reference items
+* MAG ID `2763160969`　`Observation of a new boson at a mass of 125 GeV with the CMS experiment at the LHC`　cited 0 times, 0 reference items
+    * most likely caused by single listed web source [https://dspace.mit.edu/handle/1721.1/91933](https://dspace.mit.edu/handle/1721.1/91933) that only lists MIT authors (listings of authors by institution at end of paper, MIT on page 58) (→MAG mechanism assumes different paper b/c different authors→rogue duplicate)
+
+##### new export script
+
+* command `python3 ~/arxiv_v2.1/code/extract_contexts.py ~/arxiv_v2.1/papers/ -f items_NAU_all_sentencefix_wargparse.csv -b sqlite:////home/saiert/arxiv_v2.1.1_refs.db`
+* took 115 hours for a complete export

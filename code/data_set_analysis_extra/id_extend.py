@@ -60,7 +60,7 @@ db_engine.execute(
     );
 print('index 2 built')
 
-print('merging tables')
+print('extending IDs')
 i = 0
 count_all = len(mid_aid_map)
 for mid, aid in mid_aid_map.items():

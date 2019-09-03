@@ -178,3 +178,7 @@ TODO: add notes
 
 * command `python3 ~/arxiv_v2.1/code/extract_contexts.py ~/arxiv_v2.1/papers/ -f items_NAU_all_sentencefix_wargparse.csv -b sqlite:////home/saiert/arxiv_v2.1.1_refs.db`
 * took 115 hours for a complete export
+
+##### notes
+
+* [Microsoft Academic automatic document searches: Accuracy for journal articles and suitability for citation analysis](https://www.sciencedirect.com/science/article/abs/pii/S1751157717303346) compare MAG and Scopus citation counts by Spearman correlation

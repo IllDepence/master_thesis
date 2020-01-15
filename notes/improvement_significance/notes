@@ -1,0 +1,44 @@
+# RefSeer
+
+- - - - - 53401/53401 - - - - -
+#1: 6500
+in top 5: 13575
+in top 10: 16909
+ndcg@5: 0.19124542332632172
+map@5: 0.17037539871288018
+mrr@5: 0.17037539871288018
+recall@5: 0.2542087226830958
+
+>>>>>>>> t-statistic: -24.229672715198316
+>>>>>>>> Two-sided p-value: 5.4043185915724805e-129
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#>#>#> ACL-ARC <#<#<#
+
+$ python3 test.py score_pairs_ACL_1578933495_bowVSpp+bow.json 
+# # # Student't t-test # # #
+t-statistic: 0.5864443868374447
+Two-sided p-value: 0.5576110387313422
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.9167
+
+#better: 132
+#same: 3559
+#worse: 190
+
+
+#>#>#> RefSeer <#<#<#
+
+$ python3 test.py score_pairs_RefSeer_1579057485_bowVSpp+bow.json 
+# # # Student't t-test # # #
+t-statistic: -24.229672715198316
+Two-sided p-value: 5.4043185915724805e-129
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.0
+
+#better: 2455
+#same: 49726
+#worse: 1220

@@ -1,7 +1,20 @@
-# RefSeer
+# MAG
+- - - - - 141631/141631 - - - - -
+1: 26173
+in top 5: 53671
+in top 10: 65551
+ndcg@5: 0.28658930557126217
+map@5: 0.2559991574349241
+mrr@5: 0.2559991574349241
+recall@5: 0.3789495237624531
 
+>>>>>>>> t-statistic: -44.84085092001248
+>>>>>>>> Two-sided p-value: 0.0
+
+
+# RefSeer
 - - - - - 53401/53401 - - - - -
-#1: 6500
+1: 6500
 in top 5: 13575
 in top 10: 16909
 ndcg@5: 0.19124542332632172
@@ -42,3 +55,17 @@ Two-sided p-value (alpha=0.01): 0.0
 #better: 2455
 #same: 49726
 #worse: 1220
+
+
+#>#>#> MAG <#<#<#
+$ python3 test.py score_pairs_MAG_1579142755_bowVSpp+bow.json 
+# # # Student't t-test # # #
+t-statistic: -44.84085092001248
+Two-sided p-value: 0.0
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.0
+
+#better: 8892
+#same: 128620
+#worse: 4119

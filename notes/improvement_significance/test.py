@@ -1,6 +1,6 @@
 import json
 import sys
-from scipy import stats
+from scipy import stats, mean
 from mlxtend.evaluate import permutation_test
 
 with open(sys.argv[1]) as f:
@@ -9,8 +9,12 @@ with open(sys.argv[1]) as f:
 scores_baseline = [x[0] for x in pairs]
 scores_new = [x[1] for x in pairs]
 
+print('mean baseline: {}'.format(mean(scores_baseline)))
+print('mean new: {}'.format(mean(scores_new)))
+
 t, p = stats.ttest_rel(scores_baseline, scores_new)
 
+print()
 print('# # # Student\'t t-test # # #')
 print('t-statistic: {}'.format(t))
 print('Two-sided p-value: {}'.format(p))

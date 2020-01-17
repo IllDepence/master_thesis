@@ -1,3 +1,79 @@
+#>#>#> arXiv <#<#<#
+$ python3 test.py score_pairs_arXiv_1579218939_bowVSpp+bow.json
+# # # Student't t-test # # #
+t-statistic: -121.86423331461577
+Two-sided p-value: 0.0
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.0
+
+>better: 65693
+>same: 393831
+>worse: 30494
+
+
+#>#>#> MAG <#<#<#
+$ python3 test.py score_pairs_MAG_1579142755_bowVSpp+bow.json 
+# # # Student't t-test # # #
+t-statistic: -44.84085092001248
+Two-sided p-value: 0.0
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.0
+
+>better: 8892
+>same: 128620
+>worse: 4119
+
+
+#>#>#> RefSeer <#<#<#
+
+$ python3 test.py score_pairs_RefSeer_1579057485_bowVSpp+bow.json 
+# # # Student't t-test # # #
+t-statistic: -24.229672715198316
+Two-sided p-value: 5.4043185915724805e-129
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.0
+
+>better: 2455
+>same: 49726
+>worse: 1220
+
+
+#>#>#> ACL-ARC <#<#<#
+
+$ python3 test.py score_pairs_ACL_1578933495_bowVSpp+bow.json 
+# # # Student't t-test # # #
+t-statistic: 0.5864443868374447
+Two-sided p-value: 0.5576110387313422
+
+# # # Permutation test # # #
+Two-sided p-value (alpha=0.01): 0.9167
+
+>better: 132
+>same: 3559
+>worse: 190
+
+
+# - - - - - - - - - - - - - - - - -
+
+
+# arXiv
+- - - - - 490018/490018 - - - - -
+#1: 55229
+in top 5: 118646
+in top 10: 149409
+ndcg@5: 0.2076313291287033
+map@5: 0.3312143182043261
+mrr@5: 0.15988174584060083
+recall@5: 0.24212579946042798
+
+BoW vs BoW+Claim - NDCG@5
+>>>>>>>> t-statistic: -121.86423331461577
+>>>>>>>> Two-sided p-value: 0.0
+
+
 # MAG
 - - - - - 141631/141631 - - - - -
 1: 26173
@@ -24,48 +100,3 @@ recall@5: 0.2542087226830958
 
 >>>>>>>> t-statistic: -24.229672715198316
 >>>>>>>> Two-sided p-value: 5.4043185915724805e-129
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-#>#>#> ACL-ARC <#<#<#
-
-$ python3 test.py score_pairs_ACL_1578933495_bowVSpp+bow.json 
-# # # Student't t-test # # #
-t-statistic: 0.5864443868374447
-Two-sided p-value: 0.5576110387313422
-
-# # # Permutation test # # #
-Two-sided p-value (alpha=0.01): 0.9167
-
-#better: 132
-#same: 3559
-#worse: 190
-
-
-#>#>#> RefSeer <#<#<#
-
-$ python3 test.py score_pairs_RefSeer_1579057485_bowVSpp+bow.json 
-# # # Student't t-test # # #
-t-statistic: -24.229672715198316
-Two-sided p-value: 5.4043185915724805e-129
-
-# # # Permutation test # # #
-Two-sided p-value (alpha=0.01): 0.0
-
-#better: 2455
-#same: 49726
-#worse: 1220
-
-
-#>#>#> MAG <#<#<#
-$ python3 test.py score_pairs_MAG_1579142755_bowVSpp+bow.json 
-# # # Student't t-test # # #
-t-statistic: -44.84085092001248
-Two-sided p-value: 0.0
-
-# # # Permutation test # # #
-Two-sided p-value (alpha=0.01): 0.0
-
-#better: 8892
-#same: 128620
-#worse: 4119

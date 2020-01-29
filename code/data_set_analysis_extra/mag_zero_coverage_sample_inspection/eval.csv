@@ -1,0 +1,101 @@
+#	citing discipline	citing notes	cited notes	other notes
+0	phys	references headline directly before page break		
+1	phys	no references headline		
+2	phys	reference section after appendix	current MAG has 5 references (out of many)	
+3	phys	reference items w/o titles	current MAG has all references	
+4	math	-		
+5	phys	no references headline		
+6	math	-	current MAG has most references	
+7	phys	no references headline	current MAG has most references	
+8	phys	no references headline		
+9	phys	no references headline		
+10	phys	reference items w/o titles		
+11	CS		current MAG has part of references	
+12	phys	no references headline		
+13	phys	no references headline		
+14	phys	no references headline	current MAG has all references	
+15	phys	no references headline	current MAG has part of references	
+16	phys	no references headline		
+17	phys	no references headline		
+18	math		current MAG has part of references	
+19	phys		current MAG has part of references	
+20	phys	no references headline		
+21	phys	no references headline		
+22	phys	no references headline		
+23	phys	reference items w/o titles		
+24	quant bio	no references headline		MAG record (2913037098) removed, paper now(?) has ID 2967328792
+25	phys	reference items w/o titles		
+26	phys	reference items w/o titles		
+27	phys	no references headline		
+28	math			
+29	phys	no references headline		
+30	phys	no references headline	current MAG has all references	
+31	phys	no references headline, reference section after appendix		
+32	phys	no references headline		
+33	phys	no references headline	current MAG has all references	
+34	phys	no references headline		
+35	phys	reference items w/o titles		
+36	phys	no references headline		
+37	phys	reference items w/o titles		
+38	phys	no references headline		
+39	phys		current MAG has all references	
+40	phys	reference items w/o titles		
+41	math			
+42	phys	no references headline	current MAG has most references	
+43	phys	no references headline		
+44	phys	no references headline		
+45	phys	no references headline	current MAG has all references	
+46	phys	no references headline	current MAG has most references	
+47	phys	no references headline	current MAG has most references	
+48	phys			
+49	phys	no references headline		
+50	phys	no references headline		
+51	math	reference section after appendix		
+52	phys	no references headline		
+53	phys	no references headline		
+54	math			
+55	phys		current MAG has part of references	
+56	math			
+57	phys	no references headline		
+58	phys	no references headline		
+59	phys	reference section headline appears twice		https://arxiv.org/pdf/1811.12327.pdf
+60	phys			
+61	phys	no references headline		
+62	phys	no references headline		
+63	quant bio	no references headline		
+64	phys	no references headline	current MAG has 49 of 23 references (?)	
+65	math		current MAG has part of references	
+66	CS		current MAG has all references	
+67	phys		current MAG has part of references	
+68	phys	reference items w/o titles		
+69	phys	reference items w/o titles (except 4)	current MAG has part of references	
+70	phys	no references headline		
+71	phys	reference items w/o titles		
+72	phys	references headline directly before page break		
+73	phys		current MAG has part of references	
+74	CS	no references headline		
+75	phys	no references headline		
+76	CS			
+77	phys	reference items w/o titles (except 1)		
+78	phys	no references headline		
+79	phys	no references headline		
+80	math			
+81	CS			MAG record (2904556321) removed, paper now(?) has ID 2954543879
+82	phys	no references headline	current MAG has part of references	
+83	phys			
+84	phys	no references headline		
+85	phys			
+86	phys	no references headline		
+87	phys	no references headline		
+88	phys	no references headline		
+89	phys	no references headline		
+90	phys	no references headline		
+91	phys	no references headline		
+92	phys	no references headline		
+93	phys	reference section headline appears twice		
+94	phys	no references headline		
+95	phys	no references headline		
+96	phys	no references headline		
+97	phys	no references headline	current MAG has all references	
+98	CS		current MAG has all references	
+99	math	figures within references section	current MAG has part of references	

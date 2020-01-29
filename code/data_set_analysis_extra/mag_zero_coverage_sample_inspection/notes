@@ -1,0 +1,1 @@
+cat mag_zero_coverage.csv | shuf | head -n 100 > mag_zero_coverage_sample100.csv

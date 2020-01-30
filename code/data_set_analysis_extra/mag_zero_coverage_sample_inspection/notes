@@ -1,1 +1,7 @@
 cat mag_zero_coverage.csv | shuf | head -n 100 > mag_zero_coverage_sample100.csv
+
+n = 100
+#no references headline                             = 58 (55 phys, 1 CS, 2 quant bio)
+#no reference items w/o titles                      = 10
+#double references headline                         = 2
+#references headline directly before page break     = 2
